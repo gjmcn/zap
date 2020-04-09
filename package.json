@@ -1,5 +1,5 @@
 {
-  "name": "zap",
+  "name": "@gjmcn/zap",
   "version": "0.1.0",
   "description": "Zap Language",
   "type": "module",
