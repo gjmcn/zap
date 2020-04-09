@@ -1,0 +1,121 @@
+<h2>Overview</h2>
+<hr>
+<p>Zap is a high-level language with a simple, flexible syntax. Zap compiles to JavaScript and can use JavaScript's built-in objects. JavaScript libraries can be used in Zap and vice-versa.</p>
+<h5>Literals</h5>
+<pre><code># u 5 v 6;    // Object {u: 5, v: 6}
+## u 5 v 6;   // Map {'u' =&gt; 5, 'v' =&gt; 6}
+@ 5 6;        // Array [5, 6]
+@@ 5 6;       // Set {5, 6}
+
+// whitespace for readability
+# main 'pizza'
+  side 'fries'
+  drink (@ 'water' 'coffee');
+</code></pre>
+<h5>Expressions</h5>
+<p>Everything in Zap is an expression — no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or end of the subexpression (<code>;</code>) is reached:</p>
+<pre><code>@ 5 6 7;     // [5, 6, 7]
+5 @ 6 7;     // [5, 6, 7]
+5 6 7 @;     // [5, 6, 7]
+
+5 + 6 @ 7;   // [11, 7]
++ 5 6 @ 7;   // [11, 7]
+5 6 + @ 7;   // [11, 7]
+5 6 7 + @;   // [18]
++ 5 6 7 @;   // [18]
+</code></pre>
+<p>Operators with names start with <code>$</code>:</p>
+<pre><code>$typeof 5 == 'number' $print;   // prints (and returns) true
+</code></pre>
+<h5>Functions</h5>
+<p>Functions are created with square brackets. Operators for calling functions (such as <code>\</code> in the following examples) are special: the first right operand is always the function.</p>
+<pre><code>double = [2 * a];       // function, default parameter names are a, b, c, d
+add = [x y -&gt; x + y];   // function, custom parameter names
+
+\double 5 \add 20;      // 30
+5 \double \add 20;      // 30
+\add (\double 5) 20;    // 30
+5 20 \add \double;      // 50 
+5 \add 20 \double;      // 50 
+</code></pre>
+<p>Use curly brackets to create an asynchronous function. The following example fetches data using an asynchronous IIFE (immediately-invoked function expression):</p>
+<pre><code>\{
+  data = 'https://jsonplaceholder.typicode.com/users' 
+    \fetch $await |json $await;
+  + 'The data has '(data :length)' rows' $print};
+</code></pre>
+<h5>Methods</h5>
+<p>The <code>|</code> operator calls a method:</p>
+<pre><code>'The quick brown fox jumps over the lazy dog.'
+  |slice ~9
+  |replace '.' '!'
+  |toUpperCase;   // 'LAZY DOG!'
+</code></pre>
+<p>Or use <code>&lt;|</code> to ensure that the calling object is returned:</p>
+<pre><code>@ 5 6 &lt;|push 7 &lt;|shift;   // [6, 7]
+</code></pre>
+<h5>Iterables</h5>
+<p>Working with iterables (arrays, sets, generators etc.) is easy:</p>
+<pre><code>s = @@ 5 6 7;              // Set {5, 6, 7}
+s $each [a + 10 $print];   // prints 15 16 17,
+s $map [a + 10];           // [15, 16, 17]
+s $max;                    // 7
+s $sum;                    // 18
+s $filter [a &gt; 5];         // [6, 7] 
+s $group [a &gt; 5];          // Map {false =&gt; [5], true =&gt; [6, 7]}
+</code></pre>
+<p>Backticks tell an arithmetic, logical or comparison operator to iterate over an operand:</p>
+<pre><code>x = @ 5 6 7;   // [5, 6, 7]
+x  `+  10;     // [15, 16, 17]       
+10  +` x;      // [15, 16, 17]
+x  `+` x;      // [10, 12, 14]
+
+'ab'  +  'cd';   // 'abcd'
+'ab' `+  'cd';   // ['acd', bcd']
+'ab' `+` 'cd';   // ['ac', 'bd']
+</code></pre>
+<p>There are convenience operators for creating generators:</p>
+<pre><code>1 &gt;&gt; 4;                    // generator (1 2 3 4)
+1 &gt;&gt; 4 1.5;                // generator (1 2.5 4)
+1 &gt;&gt;&gt; 4 7;                 // generator (1 1.5 2 2.5 3 3.5 4)
+$seq 1 [a &lt;= 4] [a * 2];   // generator (1 2 4)
+
+1 &gt;&gt; 4 $sum;   // 10
+</code></pre>
+<h4>Elementwise</h4>
+<p>Elementwise operators can be used with iterables or non-iterables:</p>
+<pre><code>@ 4 9 16 $sqrt;   // [2, 3, 4]
+4 $sqrt;          // 2
+</code></pre>
+<h4>Object-Oriented Programming</h4>
+<p>Use a standard function as a constructor, <code>\:</code> to set properties on its prototype (<code>:</code> is used to set object properties) and <code>$extends</code> to create a subclass:</p>
+<pre><code>Cat = [this :name a]
+  \:sleeping [$random &lt; 0.8];
+
+Lion = $extends Cat
+  \:speak [+ 'Roar, I am '(this :name)];
+
+leo = $new Lion 'Leo';
+leo |sleeping;   // (0.8 probability that true)
+leo |speak;      // 'Roar, I am Leo'
+</code></pre>
+<h4>DOM</h4>
+<p>DOM operators can work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
+<pre><code>// set color of each span with class danger to red
+'span.danger' $style 'color' 'red';      
+
+// create 5 divs, apply various operators, add divs to body
+5 $div 
+  $style 'cursor' 'pointer'
+  $addClass 'btn'
+  $text 'vanish'
+  $on 'click' [$remove this]
+  $into 'body';
+</code></pre>
+<p>Data can be encoded as (and is automatically attached to) elements:</p>
+<pre><code>@ 5 6 7 $encode 'p'
+  $text [a];   // [&lt;p&gt;5&lt;/p&gt;, &lt;p&gt;6&lt;/p&gt;, &lt;p&gt;7&lt;/p&gt;] 
+</code></pre>
+
+
+<br><br><br>

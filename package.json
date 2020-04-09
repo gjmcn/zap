@@ -1,0 +1,47 @@
+{
+  "name": "zap",
+  "version": "0.1.0",
+  "description": "Zap Language",
+  "type": "module",
+  "main": "./dist/zap.mjs",
+  "exports": {
+    "import": "./dist/zap.mjs",
+    "require": "./dist/zap.cjs",
+    "browser": "./dist/zap.umd.js"
+  },
+  "bin": {
+    "zap": "bin/zap.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/test-helpers.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gjmcn/zap.git"
+  },
+  "author": "Graham McNeill",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gjmcn/zap/issues"
+  },
+  "homepage": "https://github.com/gjmcn/zap#readme",
+  "dependencies": {
+    "source-map": "^0.7.3",
+    "yargs": "^15.3.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "jest": "^25.1.0",
+    "jest-each": "^25.1.0",
+    "rollup": "^2.3.2",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-terser": "^5.3.0"
+  }
+}

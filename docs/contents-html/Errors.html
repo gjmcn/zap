@@ -1,0 +1,51 @@
+<h2>Errors</h2>
+<hr>
+<p>Use the <code>$throw</code> operator to throw an error:</p>
+<pre><code>\Error 'something went wrong' $throw;
+</code></pre>
+<p>Use the <code>$try</code> operator to catch and handle errors. <code>$try</code> is passed three callback functions (only the first is required):</p>
+<ul>
+<li>
+<p><em>attempt</em>: function that may throw an error.</p>
+</li>
+<li>
+<p><em>catch</em>: function to call if <em>attempt</em> throws an error; <em>catch</em> is passed the error.</p>
+</li>
+<li>
+<p><em>finally</em>: a function that is called after <em>attempt</em> and <em>catch</em> regardless of whether an error was thrown.</p>
+</li>
+</ul>
+<pre><code>// ignores error
+$try [null :x];
+
+// prints error message
+$try [null :x] [a :message $print];
+
+// prints 'finally'
+$try [null :x] [] ['finally' $print];
+
+// prints error message then 'finally'
+$try [null :x] [a :message $print] ['finally' $print];
+</code></pre>
+<blockquote>
+<p>To use <em>finally</em> without <em>catch</em>, <em>catch</em> must be an empty function (<code>[]</code>) or <code>undefined</code>.</p>
+</blockquote>
+<p><code>$try</code> returns the result of <em>attempt</em> unless it throws an error, in which case <code>$try</code> returns the result of <em>catch</em> (or <code>undefined</code> if <em>catch</em> is omitted).</p>
+<p><code>$awaitTry</code> is like <code>$try</code>, but waits for each callback. <code>$awaitTry</code> can only be used inside an asynchronous function:</p>
+<pre><code>// web service that returns a random number between 0 and 1
+url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
+
+\{
+  // prints 'Problem: small number', then prints 'done'
+  $awaitTry 
+    {
+      x = url \fetch $await |text $await $number;
+      x &lt;= 1 ? (\Error 'small number' $throw)}
+    [err -&gt;
+      + 'Problem: '(err :message) $print];
+  $print 'done'};
+</code></pre>
+<p>As demonstrated in the above example, <code>$awaitTry</code> is itself awaited — <code>'done'</code> is printed <em>after</em> the error message.</p>
+
+
+<br><br><br>

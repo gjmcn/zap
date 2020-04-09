@@ -1,0 +1,57 @@
+<h2>Evaluation</h2>
+<hr>
+<p>In general, Zap does not use operator associativity, position or precedence rules. Code reads left to right and the 'current' operator is applied when the next operator or end of the subexpression is reached. When an operator is applied, the result is used as the first operand of the next operator:</p>
+<pre><code>5 + 10;   // 15
++ 5 10;   // 15
+5 10 +;   // 15
+
+@ 5 6 7;     // [5, 6, 7]
+5 @ 6 7;     // [5, 6, 7]
+5 6 7 @;     // [5, 6, 7]
+5 + 6 @ 7;   // [11, 7]
++ 5 6 @ 7;   // [11, 7]
+</code></pre>
+<blockquote>
+<p>If adjacent operators are represented by symbols, they must be separated by whitespace.</p>
+</blockquote>
+<p>Parentheses are used for precedence:</p>
+<pre><code>1 + 2 * 3;     // 9
+1 + (2 * 3);   // 7
+
+@ 5 (6 + 7);   // [5, 13]
+</code></pre>
+<p>The following sections describe the operators that <em>do</em> have special rules:</p>
+<h4 id="right-operand-rule">The Right Operand Rule</h4>
+<p>Operators for <a href="?Calling-Functions">calling functions and methods</a>, as well as <code>:</code> <a href="?Get-Property">getters</a> and <a href="?Set-Property">setters</a> use the <em>right operand rule</em>: at least one right operand is required and the first right operand is the function (or property name). We typically omit space to the right of operators that use the right operand rule.</p>
+<pre><code>f = [a + b];   // function (adds its arguments)
+\f 5 10;       // 15 
+5 \f 10;       // 15
+5 10 \f;       // 15
+</code></pre>
+<h4 id="identifier-name-rule">The Identifier-Name Rule</h4>
+<p>Operators for <a href="?Literals#objects-and-maps">object and map literals</a>, <a href="?Calling-Functions#calling-methods">calling methods</a>, and <code>:</code> <a href="?Get-Property">getters</a> and <a href="?Set-Property">setters</a> use the <em>identifier-name rule</em>: property names that are <a href="?Expressions#identifiers">identifiers</a> are treated as strings. Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:</p>
+<pre><code>u = 'v';
+# u 5
+  (u) 6
+  (u |toUpperCase) 7;   // {u: 5, v: 6, V: 7}
+</code></pre>
+<h4 id="unary-minus-precedence">Unary Minus</h4>
+<p>The unary minus operator <code>~</code> has high precedence and must be placed before its single operand (typically with space omitted):</p>
+<pre><code>10 + ~6;   // 4
+</code></pre>
+<h4 id="assignment-precedence">Assignment</h4>
+<p><a href="?Assignment">Assignment</a> operators have low precedence and can only be used at the start of a subexpression:</p>
+<pre><code>1 + 2;         // 3
+x = 1 + 2      // 3
+x += 3 + 4     // 10
+5 + (x = 6);   // 11 (x is 6)
+7 + x = 8;     // syntax error
+y = x = 8      // syntax error 
+</code></pre>
+<p>Assignment operators must be placed between their two operands. <a href="?Assignment#Destructuring">Destructuring assignment operators</a> must be placed after the last variable being assigned to:</p>
+<pre><code>x = @ 5 6;
+u v @= x;   // u is 5, v is 6
+</code></pre>
+
+
+<br><br><br>

@@ -1,0 +1,56 @@
+<h2>Calling Functions</h2>
+<hr>
+<p>Use the <code>\</code> operator to call a function:</p>
+<pre><code>\f;        // call f with no arguments
+\f 5;      // pass 5 to f
+\f 5 10;   // pass 5 and 10 to f
+</code></pre>
+<p><code>\</code> (and the other operators described below for calling functions/methods) uses the <a href="?Evaluation#right-operand-rule">right operand rule</a>:</p>
+<pre><code>f = [a + b];   // function (adds its arguments)
+\f 5 10;       // 15 
+5 \f 10;       // 15
+5 10 \f;       // 15
+</code></pre>
+<p>The behavior of <code>\</code> allows us to 'pipe' function calls rather than nest them:</p>
+<pre><code>double = [2 * a];       // function
+add = [a + b];          // function
+\double 5 \add 20;      // 30 (piped calls)
+\add (\double 5) 20;    // 30 (nested calls)
+</code></pre>
+<h4 id="calling-methods">Methods</h4>
+<p><code>\</code> can be used to call methods, or we can use the method call operator <code>|</code>:</p>
+<pre><code>x = @ 5 6 7 8;
+x |slice 1 3;      // [6, 7]
+|slice x 1 3;      // [6, 7]
+x 1 3 |slice;      // [6, 7]
+\(x :slice) 1 3;   // [6, 7]
+
+Array |isArray x;      // true
+\(Array :isArray) x;   // true
+x \(Array :isArray);   // true
+</code></pre>
+<p><code>|</code> uses the <a href="?Evaluation#identifier-name-rule">identifier-name rule</a>:</p>
+<pre><code>x = @ 5 6 7 8;
+s = 'slice'; 
+x |(s) 1 3;   // [6, 7]
+</code></pre>
+<p><code>?|</code> is like <code>|</code>, but <code>?|</code> short-circuits and returns <code>undefined</code> if the method does not exist (i.e. is <code>null</code> or <code>undefined</code>):</p>
+<pre><code>o = # f [5] v 6;   // {f: function, v: 6}
+
+o |f;    // 5
+o ?|f;   // 5
+
+o |g;    // TypeError: o.g is not a function
+o ?|g;   // undefined
+
+o |v;    // TypeError: o.v is not a function
+o ?|v;   // TypeError: o.v is not a function
+</code></pre>
+<h4 id="return-first">Return Calling Object or First Argument</h4>
+<p><code>&lt;|</code> is like <code>|</code>, but always returns the calling object. For example, we can use <code>&lt;|</code> to chain the array methods <code>push</code> and <code>shift</code> (neither of which return the calling array):</p>
+<pre><code>@ 5 6 &lt;|push 7 &lt;|shift;   // [6, 7]
+</code></pre>
+<p>Similarly, <code>&lt;\</code> is like the function call operator <code>\</code>, but <code>&lt;\</code> returns the first argument passed to the function.</p>
+
+
+<br><br><br>

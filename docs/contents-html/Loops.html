@@ -1,0 +1,100 @@
+<h2>Loops</h2>
+<hr>
+<p>Use <code>$each</code> or <code>$map</code> to loop over an iterable. <code>$each</code> and <code>$map</code> are passed an iterable and a callback function; <code>$each</code> returns the iterable whereas <code>$map</code> collects the values returned by the callback in an array:</p>
+<pre><code>x = @ 5 6;
+x $each [a $print];   // prints 5 6, returns x 
+x $map [a + 10];      // [15, 16]
+
+o = # u 5 v 6;
+Object |values o $map [a + 10];   // [15, 16]
+
+m = ## u 5 v 6;            // Map {'u' =&gt; 5, 'v' =&gt; 6}
+m |values $map [a + 10];   // [15, 16]
+</code></pre>
+<p>The callback is passed the 'current index' as its second argument and the iterable as the third argument:</p>
+<pre><code>@ 5 6 7 $map [b];         // [0, 1, 2]
+@ 5 6 7 $map [c |join];   // ['5,6,7', '5,6,7', '5,6,7']
+</code></pre>
+<p>If used with a single operand (a function), <code>$each</code> and <code>$map</code> automatically create an 'infinite generator' that yields <code>undefined</code> until its <code>return</code> method is called:</p>
+<pre><code>// prints 0 1 2 3
+$each [
+  b $print;
+  b == 3 ? (c |return)];
+</code></pre>
+<blockquote>
+<p>Calling a generator's <code>return</code> method exits a loop <em>at the end</em> of the current step.</p>
+</blockquote>
+<blockquote>
+<p>When <code>$each</code> or <code>$map</code> is used with a single operand, the loop has at least one step. Use <a href="?Generators#do-and-while"><code>$while</code></a> when the loop may have zero steps.</p>
+</blockquote>
+<blockquote>
+<p>Operators for working with iterables (including the operators in this section, but also see e.g. <a href="?Reduce">Reduce</a>, <a href="?Filter-and-Group">Filter and Group</a>, <a href="?Order-and-Bin">Order and Bin</a>, <a href="?Backticks">Backticks</a> and <a href="?Tabular-Data">Tabular Data</a>) treat empty array elements as normal elements (with value <code>undefined</code>). In contrast, some array methods ignore empty elements.</p>
+</blockquote>
+<h4 id="async-loops">Asynchronous Loops</h4>
+<p>The callback function of <code>$each</code> or <code>$map</code> can be asynchronous:</p>
+<pre><code>// web service that returns a random number
+url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
+
+// prints 'done', then prints 3 random numbers
+1 &gt;&gt; 3 $each {url \fetch $await |text $await $number $print};
+$print 'done';
+</code></pre>
+<p>In the above example, the loop moves to the next step without waiting for the promise returned by the callback to resolve. If we had used <code>$map</code>, the returned array would contain the promises. In contrast to this behavior, <code>$awaitEach</code> and <code>$awaitMap</code> await both the iterable and the callback at each step. Like <code>$each</code> and <code>$map</code>, <code>$awaitEach</code> and <code>$awaitMap</code> use an infinite synchronous generator by default.</p>
+<p><code>$awaitEach</code> and <code>$awaitMap</code> can only be used inside an asynchronous function:</p>
+<pre><code>url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
+
+\{
+  // prints random numbers until &gt; 0.9, then prints 'done'
+  $awaitEach {
+    x = url \fetch $await |text $await $number $print;
+    x &gt; 0.9 ? (c |return)};
+  $print 'done'};
+</code></pre>
+<p>As demonstrated in the above example, <code>$awaitEach</code> (and <code>$awaitMap</code>) is itself awaited — <code>'done'</code> is printed <em>after</em> the numbers are printed.</p>
+<h4 id="zipped-loops">Zipped Loops</h4>
+<p><code>$zipEach</code> and <code>$zipMap</code> take one or more iterables and a callback function. The callback is passed the first element of each iterable, then the second element of each iterable, ...</p>
+<pre><code>x = @ 5 6 7;       // [5, 6, 7]
+y = @@ 50 60 70;   // Set {50, 60, 70}
+
+x y $zipEach [a + b $print];    // prints 55 66 77
+x y $zipMap [a + b];            // [55, 66, 77]
+</code></pre>
+<p><code>$zipEach</code> and <code>$zipMap</code> return when the end of the shortest iterable is reached. <code>$zipEach</code> returns <code>undefined</code>, <code>$zipMap</code> returns an array.</p>
+<p>The callback is passed the current index and the iterables (in an array) after the elements. If any of the iterables is a generator, its return method can be used to exit the loop (at the end of the current step):</p>
+<pre><code>x = 5 &gt;&gt; 10;        // generator (5 6 7 8 9 10)
+y = 50 &gt;&gt; 100 10;   // generator (50 60 70 80 90 100)
+
+x y $zipMap [xi yi i iterables -&gt;
+  i == 2 ? (iterables :0 |return);
+  xi + yi];         // [55, 66, 77]
+</code></pre>
+<blockquote>
+<p><a href="?Generators#zip"><code>$zip</code></a> returns a generator that iterates over multiple iterables simultaneously.</p>
+</blockquote>
+<h4 id="nested-loops">Nested Loops</h4>
+<p><code>$nestEach</code> and <code>$nestMap</code> take one or more iterables and a callback function, and loop over the iterables as in a nested loop. <code>$nestEach</code> returns <code>undefined</code>, <code>$nestMap</code> returns nested arrays:</p>
+<pre><code>x = @ 10 20;   // [10, 20]
+y = @ 5 6 7;   // [5, 6, 7]
+
+// explicit nested loop, prints 15 16 17 25 26 27
+// (use custom parameter names to avoid shadowing)
+x $each [xi -&gt;
+  y $each [yi -&gt;
+    xi + yi $print]];
+
+// using nestEach, prints 15 16 17 25 26 27
+x y $nestEach [a + b $print];
+
+// using nestMap, returns [[15, 16, 17], [25, 26, 27]]
+x y $nestMap [a + b];
+</code></pre>
+<p><code>$nestEach</code> and <code>$nestMap</code> create a new array from each iterable and loop over these arrays. This allows generators (which can only be used once) to be used with <code>$nestEach</code> and <code>$nestMap</code>. However, it also means that the <code>return</code> method of a generator <em>cannot</em> be used to exit the loop.</p>
+<blockquote>
+<p><code>$nestEach</code> and <code>$nestMap</code> do <em>not</em> pass the loop indices or the iterables to the callback.</p>
+</blockquote>
+<blockquote>
+<p><a href="?Generators#nest"><code>$nest</code></a> returns a generator for a nested loop.</p>
+</blockquote>
+
+
+<br><br><br>

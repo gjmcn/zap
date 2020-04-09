@@ -1,0 +1,41 @@
+<h2>Backticks</h2>
+<hr>
+<p>A backtick before an operator indicates that the first operand is an iterable. A backtick after an operator indicates that the second operand is an iterable:</p>
+<pre><code>x = @ 5 6 7;
+x `+ 10;           // [15, 16, 17]       
+10 +` x;           // [15, 16, 17]
+x $map [a + 10];   // [15, 16, 17] (without backtick)
+
+y = @ 10 20 30;
+x `+` y;               // [15, 26, 37]  
+x y $zipMap [a + b];   // [15, 26, 37] (without backticks)
+</code></pre>
+<p>Backticks can be used with the following operators: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>&amp;&amp;</code> <code>||</code> <code>??</code> <code>&lt;&gt;</code> <code>&gt;&lt;</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code>.</p>
+<blockquote>
+<p>If an operator has any backticks, it must have exactly two operands — <code>x + y z</code> is valid code, but <code>x `+` y z</code> is not.</p>
+</blockquote>
+<blockquote>
+<p>If any backticks are used with <code>&amp;&amp;</code>, <code>||</code> or <code>??</code>, short-circuit evaluation is <em>not</em> used — both operands are always evaluated.</p>
+</blockquote>
+<p>Backticks can be used with any (synchronous) iterables; the result is always an array:</p>
+<pre><code>r = 5 &gt;&gt; 7;     // generator (5 6 7)
+s = @@ 4 6 8;   // Set {4, 6, 8}
+r `==` s;       // [false, true, false]
+</code></pre>
+<p>When both operands are iterables, the returned array is the length of the shortest iterable:</p>
+<pre><code>@ 5 6 7 `+` (@ 10 20);   // [15, 26]
+</code></pre>
+<p>A backtick really means &quot;treat this operand as an iterable&quot;. For example, a string is an iterable, but we may want to treat it as a single value:</p>
+<pre><code>'ab'  +  'X';    // 'abX'
+'ab' `+  'X';    // ['aX', 'bX']
+'ab'  +` 'X';    // ['abX']
+'ab' `+` 'X';    // ['aX']
+
+'ab'  +  'XY';   // 'abXY'
+'ab' `+  'XY';   // ['aXY', 'bXY']
+'ab'  +` 'XY';   // ['abX', 'abY']
+'ab' `+` 'XY';   // ['aX', 'bY']
+</code></pre>
+
+
+<br><br><br>

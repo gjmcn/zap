@@ -1,0 +1,48 @@
+<h2>Variables and Scope</h2>
+<hr>
+<p>Variables are created through assignment using <code>=</code>, <code>=:</code>, <code>#=</code> or <code>@=</code>:</p>
+<pre><code>x = 5;   // 5 (outer x is at 'file scope')
+
+\[
+  x;     // 5 (outer x)
+];
+
+// assign to x with '=' so a local x is created
+\[
+  x;        // undefined (local x, value is undefined prior to assignment)
+  x = 10;   // 10 (local x)
+  x;        // 10 (local x)
+];
+
+x;       // 5 (outer x)
+</code></pre>
+<p><code>=</code>, <code>=:</code>, <code>#=</code> and <code>@=</code> <em>cannot</em> create global variables. Attach a property to the global object to create a global variable:</p>
+<pre><code>globalThis :x 5;   // works in any JavaScript environment
+window :y 6;       // works in browsers
+global :z 7;       // works in Node.js
+</code></pre>
+<blockquote>
+<p>Assignment operators other than <code>=</code>, <code>=:</code>, <code>#=</code> and <code>@=</code> update a variable so the variable must already exist.</p>
+</blockquote>
+<p>Use <code>\=</code> to avoid creating a local variable. <code>\=</code> assigns to the 'most local' variable with the given name:</p>
+<pre><code>x = 5;       // 5
+\[
+  x;         // 5
+  x \= 10;   // 10
+  x;         // 10
+];
+x;           // 10
+</code></pre>
+<p>Similarly, conditional assignment (<code>?=</code>) and update assignments (<code>+=</code>, <code>-=</code>, ...) assign to the most local variable with the given name:</p>
+<pre><code>x = null;    // null
+\[
+  x;         // null
+  x ?= 10;   // 10
+  x += 5;    // 15
+  x;         // 15
+];
+x;           // 15
+</code></pre>
+
+
+<br><br><br>

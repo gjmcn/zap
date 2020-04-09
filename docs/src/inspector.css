@@ -1,0 +1,128 @@
+/*
+Adapted from style.css, @observablehq/inspector, Copyright Observable, Inc.
+*/
+
+.observablehq--expanded,
+.observablehq--collapsed,
+.observablehq--function,
+.observablehq--import,
+.observablehq--string:before,
+.observablehq--string:after,
+.observablehq--gray {
+  color: #c8c8c8;
+}
+
+.observablehq--collapsed,
+.observablehq--inspect a {
+  cursor: pointer;
+}
+
+.observablehq--field {
+  text-indent: -1em;
+  margin-left: 1em;
+}
+
+.observablehq--empty {
+  color: #969896;
+  font-style: oblique;
+}
+
+.observablehq--keyword,
+.observablehq--symbol,
+.observablehq--blue 
+{
+  color: #fff;
+}
+
+.observablehq--forbidden,
+.observablehq--pink {
+  color: #e377c2;
+}
+
+.observablehq--orange {
+  color: #e6550d;
+}
+
+.observablehq--null,
+.observablehq--undefined,
+.observablehq--boolean {
+  color: #d19a66;
+}
+
+.observablehq--number,
+.observablehq--bigint,
+.observablehq--green {
+  color: #d19a66;
+}
+
+.observablehq--date {
+  color: #61afef;
+}
+
+.observablehq--regexp {
+  color: #56b6c2;
+}
+
+.observablehq--index,
+.observablehq--key {
+  color: #c8c8c8;
+}
+
+.observablehq--string,
+.observablehq--purple {
+  color: #98c379;
+}
+
+.observablehq--error,
+.observablehq--red {
+  color: #d80000;
+}
+
+.observablehq--inspect {
+  font: 13.6px/1.38 'Source Code Pro', monospace;
+  overflow-x: auto;
+  display: block;
+  white-space: pre;
+}
+
+.observablehq--error .observablehq--inspect {
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* add padding to expand/collapse triangle */
+.observablehq--caret  {
+  padding-right: 4px;
+}
+
+/* string expand */
+.observablehq--string-expand {
+  color: #c8c8c8;
+  margin-left: 10px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11.5px;
+  background-color: #484858;
+}
+
+/* overwrite link styles */
+.observablehq--inspect a,
+.observablehq--inspect a:hover,
+.observablehq--inspect a:link,
+.observablehq--inspect a:active {
+  color: #c8c8c8;
+  text-decoration: none; 
+}
+
+/* Zap classes that mimic appearance of inspector */
+
+.zap-message, .zap-error {
+  font: 13.6px/1.38 'Source Code Pro', monospace;
+}
+.zap-error {
+  color: #c8c8c8;
+}
+.zap-message {
+  color: #c8c8c8;
+}

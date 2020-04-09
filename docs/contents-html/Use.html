@@ -1,0 +1,192 @@
+<h2>Use</h2>
+<hr>
+<h4>Install</h4>
+<pre><code class="no-highlight">npm install --save '@gjmcn/zap'
+</code></pre>
+<h4>Load</h4>
+<ul>
+<li>
+<p>CommonJS:</p>
+<pre><code class="no-highlight">const zap = require('@gjmcn/zap');
+</code></pre>
+</li>
+<li>
+<p>ES module:</p>
+<pre><code class="no-highlight">import zap from '@gjmcn/zap';
+</code></pre>
+</li>
+<li>
+<p>UMD: <code>dist/zap.umd.js</code>. This can be loaded with a <code>&lt;script&gt;</code> tag and will create a global <code>zap</code> function.</p>
+</li>
+</ul>
+<p>The exported <code>zap</code> function compiles a string of Zap code to JavaScript. The optional second argument of <code>zap</code> is an options object. The <code>asyncIIFE</code> option indicates whether the generated code should be wrapped in an asynchronous (rather than the default synchronous) IIFE. The other options specify which properties to include in the returned object:</p>
+<table class="table table-sm w600">
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>asyncIIFE</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>IIFE that wraps JavaScript code is asynchronous</td>
+</tr>
+<tr>
+<td><code>js</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>JavaScript code</td>
+</tr>
+<tr>
+<td><code>sourceMap</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>source map</td>
+</tr>
+<tr>
+<td><code>sourceFile</code></td>
+<td>string</td>
+<td><code>null</code></td>
+<td>path to source file — used for source map</td>
+</tr>
+<tr>
+<td><code>tokens</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>tokens produced by the lexer</td>
+</tr>
+<tr>
+<td><code>procTokens</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>processed tokens</td>
+</tr>
+<tr>
+<td><code>jsTree</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>JavaScript tree produced by the parser</td>
+</tr>
+</tbody>
+</table>
+<h4 id="command-line">Command Line</h4>
+<blockquote>
+<p>The command line app and the REPL are currently very basic with limited functionality.</p>
+</blockquote>
+<p>Zap can be installed as a command line app:</p>
+<pre><code class="no-highlight">npm install -g @gjmcn/zap
+</code></pre>
+<p>Use <code>zap</code> with no arguments to start an interactive Zap REPL:</p>
+<pre><code class="no-highlight">zap
+</code></pre>
+<p>Pass a file path to compile a file. For example, to compile the file <code>index.za</code> to <code>index.js</code> (in the same directory):</p>
+<pre><code class="no-highlight">zap index.za
+</code></pre>
+<p>Use:</p>
+<pre><code class="no-highlight">zap --help
+</code></pre>
+<p>to print the command-line options:</p>
+<table class="table table-sm w600">
+<thead>
+<tr>
+<th>Short</th>
+<th>Long</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a</code></td>
+<td><code>--all</code></td>
+<td>Compile all <code>.za</code> files in directory to <code>.js</code> files</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td><code>--compile</code></td>
+<td>Compile <code>.za</code> file to <code>.js</code> file of same name</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td><code>--eval</code></td>
+<td>Evaluate a string from the command line</td>
+</tr>
+<tr>
+<td><code>-h</code></td>
+<td><code>--help</code></td>
+<td>Print help</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td><code>--interactive</code></td>
+<td>Run an interactive Zap REPL</td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td><code>--map</code></td>
+<td>Generate a source map and save as a <code>.js.map</code> file</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td><code>--nodes</code></td>
+<td>Print the JavaScript tree produced by the parser</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td><code>--print</code></td>
+<td>Print the generated JavaScript</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td><code>--tokens</code></td>
+<td>Print the tokens produced by the lexer</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td><code>--proc</code></td>
+<td>Print the processed tokens</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td><code>--version</code></td>
+<td>Print version number</td>
+</tr>
+</tbody>
+</table>
+<p>Additional information:</p>
+<ul>
+<li>
+<p><code>--all</code> and <code>--compile</code> overwrite existing <code>.js</code> files.</p>
+</li>
+<li>
+<p><code>--map</code> overwrites existing <code>.js.map</code> files. If <code>--all</code> or <code>--compile</code> are used without <code>--map</code>, existing <code>.js.map</code> files (that correspond to the <code>.za</code> files being compiled) are deleted.</p>
+</li>
+<li>
+<p><code>--all</code> is recursive — <code>.za</code> files in subdirectories are compiled.</p>
+</li>
+<li>
+<p><code>--eval</code>, <code>--help</code>, <code>--interactive</code> and <code>--version</code> cannot be combined with other options.</p>
+</li>
+<li>
+<p><code>--map</code> is the only option that can be combined with <code>--all</code>.</p>
+</li>
+<li>
+<p><code>--compile</code>, <code>--map</code>, <code>--nodes</code>, <code>--print</code>, <code>--tokens</code> and <code>--proc</code> can be combined.</p>
+</li>
+<li>
+<p>In the Zap REPL, executing e.g. <code>x = 5</code> will create a local variable inside an IIFE, so <code>x</code> will not be visible to subsequent commands. Instead, use <code>global :x 5</code> to create a global variable.</p>
+</li>
+<li>
+<p>All file actions are synchronous.</p>
+</li>
+</ul>
+<h4>Code Editors</h4>
+<h5><a href="https://code.visualstudio.com/"><strong>VS Code</strong></a></h5>
+<p>Use the <a href="https://github.com/gjmcn/zap-highlight-vscode">Zap Highlight</a> extension for syntax highlighting. Given the flexibility of operator positioning in Zap, and that only operators 'do things' (functions are called with operators and there are no keywords), a theme that highlights operators differently to all other language elements can help readability. The included <em>Solarized Dark</em> theme and the <em>One Dark Pro</em> extension theme are good examples of this.</p>
+
+
+<br><br><br>

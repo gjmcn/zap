@@ -1,0 +1,19 @@
+<h2>Compatibility</h2>
+<hr>
+<p>The compiled JavaScript is automatically wrapped in an IIFE and runs in strict mode.</p>
+<p>Almost all JavaScript features used by Zap are supported by recent versions of browsers and Node.js. Features most likely to be unsupported are:</p>
+<ul>
+<li>
+<p>Rest syntax in <a href="?Assignment#destructuring">destructuring assignments</a> (<code>#=</code>, <code>@=</code>) — <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">JavaScript docs</a>.</p>
+</li>
+<li>
+<p>Nullish coalescing (<code>??</code>), conditional assignment (<code>?=</code>) and assignment from option (<code>=:</code>) use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator">JavaScript's nullish coalescing operator</a>.</p>
+</li>
+<li>
+<p>Conditional get/set property (<code>?:</code>) and conditional call method (<code>?|</code>) use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining">JavaScript's optional chaining operator</a>.</p>
+</li>
+</ul>
+<p>Where appropriate, transpile JavaScript with e.g. <a href="https://babeljs.io/">Babel</a> to ensure compatibility with the target environment(s).</p>
+
+
+<br><br><br>

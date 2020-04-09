@@ -1,0 +1,89 @@
+<h2>Reduce</h2>
+<hr>
+<p>The <code>$reduce</code> operator takes an iterable, a 'reducer function' and an initial result. The reducer function is called once for each element of the iterable; it is passed the 'current result', the element, the index and the iterable:</p>
+<pre><code>@ 5 6 7 $reduce [a + b] 0;   // 18
+</code></pre>
+<blockquote>
+<p>The initial result is required — in contrast to the array method <code>reduce</code> where the initial result is optional.</p>
+</blockquote>
+<h4>Convenience Reduction Operators</h4>
+<p>There are also convenience reduction operators for common tasks. These take an iterable and a callback function. The callback is applied to each element of the iterable and the returned values are used to compute the result. For some operators, the callback is optional — if omitted, elements of the iterable are used to compute the result:</p>
+<hr>
+<h5 id="count"><code>$count</code> <span class="small">(callback required)</span></h5>
+<p>Counts the number of times that the callback returns a truthy value:</p>
+<pre><code>s = @@ 1 '1' true 0;                // Set {1, &quot;1&quot;, true, 0}
+s $count [$typeof a == 'number'];   // 2
+</code></pre>
+<hr>
+<h5 id="every"><code>$every</code>, <code>$some</code> <span class="small">(callback required)</span></h5>
+<p><code>$every</code> returns <code>true</code> if the callback returns a truthy value for every element and <code>false</code> otherwise. <code>$some</code> returns <code>true</code> if the callback returns a truthy value for any element and <code>false</code> otherwise.</p>
+<pre><code>m = ##
+  apple 'green'
+  banana 'yellow'
+  cherry 'red';   // Map {'apple' =&gt; 'green', ...}
+
+// use values method of map
+m |values $every [a == 'green'];   // false 
+m |values $some  [a == 'green'];   // true
+
+// pass m directly (the callback is passed an array: [key value])
+m $every [a :1 == 'green'];   // false 
+m $some  [a :1 == 'green'];   // true
+</code></pre>
+<p>If the iterable is empty, <code>$every</code> returns <code>true</code>, <code>$some</code> returns <code>false</code>.</p>
+<hr>
+<h5 id="find"><code>$find</code>, <code>$findIndex</code> <span class="small">(callback required)</span></h5>
+<p><code>$find</code> returns the element corresponding to the first truthy result of the callback. <code>$findIndex</code> is like <code>$find</code>, but returns the index of the corresponding element:</p>
+<pre><code>x = @
+  (# u 5 v 20)
+  (# u 6 v 10)
+  (# u 7 v 30);   // array of objects
+
+x $find [a :u &gt; 5];        // {u: 6, v: 10}
+x $findIndex [a :u &gt; 5];   // 1
+</code></pre>
+<p>If the callback does not return a truthy value for any element, <code>$find</code> returns <code>undefined</code>, <code>$findIndex</code> returns <code>-1</code>.</p>
+<hr>
+<h5 id="min"><code>$min</code>, <code>$max</code>, <code>$minIndex</code>, <code>$maxIndex</code> <span class="small">(callback optional)</span></h5>
+<p><code>$min</code>/<code>$max</code> returns the element of the iterable corresponding to the minimum/maximum:</p>
+<pre><code>@ 7 3 2 5 $min;   // 2
+
+x = @ (@ 2 10) (@ 7 20) (@ 5 30);   // array of arrays
+x $max [a :0];                      // [7, 20]
+</code></pre>
+<p>If multiple elements correspond to the minimum/maximum, the first such element is used.</p>
+<p><code>$minIndex</code> and <code>$maxIndex</code> are like <code>$min</code> and <code>$max</code> respectively, but return the index corresponding to the minimum/maximum:</p>
+<pre><code>@ 3 9 5 $maxIndex;   // 1
+</code></pre>
+<p>The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to <code>NaN</code> or if the iterable is empty, <code>$min</code> and <code>$max</code> return <code>undefined</code>, <code>$minIndex</code> and <code>$maxIndex</code> return <code>-1</code>.</p>
+<hr>
+<h5 id="sum"><code>$sum</code>, <code>$mean</code>, <code>$variance</code>, <code>$deviation</code> <span class="small">(callback optional)</span></h5>
+<p>Sum, mean, variance and standard deviation:</p>
+<pre><code>x = @ 4 6 8;
+x $sum;         // 18
+x $mean;        // 6
+x $variance;    // 4
+x $deviation;   // 2
+
+x = @ 
+  (# u 5 v 10)
+  (# u 6 v 20)
+  (# u 7 v 30);   // array of objects
+x $sum [a :v];    // 60
+</code></pre>
+<p>The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to <code>NaN</code>, the reduction operator will return <code>NaN</code>.</p>
+<p><code>$sum</code> returns <code>0</code> if the iterable is empty, <code>$mean</code> returns <code>NaN</code>. <code>$variance</code> and <code>$deviation</code> return <code>NaN</code> if the iterable has less than 2 elements.</p>
+<p><code>$variance</code> calculates the unbiased sample variance: the sum of squared differences from the mean divided by <em>n</em> - 1, where <em>n</em> is the number of elements in the iterable. <code>$deviation</code> is the square root of <code>$variance</code>.</p>
+<hr>
+<h5 id="sum-cumu"><code>$sumCumu</code> <span class="small">(callback optional)</span></h5>
+<p><code>$sumCumu</code> is like <code>$sum</code>, but returns an array of cumulative sums rather than just the result:</p>
+<pre><code>x = @ 3 8 2 10;
+x $sum;       // 23
+x $sumCumu;   // [3, 11, 13, 23]
+</code></pre>
+<blockquote>
+<p><code>$sumCumu</code> is <em>not</em> a reduction operator, but is listed here due to its similarity to <code>$sum</code>.</p>
+</blockquote>
+
+
+<br><br><br>

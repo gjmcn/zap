@@ -1,0 +1,28 @@
+<h2>Print and Debug</h2>
+<hr>
+<h5 id="print"><code>$print</code></h5>
+<p>Print operand and return it:</p>
+<pre><code>$print 5;            // prints and returns 5
+# u 5 v 6 $print;    // prints and returns {u: 5, v: 6}
+x = 5 $print + 10;   // prints 5, returns 15
+x;                   // 15
+</code></pre>
+<blockquote>
+<p><code>$print</code> uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log"><code>console :log</code></a>.</p>
+</blockquote>
+<hr>
+<h5 id="debugger"><code>$debugger</code></h5>
+<p>Invoke debugger (if it exists):</p>
+<pre><code>$debugger;
+</code></pre>
+<hr>
+<h5 id="ms"><code>$ms</code></h5>
+<p>Create a promise that resolves to <code>undefined</code> after the given number of milliseconds:</p>
+<pre><code>500 $ms;   // promise that resolves after 500ms
+</code></pre>
+<blockquote>
+<p><code>$ms</code> uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout"><code>setTimeout</code></a>.</p>
+</blockquote>
+
+
+<br><br><br>

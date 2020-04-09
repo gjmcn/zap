@@ -1,0 +1,42 @@
+<h2>Conditional</h2>
+<hr>
+<p>The <code>?</code> operator evaluates a <em>test</em>; if the test is truthy, the second operand is evaluated and returned, otherwise the third operand is evaluated and returned. If the third operand is omitted and the test is falsy, no code is evaluated (except for the test) and <code>?</code> returns <code>undefined</code>.</p>
+<pre><code>true ? 5 10;    // 5
+false ? 5 10;   // 10
+4 &gt; 5 ? 6;      // undefined
+4 &lt; 5 ? 6;      // 6
+
+3 == 4 ? (
+  5;
+  6)
+(
+  7;
+  8);   // 8
+</code></pre>
+<p>The <code>$if</code> operator has operands <em>test</em>, <em>action</em>, <em>test</em>, <em>action</em>, ... The tests are evaluated in sequence; when a test returns truthy, the corresponding action is evaluated and <code>$if</code> returns the result. If no test is truthy, no action is evaluated and <code>$if</code> returns <code>undefined</code>.</p>
+<pre><code>exam = 60;
+
+// returns 'Pass'
+$if (exam &gt; 50) 'Pass';
+
+// returns 'Pass'
+$if
+  (exam &gt;= 80) 'Distinction'
+  (exam &gt;= 50) 'Pass'
+  true         'Fail';
+
+// prints 'Good' and returns 'Pass'
+$if
+  (exam &gt;= 80) (
+    $print 'Great';
+    'Distinction')
+  (exam &gt;= 50) (
+    $print 'Good';
+    'Pass')
+  true (
+    $print 'Try again';
+    'Fail');
+</code></pre>
+
+
+<br><br><br>

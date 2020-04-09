@@ -1,0 +1,180 @@
+<h2>Operators: Symbols</h2>
+<hr>
+<table class="table table-sm w600">
+<thead>
+<tr>
+<th>Operator</th>
+<th>Arity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~</code></td>
+<td>1</td>
+<td>unary minus (high precedence)</td>
+</tr>
+<tr>
+<td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code></td>
+<td>2+</td>
+<td>add, subtract, multiply, divide, remainder, exponentiate</td>
+</tr>
+<tr>
+<td><code>&lt;&gt;</code> <code>&gt;&lt;</code></td>
+<td>2+</td>
+<td>least, greatest</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code> <code>||</code> <code>??</code></td>
+<td>2+</td>
+<td>and, or, nullish coalescing (only <code>null</code>, <code>undefined</code> 'falsy')</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>2-3</td>
+<td>conditional</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>1</td>
+<td>not</td>
+</tr>
+<tr>
+<td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>2</td>
+<td>compare</td>
+</tr>
+<tr>
+<td><code>==</code> <code>!=</code></td>
+<td>2</td>
+<td>strict equality, strict inequality</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>2</td>
+<td>assign</td>
+</tr>
+<tr>
+<td><code>=:</code></td>
+<td>2</td>
+<td>assign, use option of same name or default</td>
+</tr>
+<tr>
+<td><code>\=</code></td>
+<td>2</td>
+<td>assign to 'most local' variable</td>
+</tr>
+<tr>
+<td><code>?=</code></td>
+<td>2</td>
+<td>conditional assign</td>
+</tr>
+<tr>
+<td><code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code></td>
+<td>2</td>
+<td>update-assign</td>
+</tr>
+<tr>
+<td><code>#=</code></td>
+<td>2+</td>
+<td>destructure object</td>
+</tr>
+<tr>
+<td><code>@=</code></td>
+<td>2+</td>
+<td>destructure array</td>
+</tr>
+<tr>
+<td><code>:</code></td>
+<td>2-3</td>
+<td>get/set property</td>
+</tr>
+<tr>
+<td><code>\:</code></td>
+<td>2-3</td>
+<td>get/set property of prototype</td>
+</tr>
+<tr>
+<td><code>?:</code></td>
+<td>2-3</td>
+<td>conditional get/set property</td>
+</tr>
+<tr>
+<td><code>+:</code> <code>-:</code> <code>*:</code> <code>/:</code> <code>%:</code> <code>^:</code></td>
+<td>3</td>
+<td>update-set property</td>
+</tr>
+<tr>
+<td><code>::</code></td>
+<td>2</td>
+<td>set property using variable of same name</td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>1+</td>
+<td>call function</td>
+</tr>
+<tr>
+<td><code>&lt;\</code></td>
+<td>1+</td>
+<td>call function, return first argument</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>2+</td>
+<td>call method</td>
+</tr>
+<tr>
+<td><code>&lt;|</code></td>
+<td>2+</td>
+<td>call method, return calling object</td>
+</tr>
+<tr>
+<td><code>?|</code></td>
+<td>2+</td>
+<td>conditional call method</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td>0+</td>
+<td>object literal</td>
+</tr>
+<tr>
+<td><code>##</code></td>
+<td>0+</td>
+<td>map literal</td>
+</tr>
+<tr>
+<td><code>@</code></td>
+<td>0+</td>
+<td>array literal</td>
+</tr>
+<tr>
+<td><code>@@</code></td>
+<td>0+</td>
+<td>set literal</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>2-3</td>
+<td>range, given step size</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;&gt;</code></td>
+<td>3</td>
+<td>range, given number of steps</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>&lt;&gt;</code>, <code>&gt;&lt;</code> can take more than two operands, e.g. <code>+ 1 2 3</code> returns <code>6</code>.</p>
+</blockquote>
+<blockquote>
+<p><code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>?</code>, <code>=:</code>, <code>?=</code>, <code>?:</code> (getter only) and <code>?|</code> use short-circuit evaluation.</p>
+</blockquote>
+<blockquote>
+<p>There is no unary plus. Use <a href="?Elementwise"><code>$number</code></a> to convert values to numbers.</p>
+</blockquote>
+
+
+<br><br><br>

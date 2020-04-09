@@ -1,0 +1,33 @@
+<h2>Expressions</h2>
+<hr>
+<p>Everything in Zap is an expression that returns a value. Operators are represented by symbols or words prefixed with <code>$</code>:</p>
+<pre><code>5 + 10;    // 15
+4 $sqrt;   // 2 
+</code></pre>
+<h4>Subexpressions</h4>
+<p>Subexpressions are terminated with a semicolon. An expression returns the value of its last subexpression:</p>
+<pre><code>2; 3 + 4;
+5 + 6;   // 11
+</code></pre>
+<p>The semicolon after the last subexpression is optional:</p>
+<pre><code>5;
+6 + 7   // 13
+</code></pre>
+<p>A subexpression is <em>not</em> automatically terminated at the end of a line:</p>
+<pre><code>5 +
+  6;     // 11
+</code></pre>
+<pre><code>x = 5    // forgot ;
+y = 6;   // syntax error
+</code></pre>
+<pre><code>x = 5   // forgot ;
+x + 6;  // NaN (x = 5 + undefined + 6)
+</code></pre>
+<h4 id="identifiers">Identifiers</h4>
+<p>The term <em>identifier</em> is used frequently in these docs. An identifier is any combination of letters (currently only <code>a</code>-<code>z</code>, <code>A</code>-<code>Z</code>), digits (<code>0</code>-<code>9</code>), <code>_</code> and <code>$</code>, but cannot start with a digit.</p>
+<blockquote>
+<p>Identifiers <em>can</em> start with <code>$</code>, but identifiers representing commands are reserved.</p>
+</blockquote>
+
+
+<br><br><br>

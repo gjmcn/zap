@@ -1,0 +1,68 @@
+<h2>Order and Bin</h2>
+<hr>
+<h4 id="order">Order</h4>
+<p><code>$order</code> takes an iterable and a 'comparison function' (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code></a> array method), and returns an array containing the sorted elements of the iterable. The default comparison function is <code>[a - b]</code> which sorts (finite) numbers or dates in ascending order:</p>
+<pre><code>@ 5 9 2 $order;   // [2, 5, 9]
+
+x = @ 
+  (# u 5 v 20)
+  (# u 6 v 10)
+  (# u 7 v 30);   // array of objects
+
+// sort on property v, descending
+x $order [b :v - (a :v)];   // [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]
+
+// orderIndex
+x $orderIndex [b :v - (a :v)];   // [2, 0, 1]
+</code></pre>
+<p>As shown in the final example, <code>$orderIndex</code> can be used to get the original indices of the sorted elements.</p>
+<blockquote>
+<p>Various Zap operators for working with iterables are named after the array methods that they are based on (e.g. <code>some</code> and <code>filter</code>). <code>$order</code> is based on the <code>sort</code> array method, but is given a different name because of important differences in behavior: <code>$order</code> has default comparison function <code>[a - b]</code> and returns a new array.</p>
+</blockquote>
+<h4 id="bin">Bin</h4>
+<p><code>$bin</code> takes an iterable to bin, an iterable of bin limits and a comparison function (see <a href="#order"><code>$order</code></a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>). The default comparison function is <code>[a - b]</code> which is suitable for binning (finite) numbers or dates. <code>$bin</code> returns a map with arrays for values:</p>
+<pre><code>@ 5 9 12 7 $bin (@ 10 20);   // Map {10 =&gt; [5, 9, 7], 20 =&gt; [12]}
+
+x = @ 
+  (@ 23 0) (@ 7 1) (@ 32 2) 
+  (@ 38 3) (@ 3 4) (@ 34 5);   // array of arrays
+
+limits = @ 10 20 30 40;
+
+x $bin limits [a :0 - b];   // Map {
+                            //   10 =&gt; [[7, 1], [3, 4]],
+                            //   20 =&gt; [],
+                            //   30 =&gt; [[23, 0]],
+                            //   40 =&gt; [[32, 2], [38, 3], [34, 5]]
+                            // }
+
+// second callback
+x $bin limits [a :0 - b] [a $map [a :1]];   // Map {
+                                            //   10 =&gt; [1, 4]
+                                            //   20 =&gt; []
+                                            //   30 =&gt; [0]
+                                            //   40 =&gt; [2, 3, 5]
+                                            // }
+
+// binCount
+@ 5 9 12 7 $binCount (@ 10 20);   // Map {10 =&gt; 3, 20 =&gt; 1}
+x $binCount limits [a :0 - b];    // Map {10 =&gt; 2, 20 =&gt; 0, 30 =&gt; 1, 40 =&gt; 3}
+x $binCount limits [a :0 - b] [a &gt; 1];   // Map {
+                                         //   10 =&gt; true,
+                                         //   20 =&gt; false,
+                                         //   30 =&gt; false,
+                                         //   40 =&gt; true
+                                         // }
+</code></pre>
+<p>As shown in the example, <code>$bin</code> can take a second callback. This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.</p>
+<p><code>$binCount</code> gets the number of elements in each bin — see the final examples above. While we could use <code>$bin</code> with a second callback for this, <code>$binCount</code> is more efficient and is easier to read.</p>
+<p>An element is assigned to a bin if the comparison function (which is passed the element and the bin limit) is less than or equal to 0. Using the default comparison function <code>[a - b]</code> is equivalent to specifying inclusive upper bin limits — use <code>[b - a]</code> to specify lower bin limits. Elements that are not assigned to any bin do not appear in the map returned by <code>$bin</code> (or contribute to any value in <code>$binCount</code>).</p>
+<blockquote>
+<p><code>$bin</code> and <code>$binCount</code> sort the bin limits using the comparison function, so the inital ordering of the limits is not important.</p>
+</blockquote>
+<blockquote>
+<p>The elements inside each bin are <em>not</em> sorted — they appear in the same order as in the original iterable.</p>
+</blockquote>
+
+
+<br><br><br>

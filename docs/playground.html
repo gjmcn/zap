@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="images/zap-black.png">
+  <title>Zap playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/playground.css">
+  <link rel="stylesheet" href="src/inspector.css">
+  <script src="src/ace/src-min-noconflict/ace.js"></script>
+</head>
+
+<body>
+    
+  <nav id="navbar">
+
+    <span id="run-button" class="button" title="Run code and print or render result (Ctrl or Shift + Enter)">Run</span>
+    <span id="help-button" class="button">Help</span>
+
+    <span id="examples-wrapper">
+      <label for="examples-select">Example:</label>
+      <select name="examples" id="examples-select">
+      </select>
+    </span>
+
+    <a href="https://github.com/gjmcn/zap">GitHub</a>
+    <a href="index.html" target="_blank">Docs</a>
+
+  </nav>
+  
+  <div id='content-wrap'>
+    <div id=editor></div>
+    <div id=result></div>
+  </div>
+
+  <div id="help-content">
+    <h2>The Zap Playground</h2>
+    <p>Write code or pick an example from the menu.</p>
+    
+    <p>Code is automatically wrapped in an asynchronous function, so variables are not global (unless explicitly attached to the <code>window</code> object) and <code>$await</code> can be used. The resolved value of the promise returned by the function is displayed &mdash; or rendered if it is an HTML element or fragment.</p>
+
+    <h3>Loading Modules</h3>
+    <p>The playground has a global <code>require</code> function (from <a href="https://github.com/d3/d3-require" target="_blank">d3-require</a>) for loading UMD modules. <code>require</code> uses <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a> by default, so a module can be loaded using e.g.</p>
+
+    <pre><code>fecha = 'fecha@4' \require $await;</code></pre>
+
+    Alternatively, import ES modules from <a href="https://www.pika.dev/cdn">Pika</a>:
+    
+    <pre><code>fecha = 'https://cdn.pika.dev/fecha@4' \import $await;</code></pre>
+
+    Then use the module:
+
+    <pre><code></code>fecha |parse 'February 3rd, 2014' 'MMMM Do, YYYY';</code></pre>
+
+    <h3>Notes</h3>
+    <ul>
+      <li>Reload the page to clear global variables, timers and recursively called functions.</li>
+      <li>The <code>$print</code> operator prints to the JavaScript console, not the playground's result panel.</li>
+      <li>Currently, there is no save feature. (The playground does 'remember' code between visits/reloads.)</li>
+      <li>Currently, there is no mechanism for handling long-running synchronous code &mdash; the browser will freeze. Results from asynchronous code are ignored if new code is run in the meantime. </li>
+    </ul>
+    <h3>Keyboard Shortcuts</h3>
+    <table>
+      <tr>
+        <td><kbd>Ctrl</kbd> + <kbd>Enter</kbd></td>
+        <td>Run</td>
+      </tr>
+      <tr>
+        <td><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+        <td>Run</td>
+      </tr>
+      <tr>
+        <td><kbd>Ctrl</kbd> + <kbd>Space</kbd></td>
+        <td>Increase editor width</td>
+      </tr>
+      <tr>
+        <td><kbd>Shift</kbd> + <kbd>Space</kbd></td>
+        <td>Decrease editor width</td>
+      </tr>
+      <tr>
+        <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd></td>
+        <td>Reset editor width</td>
+      </tr>
+      <tr>
+        <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></td>
+        <td>Save code to local storage</td>
+      </tr>
+    </table>
+    <p>The playground uses the <a href="https://ace.c9.io/" target="_blank">Ace editor</a> with the <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" target="_blank">default keyboard shortcuts</a>.</p>
+    <br>
+    <br>
+  </div>
+
+  <script src="playground-bundle.js"></script>
+
+</body>
+
+</html>
