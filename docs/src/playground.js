@@ -134,7 +134,6 @@
       examplesElm.appendChild(elm);
     }
     examplesElm.addEventListener('change', evt => {
-      editor.focus();
       if (evt.target.value) {  // do nothing if select top (empty) example
         editor.setValue(examples.get(evt.target.value), -1);
         runCode();
