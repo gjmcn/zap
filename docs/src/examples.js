@@ -107,11 +107,11 @@ burst   = 0.05;
 frames  = 400;
 
 // array of bubble objects
-bubbles = 0 >>> width n $map [xi ->
-  # x xi
-    y (height - ($random * height / 10))
-    r 1
-    color (+ 'rgba('($randomInt 0 200 3 |join)',0.7)')];
+bubbles = 0 >>> width n $map [xi -> #
+  x xi
+  y (height - ($random * height / 10))
+  r 1
+  color (+ 'rgba('($randomInt 0 200 3 |join)',0.7)')];
 
 // canvas and context
 canvas ctx @= # ::width ::height $sketch;
