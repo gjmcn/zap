@@ -31,13 +31,16 @@
     new (require('@observablehq/inspector').Inspector)(resultElm);
 
   // editor
+  ace.require("ace/ext/language_tools");
   const editor = ace.edit("editor", {
     fontSize: 13.6,
     fontFamily: "'Source Code Pro', monospace",
     tabSize: 2,
     useSoftTabs: true,
     highlightActiveLine: false,
-    useWorker: false
+    useWorker: false,
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true
   });
   editor.setTheme("ace/theme/tomorrow_night_bright");
   editor.session.setMode(`ace/mode/zap`);
@@ -148,12 +151,16 @@
       if ((evt.ctrlKey || evt.shiftKey) && evt.key === 'Enter') {
         runCode();
       }
-      else if (evt.ctrlKey && evt.key === ' ') {
-        resultWidth = evt.shiftKey ? 50 : Math.max(resultWidth - 2, 10);
+      else if (evt.altKey && evt.key === 'a') {
+        resultWidth = 50;
         setEditorWidth();
       }
-      else if (evt.shiftKey && evt.key === ' ') {
-        resultWidth = Math.min(resultWidth + 2, 90);
+      else if (evt.altKey && evt.key === 'w') {
+        resultWidth = Math.max(resultWidth - 2, 8);
+        setEditorWidth();
+      }
+      else if (evt.altKey && evt.key === 'q') {
+        resultWidth = Math.min(resultWidth + 2, 92);
         setEditorWidth();
       }
       else if (evt.ctrlKey && evt.shiftKey && evt.key === 'S') {
