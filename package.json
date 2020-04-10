@@ -5,6 +5,8 @@
   "type": "module",
   "main": "./dist/zap.mjs",
   "module": "./dist/zap.mjs",
+  "unpkg": "./dist/zap.umd.js",
+  "jsdelivr": "./dist/zap.umd.js",
   "exports": {
     "import": "./dist/zap.mjs",
     "require": "./dist/zap.cjs",
