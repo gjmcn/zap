@@ -208,31 +208,44 @@ knn = [data testPoint -> data
   $max [a :1] :0];            // most frequent label
 
 // random data in unit square
-labeled = 1 >> nLabeled $map [
-  # x ($random) y ($random)
+labeled = 1 >> nLabeled $map [#
+  x ($random)
+  y ($random)
     \\[a :class (a :x ^ 3 + 0.2 > (a :y) $number)]];
-test = 1 >> nTest $map [
-  # x ($random) y ($random)
+test = 1 >> nTest $map [#
+  x ($random)
+  y ($random)
     \\[a :predicted (labeled \\knn a)]];
-boundary = 0 >>> 1 100 $map [# x a y (a ^ 3 + 0.2 <> 1)];
+boundary = 0 >>> 1 100 $map [#
+  x a
+  y (a ^ 3 + 0.2 <> 1)];
 
 // Vega-Lite plot
-vegaEmbed vl @= 'vega-embed@6.5.2' 'vega-lite-api@0.3.0' @
-  $map [a \\require] \\(Promise :all) $await;
-xx = vl |x |fieldQ 'x';
-yy = vl |y |fieldQ 'y';
-plot = vl |layer
-  (vl |markArea |data (# values boundary) 
-    |encode xx yy (vl |color |value '#fcf1e5'))
-  (vl |markCircle |data (# values labeled)
-    |encode xx yy (vl |color |fieldN 'class'))
-  (vl |markPoint |data (# values test)
-    |encode xx yy (vl |color |fieldN 'predicted')
-                  (vl |shape |fieldN 'predicted'))
-  |width 400 |height 400
-  |view (# fill '#e5f2fc' stroke false)
-  |config (# axis (# grid false domain false));
-$div <\\vegaEmbed (plot |toSpec);`
+vegaEmbed = 'vega-embed@6.5.2' \\require $await;
+encode = [#
+  x (# field 'x' type 'quantitative')
+  y (# field 'y' type 'quantitative')];
+$div <\\vegaEmbed (#
+  width 400
+  height 400
+  view (# fill '#e5f2fc' stroke false)
+  config (# axis (# grid false domain false))
+  layer (@
+    (#
+      mark 'area'
+      data (# values boundary)
+      encoding (\\encode :color (# value '#fcf1e5')))
+    (#
+      mark 'circle'
+      data (# values labeled)
+      encoding (\\encode :color (# field 'class' type 'nominal')))
+    (#
+      mark 'point'
+      data (# values test)
+      encoding (\\encode
+        :color (# field 'predicted' type 'nominal')
+        :shape (# field 'predicted' type 'nominal')))))
+`
 ], [
 'd3',
 `// based on: https://observablehq.com/@d3/bar-chart
