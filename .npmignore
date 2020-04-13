@@ -1,3 +1,4 @@
 node_modules/
 .vscode/
 docs/
+__tests__/
