@@ -247,7 +247,56 @@ $div <\\vegaEmbed (#
         :shape (# field 'predicted' type 'nominal')))))
 `
 ], [
-'d3',
+  'winner',
+`// choose a winner or a loser
+
+list = $ol
+  $style 'margin' '20px 50px';
+
+add = $button
+  $text '+'
+  $on 'click' [
+    list $insert ($li)
+      $style 'font' '34px/60px sans-serif'
+      $text '😐'];
+          
+remove = $button
+  $text '-'
+  $on 'click' [list :children :length > 2 ? (list :lastChild $remove)];
+  
+winLose = $button
+  $text '😄'
+  $on 'click' [this $text (this $text == '😄' ? '😭' '😄')];
+  
+start = $button
+  $text 'Start'
+  $on 'click' {
+    buttons $attr 'disabled' true;
+    players = list $pick 'li';
+    n = players :length;
+    shift = $randomInt 0 n;
+    $awaitEach {_ index generator ->
+      index ^ 2 + 50 $ms $await;
+      players
+        $text '😐'
+        $style 'opacity' '0.5';
+      players :(shift + index % n)
+        $text (winLose $text)
+        $style 'opacity' '1';
+      index == 25 ? (generator |return)};
+    players :(shift + 25 % n) $insert ($span $text '◂');
+    buttons $removeAttr 'disabled'};
+   
+buttons = @ add remove winLose start
+  $style 'font-size' '18px'
+  $style 'padding' '5px 24px'
+  $style 'margin' '5px';
+  
+add <|click <|click <|click;
+buttons |concat list $into ($fragment);
+`
+], [
+  'd3',
 `// based on: https://observablehq.com/@d3/bar-chart
 
 d3 = 'd3@5.12.0' \\require $await;
