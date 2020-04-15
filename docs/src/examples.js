@@ -251,7 +251,7 @@ $div <\\vegaEmbed (#
 `// choose a winner or a loser
 
 list = $ol
-  $style 'margin' '20px 50px';
+  $style 'margin' '20px 0 0 10px';
 
 add = $button
   $text '+'
