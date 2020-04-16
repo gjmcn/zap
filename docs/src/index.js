@@ -22,6 +22,15 @@
     }
   }
 
+  // tweaked from: https://stackoverflow.com/questions/487073/how-to-check-if-element-is-visible-after-scrolling
+  function isElementInView (el, holder) {
+    const { top, bottom, height } = el.getBoundingClientRect();
+    const holderRect = holder.getBoundingClientRect();
+    return top <= holderRect.top
+      ? holderRect.top - top <= height - 20
+      : bottom - holderRect.bottom <= height - 20;
+  }
+
   //load content into main panel
   async function loadPanel(span, returning) {
 
@@ -38,8 +47,12 @@
       for (let elm of document.querySelectorAll('#sidebar span')) {
         elm.classList.remove('selected');
       };
-      (span || document.querySelector(`#sidebar span[data-file="${filename}"]`))
-        .classList.add('selected');
+      const sidebarLink = span ||
+        document.querySelector(`#sidebar span[data-file="${filename}"]`);
+      sidebarLink.classList.add('selected');
+      if (!isElementInView(sidebarLink, sidebarLink.parentNode)) {
+        sidebarLink.scrollIntoView();
+      }
 
       //load content and highlight code
       const content = await fetch(`contents-html/${filename}.html`)
