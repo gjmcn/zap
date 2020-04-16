@@ -268,23 +268,23 @@ winLose = $button
   $text '😄'
   $on 'click' [this $text (this $text == '😄' ? '😭' '😄')];
   
-  start = $button
-  $text 'Start'
-  $on 'click' {
-    buttons $attr 'disabled' true;
-    players = list $pick 'li';
-    n = players :length;
-    shift = $randomInt 0 n;
-    0 >> 25 $awaitEach {
-      a ^ 2 + 50 $ms $await;
-      players
-        $text '😐'
-        $style 'opacity' '0.5';
-      players :(shift + a % n)
-        $text (winLose $text)
-        $style 'opacity' '1'};
-    players :(shift + 25 % n) $insert ($span $text '◂');
-    buttons $removeAttr 'disabled'};
+start = $button
+$text 'Start'
+$on 'click' {
+  buttons $attr 'disabled' true;
+  players = list $pick 'li';
+  n = players :length;
+  shift = $randomInt 0 n;
+  0 >> 25 $awaitEach {
+    a ^ 2 + 50 $ms $await;
+    players
+      $text '😐'
+      $style 'opacity' '0.5';
+    players :(shift + a % n)
+      $text (winLose $text)
+      $style 'opacity' '1'};
+  players :(shift + 25 % n) $insert ($span $text '◂');
+  buttons $removeAttr 'disabled'};
    
 buttons = @ add remove winLose start
   $style 'font-size' '18px'
