@@ -37,7 +37,7 @@ export default {
   },
 
   _bin(c, i, z, f = (x, y) => x - y, g) {
-    z = [...z].sort(f);
+    z = [...z];
     let m = new Map();
     for (let q of z) {
       m.set(q, c ? 0 : []);

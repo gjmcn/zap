@@ -58,7 +58,7 @@ x $binCount limits [a :0 - b] [a &gt; 1];   // Map {
 <p><code>$binCount</code> gets the number of elements in each bin — see the final examples above. While we could use <code>$bin</code> with a second callback for this, <code>$binCount</code> is more efficient and is easier to read.</p>
 <p>An element is assigned to a bin if the comparison function (which is passed the element and the bin limit) is less than or equal to 0. Using the default comparison function <code>[a - b]</code> is equivalent to specifying inclusive upper bin limits — use <code>[b - a]</code> to specify lower bin limits. Elements that are not assigned to any bin do not appear in the map returned by <code>$bin</code> (or contribute to any value in <code>$binCount</code>).</p>
 <blockquote>
-<p><code>$bin</code> and <code>$binCount</code> sort the bin limits using the comparison function, so the inital ordering of the limits is not important.</p>
+<p><code>$bin</code> and <code>$binCount</code> assume that the bin limits are ordered 'correctly' — e.g. upper bin limits should be in ascending order. If the bin limits are not ordered correctly, <code>$bin</code> and <code>$binCount</code> will give unexpected results.</p>
 </blockquote>
 <blockquote>
 <p>The elements inside each bin are <em>not</em> sorted — they appear in the same order as in the original iterable.</p>

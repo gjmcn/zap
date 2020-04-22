@@ -70,6 +70,6 @@ As shown in the example, `$bin` can take a second callback. This is applied to e
 
 An element is assigned to a bin if the comparison function (which is passed the element and the bin limit) is less than or equal to 0. Using the default comparison function `[a - b]` is equivalent to specifying inclusive upper bin limits &mdash; use `[b - a]` to specify lower bin limits. Elements that are not assigned to any bin do not appear in the map returned by `$bin` (or contribute to any value in `$binCount`).
 
-> `$bin` and `$binCount` sort the bin limits using the comparison function, so the inital ordering of the limits is not important.
+> `$bin` and `$binCount` assume that the bin limits are ordered 'correctly' &mdash; e.g. upper bin limits should be in ascending order. If the bin limits are not ordered correctly, `$bin` and `$binCount` will give unexpected results.
 
 > The elements inside each bin are _not_ sorted &mdash; they appear in the same order as in the original iterable.
