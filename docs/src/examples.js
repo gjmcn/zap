@@ -250,15 +250,17 @@ $div <\\vegaEmbed (#
   'winner',
 `// choose a winner or a loser
 
-list = $ol
+list = $div
   $style 'margin' '20px 0 0 10px';
 
 add = $button
   $text '+'
   $on 'click' [
-    list $insert ($li)
-      $style 'font' '34px/60px sans-serif'
-      $text '😐'];
+    list $insert ($div)
+      $html (+ "
+        <span style='font: 34px/60px serif; padding: 10px'>😐</span>
+        <input type='text' style='width: 200px; font-size: 24px'
+               placeholder='"(list :children :length)"'>")];
           
 remove = $button
   $text '-'
@@ -272,7 +274,7 @@ start = $button
   $text 'Start'
   $on 'click' {
     buttons $attr 'disabled' true;
-    players = list $pick 'li';
+    players = list $pick 'span';
     n = players :length;
     shift = $randomInt 0 n;
     0 >> 25 $awaitEach {
@@ -283,7 +285,7 @@ start = $button
       players :(shift + a % n)
         $text (winLose $text)
         $style 'opacity' '1'};
-    players :(shift + 25 % n) $insert ($span $text '◂');
+    players :(shift + 25 % n) $text (winLose $text + '▸');
     buttons $removeAttr 'disabled'};
    
 buttons = @ add remove winLose start
@@ -291,7 +293,7 @@ buttons = @ add remove winLose start
   $style 'padding' '5px 24px'
   $style 'margin' '5px';
   
-add <|click <|click <|click;
+add <|click <|click;
 buttons |concat list $into ($fragment);
 `
 ], [
