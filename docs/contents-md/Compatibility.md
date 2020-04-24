@@ -10,6 +10,6 @@ Almost all JavaScript features used by Zap are supported by recent versions of b
 
 * Nullish coalescing (`??`), conditional assignment (`?=`) and assignment from option (`=:`) use [JavaScript's nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator).
 
-* Conditional get/set property (`?:`) and conditional call method (`?|`) use [JavaScript's optional chaining operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
+* Conditional get property (`?:`) and conditional call method (`?|`) use [JavaScript's optional chaining operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining).
 
 Where appropriate, transpile JavaScript with e.g. [Babel](https://babeljs.io/) to ensure compatibility with the target environment(s).
