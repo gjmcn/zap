@@ -39,7 +39,7 @@ testEach('repeat 1', [
   ['6 ^ 2',  36],
   ['6 && 2',  2],
   ['6 || 2',  6],
-  // ['6 ?? 2',  6],
+  ['6 ?? 2',  6],
   ['6 <> 2',  2],
   ['6 >< 2',  6],
 ]);
@@ -54,7 +54,7 @@ testEach('repeat 2', [
   ['^ 2 3 5',   32768],
   ['&& 0 2 3',      0],
   ['|| 0 2 3',      2],
-  // ['?? null 0 2',   0],
+  ['?? null 0 2',   0],
   ['<> 2 5 3',      2],
   ['>< 2 5 3',      5],
 ]);
@@ -82,7 +82,7 @@ testEach('backtick pre', [
   ['@ 2 5 `^ 3',      [8, 125]],
   ['@ 0 5 `&& 10',    [0, 10]],
   ['@ 0 5 `|| 10',    [10, 5]],
-  // ['@ null 5 `?? 10', [10, 5]],
+  ['@ null 5 `?? 10', [10, 5]],
   ['@ 2 10 `<> 5',    [2, 5]],
   ['@ 2 10 `>< 5',    [5, 10]],
   ['@ 10 2 `< 5',     [false, true]],
@@ -106,7 +106,7 @@ testEach('backtick post', [
   ['3 ^` (@ 2 5)',      [9, 243]],
   ['10 &&` (@ 0 5)',    [0, 5]],
   ['10 ||` (@ 0 5)',    [10, 10]],
-  // ['10 ??` (@ null 5), [10, 10]],
+  ['10 ??` (@ null 5)', [10, 10]],
   ['5 <>` (@ 2 10)',    [2, 5]],
   ['5 ><` (@ 2 10)',    [5, 10]],
   ['5 <` (@ 10 2)',     [true, false]],
@@ -130,7 +130,7 @@ testEach('backtick both', [
   ['@ 10 20 `^` (@ 2 3)', [100, 8000]],
   ['@ true false `&&` (@ 0 5)', [0, false]],
   ['@ true false `||` (@ 0 5)', [true, 5]],
-  // ['@ true false `??` (@ 0 5)', [true, false]],
+  ['@ true false `??` (@ 0 5)', [true, false]],
   ['@ 3 5 `<>` (@ 2 10)',   [2, 5]],
   ['@ 3 5 `><` (@ 2 10)',   [3, 10]],
   ['@ 3 5 `<` (@ 10 2)',    [true, false]],
@@ -200,18 +200,18 @@ testEach('call method, return calling object', [
   ['x = @ 5; <|push x 6 7 8', [5, 6, 7, 8]],
 ], true);
 
-// testEach('conditional call method', [
-//   ['?|toUpperCase "abcd"',  'ABCD'],
-//   ['"abcd" ?|ToUpperCase',  undefined],
-//   ['?|charA "abcd" 1',      undefined],
-//   ['"abcd" ?|chaRAt 1',     undefined],
-//   ['"abcd" 1 ?|charAt',     'b'],
-//   ['?|SLICE "abcd" 1 3',    undefined],
-//   ['"abcd" ?|slice 1 3',    'bc'],
-//   ['"abcd" 1 ?|slic 3',     undefined],
-//   ['"abcd" 1 3 ?|slice',    'bc'],
-//   ['false ?|toString',      'false'],
-// ]);
+testEach('conditional call method', [
+  ['?|toUpperCase "abcd"',  'ABCD'],
+  ['"abcd" ?|ToUpperCase',  undefined],
+  ['?|charA "abcd" 1',      undefined],
+  ['"abcd" ?|chaRAt 1',     undefined],
+  ['"abcd" 1 ?|charAt',     'b'],
+  ['?|SLICE "abcd" 1 3',    undefined],
+  ['"abcd" ?|slice 1 3',    'bc'],
+  ['"abcd" 1 ?|slic 3',     undefined],
+  ['"abcd" 1 3 ?|slice',    'bc'],
+  ['false ?|toString',      'false'],
+]);
 
 testEach(': getter', [
   ['# u 5 v 6 :v', 6],
@@ -243,19 +243,20 @@ test('\\: getter-setter', () => {
   `)).toStrictEqual([5, 6, 7, undefined, false]);
 });
 
-// testEach('?: getter', [
-//   ['# u 5 v 6 ?:v', 6],
-//   ['@ 5 6 ?:1',     6],
-//   ['?:1 (@ 5 6)',   6],
-//   ['# uv 5 wx 6 ?:("u" + "v")', 5],
-//   ['x = @ 5 6; i = 1; x ?:(i)', 6],
-//   ['"" ?:length;',              0],            
-//   ['null ?:v',               undefined],
-//   ['undefined ?:v',          undefined],
-//   ['# u 5 v null ?:v',       null],
-//   ['# u 5 v null :v ?:w',    undefined],
-//   ['?:("w" + "x") (@ 5 :1)', undefined],
-// ]);
+testEach('?: getter', [
+  ['# u 5 v 6 ?:v', 6],
+  ['@ 5 6 ?:1',     6],
+  ['?:1 (@ 5 6)',   6],
+  ['# uv 5 wx 6 ?:("u" + "v")', 5],
+  ['x = @ 5 6; i = 1; x ?:(i)', 6],
+  ['"" ?:length;',              0],            
+  ['null ?:v',               undefined],
+  ['undefined ?:v',          undefined],
+  ['# u 5 v null ?:v',       null],
+  ['# u 5 v null ?:v',       null],
+  ['# u 5 v null :q ?:w',    undefined],
+  ['?:("w" + "x") (@ 5 :1)', undefined],
+]);
 
 testEach('?: setter', [
   ['# u 5 v 6 ?:v 10',        {u: 5, v: 6}],
@@ -317,43 +318,44 @@ testEach('\\= assignment', [
   ['x = 5; x \\= 6; x',     6],
 ]);
 
-// testEach('?= assignment', [
-//   ['x = 5; x ?= 6;',           5],
-//   ['x = 5; x ?= 6; x',         5],
-//   ['x = false; x ?= 6;',       false],
-//   ['x = false; x ?= 6; x',     false],
-//   ['x = 0; x ?= 6;',           0],
-//   ['x = ~0; x ?= 6;',          -0],
-//   ['x = 0n; x ?= 6;',          0n],
-//   ['x = NaN; x ?= 6;',         NaN],
-//   ['x = ""; x ?= 6;',          ''],
-//   ['x = null; x ?= 5;',        5],
-//   ['x = null; x ?= 5; x',      5],
-//   ['x = undefined; x ?= 5;',   5],
-//   ['x = undefined; x ?= 5; x', 5],
-// ]);
+testEach('?= assignment', [
+  ['x = 5; x ?= 6;',           5],
+  ['x = 5; x ?= 6; x',         5],
+  ['x = false; x ?= 6;',       false],
+  ['x = false; x ?= 6; x',     false],
+  ['x = 0; x ?= 6;',           0],
+  ['x = ~0; x ?= 6;',          -0],
+  ['x = 0n; x ?= 6;',          0n],
+  ['x = NaN; x ?= 6;',         NaN],
+  ['x = ""; x ?= 6;',          ''],
+  ['x = null; x ?= 5;',        5],
+  ['x = null; x ?= 5; x',      5],
+  ['x = undefined; x ?= 5;',   5],
+  ['x = undefined; x ?= 5; x', 5],
+]);
 
-// testEach('=: assignment', [
-//   [`
-//     f = [ops -> 
-//       q =: 2;   r =: 3;   s =: 4;   t =: 5;       u =: 6;
-//       v =: 7;   w =: 8;   x =: 9;   y =: 10;      z =: 11;
-//       @ q r s t u v w x y z];
-//     # q 99      r 0       s ~0      t 0n          u ''
-//       v NaN     w false   x null    y undefined   z (@ true 'abc') 
-//         \\f`,
-//       [99, 0, -0, 0n, '', NaN, false, 9, 10, [true, 'abc']]],
-//   [`
-//     f = [u ops v ...w =>
-//       x =: 5;
-//       y =: 6;
-//       z =: 7;
-//       @ u x y z v w];
-//     \\f 10 (# x 20 z null) 30 40 50;`,
-//       [10, 20, 6, 7, 30, [40, 50]]],
-//   [`\\[ops -> w =: 5;]`,   5],
-//   [`\\[ops -> w =: 5; w]`, 5],
-// ], true);
+testEach('=: assignment', [
+  [`
+    f = [ops -> 
+      q =: 2;   r =: 3;   s =: 4;   t =: 5;       u =: 6;
+      v =: 7;   w =: 8;   x =: 9;   y =: 10;      z =: 11;
+      @ q r s t u v w x y z];
+    # q 99      r 0       s ~0      t 0n          u ''
+      v NaN     w false   x null    y undefined   z (@ true 'abc') 
+        \\f`,
+      [99, 0, -0, 0n, '', NaN, false, 9, 10, [true, 'abc']]],
+  [`
+    f = [u ops v ...w =>
+      x =: 5;
+      y =: 6;
+      z =: 7;
+      @ u x y z v w];
+    \\f 10 (# x 20 z null) 30 40 50;`,
+      [10, 20, 6, 7, 30, [40, 50]]],
+  [`\\[ops -> w =: 5;]`,   5],
+  [`\\[ops -> w =: 5; w]`, 5],
+  [`\\[ops -> ops]`, {}]
+], true);
 
 testEach('update assignment', [
   ['x = 10; x += 4;',     14],
