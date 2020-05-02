@@ -46,4 +46,4 @@ x + 6;  // NaN (x = 5 + undefined + 6)
 
 The term _identifier_ is used frequently in these docs. An identifier is any combination of letters (currently only `a`-`z`, `A`-`Z`), digits (`0`-`9`), `_` and `$`, but cannot start with a digit. 
 
-> Identifiers _can_ start with `$`, but identifiers representing commands are reserved.
+> Identifiers _can_ start with `$`, but identifiers representing operators are reserved.
