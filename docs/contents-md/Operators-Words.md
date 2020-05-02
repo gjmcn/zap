@@ -13,7 +13,7 @@ The operators behave the same as their JavaScript counterparts except that:
     ```
     o $delete 'u';       // delete property 'u' of o
     o 'u' $delete 'v';   // delete property 'v' of o,u
-    o,u $delete 'v';     // delete property 'v' of o,u
+    o :u $delete 'v';    // delete property 'v' of o,u
     ```
   
   * The constructor and its arguments are passed to `$new` as separate operands. Unlike other commands, [spread syntax](?Spread) _can_ be used with `$new` (with any operand except the constructor):
