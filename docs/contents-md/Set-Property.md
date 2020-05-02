@@ -46,7 +46,7 @@ Use `:` with two operands to [get a property](?Get-Property#colon-getter).
 
 ##### `\:` {#colon-proto-setter}
 
-`\:` is like `:`, but sets a property on the object's prototype:
+`\:` is like [`:`](#colon-setter), but sets a property on the object's prototype:
 
 ```
 Person = [this :name a];
@@ -77,7 +77,7 @@ o +:u 1 *:v 2;   // {u: 6, v: 12}
 
 ##### `?:` {#conditional-set}
 
-`?:` is like `:`, but only sets a property if its current value is `null`, `undefined` or the property does not exist.
+`?:` is like [`:`](#colon-setter), but only sets a property if its current value is `null`, `undefined` or the property does not exist.
 
 ```
 o = # u null v 6;

@@ -52,7 +52,7 @@ The operators behave the same as their JavaScript counterparts except that:
 
 #### Other
 
-[`$at`](?Get-Property#at) [`$array`](?Spread#array)  [`$arrObj`](?Tabular-Data#array-of-objects) [`$assign`](?Set-Property#copy-properties) [`$awaitTry`](?Errors) [`$class`](?Object-Oriented-Programming#extends-example) [`$debugger`](?Print-and-Debug#debugger) [`$extends`](?Object-Oriented-Programming#extends-example) [`$get`](?Get-Property#get) [`$if`](?Conditional) [`$ms`](?Print-and-Debug#ms) [`$objArr`](?Tabular-Data#object-of-arrays) [`$print`](?Print-and-Debug#print) [`$set`](?Set-Property#set) [`$throw`](?Errors) [`$to`](?Set-Property#to) [`$transpose`](?Tabular-Data#transpose) [`$try`](?Errors)
+[`$at`](?Get-Property#at) [`$ats`](?Get-Property#ats) [`$array`](?Spread#array)  [`$arrObj`](?Tabular-Data#array-of-objects) [`$assign`](?Set-Property#copy-properties) [`$awaitTry`](?Errors) [`$class`](?Object-Oriented-Programming#extends-example) [`$debugger`](?Print-and-Debug#debugger) [`$extends`](?Object-Oriented-Programming#extends-example) [`$get`](?Get-Property#get) [`$if`](?Conditional) [`$ms`](?Print-and-Debug#ms) [`$objArr`](?Tabular-Data#object-of-arrays) [`$print`](?Print-and-Debug#print) [`$set`](?Set-Property#set) [`$throw`](?Errors) [`$to`](?Set-Property#to) [`$transpose`](?Tabular-Data#transpose) [`$try`](?Errors)
 
 #### DOM
 

@@ -563,6 +563,26 @@ export default {
     return new Promise(r => setTimeout(r, m));
   },
 
+  $ats(...p) {
+    let q = p[0];
+    let z = p[p.length - 1];
+    let r;
+    for (let j = 1; j < p.length - 1; j++) q = q[p[j]];
+    if (typeof q === 'string') {
+      r = '';
+      for (let v of z) r += q[v]; 
+    }
+    else if (Array.isArray(q)) {
+      r = [];
+      for (let v of z) r.push(q[v]); 
+    }
+    else {
+      r = {};
+      for (let v of z) r[v] = q[v]; 
+    }
+    return r;
+  },
+
   $pickIn(p, s) {
     return [...this._first(p).querySelectorAll(s)];
   },

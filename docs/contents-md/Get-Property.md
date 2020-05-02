@@ -18,6 +18,41 @@ circle $at 'radius';     // 50
 circle $at r;            // 50
 circle $at 'center' 1;   // 200   
 circle $at 'color' 2;    // 'd'
+circle 'color' $at 2;    // 'd'
+```
+
+---
+
+##### `$ats` {#ats}
+
+`$ats` is like [`$at`](#at), but `$ats` can get multiple properties or characters &mdash; the final operand of `$ats` must be an iterable.
+
+`$ats` returns the same kind of object that it gets properties from. For example, when getting elements from an array, `$ats` returns an array.
+
+```
+// array of objects
+data = @
+  (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
+  (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
+  (# Name 'ford ranger'   Horsepower 79 Origin 'USA');
+
+data $ats (@ 2 0);
+  // [
+  //   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}
+  //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
+  // ]
+
+data 2 $ats (@ 'Name' 'Origin');
+  // {Name: 'ford ranger', Origin: 'USA'}
+
+data 0 'Origin' $ats (@ 1 3);   // 'uo'
+```
+
+Since the final operand of `$ats` can be any iterable, we can use e.g. a string or a [range](?Generators#range):
+
+```
+# u 5 v 6 w 7 $ats 'uw';                    // {u: 5, w 7}
+@ 0 10 20 30 40 50 60 70 $ats (1 >> 7 2);   // [10, 30, 50, 70]
 ```
 
 ---
@@ -48,7 +83,7 @@ Use `:` with three operands to [set a property](?Set-Property#colon-setter).
 
 ##### `\:` {#colon-proto-getter}
 
-`\:` is like `:`, but gets a property from the object's prototype:
+`\:` is like [`:`](#colon-getter), but gets a property from the object's prototype:
 
 ```
 Array :prototype :slice;   // function
@@ -59,7 +94,7 @@ Array \:slice;             // same function
 
 ##### `?:` {#conditional-get}
 
-`?:` is like `:`, but `?:` short-circuits and returns `undefined` if the object is `null` or `undefined`:
+`?:` is like [`:`](#colon-getter), but `?:` short-circuits and returns `undefined` if the object is `null` or `undefined`:
 
 ```
 o = # u 5 v (# x 10 y 20);   // {u: 5, v: {x: 10, y: 20}}

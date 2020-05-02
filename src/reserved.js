@@ -66,7 +66,7 @@ const reserved = {
     '$mean', '$group', '$groupCount', '$bin', '$binCount', '$variance',
     '$deviation', '$arrObj', '$objArr', '$transpose', '$class', '$extends',
     '$assign', '$shuffle', '$export', '$import', '$importAs',
-    '$importDefault', '$importAll', '$ms', '$at', '$to'
+    '$importDefault', '$importAll', '$ms', '$at', '$ats', '$to'
   ]),
 
   invalid: new Set([

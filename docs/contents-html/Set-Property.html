@@ -32,7 +32,7 @@ circle
 <p>Use <code>:</code> with two operands to <a href="?Get-Property#colon-getter">get a property</a>.</p>
 <hr>
 <h5 id="colon-proto-setter"><code>\:</code></h5>
-<p><code>\:</code> is like <code>:</code>, but sets a property on the object's prototype:</p>
+<p><code>\:</code> is like <a href="#colon-setter"><code>:</code></a>, but sets a property on the object's prototype:</p>
 <pre><code>Person = [this :name a];
 
 // without \: (returns the prototype of Person)
@@ -53,7 +53,7 @@ o +:u 1 *:v 2;   // {u: 6, v: 12}
 </code></pre>
 <hr>
 <h5 id="conditional-set"><code>?:</code></h5>
-<p><code>?:</code> is like <code>:</code>, but only sets a property if its current value is <code>null</code>, <code>undefined</code> or the property does not exist.</p>
+<p><code>?:</code> is like <a href="#colon-setter"><code>:</code></a>, but only sets a property if its current value is <code>null</code>, <code>undefined</code> or the property does not exist.</p>
 <pre><code>o = # u null v 6;
 o ?:u 10 ?:v 20 ?:w 30;   // {u: 10, v: 6, w: 30}
 </code></pre>
