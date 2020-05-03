@@ -1,6 +1,6 @@
 {
   "name": "@gjmcn/zap",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Zap Language",
   "type": "module",
   "main": "./dist/zap.mjs",

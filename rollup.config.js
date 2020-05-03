@@ -13,7 +13,7 @@ export default  [
 			format: 'umd'
 		},
 		plugins: [
-			resolve(),
+			resolve({preferBuiltins: true}),
 			commonjs(),
 			builtins(),
 			terser({"compress": {"arrows": false}})

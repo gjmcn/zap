@@ -48,7 +48,7 @@ data 2 $ats (@ 'Name' 'Origin');
 data 0 'Origin' $ats (@ 1 3);   // 'uo'
 ```
 
-Since the final operand of `$ats` can be any iterable, we can use e.g. a string or a [range](?Generators#range):
+The final operand of `$ats` can be any iterable. For example, a string or a [range](?Generators#range):
 
 ```
 # u 5 v 6 w 7 $ats 'uw';                    // {u: 5, w 7}
