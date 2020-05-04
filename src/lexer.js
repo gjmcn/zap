@@ -12,8 +12,8 @@ const regexps = new Map([
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
-  ['openParentheses', /\(/y],
-  ['function', /[[{](?:\*\*)?/y], 
+  ['openParentheses', /\((\))?/y],
+  ['function', /([[{])(\*\*)?(]|})?/y], 
   ['closeBracket', /[)\]}]/y],
   ['closeSubexpr', /;/y],
   ['spreadOrRest', /\.{3}/y],
@@ -28,6 +28,8 @@ export default code => {
   let index = 0;   // position in code
   let line = 1;    // current line
   let column = 0;  // current column
+  let indent = 0;  // current indent
+  let indentCharsValid = true;
 
   const canBacktick = new Set ([
     '+', '-', '*', '/', '%', '^', '&&', '||', '??',
@@ -39,23 +41,43 @@ export default code => {
 
     // iterate over regexps
     for (let [type, reg] of regexps.entries()) {
+      
       reg.lastIndex = index;
       const match = reg.exec(code);
+
       if (match) {
 
-        // newline
-        if (type === 'newline') {
-          line++;
-          column = 0;
-        }
-
-        // comment or space
-        else if (type === 'comment' || type === 'space') {
+        // space
+        if (type === 'space') {
+          if (column === 0) {
+            if (match[0].test(/[^ ]/)) {
+              indentCharsValid = false;  // do not throw, may be empty line or just comments
+            }
+            indent = match[0].length;
+          }
           column += match[0].length;
         }
 
+        // comment
+        else if (type === 'comment') {
+          column += match[0].length;
+        }
+
+        // newline
+        else if (type === 'newline') {
+          line++;
+          column = 0;
+          indent = 0;
+          indentCharsValid = true;
+        }
+        
         // add token
         else {
+
+          if (!indentCharsValid) {
+            throw Error(`Zap syntax at ${line}:${
+              column + 1}, non-space indentation character`);
+          }
 
           const tkn = { type, value: match[0], line, column };
 
@@ -92,6 +114,24 @@ export default code => {
               tkn.value = match[2];
               if (match[1]) tkn.preTick = true;
               if (match[3]) tkn.postTick = true;
+            }
+
+            // open parentheses
+            else if (type === 'openParentheses') {
+              if (match[1]) tkn.indent = true;
+            }
+
+            // function
+            else if (type === 'function') {
+              if (match[2]) tkn.generator = true;
+              if (match[3]) {
+                const openClose = match[1] + match[3];
+                if (openClose !== '[]' && openClose !== '{}') {
+                  throw Error(
+                    `Zap syntax at ${line}:${column + 1}, bracket mismatch`);
+                }
+                tkn.indent = true;
+              }
             }
 
             column += match[0].length;
