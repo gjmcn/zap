@@ -28,7 +28,7 @@ export default code => {
   let index = 0;   // position in code
   let line = 1;    // current line
   let column = 0;  // current column
-  let indent = 0;  // current indent
+  
   let indentCharsValid = true;
 
   const canBacktick = new Set ([
@@ -47,42 +47,40 @@ export default code => {
 
       if (match) {
 
-        // space
-        if (type === 'space') {
+        const tkn = { type, value: match[0], line, column };
+
+        // comment
+        if (type === 'comment') {}
+
+        // same line space
+        else if (type === 'space') {
           if (column === 0) {
             if (match[0].test(/[^ ]/)) {
               indentCharsValid = false;  // do not throw, may be empty line or just comments
             }
-            indent = match[0].length;
+            tkn.type = 'indent';
+            tokens.push(tkn);  // only keep space token if it is an indent
           }
           column += match[0].length;
         }
 
-        // comment
-        else if (type === 'comment') {
-          column += match[0].length;
-        }
-
-        // newline
-        else if (type === 'newline') {
-          line++;
-          column = 0;
-          indent = 0;
-          indentCharsValid = true;
-        }
-        
-        // add token
+        // add token        
         else {
 
-          if (!indentCharsValid) {
+          // newline
+          if (type === 'newline') {
+            line++;
+            column = 0;
+            indentCharsValid = true;
+          }
+
+          else if (!indentCharsValid) {
             throw Error(`Zap syntax at ${line}:${
               column + 1}, non-space indentation character`);
           }
 
-          const tkn = { type, value: match[0], line, column };
-
           // (potentially) multiline string
-          if (type === 'string' && match[0][0] === '"') {
+          else if (type === 'string' && match[0][0] === '"') {
             let hasNewline;
             tkn.value = tkn.value.replace(/\r?\n/g, () => {
               line++;
