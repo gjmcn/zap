@@ -12,12 +12,13 @@ const regexps = new Map([
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
-  ['openParentheses', /\((\))?/y],
+  ['openParentheses', /\(/y],
   ['function', /([[{])(\*\*)?(]|})?/y], 
   ['closeBracket', /[)\]}]/y],
   ['closeSubexpr', /;/y],
   ['spreadOrRest', /\.{3}/y],
   ['arrow', /[\-=]>/y],
+  ['adjBlock', /,/y],
   ['operator', /(`)?([+\-*/%\^?\\=]?[=:]|[@#<>!]=|[+\-*/%\^\\!~]|[|<]?\||<\\|&&|<>?|><|>{1,3}|@{1,2}|#{1,2}|\?[?|]?|::)(`)?(?![+\-*%<>=!?\\#@:\|~\^`]|\/(?:$|[^/])|&&)/y]
 ]);
 
@@ -28,7 +29,7 @@ export default code => {
   let index = 0;   // position in code
   let line = 1;    // current line
   let column = 0;  // current column
-  
+
   let indentCharsValid = true;
 
   const canBacktick = new Set ([
@@ -49,24 +50,26 @@ export default code => {
 
         const tkn = { type, value: match[0], line, column };
 
-        // comment
-        if (type === 'comment') {}
+        // comment (discard token)
+        if (type === 'comment') {
+          column += match[0].length;
+        }
 
-        // same line space
+        // same line space (discard token unless indent)
         else if (type === 'space') {
           if (column === 0) {
             if (match[0].test(/[^ ]/)) {
               indentCharsValid = false;  // do not throw, may be empty line or just comments
             }
             tkn.type = 'indent';
-            tokens.push(tkn);  // only keep space token if it is an indent
+            tokens.push(tkn);
           }
           column += match[0].length;
         }
-
+        
         // add token        
         else {
-
+          
           // newline
           if (type === 'newline') {
             line++;
@@ -112,11 +115,6 @@ export default code => {
               tkn.value = match[2];
               if (match[1]) tkn.preTick = true;
               if (match[3]) tkn.postTick = true;
-            }
-
-            // open parentheses
-            else if (type === 'openParentheses') {
-              if (match[1]) tkn.indent = true;
             }
 
             // function
