@@ -1,18 +1,26 @@
-// Convert indented blocks to bracketed blocks.
-// Exported function removes indent, newline and adjBlock
-// tokens, and adds closeBracket and closeSubexpr tokens.
+// Convert indented blocks to bracketed blocks. Exported function returns a
+// new array of tokens with no newline or adjBlock tokens - new tokens are
+// added as required.
 
 'use strict';
 
 export default tokens => {
 
-  const blocks = [];  //!! IN EACH BLOCK, DO WE NEED TO KNOW IF CURRENT SUBEXPR ALREADY CONTINUED? - NO SINCE CAN CONT IT WITHER WAY?
-  const indent = 0;
-  const blockCode = false;  // all indent-blocks must contain code
+  const newTokens = [];
+  
+  // each element of stack will be an object representing an inline or indent
+  // block. Properties:
+  //    indent: bool, true if inline block
+  //    close: ')', ']' or '}' 
+  //    line: line of block (inline blocks only)
+  //    indent: indent of block (indent blocks only)
+  const stack = [];
+  let block = null;
+  let indent = 0;
 
   function syntaxError(tkn, msg) {
     throw Error(`Zap syntax at ${tkn.line}:${tkn.column + 1}, ${msg}`);
-  };
+  }
 
   // iterate over tokens
   for (let i = 0; i < tokens.length; i++) {
@@ -20,41 +28,39 @@ export default tokens => {
     const tkn = tokens[i];
     const {value, type} = tkn;
     
-    if (type === 'indent') {
+    if (type === 'newline') {
 
-      const newIndent = value.length;
-      
-      // open block
-      if (newIndent === indent + 4) {
+      // next token is newline: this line is empty, do nothing - regardless
+      // of indent and line-continue
+      if (tkn[i + 1] && tkn[i + 1].type === 'newline') {
+        continue;
 
-      }
+        !!!!!!!!! will not skip if token include function brackets?
 
-      // continue subexpression
-      else if (newIndent === indent + 2) {
-        //  ONLY ALLOW IF NOT ALREADY CONTINUING SUBEXPR
-      }
-
-      // new subexpr or continuing an already-continued subexpr
-      else if (newIndent === indent) {
 
       }
-      
-      // decreasing indent
-      else if (newIndent < indent)
-      
-      }
 
-      else {
-        syntaxError(tkn, 'invalid indent');
-      }
-            
+      // open new block
+      else if (tkn.indent - indent === 4) {
+        
+        if (block && !block.indent) {
+          syntaxError(tkn, 'unclosed inline block');
+        }
+        if (tkn.continue) {
+          syntaxError(tkn, 'line continue in new indent block');
+        }
 
-      indent = value.length;
+        block = {
+          type: indent;
+
+        }
+        stack.push(block);
+        indent = block.indent;
+        
+
     
     }
 
-    else if (type === 'newline') {
-    }
 
     else if (type === 'openParentheses') {
     }
@@ -65,20 +71,10 @@ export default tokens => {
     else if (type === 'closeBracket') {
     }
 
-    else {
-      blockCode = true;
+    else if (type === 'adjBlock') {
     }
 
 
-    
   }
   
 };
-
-/*
-- do we need to consider closeSubexpr tokens? - any other tokens?
-- make sure closing subepressions for all blocks that close
-
-
-
-*/
