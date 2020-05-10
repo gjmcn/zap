@@ -7,7 +7,7 @@ import reserved from './reserved.js';
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],
   ['comment', /\/\/.*/y],
-  ['newline', /\r?\n([^\S\r\n])?(\|(?!\|)|\[]|\{}|\[\*\*]|\{\*\*})?/y],  // includes indent and line-continue or function brackets
+  ['newline', /\r?\n([^\S\r\n])?(\|(?!\|))?/y],  // includes indent and line-continue
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
@@ -19,7 +19,7 @@ const regexps = new Map([
   ['spreadOrRest', /\.{3}/y],
   ['arrow', /[\-=]>/y],
   ['adjBlock', /,/y],
-  ['operator', /(`)?([+\-*/%\^?\\=]?[=:]|[@#<>!]=|[+\-*/%\^\\!~]|<?\.|<\\|\|\||&&|<>?|><|>{1,3}|@{1,2}|#{1,2}|\?[?.]?|::)(`)?(?![+\-*%<>=!?\\#@:\|~\^`.]|\/(?:$|[^/])|&&)/y]
+  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|[+\-*/%\^\\!~]|<?\.|<\\|\|\||&&|<>?|><|>{1,3}|@{1,2}|#{1,2}|\?[?.]?|=?:)(`)?(?![+\-*%<>=!?\\#@:\|~\^`.]|\/(?:$|[^/])|&&)/y]
 ]);
 
 const canBacktick = new Set ([
@@ -37,7 +37,7 @@ export default code => {
   let indentCharsValid = true;
 
   // handle first line indent as special case since collect indent
-  // and continue with newline tokens for all other lines
+  // (and line continue) with newline tokens for all other lines
   {
     const match = regexps.get('space').exec(code);
     if (match) {
@@ -75,7 +75,7 @@ export default code => {
         // add token        
         else {
           
-          // newline (and indent and line continue or function brackets)
+          // newline (and indent and line continue)
           if (type === 'newline') {
             line++;
             if (match[1]) {
@@ -146,7 +146,7 @@ export default code => {
     let snippet = code.slice(index, index + 30);
     if (code.length > index + 30) snippet += ' ...';
     throw Error(`Zap syntax at ${line}:${
-      column + 1}, unrecognized token: ${snippet}`);
+      column + 1}, unrecognized or unexpected token: ${snippet}`);
   }
 
   return tokens;
