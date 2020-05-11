@@ -56,6 +56,9 @@ const reserved = {
     // random
     '$random', '$randomInt', '$categorical', '$normal', '$logNormal',
     '$binomial', '$exponential', '$geometric',
+    // function
+    '$fun', '$proc', '$gen', '$as', '$scope',
+    '$asyncFun', '$asyncProc', '$asyncGen', '$asyncAs', '$asyncScope',
     // other
     '$array', '$get', '$set', '$if', '$each', '$awaitEach',
     '$nestEach', '$zipEach', '$map', '$awaitMap', '$nestMap', '$zipMap',
@@ -65,8 +68,8 @@ const reserved = {
     '$sumCumu', '$count', '$find', '$findIndex', '$order', '$orderIndex',
     '$mean', '$group', '$groupCount', '$bin', '$binCount', '$variance',
     '$deviation', '$arrObj', '$objArr', '$transpose', '$class', '$extends',
-    '$assign', '$shuffle', '$export', '$import', '$importAs',
-    '$importDefault', '$importAll', '$ms', '$at', '$ats', '$to'
+    '$assign', '$attach', '$shuffle', '$export', '$import', '$importAs',
+    '$importDefault', '$importAll', '$ms', '$at'
   ]),
 
   invalid: new Set([

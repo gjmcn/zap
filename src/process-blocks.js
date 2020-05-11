@@ -118,6 +118,7 @@ export default tokens => {
       //?????? can ',' appear anywhere? - needn't be on own line?
       //    -can even have code after it?
       //????? do we need to change stack?
+      // should check indent has not changed?
       
       if (block() === 'inline') throw syntaxError('unclosed inline block');
       if (block() === 0) throw syntaxError('cannot close base block');
