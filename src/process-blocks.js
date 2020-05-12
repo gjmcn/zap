@@ -113,6 +113,7 @@ export default tokens => {
     else if (type === 'adjBlock') {
       
       !!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      need to handle >> 1-line blocks - so have 3 block types: indent, inline and ?????
 
       //?????correct to not change indent?
       //?????? can ',' appear anywhere? - needn't be on own line?
