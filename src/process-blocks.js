@@ -1,6 +1,6 @@
 // Convert indent blocks to bracket blocks. Exported function returns a new
-// array of tokens with no newline or adjBlock tokens - new tokens are added
-// as required.
+// array of token objects with no newline, adjBlock or lineBlock tokens - new
+// tokens are added as required.
 
 'use strict';
 
@@ -8,7 +8,16 @@ export default tokens => {
 
   const newTokens = [];
   
-  // each element of stack is 'inline' or the indent of the block
+
+!!!!!!!!!!!!!!!!!!!!! HERE!!!!!!!!!!!!!!
+DECIDE HOW HANDLE:
+-LINEBLOCKS
+-FUNCTOIN BLOCKS HAVE GONE, BUT NOW HAVE GETPROPERTY BLOCKS
+-ANY CHANGES REQUIRED FOR (-> ...) BLOCKS COMPARED TO NORMAL () BLOCKS
+-SHOULD WE HANDLE ALL BLOCKS HERE SO NO NEED TO DO N PARSE? - OR SHIFT ALL THIS TO PARSE?
+
+
+  // each element of stack is 'inline', 'lineBlock' or the indent of the block
   // (the base block is an indent block with indent 0)
   const stack = [0];
   const block = () => stack[stack,length - 1];
@@ -112,8 +121,6 @@ export default tokens => {
 
     else if (type === 'adjBlock') {
       
-      !!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      need to handle >> 1-line blocks - so have 3 block types: indent, inline and ?????
 
       //?????correct to not change indent?
       //?????? can ',' appear anywhere? - needn't be on own line?
@@ -125,6 +132,10 @@ export default tokens => {
       if (block() === 0) throw syntaxError('cannot close base block');
       addNewToken('closeBracket', ')', tkn.line, tkn.column);
       addNewToken('openParentheses', '(', tkn.line, tkn.column);
+    }
+
+    else if (type === 'lineBlock') {
+
     }
 
     // remember to push all other tokens onto new newTokens

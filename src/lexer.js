@@ -1,4 +1,5 @@
-// Tokenize a string of Zap code.
+// Tokenize a string of Zap code. Exported function returns an array of token
+// objects. Comment and same-line space tokens are discarded. 
 
 'use strict';
 
@@ -27,7 +28,6 @@ const canBacktick = new Set ([
   '<', '<=', '>', '>=', '==', '!=', '<>', '><'
 ]);
 
-// returns an array of tokens (objects) from a string of Zap code
 export default code => {
   
   const tokens = [];
