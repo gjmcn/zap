@@ -1,30 +1,29 @@
-// Convert indent blocks to bracket blocks. Exported function returns a new
-// array of token objects with no newline, adjBlock or lineBlock tokens - new
-// tokens are added as required.
+// Convert all blocks to bracket blocks. Exported function returns a new array
+// of token objects with no newline tokens - new tokens are added as required.
 
 'use strict';
 
 export default tokens => {
 
+  const inline = Symbol('inline');
   const newTokens = [];
-  
 
-!!!!!!!!!!!!!!!!!!!!! HERE!!!!!!!!!!!!!!
-DECIDE HOW HANDLE:
--LINEBLOCKS
--FUNCTOIN BLOCKS HAVE GONE, BUT NOW HAVE GETPROPERTY BLOCKS
--ANY CHANGES REQUIRED FOR (-> ...) BLOCKS COMPARED TO NORMAL () BLOCKS
--SHOULD WE HANDLE ALL BLOCKS HERE SO NO NEED TO DO N PARSE? - OR SHIFT ALL THIS TO PARSE?
-
-
-  // each element of stack is 'inline', 'lineBlock' or the indent of the block
-  // (the base block is an indent block with indent 0)
+  // each element of stack is the inline symbol (parentheses, one-liner
+  // function or get property block) or the indent of an indent block (the base
+  // block is an indent block with indent 0)
   const stack = [0];
-  const block = () => stack[stack,length - 1];
-  let indent = 0;  // indent of nearest indent block
+  const block = () => stack[stack.length - 1];
+  let indent = 0;  // current indent (i.e. indent of most recent indent block)
+
+
+  // ===== helper functions ===============================
 
   function syntaxError(tkn, msg) {
     throw Error(`Zap syntax at ${tkn.line}:${tkn.column + 1}, ${msg}`);
+  }
+
+  function checkInlineNotOpen(tkn) {
+    if (block() === inline) throw syntaxError(tkn, 'unclosed brackets');
   }
 
   function addNewToken(type, value, line, column) {
@@ -33,21 +32,23 @@ DECIDE HOW HANDLE:
 
   // open new indent block, tkn is the newline token that opens it
   function openIndentBlock(tkn) {
-    if (block() === 'inline') throw syntaxError('unclosed inline block');
+    checkInlineNotOpen(tkn);
     addNewToken('openParentheses', '(', tkn.line, tkn.column);
     stack.push(tkn.indent);
     indent = tkn.indent;
   }
 
-  // close current indent block, tkn is the newline token that closes it
+  // close indent block, tkn is the newline token that closes it
   function closeIndentBlock(tkn) {
-    if (block() === 'inline') throw syntaxError('unclosed inline block');
+    checkInlineNotOpen(tkn);
     addNewToken('closeBracket', ')', tkn.line, tkn.column);
     stack.pop();
     indent -= 4;
   }
 
-  // iterate over tokens
+
+  // ===== iterate over tokens ============================
+
   for (let i = 0; i < tokens.length; i++) {
 
     const tkn = tokens[i];
@@ -58,20 +59,39 @@ DECIDE HOW HANDLE:
       // line continue - same behavior if newline is empty or contains code
       if (tkn.continue) {
 
-        // throw if invalid indent or new indent block
-        if (tkn.indent % 4) syntaxError(tkn, 'invalid indentation');
-        if (tkn.indent > indent) syntaxError(tkn, 'invalid line continue');
+        // do nothing if line continuing at same indent
+        if (tkn.indent === indent) continue;
+
+        // throw if invalid indent
+        if (tkn.indent % 4 || tkn.indent > indent + 4) {
+          syntaxError(tkn, 'invalid indent');
+        }
+
+        // open block if bigger indent
+        if (tkn.indent > indent) {
+          openIndentBlock(tkn);
+        }
         
         // close blocks if smaller indent
-        if (tkn.indent < indent) {
+        else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
           for (let k = 0; k <= nClose; k++) closeIndentBlock(tkn); 
         }
 
-        // do nothing if line continuing at same indent 
       }
       
-      // not line continue
+      // close-open indent block
+      else if (tkn.closeOpen) {
+        if (tkn.indent !== indent) syntaxError(tkn, 'invalid indent');
+        if (indent === 0) syntaxError(tkn, 'no block to close');
+        if (tkn[i + 1] && tkn[i + 1].type !== 'newline') {
+          syntaxError(tkn, 'comma must be on line of its own');
+        }
+        closeIndentBlock();
+        openIndentBlock();
+      }
+
+      // neither line continue nor close-open
       else {
 
         // next token is newline - so this newline has no code
@@ -79,10 +99,8 @@ DECIDE HOW HANDLE:
           
         // throw if invalid indent
         if (tkn.indent % 4 || tkn.indent > indent + 4) {
-          syntaxError(tkn, 'invalid indentation');
+          syntaxError(tkn, 'invalid indent');
         }
-
-        // ----- line has valid indent and contains code -----
 
         // open block if bigger indent
         if (tkn.indent > indent) {
@@ -98,6 +116,7 @@ DECIDE HOW HANDLE:
 
         // same indent
         else {
+          checkInlineNotOpen(tkn);
           addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
         }
 
@@ -105,48 +124,32 @@ DECIDE HOW HANDLE:
 
     }
 
-    else if (type === 'openParentheses' || type === 'function') {
-      stack.push('inline')
-      newTokens.push(tkn);
-    }
-
-    // close inline block - do not check bracket types, handled in parse.js
-    else if (type === 'closeBracket') {   
-      if (block() !== 'inline') {
-        syntaxError(tkn, 'invalid closing bracket');
+    // non-newline token
+    else {
+    
+      // open inline block
+      if (type === 'openOneLiner' || 
+          type === 'openParentheses' ||
+          type === 'getProperty') {
+        stack.push(inline);
       }
-      stack.pop();
+
+      // close inline block
+      else if (type === 'closeBracket') {   
+        if (block() !== inline) syntaxError(tkn, 'invalid closing bracket');
+        stack.pop();
+      }
+
       newTokens.push(tkn);
-    }
-
-    else if (type === 'adjBlock') {
-      
-
-      //?????correct to not change indent?
-      //?????? can ',' appear anywhere? - needn't be on own line?
-      //    -can even have code after it?
-      //????? do we need to change stack?
-      // should check indent has not changed?
-      
-      if (block() === 'inline') throw syntaxError('unclosed inline block');
-      if (block() === 0) throw syntaxError('cannot close base block');
-      addNewToken('closeBracket', ')', tkn.line, tkn.column);
-      addNewToken('openParentheses', '(', tkn.line, tkn.column);
-    }
-
-    else if (type === 'lineBlock') {
 
     }
-
-    // remember to push all other tokens onto new newTokens
-
-    // check that handle
-    //  -initial indent = dome since start at 0 so first indent must be 4?
-    //      -what if no indent blocks?
-    //  -end of code
-    //  -any special cases for first line
-
 
   }
+
+
+  // ===== end of code: close any open indent blocks ======
   
+  while (block.length > 1) closeIndentBlock();
+  addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
+
 };
