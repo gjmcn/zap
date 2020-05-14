@@ -1,5 +1,3 @@
-'use strict';
-
 const createArray = ['_create', '_createElm'];
 
 export default {

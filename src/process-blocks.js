@@ -1,8 +1,6 @@
 // Convert all blocks to bracket blocks. Exported function returns a new array
 // of token objects with no newline tokens - new tokens are added as required.
 
-'use strict';
-
 export default tokens => {
 
   const inline = Symbol('inline');
@@ -52,14 +50,14 @@ export default tokens => {
   for (let i = 0; i < tokens.length; i++) {
 
     const tkn = tokens[i];
-    const {value, type} = tkn;
+    const {type} = tkn;
     
     if (type === 'newline') {
 
       // line continue - same behavior if newline is empty or contains code
       if (tkn.continue) {
 
-        // do nothing if line continuing at same indent
+        // do nothing if same indent
         if (tkn.indent === indent) continue;
 
         // throw if invalid indent
@@ -72,23 +70,31 @@ export default tokens => {
           openIndentBlock(tkn);
         }
         
-        // close blocks if smaller indent
+        // close block(s) if smaller indent
         else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
-          for (let k = 0; k <= nClose; k++) closeIndentBlock(tkn); 
+          for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
         }
 
       }
       
       // close-open indent block
       else if (tkn.closeOpen) {
+        
+        // indent must not change
         if (tkn.indent !== indent) syntaxError(tkn, 'invalid indent');
-        if (indent === 0) syntaxError(tkn, 'no block to close');
+        
+        // cannot close base block
+        if (indent === 0) syntaxError(tkn, 'cannot close base block');
+        
+        // comma must be on a line of its own
         if (tkn[i + 1] && tkn[i + 1].type !== 'newline') {
-          syntaxError(tkn, 'comma must be on line of its own');
+          syntaxError(tkn, 'comma must be on a line of its own');
         }
+        
         closeIndentBlock();
         openIndentBlock();
+      
       }
 
       // neither line continue nor close-open
@@ -107,10 +113,10 @@ export default tokens => {
           openIndentBlock(tkn);
         }
 
-        // close blocks if smaller indent
+        // close block(s) if smaller indent
         else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
-          for (let k = 0; k <= nClose; k++) closeIndentBlock(tkn); 
+          for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
           addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
         }
 
@@ -149,7 +155,7 @@ export default tokens => {
 
   // ===== end of code: close any open indent blocks ======
   
-  while (block.length > 1) closeIndentBlock();
+  while (stack.length > 1) closeIndentBlock();
   addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
 
 };

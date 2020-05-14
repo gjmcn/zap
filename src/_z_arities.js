@@ -1,7 +1,5 @@
 // Commands that map directly to _z_ methods.
 
-'use strict';
-
 const m = new Map();
 
 m.set('$get',        [3, 3]);

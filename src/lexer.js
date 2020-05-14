@@ -1,8 +1,6 @@
 // Tokenize a string of Zap code. Exported function returns an array of token
 // objects. Comment and same-line space tokens are discarded. 
 
-'use strict';
-
 import reserved from './reserved.js';
 
 const regexps = new Map([

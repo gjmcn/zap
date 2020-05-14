@@ -1,5 +1,3 @@
-'use strict';
-
 import reserved from './reserved.js';
 const {wordLiterals, commands, invalid, nonCommands} = reserved;
 

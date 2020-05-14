@@ -1,5 +1,3 @@
-'use strict';
-
 const reserved = {
 
   wordLiterals: new Set([

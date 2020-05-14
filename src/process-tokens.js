@@ -1,7 +1,5 @@
 // Add properties to tokens and combine some tokens into compound tokens.
 
-'use strict';
-
 // token types that can accept unary minus
 const canUnaryMinus = new Set([
   'number', 'string', 'regexp', 'identifier', 'openParentheses', 'function'
