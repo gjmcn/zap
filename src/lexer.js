@@ -13,10 +13,9 @@ const regexps = new Map([
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openOneLiner', /\([\-=]>/y],
   ['openParentheses', /\(/y],
-  ['getProperty', /\??[[{]/y],   
+  ['getProperty', /(\?)?[[{]/y],   
   ['closeBracket', /[)\]}]/y],
   ['closeSubexpr', /;/y],
-  ['spreadOrRest', /\.{3}/y],
   ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|[+\-*/%\^\\!]|<\\|\|\||&&|<>?|><|>|@{1,2}|#{1,2}|\?{1,2}|[<?:]?:)(`)?(?![+\-*%<>=!?\\#@:\|\^`]|\/(?:$|[^/])|&&)/y]
 ]);
 
@@ -102,9 +101,14 @@ export default code => {
           // no other tokens can be multiline
           else {
 
-            // command: change type from 'identifier' to 'operator'
-            if (type === 'identifier' && reserved.commands.has(tkn.value)) {              
-              tkn.type = 'operator';
+            // identifier
+            if (type === 'identifier') {
+              if (reserved.commands.has(tkn.value)) {              
+                tkn.type = 'operator';
+              }
+              else {
+                tkn.name = tkn.value;
+              }
             }
 
             // backticks
@@ -116,6 +120,16 @@ export default code => {
               tkn.value = match[2];
               if (match[1]) tkn.preTick = true;
               if (match[3]) tkn.postTick = true;
+            }
+
+            // get property
+            else if (type === 'getProperty') {
+              if (match[1]) tkn.optional = true;
+            }
+
+            // close bracket
+            else if (type === 'closeBracket') {
+              tkn.bracket = tkn.value;
             }
 
             column += match[0].length;

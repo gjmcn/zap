@@ -67,7 +67,7 @@ const reserved = {
     '$variance', '$deviation', '$arrObj', '$objArr', '$transpose', '$class',
     '$extends', '$assign', '$attach', '$shuffle', '$export', '$import',
     '$importAs', '$importDefault', '$importAll', '$ms', '$at', '$ats', '$to',
-    '$linSpace'
+    '$linSpace', '$apply', '$call'
   ]),
 
   invalid: new Set([
