@@ -1,17 +1,24 @@
 // Convert all blocks to bracket blocks. Exported function returns a new array
 // of token objects with no newline tokens - new tokens are added as required.
+//
+// The exported function validates the block structure:
+//  - inline blocks do not span multiple lines (unless lines are continued)
+//  - opening and closing brackets match; no extra/missing closing brackets
+//  - indents are valid (know from lexer that indents are all spaces)
+//  - cannot use close-open at base level
+//  - no other code on close-open comma line
+//  - (does not check that blocks are non-empty)
 
 export default tokens => {
 
-  const inline = Symbol('inline');
+  const closingBrackets = { '(': ')', '[': ']', '{': '}' };
   const newTokens = [];
 
-  // each element of stack is the inline symbol (parentheses, one-liner
-  // function or get property block) or the indent of an indent block (the base
-  // block is an indent block with indent 0)
+  // each element of stack is '(', '[' or '{', or is the indent of an indent
+  // block (the base block is an indent block with indent 0)
   const stack = [0];
   const block = () => stack[stack.length - 1];
-  let indent = 0;  // current indent (i.e. indent of most recent indent block)
+  let indent = 0;  // current indent (i.e. indent of most local indent block)
 
 
   // ===== helper functions ===============================
@@ -21,7 +28,9 @@ export default tokens => {
   }
 
   function checkInlineNotOpen(tkn) {
-    if (block() === inline) throw syntaxError(tkn, 'unclosed brackets');
+    if (typeof block() !== 'number') {
+      throw syntaxError(tkn, 'unclosed brackets');
+    }
   }
 
   function addNewToken(type, value, line, column) {
@@ -134,15 +143,14 @@ export default tokens => {
     else {
     
       // open inline block
-      if (type === 'openOneLiner' || 
-          type === 'openParentheses' ||
-          type === 'getProperty') {
-        stack.push(inline);
-      }
+      if (type === 'openOneLiner' || type === 'openParentheses') stack.push('(');
+      else if (type === 'getProperty') stack.push(tkn.value);
 
       // close inline block
-      else if (type === 'closeBracket') {   
-        if (block() !== inline) syntaxError(tkn, 'invalid closing bracket');
+      else if (type === 'closeBracket') {
+        if (closingBrackets[block()] !== tkn.value) {
+          syntaxError(tkn, 'bracket mismatch');
+        }
         stack.pop();
       }
 
@@ -153,9 +161,9 @@ export default tokens => {
   }
 
 
-  // ===== end of code: close any open indent blocks ======
+  // ===== end of code: close open indent blocks ==========
   
   while (stack.length > 1) closeIndentBlock();
-  addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
+
 
 };
