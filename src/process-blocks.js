@@ -18,11 +18,20 @@ export default tokens => {
   // each element of stack is '(', '[' or '{', or is the indent of an indent
   // block (the base block is an indent block with indent 0)
   const stack = [0];
-  const block = () => stack[stack.length - 1];
+  const block = () => last(stack);
   let indent = 0;  // current indent (i.e. indent of most local indent block)
 
 
   // ===== helper functions ===============================
+
+  function last(arr) {
+    return arr[arr.length - 1];
+  }
+
+  function lastNewType() {
+    const lastNew = last(newTokens);
+    return lastNew && lastNew.type;
+  }
 
   function syntaxError(tkn, msg) {
     throw Error(`Zap syntax at ${tkn.line}:${tkn.column + 1}, ${msg}`);
@@ -133,14 +142,26 @@ export default tokens => {
         // same indent
         else {
           checkInlineNotOpen(tkn);
-          addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
+          if (lastNewType() !== 'closeSubexpr') {
+            addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
+          }
         }
 
       }
 
     }
 
-    // non-newline token
+    // close subexpression
+    else if (type === 'closeSubexpr') {
+      if (block() === '[' || block() === '{') {
+        syntaxError(tkn, 'unexpected semicolon');
+      }
+      if (lastNewType() !== 'closeSubexpr') {
+        newTokens.push(tkn);
+      }
+    }
+
+    // all other tokens
     else {
     
       // open inline block
@@ -155,11 +176,10 @@ export default tokens => {
         stack.pop();
       }
 
-      // close subexpression and operator
-      else if (type === 'closeSubexpr' || type === 'operator') {
+      // operator
+      else if (type === 'operator') {
         if (block() === '[' || block() === '{') {
-          syntaxError(tkn,
-            `unexpected ${type === 'operator' ? 'operator' : 'semicolon'}`);
+          syntaxError(tkn, 'unexpected operator');
         }
       }
 
@@ -173,6 +193,6 @@ export default tokens => {
   // ===== end of code: close open indent blocks ==========
   
   while (stack.length > 1) closeIndentBlock();
-
+  if (lastNewType() === 'closeSubexpr') newTokens.pop();
 
 };

@@ -58,16 +58,15 @@ const reserved = {
     '$fun', '$proc', '$gen', '$asyncFun', '$asyncProc', '$asyncGen',
     // other
     '$array', '$get', '$set', '$if', '$each', '$awaitEach', '$nestEach',
-    '$zipEach', '$map', '$awaitMap', '$nestMap', '$zipMap', '$loop', '$scope',
-    'asyncScope', '$do', '$asyncDo', '$while', '$asyncWhile', '$nest', '$zip',
-    '$seq', '$throw', '$try', '$awaitTry', '$debugger', '$print', '$reduce',
-    '$some', '$every', '$filter', '$min', '$minIndex', '$max', '$maxIndex',
-    '$sum', '$sumCumu', '$count', '$find', '$findIndex', '$order',
-    '$orderIndex', '$mean', '$group', '$groupCount', '$bin', '$binCount',
-    '$variance', '$deviation', '$arrObj', '$objArr', '$transpose', '$class',
-    '$extends', '$assign', '$attach', '$shuffle', '$export', '$import',
-    '$importAs', '$importDefault', '$importAll', '$ms', '$at', '$ats', '$to',
-    '$linSpace', '$apply', '$call'
+    '$map', '$awaitMap', '$nestMap',  '$loop', '$scope', 'asyncScope', '$do',
+    '$asyncDo', '$while', '$asyncWhile', '$nest', '$seq', '$throw', '$try',
+    '$awaitTry', '$debugger', '$print', '$reduce', '$some', '$every',
+    '$filter', '$min', '$minIndex', '$max', '$maxIndex', '$sum', '$sumCumu',
+    '$count', '$find', '$findIndex', '$order', '$orderIndex', '$mean',
+    '$group', '$groupCount', '$bin', '$binCount', '$variance', '$deviation',
+    '$arrObj', '$objArr', '$transpose', '$class', '$extends', '$assign',
+    '$attach', '$shuffle', '$export', '$import', '$importAs', '$importDefault',
+    '$importAll', '$ms', '$at', '$ats', '$to', '$linSpace', '$apply', '$call'
   ]),
 
   invalid: new Set([
