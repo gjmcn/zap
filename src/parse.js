@@ -6,15 +6,12 @@ const {SourceNode} = sourceMapObject;
 
 // helper functions and constants
 
-const closingBrackets = { '(': ')', '[': ']', '{': '}' };
-
 function syntaxError(t, msg) {
   throw Error(`Zap syntax at ${
     typeof t === 'string' ? t : `${t.line}:${t.column + 1}`}, ${msg}`);
 };
 
 function checkNotReserved(name, tkn, isArg) {
-  name = name.replace('...', '');
   if (reserved.nonCommands.has(name)) {
     syntaxError(tkn, isArg 
       ? `parameter name is a reserved word: ${name}`
@@ -42,15 +39,16 @@ export default (tokens, options = {}) => {
   // open block
   function openBlock() {
     const b = {
-      token: tkn || null,  // token that opens block - null if base block 
-      operator: null,      // current operator/command token
-      operands: [],        // each entry is an object or an array
-      position: null,      // number of operands before operator/command
-      assign: null,        // current assignment token
-      function: null,      // most local open function (or base) block
-      variables: null,     // local variable names, used by function and base blocks
-      js: []               // each entry is an array representing a subexpression, or
-                           // a comma (string) separating these
+      token: tkn || null,   // token that opens block - null if base block 
+      operator: null,       // current operator token
+      operands: [],         // each entry is an object or an array
+      position: null,       // number of operands before operator
+      assign: null,         // current assignment token
+      function: null,       // most local open function (or base) block
+      variables: null,      // local variable names, used by function and base blocks
+      js: [],               // each entry is an array representing a subexpression, or
+                            // a comma (string) separating these
+      jsLHS: null,          // left hand side of assignment
     }
     if (!b.token) {
       b.import = [];         // import statements
@@ -73,56 +71,55 @@ export default (tokens, options = {}) => {
   //  - if not base block, pop stack and push array representing the
   //    block's JS tree to operands of popped block
   function closeBlock() {
+    
     closeSubexpr();
     const isBase = !block.token;
-    if (!isBase && tkn.bracket !== closingBrackets[block.token.value[0]]) {
-      syntaxError(tkn, 'bracket mismatch');
-    }
     const blockJS = block.js;
     let endJS;
+    
+    // base block
     if (isBase) {
       endJS = {js: ';'};
     }
-    else {  // function or parentheses
+
+    // function or parentheses
+    else { 
+      
+      // function
       if (block.token.type === 'function') {
-        const argString = Array.from(block.token.args, a => {
-          return a === 'ops' ? 'ops={}' : a;
-        }).join(', ');
+        const argString = Array.from(block.token.args, (a, j) => {
+          if (a === 'ops') {
+            return 'ops={}';
+          }
+          else if (a === 'rest') {
+            if (j !== block.token.args.length - 1) {
+              syntaxError(
+                block.token, 'rest parameter must be the final parameter');
+            }
+            return '...rest';
+          }
+          return a;
+        }).join();
         block.token.js = `${block.token.async ? '(async ' : '('}${
-          (block.token.arrow === '=>') 
+          block.token.arrow
             ? `(${argString}) => {return `
             : `function${
                 block.token.generator ? '*' : ''}(${argString}) {return `}`;
-        tkn.js = '})';
-        if (block.token.arrow !== '=>' && !block.token.async && 
-              !block.token.generator && !block.token.unaryMinus
-            ) {  //standard function so can be a constructor literal
-          blockJS._zap_constructor = {
-            start: `{constructor(${argString}) {`,
-            end: '}}'
-          };
-        }
-      }  
-      else {  // parentheses
-        if (blockJS.length === 0) {
-          syntaxError(tkn, 'empty parentheses');
-        }
-        if (block.token.spread) {
-          blockJS._zap_parenthSpread = true;
-          block.token.js = '...(';
-        }
-        else {
-          block.token.js = '(';
-        }
+        tkn.js = block.token.scope ? '})()': '})';
+      }
+
+      // parentheses
+      else {
+        if (blockJS.length === 0) syntaxError(tkn, 'empty block');
+        block.token.js = '(';
         tkn.js = ')';
       }
-      if (block.token.unaryMinus) {  // will not have spread
-        block.token.js =
-          `(${'- '.repeat(block.token.unaryMinus)}${block.token.js}`;
-        tkn.js += ')';
-      }
+
+      !!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
       blockJS.unshift(block.token);
       endJS = tkn;
+    
     }
     if (block.variables) {
       let varArr = [...block.variables];

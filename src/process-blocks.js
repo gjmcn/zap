@@ -7,7 +7,6 @@
 //  - indents are valid (know from lexer that indents are all spaces)
 //  - cannot use close-open at base level
 //  - no other code on close-open comma line
-//  - semicolons and operators cannot appear (directly) inside [] or {} blocks
 //  - (does not check that blocks are non-empty)
 
 export default tokens => {
@@ -153,9 +152,6 @@ export default tokens => {
 
     // close subexpression
     else if (type === 'closeSubexpr') {
-      if (block() === '[' || block() === '{') {
-        syntaxError(tkn, 'unexpected semicolon');
-      }
       if (lastNewType() !== 'closeSubexpr') {
         newTokens.push(tkn);
       }
@@ -165,8 +161,9 @@ export default tokens => {
     else {
     
       // open inline block
-      if (type === 'openOneLiner' || type === 'openParentheses') stack.push('(');
-      else if (type === 'getProperty') stack.push(tkn.value.slice(-1));
+      if (type === 'function' || type === 'openParentheses') {
+        stack.push(tkn.value);
+      }
 
       // close inline block
       else if (type === 'closeBracket') {
@@ -174,13 +171,6 @@ export default tokens => {
           syntaxError(tkn, 'bracket mismatch');
         }
         stack.pop();
-      }
-
-      // operator
-      else if (type === 'operator') {
-        if (block() === '[' || block() === '{') {
-          syntaxError(tkn, 'unexpected operator');
-        }
       }
 
       newTokens.push(tkn);

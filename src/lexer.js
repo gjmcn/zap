@@ -11,12 +11,11 @@ const regexps = new Map([
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
-  ['openOneLiner', /\([\-=]>/y],
-  ['openParentheses', /\(/y],
-  ['getProperty', /(\?)?[[{]/y],   
+  ['function', /[\[{]/y],
+  ['openParentheses', /\(/y],  
   ['closeBracket', /[)\]}]/y],
   ['closeSubexpr', /;/y],
-  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|[+\-*/%\^\\!]|<\\|\|\||&&|<>?|><|>|@{1,2}|#{1,2}|\?{1,2}|[<?:]?:)(`)?(?![+\-*%<>=!?\\#@:\|\^`]|\/(?:$|[^/])|&&)/y]
+  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|->|[+\-*/%\^\\!~]|<\\|\|\||&&|<[>\-]?|><|>|@{1,2}|#{1,2}|\?{1,2}|[=?]?:)(`)?(?![+\-*%<>=!?\\#@:\|\^`~]|\/(?:$|[^/])|&&)/y]
 ]);
 
 const canBacktick = new Set([
@@ -122,14 +121,10 @@ export default code => {
               if (match[3]) tkn.postTick = true;
             }
 
-            // get property
-            else if (type === 'getProperty') {
-              if (match[1]) tkn.optional = true;
-            }
-
-            // close bracket
-            else if (type === 'closeBracket') {
-              tkn.bracket = tkn.value;
+            // function
+            else if (type === 'function') {
+              tkn.oneLiner = true;
+              if (match[0] === '{') tkn.arrow = true;
             }
 
             column += match[0].length;
