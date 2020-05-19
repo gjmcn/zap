@@ -5,8 +5,8 @@
 //  - inline blocks do not span multiple lines (unless lines are continued)
 //  - opening and closing brackets match; no extra/missing closing brackets
 //  - indents are valid (know from lexer that indents are all spaces)
-//  - cannot use close-open at base level
-//  - no other code on close-open comma line
+//  - cannot use close-open comma at base level
+//  - close-open comma must be on aline of its own
 //  - (does not check that blocks are non-empty)
 
 export default tokens => {
@@ -65,7 +65,7 @@ export default tokens => {
     if (type === 'newline') {
 
       // line continue - same behavior if newline is empty or contains code
-      if (tkn.continue) {
+      if (tkn.lineStart === '|') {
 
         // do nothing if same indent
         if (tkn.indent === indent) continue;
@@ -89,7 +89,7 @@ export default tokens => {
       }
       
       // close-open indent block
-      else if (tkn.closeOpen) {
+      else if (tkn.lineStart === ',') {
         
         // indent must not change
         if (tkn.indent !== indent) syntaxError(tkn, 'invalid indent');
@@ -110,8 +110,8 @@ export default tokens => {
       // normal newline - neither line continue nor close-open
       else {
 
-        // next token is newline - so this newline has no code
-        if (tkn[i + 1] && tkn[i + 1].type === 'newline') continue;
+        // do nothing if no code on the newline
+        if (!tkn[i + 1] || tkn[i + 1].type === 'newline') continue;
           
         // throw if invalid indent
         if (tkn.indent % 4 || tkn.indent > indent + 4) {

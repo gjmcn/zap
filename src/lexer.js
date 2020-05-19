@@ -6,7 +6,7 @@ import reserved from './reserved.js';
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],
   ['comment', /\/\/.*/y],
-  ['newline', /\r?\n([^\S\r\n])?(,|\|(?!\|))?/y],
+  ['newline', /\r?\n([^\S\r\n]*)(,|\|(?!\|))?/y],
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
@@ -14,7 +14,7 @@ const regexps = new Map([
   ['function', /[\[{]/y],
   ['openParentheses', /\(/y],  
   ['closeBracket', /[)\]}]/y],
-  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|->|[+\-*/%\^\\!~]|<\\|\|\||&&|<>?|><|>|@{1,2}|#{1,2}|\?{1,2}|[?<]?::|[=?]?:)(`)?(?![+\-*%<>=!?\\#@:\|\^`~]|\/(?:$|[^/])|&&)/y]
+  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|\\:|[+\-*/%\^\\!~]|<\\|\|\||&&|<>?|><|>|@{1,2}|#{1,2}|\?{1,2}|[?<]?::|[=?]?:)(`)?(?![+\-*%<>=!?\\#@:\|\^`~]|\/(?:$|[^/])|&&)/y]
 ]);
 
 const canBacktick = new Set([
@@ -30,9 +30,23 @@ export default code => {
   let column = 0;  // current column
   let indentCharsValid = true;
 
-  // handle indent of first line as a special case (new line tokens include
-  // indent for all other lines)
+  // handle indent and lineStart characters on first line as a special case
+  // (these are included in newline tokens for all other lines)
   const initIndent = regexps.get('space').exec(code);
+  if (!initIndent) {
+    let lineStart = /,|\|(?!\|)/y.exec(code);
+    if (lineStart) {
+      column = 1
+      index = 1;
+      tokens.push({
+        type: 'newline',
+        indent: 0,
+        lineStart: lineStart[0],
+        line,
+        column
+      });
+    }
+  }
 
   // iterate over code
   codeLoop: while (index < code.length) {
@@ -68,7 +82,7 @@ export default code => {
             }
             column = tkn.indent;
             if (match[2]) {
-              tkn[match[2] === ',' ? 'closeOpen' : 'continue'] = true;
+              tkn.lineStart = match[2];
               column++;
             }
             tkn.line = line;  //use end of token for error messages
@@ -142,7 +156,7 @@ export default code => {
     let snippet = code.slice(index, index + 30);
     if (code.length > index + 30) snippet += ' ...';
     throw Error(`Zap syntax at ${line}:${
-      column + 1}, unrecognized or unexpected token: ${snippet}`);
+      column + 1}, unrecognized token: ${snippet}`);
   }
 
   // error if indent on first line - unless it has no code
