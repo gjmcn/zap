@@ -17,33 +17,25 @@ export default tokens => {
   // each element of stack is '(', '[' or '{', or is the indent of an indent
   // block (the base block is an indent block with indent 0)
   const stack = [0];
-  const block = () => last(stack);
+  const block = () => stack[stack.length - 1];
   let indent = 0;  // current indent (i.e. indent of most local indent block)
 
 
   // ===== helper functions ===============================
 
-  function last(arr) {
-    return arr[arr.length - 1];
-  }
-
-  function lastNewType() {
-    const lastNew = last(newTokens);
-    return lastNew && lastNew.type;
-  }
-
   function syntaxError(tkn, msg) {
     throw Error(`Zap syntax at ${tkn.line}:${tkn.column + 1}, ${msg}`);
   }
 
+  function addNewToken(type, value, line, column) {
+    newTokens.push({type, value, line, column});
+  }
+ 
+  // throw if inline block open
   function checkInlineNotOpen(tkn) {
     if (typeof block() !== 'number') {
       throw syntaxError(tkn, 'unclosed brackets');
     }
-  }
-
-  function addNewToken(type, value, line, column) {
-    newTokens.push({type, value, line, column});
   }
 
   // open new indent block, tkn is the newline token that opens it
@@ -115,7 +107,7 @@ export default tokens => {
       
       }
 
-      // neither line continue nor close-open
+      // normal newline - neither line continue nor close-open
       else {
 
         // next token is newline - so this newline has no code
@@ -135,26 +127,17 @@ export default tokens => {
         else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
           for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
-          addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
+          addNewToken('closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
         }
 
         // same indent
         else {
           checkInlineNotOpen(tkn);
-          if (lastNewType() !== 'closeSubexpr') {
-            addNewToken('closeSubexpr', ';' , tkn.line, tkn.column);
-          }
+          addNewToken('closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
         }
 
       }
 
-    }
-
-    // close subexpression
-    else if (type === 'closeSubexpr') {
-      if (lastNewType() !== 'closeSubexpr') {
-        newTokens.push(tkn);
-      }
     }
 
     // all other tokens
@@ -183,6 +166,5 @@ export default tokens => {
   // ===== end of code: close open indent blocks ==========
   
   while (stack.length > 1) closeIndentBlock();
-  if (lastNewType() === 'closeSubexpr') newTokens.pop();
 
 };

@@ -60,12 +60,12 @@ const reserved = {
     '$array', '$get', '$set', '$if', '$each', '$awaitEach', '$nestEach',
     '$map', '$awaitMap', '$nestMap',  '$loop', '$scope', 'asyncScope', '$do',
     '$asyncDo', '$while', '$asyncWhile', '$nest', '$seq', '$throw', '$try',
-    '$awaitTry', '$debugger', '$print', '$reduce', '$some', '$every',
-    '$filter', '$min', '$minIndex', '$max', '$maxIndex', '$sum', '$sumCumu',
-    '$count', '$find', '$findIndex', '$order', '$orderIndex', '$mean',
-    '$group', '$groupCount', '$bin', '$binCount', '$variance', '$deviation',
-    '$arrObj', '$objArr', '$transpose', '$class', '$extends', '$assign',
-    '$attach', '$shuffle', '$export', '$import', '$importAs', '$importDefault',
+    '$awaitTry', '$debugger', '$reduce', '$some', '$every', '$filter',
+    '$min', '$minIndex', '$max', '$maxIndex', '$sum', '$sumCumu', '$count',
+    '$find', '$findIndex', '$order', '$orderIndex', '$mean', '$group',
+    '$groupCount', '$bin', '$binCount', '$variance', '$deviation', '$arrObj',
+    '$objArr', '$transpose', '$class', '$extends', '$assign', '$attach',
+    '$shuffle', '$export', '$import', '$importAs', '$importDefault',
     '$importAll', '$ms', '$at', '$to', '$linSpace', '$apply', '$call'
   ]),
 

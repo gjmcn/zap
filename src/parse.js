@@ -56,7 +56,7 @@ export default (tokens, options = {}) => {
     }
     if (!b.token || b.token.type === 'function') {
       b.variables = new Set();
-      b.function = b;  // base block equivalent to function for declaring variables 
+      b.function = b;  // base block is equivalent to function for declaring variables
     }
     else {
       b.function = block.function;
