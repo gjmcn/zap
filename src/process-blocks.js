@@ -1,10 +1,11 @@
-// Convert all blocks to bracket blocks. Exported function returns a new array
-// of token objects with no newline tokens - new tokens are added as required.
+// Convert all blocks to bracket blocks. The exported function returns a new
+// array of token objects with no newline tokens - new tokens are added as
+// required.
 //
 // The exported function validates the block structure:
 //  - inline blocks do not span multiple lines (unless lines are continued)
 //  - opening and closing brackets match; no extra/missing closing brackets
-//  - indents are valid (know from lexer that indents are all spaces)
+//  - indents are valid
 //  - cannot use close-open comma at base level
 //  - close-open comma must be on aline of its own
 //  - (does not check that blocks are non-empty)
@@ -64,66 +65,60 @@ export default tokens => {
     
     if (type === 'newline') {
 
+      const codeOnLine = tokens[i + 1] && tokens[i + 1].type !== 'newline';
+
+      // check indent is valid if line is not empty
+      if (tkn.lineCont || codeOnLine) {
+       
+        // invalid characters in indent?
+        if (!/[^\r\n ]/.test(tkn.value)) {
+          syntaxError(tkn, 'invalid indent - only spaces allowed');
+        }
+
+        // indent must be a multiple of 4?
+        if (tkn.indent % 4) {
+          syntaxError(tkn, 'invalid indent - not a multiple of 4');
+        }
+
+        // indent increased by more than one level?
+        if (tkn.indent > indent + 4) {
+          syntaxError(tkn, 'invalid indent - indent increased by more than 1 level');
+        }
+
+      }
+
       // line continue - same behavior if newline is empty or contains code
-      if (tkn.lineStart === '|') {
-
-        // do nothing if same indent
-        if (tkn.indent === indent) continue;
-
-        // throw if invalid indent
-        if (tkn.indent % 4 || tkn.indent > indent + 4) {
-          syntaxError(tkn, 'invalid indent');
-        }
-
-        // open block if bigger indent
-        if (tkn.indent > indent) {
-          openIndentBlock(tkn);
-        }
+      if (tkn.lineCont) {
         
-        // close block(s) if smaller indent
-        else if (tkn.indent < indent) {
+        // decreased indent? - close block(s)
+        if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
-          for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
+          for (let k = 0; k < nClose; k++) closeIndentBlock(tkn);
+        }
+
+        // increased indent or at start of file? - throw since do not allow line
+        // continue at start of block
+        else if (tkn.indent > indent || newTokens.length === 0) {
+          syntaxError(tkn, 'invalid line continue');
         }
 
       }
       
-      // close-open indent block
-      else if (tkn.lineStart === ',') {
-        
-        // indent must not change
-        if (tkn.indent !== indent) syntaxError(tkn, 'invalid indent');
-        
-        // cannot close base block
-        if (indent === 0) syntaxError(tkn, 'cannot close base block');
-        
-        // comma must be on a line of its own
-        if (tkn[i + 1] && tkn[i + 1].type !== 'newline') {
-          syntaxError(tkn, 'comma must be on a line of its own');
-        }
-        
-        closeIndentBlock();
-        openIndentBlock();
-      
-      }
-
-      // normal newline - neither line continue nor close-open
+      // normal newline - no line continue
       else {
 
-        // do nothing if no code on the newline
-        if (!tkn[i + 1] || tkn[i + 1].type === 'newline') continue;
-          
-        // throw if invalid indent
-        if (tkn.indent % 4 || tkn.indent > indent + 4) {
-          syntaxError(tkn, 'invalid indent');
-        }
+        // no code on the newline? - do nothing
+        if (!codeOnLine) continue;
 
-        // open block if bigger indent
+        // increased indent? - open block as long as not at start of file
         if (tkn.indent > indent) {
+          if (newTokens.length === 0) {
+            syntaxError(tkn, 'invalid indent - base block cannot be indented');
+          }
           openIndentBlock(tkn);
         }
 
-        // close block(s) if smaller indent
+        // decreased indent? - close block(s)
         else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
           for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
