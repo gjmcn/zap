@@ -55,20 +55,19 @@ const reserved = {
     '$random', '$randomInt', '$categorical', '$normal', '$logNormal',
     '$binomial', '$exponential', '$geometric',
     // function
-    '$fun', '$proc', '$gen', '$scope', '$asyncFun', '$asyncProc', '$asyncGen',
-    '$asyncScope',
+    '$fun', '$proc', '$gen', '$scope', '$as', '$asyncFun', '$asyncProc',
+    '$asyncGen', '$asyncScope', '$asyncAs',
 
     // other
-    '$array', '$get', '$set', '$if', '$each', '$awaitEach', '$nestEach',
-    '$map', '$awaitMap', '$nestMap',  '$loop', '$do', '$asyncDo', '$while',
-    '$asyncWhile', '$nest', '$seq', '$throw', '$try', '$awaitTry', '$debugger',
-    '$reduce', '$some', '$every', '$filter', '$min', '$minIndex', '$max',
-    '$maxIndex', '$sum', '$sumCumu', '$count', '$find', '$findIndex', '$order',
-    '$orderIndex', '$mean', '$group', '$groupCount', '$bin', '$binCount',
-    '$variance', '$deviation', '$arrObj', '$objArr', '$transpose', '$class',
-    '$extends', '$assign', '$attach', '$shuffle', '$export', '$import',
-    '$importAs', '$importDefault', '$importAll', '$ms', '$at', '$to',
-    '$linSpace', '$apply', '$call', '$print'
+    '$array', '$get', '$set', '$if', '$each', '$awaitEach', '$map',
+    '$awaitMap', '$do',  '$while', '$seq', '$throw', '$try', '$awaitTry',
+    '$debugger', '$reduce', '$some', '$every', '$filter', '$min', '$minIndex',
+    '$max', '$maxIndex', '$sum', '$sumCumu', '$count', '$find', '$findIndex',
+    '$order', '$orderIndex', '$mean', '$group', '$groupCount', '$bin',
+    '$binCount', '$variance', '$deviation', '$arrObj', '$objArr', '$transpose',
+    '$class', '$extends', '$assign', '$attach', '$shuffle', '$export',
+    '$import', '$importAs', '$importDefault', '$importAll', '$ms', '$at',
+    '$to', '$linSpace', '$apply', '$call', '$print'
   ]),
 
   invalid: new Set([

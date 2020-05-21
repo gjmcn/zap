@@ -82,7 +82,8 @@ export default tokens => {
 
         // indent increased by more than one level?
         if (tkn.indent > indent + 4) {
-          syntaxError(tkn, 'invalid indent - indent increased by more than 1 level');
+          syntaxError(tkn,
+            'invalid indent - indent increased by more than 1 level');
         }
 
       }
@@ -118,17 +119,21 @@ export default tokens => {
           openIndentBlock(tkn);
         }
 
-        // decreased indent? - close block(s)
+        // decreased indent? - close block(s) and subexpression
         else if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
           for (let k = 0; k < nClose; k++) closeIndentBlock(tkn); 
-          addNewToken('closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
+          addNewToken(
+            'closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
         }
 
-        // same indent
+        // same indent - close subexpression unless at start of file
         else {
           checkInlineNotOpen(tkn);
-          addNewToken('closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
+          if (newTokens.length) {
+            addNewToken(
+              'closeSubexpr', '(close subexpression)', tkn.line, tkn.column);
+          }
         }
 
       }
