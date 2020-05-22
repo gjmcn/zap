@@ -39,7 +39,7 @@ export default tokens => {
   // open new indent block, tkn is the newline token that opens it
   function openIndentBlock(tkn) {
     checkInlineNotOpen(tkn);
-    addNewToken('openParentheses', '(', tkn.line, tkn.column);
+    addNewToken('openParentheses', '(open indent)', tkn.line, tkn.column);
     stack.push(tkn.indent);
     indent = tkn.indent;
   }
@@ -47,7 +47,7 @@ export default tokens => {
   // close indent block, tkn is the newline token that closes it
   function closeIndentBlock(tkn) {
     checkInlineNotOpen(tkn);
-    addNewToken('closeBracket', ')', tkn.line, tkn.column);
+    addNewToken('closeBracket', '(close indent)', tkn.line, tkn.column);
     stack.pop();
     indent -= 4;
   }

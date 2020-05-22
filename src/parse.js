@@ -202,48 +202,36 @@ export default (tokens, options = {}) => {
 
   }
 
-  !!!!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   // iterate over tokens
   for (tkn of tokens) {
 
     type = tkn.type;
 
-    // literal or identifier
-    if (type === 'number' || type === 'string' || type === 'regexp' ||
-        type === 'identifier') {
-      if (type === 'identifier') {
-        if (reserved.nonCommands.has(tkn.name) && tkn.spread) {
-          syntaxError(tkn, `cannot use spread with: ${tkn.name}`);
-        }
-        if (reserved.invalid.has(tkn.name) && tkn.unaryMinus) {
-          syntaxError(tkn, `cannot use unary minus with: ${tkn.name}`);
-        }
-        tkn.js = `${tkn.spread ? '...' : ''}${tkn.name}`;
-      }
-      else if (type === 'string') {
-        tkn.js = `${tkn.spread ? '...' : ''}${tkn.value}`;
-      }
-      else if (type === 'regexp') {
-        tkn.js = tkn.value.slice(1);
-      }
-      else {  // number
-        tkn.js = tkn.value;
-      }
-      if (tkn.unaryMinus) {  // will not have spread
-        tkn.js = `(${'- '.repeat(tkn.unaryMinus)}${tkn.js})`;
-      }
+    // number or string
+    if (type === 'number' || type === 'string') {
+      tkn.js = tkn.value;
       block.operands.push(tkn);
     }
 
-    // open function
+    // regex
+    else if (type === 'regexp') {
+      tkn.js = tkn.value.slice(1);
+      block.operands.push(tkn);
+    }
+
+    // identifier
+    else if (type === 'identifier') {
+      tkn.js = tkn.name;
+      block.operands.push(tkn);
+    }
+
+    // one-liner function
     else if (type === 'function') {
-      if (tkn.generator && tkn.arrow === '=>') {
-        syntaxError(tkn, 'arrow function cannot be a generator function');
-      }
-      for (let nm of tkn.args) checkNotReserved(nm, tkn, 'isArg');
+      tkn.args = new Set('abcd');
       openBlock();
     }
+
+!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // open parentheses
     else if (type === 'openParentheses') {
