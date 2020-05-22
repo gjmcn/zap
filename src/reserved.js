@@ -67,7 +67,7 @@ const reserved = {
     '$binCount', '$variance', '$deviation', '$arrObj', '$objArr', '$transpose',
     '$class', '$extends', '$assign', '$attach', '$shuffle', '$export',
     '$import', '$importAs', '$importDefault', '$importAll', '$ms', '$at',
-    '$to', '$linSpace', '$apply', '$call', '$print', '$index'
+    '$to', '$linSpace', '$apply', '$call', '$print'
   ]),
 
   invalid: new Set([
@@ -76,7 +76,8 @@ const reserved = {
     'break', 'catch', 'class', 'const', 'continue', 'default', 'else',
     'export', 'extends', 'finally', 'for', 'function', 'let',
     'return', 'switch', 'var', 'with', 'enum', 'implements', 'interface',
-    'package', 'private', 'protected', 'public', 'static', '_z_'
+    'package', 'private', 'protected', 'public', 'static', '_z_', '_z_index',
+    '_z_iter', '_z_map'
   ])
 
 };
