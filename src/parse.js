@@ -43,12 +43,11 @@ export default (tokens, options = {}) => {
       operator: null,       // current operator token
       operands: [],         // each entry is an object or an array
       position: null,       // number of operands before operator
-      assign: null,         // current assignment token
+      assign: null,         // current LHS and assignment token
       function: null,       // most local open function (or base) block
-      variables: null,      // local variable names, used by function and base blocks
+      variables: null,      // local variable names, used by functions and base block
       js: [],               // each entry is an array representing a subexpression, or
                             // a comma (string) separating these
-      jsLHS: null,          // left hand side of assignment
     }
     if (!b.token) {
       b.import = [];         // import statements
@@ -105,7 +104,9 @@ export default (tokens, options = {}) => {
             ? `(${argString}) => {return `
             : `function${
                 block.token.generator ? '*' : ''}(${argString}) {return `}`;
-        tkn.js = block.token.scope ? '})()': '})';
+        if (block.token.scope) tkn.js = '})()';
+        else if (block.token.as) tkn.js = `})(${block.token.as})`;
+        else tkn.js =  '})';
       }
 
       // parentheses
@@ -115,12 +116,12 @@ export default (tokens, options = {}) => {
         tkn.js = ')';
       }
 
-      !!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
       blockJS.unshift(block.token);
       endJS = tkn;
     
     }
+
+    // declare variables
     if (block.variables) {
       let varArr = [...block.variables];
       if (isBase) {
@@ -129,14 +130,16 @@ export default (tokens, options = {}) => {
       }
       if (varArr.length) blockJS.push({js: `; var ${varArr.join()}`});
     }
+    
     blockJS.push(endJS);
-    if (!isBase) {
+    if (isBase) {
+      return blockJS;
+    }
+    else {
       block = stack.pop();
       block.operands.push(blockJS);
     }
-    else {
-      return blockJS;
-    }
+
   }
 
   // started subexpression
@@ -153,7 +156,7 @@ export default (tokens, options = {}) => {
         syntaxError(endOfCode ? 'end of code' : tkn,
           'assignment has no right-hand side');
       }
-      applyCurrentOperator();  //once applied, block.operands has 1 entry - an array
+      applyCurrentOperator();  // once applied, block.operands has 1 entry - an array
       const op0 = block.operands.pop();
       if (block.assign) {
         op0.unshift(block.assign);
@@ -169,34 +172,37 @@ export default (tokens, options = {}) => {
   // apply current operator
   //  - once applied, block.operands has a single entry - an array
   function applyCurrentOperator() {
-    const n = block.operands.length;
+    
+    // block has operator? - apply it
     if (block.operator) {
       block.operands = [applyOperator(block, _z_used)];
       block.operator = null;
       block.position = null;
     }
-    else if (n === 1) {  // check operand a valid result, wrap in array if not already one
+
+    // no operator and a single operand? - check operand is a valid result and
+    // wrap in an array if not already one
+    else if (block.operands.length === 1) {
       const op0 = block.operands[0];
-      const isToken = !Array.isArray(op0);
-      if (isToken && op0.type === 'identifier' &&
-          reserved.invalid.has(op0.name)) {
-        syntaxError(`${op0.line}:${op0.column + 1}`,
-          `invalid use of reserved word: ${op0.name}`);
+      if (!Array.isArray(op0)) {
+        if (op0.type === 'identifier' && reserved.invalid.has(op0.name)) {
+          syntaxError(`${op0.line}:${op0.column + 1}`,
+            `invalid use of reserved word: ${op0.name}`);
+        }
+        block.operands[0] = [op0];
       }
-      const firstToken = isToken && op0.spread
-        ? op0
-        : (op0._zap_parenthSpread ? op0[0] : null);
-      if (firstToken) {
-        syntaxError(`${firstToken.line}:${firstToken.column + 1}`,
-          'spread syntax but no operator');
-      }
-      if (isToken) block.operands[0] = [op0];
     }
-    else {  // n > 1 (never try to apply operator when no operator and no operands)
+
+    // multiple operands error - this function is never called with no operator
+    // and no operands
+    else {
       syntaxError(endOfCode ? 'end of code' : tkn,
         'multiple operands but no operator');
     }
+
   }
+
+  !!!!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // iterate over tokens
   for (tkn of tokens) {
