@@ -1,13 +1,10 @@
 // Convert all blocks to bracket blocks. The exported function returns a new
-// array of token objects with no newline tokens - new tokens are added as
-// required.
+// array of token objects with no newline tokens.
 //
 // The exported function validates the block structure:
-//  - inline blocks do not span multiple lines (unless lines are continued)
-//  - opening and closing brackets match; no extra/missing closing brackets
+//  - inline blocks do not span multiple lines
+//  - opening and closing brackets match
 //  - indents are valid
-//  - cannot use close-open comma at base level
-//  - close-open comma must be on aline of its own
 //  - (does not check that blocks are non-empty)
 
 export default tokens => {
@@ -71,37 +68,38 @@ export default tokens => {
       if (tkn.lineCont || codeOnLine) {
        
         // invalid characters in indent?
-        if (!/[^\r\n ]/.test(tkn.value)) {
-          syntaxError(tkn, 'invalid indent - only spaces allowed');
+        if (/[^\r\n ]/.test(tkn.value)) {
+          syntaxError(tkn, 'invalid indent - only spaces are allowed');
         }
 
-        // indent must be a multiple of 4?
+        // indent not a multiple of 4?
         if (tkn.indent % 4) {
           syntaxError(tkn, 'invalid indent - not a multiple of 4');
         }
 
-        // indent increased by more than one level?
+        // indent increased by more than one block?
         if (tkn.indent > indent + 4) {
-          syntaxError(tkn,
-            'invalid indent - indent increased by more than 1 level');
+          syntaxError(tkn, 'invalid indent - increase of more than 1 block');
         }
 
       }
 
-      // line continue - same behavior if newline is empty or contains code
+      // line continue
       if (tkn.lineCont) {
         
+        // increased indent or at start of file? - throw since do not allow
+        // line continue at start of block
+        if (tkn.indent > indent || newTokens.length === 0) {
+          syntaxError(tkn, 'invalid line continue');
+        }
+
         // decreased indent? - close block(s)
         if (tkn.indent < indent) {
           const nClose = (indent - tkn.indent) / 4;
           for (let k = 0; k < nClose; k++) closeIndentBlock(tkn);
         }
 
-        // increased indent or at start of file? - throw since do not allow line
-        // continue at start of block
-        else if (tkn.indent > indent || newTokens.length === 0) {
-          syntaxError(tkn, 'invalid line continue');
-        }
+        // do nothing if same indent and not at start of file 
 
       }
       
@@ -114,7 +112,7 @@ export default tokens => {
         // increased indent? - open block as long as not at start of file
         if (tkn.indent > indent) {
           if (newTokens.length === 0) {
-            syntaxError(tkn, 'invalid indent - base block cannot be indented');
+            syntaxError(tkn, 'invalid indent - base block cannot have indent');
           }
           openIndentBlock(tkn);
         }
