@@ -283,14 +283,14 @@ export default {
     }
   },
 
-  *$seq(v, t, u) {
+  *seq(v, t, u) {
     while(t(v)) {
       yield v;
       v = u(v);
     }
   },
 
-  *$zip(...i) {
+  *zip(...i) {
     i = i.map(j => j[Symbol.iterator]());
     while (1) {
       let r = i.map(j => j.next());
@@ -299,7 +299,7 @@ export default {
     }
   },
 
-  $zipMap(f, ...i) {
+  zipMap(f, ...i) {
     let q = i.map(j => j[Symbol.iterator]()),
         k = 0,
         v = [],
@@ -312,7 +312,7 @@ export default {
     return v;
   },
   
-  $zipEach(f, ...i) {
+  zipEach(f, ...i) {
     let q = i.map(j => j[Symbol.iterator]()),
         k = 0,
         r;
@@ -323,12 +323,12 @@ export default {
     }
   },
 
-  $print(v) {
+  print(v) {
     console.log(v);
     return v;
   },
 
-  $get(o, p, f) {
+  get(o, p, f) {
     return Object.defineProperty(o, p, {
       get: f,
       configurable: true,
@@ -336,7 +336,7 @@ export default {
     });
   },
 
-  $set(o, p, f) {
+  set(o, p, f) {
     return Object.defineProperty(o, p, {
       set: f,
       configurable: true,
@@ -344,7 +344,7 @@ export default {
     });
   },
 
-  $reduce(i, f, q) {
+  reduce(i, f, q) {
     let j = 0;
     for (let v of i) {
       q = f(q, v, j++, i);
@@ -352,19 +352,19 @@ export default {
     return q;
   },
 
-  $group(i, f, g) { return this._group(false, i, f, g) },
-  $groupUse: ['_group'],
+  group(i, f, g) { return this._group(false, i, f, g) },
+  groupUse: ['_group'],
 
-  $groupCount(i, f, g) { return this._group(true, i, f, g) },
-  $groupCountUse: ['_group'],
+  groupCount(i, f, g) { return this._group(true, i, f, g) },
+  groupCountUse: ['_group'],
 
-  $bin(i, z, f, g) { return this._bin(false, i, z, f, g) },
-  $binUse: ['_bin'],
+  bin(i, z, f, g) { return this._bin(false, i, z, f, g) },
+  binUse: ['_bin'],
 
-  $binCount(i, z, f, g) { return this._bin(true, i, z, f, g) },
-  $binCountUse: ['_bin'],
+  binCount(i, z, f, g) { return this._bin(true, i, z, f, g) },
+  binCountUse: ['_bin'],
 
-  $sumCumu(i, f) {
+  sumCumu(i, f) {
     let s = 0,
         r = [],
         j = 0;
@@ -374,40 +374,40 @@ export default {
     return r;
   },
 
-  $sum(i, f) { return this._sum(false, i, f) },
-  $sumUse: ['_sum'],
+  sum(i, f) { return this._sum(false, i, f) },
+  sumUse: ['_sum'],
 
-  $mean(i, f) { return this._sum(true, i, f) },
-  $meanUse: ['_sum'],
+  mean(i, f) { return this._sum(true, i, f) },
+  meanUse: ['_sum'],
 
-  $minIndex(i, f) { return this._minMaxIndex(false, i, f) },
-  $minIndexUse: ['_minMaxIndex'],
+  minIndex(i, f) { return this._minMaxIndex(false, i, f) },
+  minIndexUse: ['_minMaxIndex'],
 
-  $maxIndex(i, f) { return this._minMaxIndex(true, i, f) },
-  $maxIndexUse: ['_minMaxIndex'],
+  maxIndex(i, f) { return this._minMaxIndex(true, i, f) },
+  maxIndexUse: ['_minMaxIndex'],
 
-  $min(i, f) { return this._minMax(false, i, f) },
-  $minUse: ['_minMax'],
+  min(i, f) { return this._minMax(false, i, f) },
+  minUse: ['_minMax'],
 
-  $max(i, f) { return this._minMax(true, i, f) },
-  $maxUse: ['_minMax'],
+  max(i, f) { return this._minMax(true, i, f) },
+  maxUse: ['_minMax'],
 
-  $variance(i, f) { return this._varDev(false, i, f) },
-  $varianceUse: ['_varDev'],
+  variance(i, f) { return this._varDev(false, i, f) },
+  varianceUse: ['_varDev'],
 
-  $deviation(i, f) { return this._varDev(true, i, f) },
-  $deviationUse: ['_varDev'],
+  deviation(i, f) { return this._varDev(true, i, f) },
+  deviationUse: ['_varDev'],
 
-  $orderIndex(i, f = (x, y) => x - y) {
+  orderIndex(i, f = (x, y) => x - y) {
     i = [...i];
     return i.map((_, j) => j).sort((x, y) => f(i[x], i[y]));
   },
 
-  $order(i, f = (x, y) => x - y) {
+  order(i, f = (x, y) => x - y) {
     return [...i].sort(f);
   },
 
-  $some(i, f) {
+  some(i, f) {
     let j = 0;
     for (let v of i) {
       if (f(v, j++, i)) return true;
@@ -415,7 +415,7 @@ export default {
     return false;
   },
 
-  $every(i, f) { 
+  every(i, f) { 
     let j = 0;
     for (let v of i) {
       if (!f(v, j++, i)) return false;
@@ -423,7 +423,7 @@ export default {
     return true;
   },
 
-  $filter(i, f) {
+  filter(i, f) {
     let r = [],
         j = 0;
     for (let v of i) {
@@ -432,7 +432,7 @@ export default {
     return r;
   },
 
-  $count(i, f) {
+  count(i, f) {
     let c = 0,
         j = 0;
     for (let v of i) {
@@ -441,7 +441,7 @@ export default {
     return c;
   },
 
-  $findIndex(i, f) {
+  findIndex(i, f) {
     let j = 0;
     for (let v of i) {
       if (f(v, j, i)) return j;
@@ -450,14 +450,14 @@ export default {
     return -1;
   },
 
-  $find(i, f) {
+  find(i, f) {
     let j = 0;
     for (let v of i) {
       if (f(v, j++, i)) return v;
     }
   },
 
-  $arrObj(o, c) {
+  arrObj(o, c) {
     let r = [];
     for (let k of c || Object.keys(o)) {
       let j = 0;
@@ -469,7 +469,7 @@ export default {
     return r;
   },
   
-  $objArr(a, c) {
+  objArr(a, c) {
     let r = {},
         j = 0;
     for (let o of a) {
@@ -481,7 +481,7 @@ export default {
     return r;
   },
 
-  $transpose(x) {
+  transpose(x) {
     let r = [],
         j = 0;
     for (let y of x) {
@@ -495,21 +495,21 @@ export default {
     return r;
   },
 
-  $pickDoc(s) {
+  pickDoc(s) {
     return [...document.querySelectorAll(s)];
   },
 
-  $random(j = 0, k = 1, n) {
+  random(j = 0, k = 1, n) {
     return this._sample(this._random, n, +j, +k);
   },
-  $randomUse: ['_sample', '_random'],
+  randomUse: ['_sample', '_random'],
 
-  $randomInt(j = 0, k = 2, n) {
+  randomInt(j = 0, k = 2, n) {
     return this._sample(this._randomInt, n, +j, +k);
   },
-  $randomIntUse: ['_sample', '_randomInt'],
+  randomIntUse: ['_sample', '_randomInt'],
 
-  $categorical(m, n) {
+  categorical(m, n) {
     let q = [],
         c = 0;
     for (let w of m) {
@@ -517,34 +517,34 @@ export default {
     }
     return this._sample(this._categorical, n, q, c);
   },
-  $categoricalUse: ['_sample', '_categorical'],
+  categoricalUse: ['_sample', '_categorical'],
   
-  $normal(m = 0, d = 1, n) {
+  normal(m = 0, d = 1, n) {
     return this._sample(this._normal(+m, +d), n);
   },
-  $normalUse: ['_sample', '_normal'],
+  normalUse: ['_sample', '_normal'],
 
-  $logNormal(m = 0, d = 1, n) {
+  logNormal(m = 0, d = 1, n) {
     return this._sample(this._normal(+m, +d, true), n);
   },
-  $logNormalUse: ['_sample', '_normal'],
+  logNormalUse: ['_sample', '_normal'],
 
-  $binomial(m, p = 0.5, n) {
+  binomial(m, p = 0.5, n) {
     return this._sample(this._binomial, n, +m, +p);
   },
-  $binomialUse: ['_sample', '_binomial'],
+  binomialUse: ['_sample', '_binomial'],
 
-  $exponential(r, n) {
+  exponential(r, n) {
     return this._sample(this._exponential, n, +r);
   },
-  $exponentialUse: ['_sample', '_exponential'],
+  exponentialUse: ['_sample', '_exponential'],
 
-  $geometric(p = 0.5, n) {
+  geometric(p = 0.5, n) {
     return this._sample(this._geometric, n, +p);
   },
-  $geometricUse: ['_sample', '_geometric'],
+  geometricUse: ['_sample', '_geometric'],
 
-  $shuffle(x) {  // Fisher–Yates
+  shuffle(x) {  // Fisher–Yates
     x = [...x];
     for (let i = x.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -557,11 +557,11 @@ export default {
     return x;
   },
 
-  $ms(m) {
+  ms(m) {
     return new Promise(r => setTimeout(r, m));
   },
 
-  $ats(...p) {
+  ats(...p) {
     let q = p[0];
     let z = p[p.length - 1];
     let r;
@@ -581,12 +581,12 @@ export default {
     return r;
   },
 
-  $pickIn(p, s) {
+  pickIn(p, s) {
     return [...this._first(p).querySelectorAll(s)];
   },
-  $pickInUse: ['_first'],
+  pickInUse: ['_first'],
 
-  $insert(t, e, p = () => null) {
+  insert(t, e, p = () => null) {
     t = this._first(t);
     if (typeof e === 'function') e = e.call(t, t.__data__);
     else e = this._autoSelect(e);
@@ -596,9 +596,9 @@ export default {
     }
     return e;
   },
-  $insertUse: ['_first', '_autoSelect'],
+  insertUse: ['_first', '_autoSelect'],
 
-  $insertEach(t, f, p = () => null) {
+  insertEach(t, f, p = () => null) {
     let r = [],
         j = 0;
     if (typeof t === 'string') t = document.querySelectorAll(t);
@@ -613,9 +613,9 @@ export default {
     }
     return r;
   },
-  $insertEachUse: ['_first'],
+  insertEachUse: ['_first'],
   
-  $into(e, t, p = () => null) {
+  into(e, t, p = () => null) {
     t = this._first(t);
     if (typeof e === 'function') e = e.call(t, t.__data__);
     else if (typeof e === 'string') e = document.querySelectorAll(e);
@@ -625,56 +625,56 @@ export default {
     }
     return t;
   },
-  $intoUse: ['_first'],
+  intoUse: ['_first'],
    
-  $encode(x, t, a) { return this._encode(false, x, t, a) },
-  $encodeUse: ['_encode'],
+  encode(x, t, a) { return this._encode(false, x, t, a) },
+  encodeUse: ['_encode'],
 
-  $encodeSVG(x, t, a) { return this._encode(true, x, t, a) },
-  $encodeSVGUse: ['_encode'],
+  encodeSVG(x, t, a) { return this._encode(true, x, t, a) },
+  encodeSVGUse: ['_encode'],
 
-  $create(t, n) { return this._create(false, t, n) },
-  $createUse: createArray,
+  create(t, n) { return this._create(false, t, n) },
+  createUse: createArray,
 
-  $createSVG(t, n) { return this._create(true, t, n) },
-  $createSVGUse: createArray,
+  createSVG(t, n) { return this._create(true, t, n) },
+  createSVGUse: createArray,
 
-  $attr(...x) {
+  attr(...x) {
     return (x.length === 2)
       ? this._apsGet(this._getAttr, ...x)
       : this._apsSet(this._setAttr, ...x);
   },
-  $attrUse: ['_apsGet', '_apsSet', '_getAttr', '_setAttr', '_autoSelect'],
+  attrUse: ['_apsGet', '_apsSet', '_getAttr', '_setAttr', '_autoSelect'],
 
-  $prop(...x) {
+  prop(...x) {
     return (x.length === 2)
       ? this._apsGet(this._getProp, ...x)
       : this._apsSet(this._setProp, ...x);
   },
-  $propUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
+  propUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
 
-  $style(...x) {
+  style(...x) {
     return (x.length === 2)
       ? this._apsGet(this._getStyle, ...x)
       : this._apsSet(this._setStyle, ...x);
   },
-  $styleUse: ['_apsGet', '_apsSet', '_getStyle', '_setStyle', '_autoSelect'],
+  styleUse: ['_apsGet', '_apsSet', '_getStyle', '_setStyle', '_autoSelect'],
 
-  $text(...x) {
+  text(...x) {
     return (x.length === 1)
       ? this._apsGet(this._getProp, x[0], 'textContent')
       : this._apsSet(this._setProp, x[0], 'textContent', x[1]);
   },
-  $textUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
+  textUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
 
-  $html(...x) {
+  html(...x) {
     return (x.length === 1)
       ? this._apsGet(this._getProp, x[0], 'innerHTML')
       : this._apsSet(this._setProp, x[0], 'innerHTML', x[1]);
   },
-  $htmlUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
+  htmlUse: ['_apsGet', '_apsSet', '_getProp', '_setProp', '_autoSelect'],
 
-  $remove(e) {
+  remove(e) {
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
       for (let q of e) {
@@ -686,9 +686,9 @@ export default {
     }
     return e;
   },
-  $removeUse: ['_autoSelect'],
+  removeUse: ['_autoSelect'],
 
-  $lower(e) {
+  lower(e) {
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
       for (let q of e) {
@@ -702,9 +702,9 @@ export default {
     }
     return e;
   },
-  $lowerUse: ['_autoSelect'],
+  lowerUse: ['_autoSelect'],
 
-  $raise(e) {
+  raise(e) {
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
       for (let q of e) {
@@ -716,9 +716,9 @@ export default {
     }
     return e;
   },
-  $raiseUse: ['_autoSelect'],
+  raiseUse: ['_autoSelect'],
 
-  $addClass(e, c) {
+  addClass(e, c) {
     c = c.trim().split(/^|\s+/);
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
@@ -731,9 +731,9 @@ export default {
     }
     return e;
   },
-  $addClassUse: ['_autoSelect'],
+  addClassUse: ['_autoSelect'],
 
-  $removeClass(e, c) {
+  removeClass(e, c) {
     c = c.trim().split(/^|\s+/);
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
@@ -746,9 +746,9 @@ export default {
     }
     return e;
   },
-  $removeClassUse: ['_autoSelect'],
+  removeClassUse: ['_autoSelect'],
 
-  $removeAttr(e, a) {
+  removeAttr(e, a) {
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
       for (let q of e) {
@@ -760,9 +760,9 @@ export default {
     }
     return e;
   },
-  $removeAttrUse: ['_autoSelect'],
+  removeAttrUse: ['_autoSelect'],
 
-  $removeStyle(e, s) {
+  removeStyle(e, s) {
     e = this._autoSelect(e);
     if (e && e[Symbol.iterator]) {
       for (let q of e) {
@@ -774,9 +774,9 @@ export default {
     }
     return e;
   },
-  $removeStyleUse: ['_autoSelect'],
+  removeStyleUse: ['_autoSelect'],
 
-  $hasClass(e, c) {
+  hasClass(e, c) {
     let r;
     if (typeof e === 'string') e = document.querySelectorAll(e);
     if (e && e[Symbol.iterator]) {
@@ -791,7 +791,7 @@ export default {
     return r;
   },
 
-  $hasAttr(e, a) {
+  hasAttr(e, a) {
     let r;
     if (typeof e === 'string') e = document.querySelectorAll(e);
     if (e && e[Symbol.iterator]) {
@@ -806,7 +806,7 @@ export default {
     return r;
   },
 
-  $on(e, t, f, c = false) {
+  on(e, t, f, c = false) {
     e = this._autoSelect(e);
     for (let q of (e && e[Symbol.iterator] ? e : [e])) {
       let g = k => f.call(q, q.__data__, k);
@@ -820,9 +820,9 @@ export default {
     }
     return e;
   },
-  $onUse: ['_autoSelect'],
+  onUse: ['_autoSelect'],
 
-  $off(e, t, f, c = false) {
+  off(e, t, f, c = false) {
     e = this._autoSelect(e);
     for (let q of (e && e[Symbol.iterator] ? e : [e])) {
       if (!q.__on__) continue;
@@ -836,9 +836,9 @@ export default {
     }
     return e;
   },
-  $offUse: ['_autoSelect'],
+  offUse: ['_autoSelect'],
 
-  $sketch({
+  sketch({
       width: w = 300,
       height: h = 300,
       context: d = "2d",
@@ -1030,47 +1030,47 @@ export default {
   $view(n) {return this._create(true, 'view', n)}, $viewUse: createArray,
 
   // entrywise
-  $abs(x) {return this._ew(x, Math.abs)}, $absUse: ['_ew'],
-  $acos(x) {return this._ew(x, Math.acos)}, $acosUse: ['_ew'],
-  $acosh(x) {return this._ew(x, Math.acosh)}, $acoshUse: ['_ew'],
-  $asin(x) {return this._ew(x, Math.asin)}, $asinUse: ['_ew'],
-  $asinh(x) {return this._ew(x, Math.asinh)}, $asinhUse: ['_ew'],
-  $atan(x) {return this._ew(x, Math.atan)}, $atanUse: ['_ew'],
-  $atanh(x) {return this._ew(x, Math.atanh)}, $atanhUse: ['_ew'],
-  $cbrt(x) {return this._ew(x, Math.cbrt)}, $cbrtUse: ['_ew'],
-  $ceil(x) {return this._ew(x, Math.ceil)}, $ceilUse: ['_ew'],
-  $clz32(x) {return this._ew(x, Math.clz32)}, $clz32Use: ['_ew'],
-  $cos(x) {return this._ew(x, Math.cos)}, $cosUse: ['_ew'],
-  $cosh(x) {return this._ew(x, Math.cosh)}, $coshUse: ['_ew'],
-  $exp(x) {return this._ew(x, Math.exp)}, $expUse: ['_ew'],
-  $expm1(x) {return this._ew(x, Math.expm1)}, $expm1Use: ['_ew'],
-  $floor(x) {return this._ew(x, Math.floor)}, $floorUse: ['_ew'],
-  $fround(x) {return this._ew(x, Math.fround)}, $froundUse: ['_ew'],
-  $log(x) {return this._ew(x, Math.log)}, $logUse: ['_ew'],
-  $log10(x) {return this._ew(x, Math.log10)}, $log10Use: ['_ew'],
-  $log1p(x) {return this._ew(x, Math.log1p)}, $log1pUse: ['_ew'],
-  $log2(x) {return this._ew(x, Math.log2)}, $log2Use: ['_ew'],
-  $round(x) {return this._ew(x, Math.round)}, $roundUse: ['_ew'],
-  $sign(x) {return this._ew(x, Math.sign)}, $signUse: ['_ew'],
-  $sin(x) {return this._ew(x, Math.sin)}, $sinUse: ['_ew'],
-  $sinh(x) {return this._ew(x, Math.sinh)}, $sinhUse: ['_ew'],
-  $sqrt(x) {return this._ew(x, Math.sqrt)}, $sqrtUse: ['_ew'],
-  $tan(x) {return this._ew(x, Math.tan)}, $tanUse: ['_ew'],
-  $tanh(x) {return this._ew(x, Math.tanh)}, $tanhUse: ['_ew'],
-  $trunc(x) {return this._ew(x, Math.trunc)}, $truncUse: ['_ew'],
-  $toUpperCase(x) {return this._ew(x, y => String.prototype.toUpperCase.call(y))}, $toUpperCaseUse: ['_ew'],
-  $toLowerCase(x) {return this._ew(x, y => String.prototype.toLowerCase.call(y))}, $toLowerCaseUse: ['_ew'],
-  $trim(x) {return this._ew(x, y => String.prototype.trim.call(y))}, $trimUse: ['_ew'],
-  $trimEnd(x) {return this._ew(x, y => String.prototype.trimEnd.call(y))}, $trimEndUse: ['_ew'],
-  $trimStart(x) {return this._ew(x, y => String.prototype.trimStart.call(y))}, $trimStartUse: ['_ew'],
-  $neg(x) {return this._ew(x, y => -y)}, $negUse: ['_ew'],
-  $boolean(x) {return this._ew(x, Boolean)}, $booleanUse: ['_ew'],
-  $number(x) {return this._ew(x, Number)}, $numberUse: ['_ew'],
-  $string(x) {return this._ew(x, String)}, $stringUse: ['_ew'],
-  $date(x) {return this._ew(x, y => new Date(y))}, $dateUse: ['_ew'],
-  $isInteger(x) {return this._ew(x, Number.isInteger)}, $isIntegerUse: ['_ew'],
-  $isFinite(x) {return this._ew(x, Number.isFinite)}, $isFiniteUse: ['_ew'],
-  $isNaN(x) {return this._ew(x, Number.isNaN)}, $isNaNUse: ['_ew'],
-  $not(x) {return this._ew(x, y => !y)}, $notUse: ['_ew']
+  abs(x) {return this._ew(x, Math.abs)}, absUse: ['_ew'],
+  acos(x) {return this._ew(x, Math.acos)}, acosUse: ['_ew'],
+  acosh(x) {return this._ew(x, Math.acosh)}, acoshUse: ['_ew'],
+  asin(x) {return this._ew(x, Math.asin)}, asinUse: ['_ew'],
+  asinh(x) {return this._ew(x, Math.asinh)}, asinhUse: ['_ew'],
+  atan(x) {return this._ew(x, Math.atan)}, atanUse: ['_ew'],
+  atanh(x) {return this._ew(x, Math.atanh)}, atanhUse: ['_ew'],
+  cbrt(x) {return this._ew(x, Math.cbrt)}, cbrtUse: ['_ew'],
+  ceil(x) {return this._ew(x, Math.ceil)}, ceilUse: ['_ew'],
+  clz32(x) {return this._ew(x, Math.clz32)}, clz32Use: ['_ew'],
+  cos(x) {return this._ew(x, Math.cos)}, cosUse: ['_ew'],
+  cosh(x) {return this._ew(x, Math.cosh)}, coshUse: ['_ew'],
+  exp(x) {return this._ew(x, Math.exp)}, expUse: ['_ew'],
+  expm1(x) {return this._ew(x, Math.expm1)}, expm1Use: ['_ew'],
+  floor(x) {return this._ew(x, Math.floor)}, floorUse: ['_ew'],
+  fround(x) {return this._ew(x, Math.fround)}, froundUse: ['_ew'],
+  log(x) {return this._ew(x, Math.log)}, logUse: ['_ew'],
+  log10(x) {return this._ew(x, Math.log10)}, log10Use: ['_ew'],
+  log1p(x) {return this._ew(x, Math.log1p)}, log1pUse: ['_ew'],
+  log2(x) {return this._ew(x, Math.log2)}, log2Use: ['_ew'],
+  round(x) {return this._ew(x, Math.round)}, roundUse: ['_ew'],
+  sign(x) {return this._ew(x, Math.sign)}, signUse: ['_ew'],
+  sin(x) {return this._ew(x, Math.sin)}, sinUse: ['_ew'],
+  sinh(x) {return this._ew(x, Math.sinh)}, sinhUse: ['_ew'],
+  sqrt(x) {return this._ew(x, Math.sqrt)}, sqrtUse: ['_ew'],
+  tan(x) {return this._ew(x, Math.tan)}, tanUse: ['_ew'],
+  tanh(x) {return this._ew(x, Math.tanh)}, tanhUse: ['_ew'],
+  trunc(x) {return this._ew(x, Math.trunc)}, truncUse: ['_ew'],
+  toUpperCase(x) {return this._ew(x, y => String.prototype.toUpperCase.call(y))}, toUpperCaseUse: ['_ew'],
+  toLowerCase(x) {return this._ew(x, y => String.prototype.toLowerCase.call(y))}, toLowerCaseUse: ['_ew'],
+  trim(x) {return this._ew(x, y => String.prototype.trim.call(y))}, trimUse: ['_ew'],
+  trimEnd(x) {return this._ew(x, y => String.prototype.trimEnd.call(y))}, trimEndUse: ['_ew'],
+  trimStart(x) {return this._ew(x, y => String.prototype.trimStart.call(y))}, trimStartUse: ['_ew'],
+  neg(x) {return this._ew(x, y => -y)}, negUse: ['_ew'],
+  boolean(x) {return this._ew(x, Boolean)}, booleanUse: ['_ew'],
+  number(x) {return this._ew(x, Number)}, numberUse: ['_ew'],
+  string(x) {return this._ew(x, String)}, stringUse: ['_ew'],
+  date(x) {return this._ew(x, y => new Date(y))}, dateUse: ['_ew'],
+  isInteger(x) {return this._ew(x, Number.isInteger)}, isIntegerUse: ['_ew'],
+  isFinite(x) {return this._ew(x, Number.isFinite)}, isFiniteUse: ['_ew'],
+  isNaN(x) {return this._ew(x, Number.isNaN)}, isNaNUse: ['_ew'],
+  not(x) {return this._ew(x, y => !y)}, notUse: ['_ew']
 
 };

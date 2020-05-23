@@ -82,7 +82,7 @@ export default (tokens, options = {}) => {
     }
 
     // function or parentheses
-    else { 
+    else {
       
       // function
       if (block.token.type === 'function') {
@@ -231,11 +231,21 @@ export default (tokens, options = {}) => {
       openBlock();
     }
 
-!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     // open parentheses
     else if (type === 'openParentheses') {
+      
+      // function body? - change to a function token
+      if (block.operator) {
+
+        !!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!
+        create helper list of function create op names (inclide class and extends)
+        and test if block.operator is one of them
+
+      }
+      
+      
       openBlock();
+    
     }
 
     // close block

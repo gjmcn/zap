@@ -60,7 +60,7 @@ export default (block, _z_used) => {
 
     // spread
     if ((xTypes[i] ? x[i].spread : x[i]._zap_parenthSpread) && (
-          (isCommand && (op !== '$new' || i === 0)) ||
+          (isCommand && (op !== 'new' || i === 0)) ||
           (callingFunction && (i === position || 
             (op === '<\\' && i === (position === 0 ? 1 : 0)))) ||  // first arg cannot have spread with <\
           (callingMethod && (i === position ||
@@ -395,14 +395,14 @@ export default (block, _z_used) => {
       return call_z_method(op);
     }
 
-    else if (op === '$at') {
+    else if (op === 'at') {
       if (nx < 2) throw arityError(operator);
       const res = [ x[0] ];
       for (let j = 1; j < nx; j++) res.push(opPosn('['), x[j], ']');
       return res;
     }
 
-    else if (op === '$to') {
+    else if (op === 'to') {
       if (nx < 3) throw arityError(operator);
       const res = [ '(', x[0] ];
       for (let j = 1; j < nx - 1; j++) res.push(opPosn('['), x[j], ']');
@@ -410,7 +410,7 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$new') {
+    else if (op === 'new') {
       if (nx === 0) throw arityError(operator);
       const res = [ opPosn('(new ('), x[0], opPosn(')(') ];
       addToResult(x.slice(1), res);
@@ -418,13 +418,13 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$in' || op === '$instanceof') {
+    else if (op === 'in' || op === 'instanceof') {
       if (nx !== 2) throw arityError(operator);
       operator.js = op.slice(1);
       return [ '(', x[0], ' ', operator, ' ', x[1], ')' ];
     }
 
-    else if (op === '$delete') {
+    else if (op === 'delete') {
       if (nx < 2) throw arityError(operator);
       operator.js = 'delete';
       const res = [ '(', operator, ' ', x[0] ];
@@ -433,14 +433,14 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$await' || op === '$void' || op === '$typeof' || 
-        op === '$yield' || op === '$yieldFrom') {
+    else if (op === 'await' || op === 'void' || op === 'typeof' || 
+        op === 'yield' || op === 'yieldFrom') {
       if (nx !== 1) throw arityError(operator);
-      operator.js = (op === '$yieldFrom') ? 'yield*' : op.slice(1);
+      operator.js = (op === 'yieldFrom') ? 'yield*' : op.slice(1);
       return [ '(', operator, ' ', x[0], ')' ];
     }
 
-    else if (op === '$if') {
+    else if (op === 'if') {
       if (nx % 2 || nx < 2) throw arityError(operator);
       const res = [ '(' ];
       for (let i = 0; i < nx; i += 2) {
@@ -450,15 +450,15 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$array') {
+    else if (op === 'array') {
       let res = [ opPosn('[') ];
       for (let xi of x) res.push(opPosn('...'), xi, ',');
       res.push(opPosn(']'));
       return res;
     }
 
-    else if (op === '$each' || op === '$awaitEach' || 
-              op === '$map'  || op === '$awaitMap') {
+    else if (op === 'each' || op === 'awaitEach' || 
+              op === 'map'  || op === 'awaitMap') {
       const isAwait = (op.slice(1, 6) === 'await');
       const isMap = (op.slice(-3).toLowerCase() === 'map');
       let s = isAwait
@@ -484,40 +484,40 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$zipEach' || op === '$zipMap') {
+    else if (op === 'zipEach' || op === 'zipMap') {
       if (nx < 2) throw arityError(operator);
       const res = [ opPosn(`_z_.${op}(`), x[nx - 1], ',' ];
       _z_used.add(op);
       return addToResult(x.slice(0, -1), res, 'close');
     }
 
-    else if (op === '$nestEach' || op === '$nestMap') {
+    else if (op === 'nestEach' || op === 'nestMap') {
       if (nx < 2) throw arityError(operator);
       const iterables = x.slice(0, -1);
       const ni = iterables.length;
       let argList = iterables.map((_, i) => `a${i}`).join();
       let s = `((f, ${argList}) => {`;
       for (let i = 0; i < ni; i++) s += `a${i} = [...a${i}]; `;
-      if (op === '$nestMap') {
+      if (op === 'nestMap') {
         s += 'let r0 = []';
         for (let i = 0; i < ni - 1; i++) s += `, r${i + 1}`;
         s += '; '
       }
       for (let i = 0; i < ni; i++) {
         s += `for (let v${i} of a${i}) {`;
-        if (op === '$nestMap' && i < ni - 1) s += `r${i}.push(r${i + 1} = []); `; 
+        if (op === 'nestMap' && i < ni - 1) s += `r${i}.push(r${i + 1} = []); `; 
       }
       argList = argList.replace(/a/g, 'v');
       const closeLoops = '}'.repeat(ni); 
-      s += (op === '$nestMap')
+      s += (op === 'nestMap')
         ? `r${ni - 1}.push(f(${argList}))${closeLoops} return r0})(`
         : `f(${argList})${closeLoops}})(`;
       const res = [ opPosn(s), x[nx - 1], ','];
       return addToResult(iterables, res, 'close');
     }
 
-    else if (op === '$while' || op === '$asyncWhile' ||
-             op === '$do'    || op === '$asyncDo') {
+    else if (op === 'while' || op === 'asyncWhile' ||
+             op === 'do'    || op === 'asyncDo') {
       if (nx !== 1) throw arityError(operator);
       const isAsync = (op.slice(1, 6) === 'async');
       let s = `(${isAsync ? 'async ' : ''}function*(t) {`;
@@ -530,7 +530,7 @@ export default (block, _z_used) => {
       return [ opPosn(s), x[0], ')' ];
     }
 
-    else if (op === '$nest') {
+    else if (op === 'nest') {
       if (nx === 0) throw arityError(operator);
       let s = `(function*(${x.map((_, i) => `a${i}`).join()}) {`;
       for (let i = 0; i < x.length; i++) s += `a${i} = [...a${i}]; `;
@@ -540,31 +540,31 @@ export default (block, _z_used) => {
       return addToResult(x, res, 'close');
     }
 
-    else if (op === '$throw') {
+    else if (op === 'throw') {
       if (nx !== 1) throw arityError(operator);
       return [ opPosn('(e => {throw e})('), x[0], ')' ];
     }
 
-    else if (op === '$try' || op === '$awaitTry') {
+    else if (op === 'try' || op === 'awaitTry') {
       if (nx < 1 || nx > 3) throw arityError(operator);
       const res = [ opPosn(
-        op === '$try'
+        op === 'try'
           ? `((t, c = () => {}, f) => {let r; try {r = t()} catch (e) {r = c(e)}${
             nx === 3 ? ` finally {f()}` : ''} return r})(`
           : `(await (async (t, c = async () => {}, f) => {let r; try {r = await t()} catch (e) {r = await c(e)}${
             nx === 3 ? ` finally {await f()}` : ''} return r})(`
       ) ];
       addToResult(x, res, 'close');
-      if (op === '$awaitTry') res.push(')');
+      if (op === 'awaitTry') res.push(')');
       return res;
     }
 
-    else if (op === '$debugger') {
+    else if (op === 'debugger') {
       if (nx !== 0) throw arityError(operator);
       return [ opPosn('(() => {debugger})()') ];
     }
     
-    else if (op === '$class') {
+    else if (op === 'class') {
       if (nx > 1) throw arityError(operator);
       const res = [ opPosn('(class ') ];
       if (nx === 0) {
@@ -580,7 +580,7 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$extends') {
+    else if (op === 'extends') {
       if (nx < 1 || nx > 2) throw arityError(operator);
       const res = [ opPosn('(class extends '), x[0] ];
       if (nx === 1) {
@@ -596,19 +596,19 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$assign') {
+    else if (op === 'assign') {
       if (nx < 2) throw arityError(operator);
       const res = [ opPosn('Object.assign(') ];
       return addToResult(x, res, 'close');
     }
 
-    else if (op === '$pick') {
+    else if (op === 'pick') {
       let res;
       if (nx === 1) {
-        res = call_z_method('$pickDoc');
+        res = call_z_method('pickDoc');
       }
       else if (nx === 2) {
-        res = call_z_method('$pickIn');
+        res = call_z_method('pickIn');
       }
       else {
         throw arityError(operator);
@@ -616,12 +616,12 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === '$fragment') {
+    else if (op === 'fragment') {
       if (nx) throw arityError(operator);
       return [ opPosn('document.createDocumentFragment()') ];
     }
 
-    else if (op === '$import') {
+    else if (op === 'import') {
       if (block.token) throw topLevelError(operator);
       if (!nx) throw arityError(operator);
       const src = validateImportPath(0);
@@ -638,7 +638,7 @@ export default (block, _z_used) => {
       return [ opPosn('undefined') ];
     }
 
-    else if (op === '$importAs') {
+    else if (op === 'importAs') {
       if (block.token) throw topLevelError(operator);
       if (nx < 3 || nx % 2 === 0) throw arityError(operator);
       const src = validateImportPath(0);
@@ -654,18 +654,18 @@ export default (block, _z_used) => {
       return [ opPosn('undefined') ];
     }
 
-    else if (op === '$importDefault' || op === '$importAll') {
+    else if (op === 'importDefault' || op === 'importAll') {
       if (block.token) throw topLevelError(operator);
       if (nx !== 2) throw arityError(operator);
       const src = validateImportPath(0);
       if (!isVariableName(1)) throw operandError(operator, 1, nx);
       let s = 'import ';
-      if (op === '$importAll') s += '* as ';
+      if (op === 'importAll') s += '* as ';
       block.import.push([ opPosn(s + `${x[1].js} from ${src};\n`) ]);
       return [ opPosn('undefined') ];
     }
 
-    else if (op === '$export') {
+    else if (op === 'export') {
       if (block.token) throw topLevelError(operator);
       if (block.export.size) throw multipleExportError(operator);
       if (!nx) throw arityError(operator);
