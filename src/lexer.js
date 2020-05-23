@@ -115,12 +115,6 @@ export default code => {
               if (match[3]) tkn.postTick = true;
             }
 
-            // function
-            else if (type === 'function') {
-              tkn.oneLiner = true;
-              if (match[0] === '{') tkn.arrow = true;
-            }
-
             column += match[0].length;
           }
 

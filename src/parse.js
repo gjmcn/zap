@@ -19,6 +19,11 @@ function checkNotReserved(name, tkn, isArg) {
   }
 }
 
+const functionCreators = new Set([
+  'fun', 'proc', 'gen', 'scope', 'as', 'asyncFun', 'asyncProc', 'asyncGen',
+  'asyncScope', 'asyncAs', 'class', 'extends'
+]);
+
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned object
 //  - 'sourceFile' option should be used if 'sourceMap' option true
@@ -227,6 +232,7 @@ export default (tokens, options = {}) => {
 
     // one-liner function
     else if (type === 'function') {
+      if (tkn.value === '{') tkn.arrow = true;
       tkn.args = new Set('abcd');
       openBlock();
     }
@@ -235,14 +241,31 @@ export default (tokens, options = {}) => {
     else if (type === 'openParentheses') {
       
       // function body? - change to a function token
-      if (block.operator) {
+      if (functionCreators.has(block.operator.value)) {
+        tkn.type = 'function'; 
+        if (tkn.value.slice(0, 5) === 'async') {
+          tkn.async = true;
+        }
+        const kind = tkn.async ? tkn.value : tkn.value(5).toLowerCase();
+        if (kind === 'gen') {
+          tkn.generator = true;
+        }
+        else if (kind === 'proc' || kind === 'scope' || kind === 'as') {
+          tkn.arrow = true;
+          tkn[kind] = true;
+        }
+        else if (kind === 'class' || kind === 'extends') {
+          tkn[kind] = true;
+        }
+        
+        !!!!HERE - need to validate other operands for each function kind
 
-        !!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!
-        create helper list of function create op names (inclide class and extends)
-        and test if block.operator is one of them
+        // TO DO
+        // - args, inc for as and asyncAs
+        // - class and extends: need to modify closeBlock to handle these?
+
 
       }
-      
       
       openBlock();
     
@@ -254,7 +277,7 @@ export default (tokens, options = {}) => {
       closeBlock();
     }
 
-    // operator
+    // operator //WHEN UPDATE, CHECK IF FUNC CREATOR AND THAT OP IS BEFORE BODY
     else if (type === 'operator') {
       if (block.operator) applyCurrentOperator();
       block.operator = tkn;
