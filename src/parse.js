@@ -12,7 +12,8 @@ function syntaxError(t, msg) {
 };
 
 function checkValidName(tkn, nameType) {
-  if (tkn.type !== 'identifier' || reserved.nonCommands.has(tkn.name)) {
+  if (Array.isArray(tkn) || tkn.type !== 'identifier' ||
+      reserved.nonCommands.has(tkn.name)) {
     syntaxError(tkn, `invalid ${nameType} name`);
   }
 }
@@ -186,7 +187,7 @@ export default (tokens, options = {}) => {
 
   // apply current operator
   //  - once applied, block.operands has a single entry - an array
-  //  - funtion creator ops are not handled here
+  //  - function creator opertors are not handled here
   function applyCurrentOperator() {
     
     // block has operator? - apply it
@@ -254,8 +255,8 @@ export default (tokens, options = {}) => {
       openBlock();
     }
 
-    // close block - if it is a function body, change the block type to
-    // function and apply the function operator
+    // close block - if the block is a function body, change the block type to
+    // function and apply the create-function operator
     else if (type === 'closeBracket') {
 
       // one-liner function
@@ -263,15 +264,16 @@ export default (tokens, options = {}) => {
         closeBlock();
       }
       
-      // parentheses: is a function body if parent block's current operator is
-      // a function creator and the next token triggers the operator to be
-      // applied (or at end of code)      
+      // parentheses    
       else {
 
         const parentBlock = stack[stack.length - 1];
         const parentOp = parentBlock.operator;
         const nextToken = tokens[tknIndex + 1];
 
+        // the block is a function body if parent block's current
+        // operator is a create-function operator and the next token triggers
+        // the operator to be applied (or at end of code)  
         if (functionCreators.has(parentOp.value) &&
             (!nextToken || triggerApplyOp.has(nextToken.type))) {
         
@@ -285,7 +287,7 @@ export default (tokens, options = {}) => {
           if (kind === 'proc' || kind === 'as') block.tkn.arrow = true;
           else if (kind === 'gen') block.tkn.generator = true;
           else if (kind === 'scope') block.tkn.arrow = block.tkn.scope = true;
-          else if (kind === 'class') block.tkn.class[kind] = true;
+          else if (kind === 'class') block.tkn.class = true;
           
           // params
           block.tkn.params = new Set();
@@ -304,9 +306,9 @@ export default (tokens, options = {}) => {
             }
             block.token.as = parentBlock.operands[0];
             const paramToken = parentBlock.operands[1];
-            checkValidName(paramToken.name, 'parameter');
+            checkValidName(paramToken, 'parameter');
             if (paramToken.name === 'rest') {
-              syntaxError(parentOp, 'invalid rest parameter');
+              syntaxError(paramToken, 'invalid rest parameter');
             }
             block.tkn.params.add(
               paramToken.name === 'ops' ? 'ops={}' : paramToken.name
@@ -330,7 +332,7 @@ export default (tokens, options = {}) => {
             if (kind === 'extends') paramTokens = paramTokens.slice(1);
             for (let j = 0; j < paramTokens.length; j++) {
               let paramTkn = paramTokens[j];
-              checkValidName(paramToken.name, 'parameter');
+              checkValidName(paramTkn, 'parameter');
               if (paramTkn.name === 'ops') {
                 block.tkn.params.add('ops={}');
               }
@@ -345,20 +347,27 @@ export default (tokens, options = {}) => {
               }
             }
             if (block.tkn.params.size < paramTokens.length) {
-              syntaxError(paramTkn, 'duplicate parameter name');
+              syntaxError(parentOp, 'duplicate parameter name');
             }
 
-          }                 
-        }
+          }
+
+          // close block - changes block to parent block; this needs modified
+          // since we have just 'manually' applied its operator
+          closeBlock();
+          block.operator = null;
+          block.position = null;
+          block.operands = [block.operands.pop()];
         
-        // close block - changes block to parent block; this needs modified
-        // since we have just 'manually' applied its operator
-        closeBlock();
-        block.operator = null;
-        block.position = null;
-        block.operands = [block.operands.pop()];
+        }
+
+        // standard parentheses
+        else {
+          closeBlock();
+        }
 
       }
+
     }
 
     !!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
