@@ -11,17 +11,19 @@ function syntaxError(t, msg) {
     typeof t === 'string' ? t : `${t.line}:${t.column + 1}`}, ${msg}`);
 };
 
-function checkNotReserved(name, tkn, isArg) {
-  if (reserved.nonCommands.has(name)) {
-    syntaxError(tkn, isArg 
-      ? `parameter name is a reserved word: ${name}`
-      : `assigning to a reserved word: ${name}`);
+function checkValidName(tkn, nameType) {
+  if (tkn.type !== 'identifier' || reserved.nonCommands.has(tkn.name)) {
+    syntaxError(tkn, `invalid ${nameType} name`);
   }
 }
 
 const functionCreators = new Set([
   'fun', 'proc', 'gen', 'scope', 'as', 'asyncFun', 'asyncProc', 'asyncGen',
   'asyncScope', 'asyncAs', 'class', 'extends'
+]);
+
+const triggerApplyOp = new Set([
+  'closeSubexpr', 'closeBracket', 'operator'
 ]);
 
 // parse array of processed tokens to JavaScript
@@ -49,21 +51,14 @@ export default (tokens, options = {}) => {
       operands: [],         // each entry is an object or an array
       position: null,       // number of operands before operator
       assign: null,         // current LHS and assignment token
-      function: null,       // most local open function (or base) block
-      variables: null,      // local variable names, used by functions and base block
+      variables: new Set(), // local variables - if the block is not a function or the
+                            // base block, variables are pushed to the parent block
       js: [],               // each entry is an array representing a subexpression, or
                             // a comma (string) separating these
     }
     if (!b.token) {
       b.import = [];         // import statements
       b.export = new Set();  // export variable names
-    }
-    if (!b.token || b.token.type === 'function') {
-      b.variables = new Set();
-      b.function = b;  // base block is equivalent to function for declaring variables
-    }
-    else {
-      b.function = block.function;
     }
     if (block) stack.push(block);
     block = b;
@@ -91,27 +86,26 @@ export default (tokens, options = {}) => {
       
       // function
       if (block.token.type === 'function') {
-        const argString = Array.from(block.token.args, (a, j) => {
-          if (a === 'ops') {
-            return 'ops={}';
-          }
-          else if (a === 'rest') {
-            if (j !== block.token.args.length - 1) {
-              syntaxError(
-                block.token, 'rest parameter must be the final parameter');
-            }
-            return '...rest';
-          }
-          return a;
-        }).join();
-        block.token.js = `${block.token.async ? '(async ' : '('}${
-          block.token.arrow
-            ? `(${argString}) => {return `
-            : `function${
-                block.token.generator ? '*' : ''}(${argString}) {return `}`;
-        if (block.token.scope) tkn.js = '})()';
-        else if (block.token.as) tkn.js = `})(${block.token.as})`;
-        else tkn.js =  '})';
+        const paramsString = [...block.token.params].join();
+        if (block.token.class) {
+          block.token.js = `(class {constructor(${paramsString}) {`;
+          tkn.js = '}})';
+        }
+        else if (block.token.extends) {
+          block.token.js = `(class extends ${
+            block.token.extends} {constructor(${paramsString}) {`;
+          tkn.js = '}})';
+        }
+        else {
+          block.token.js = `${block.token.async ? '(async ' : '('}${
+            block.token.arrow
+              ? `(${paramsString}) => {return `
+              : `function${
+                  block.token.generator ? '*' : ''}(${paramsString}) {return `}`;
+          if (block.token.scope) tkn.js = '})()';
+          else if (block.token.as) tkn.js = ['})(', block.token.as, ')'];
+          else tkn.js =  '})';
+        }
       }
 
       // parentheses
@@ -126,14 +120,30 @@ export default (tokens, options = {}) => {
     
     }
 
-    // declare variables
-    if (block.variables) {
+    // base block or function - declare variables
+    if (isBase || block.token.type === 'function') {
+     
       let varArr = [...block.variables];
+
+      // base block
       if (isBase) {
         varArr = varArr.filter(v => !block.export.has(v));
         if (_z_used.size) varArr.push('_z_');
       }
+
+      // function - do not declare variables that are params
+      else if (block.token.params.size) {  
+        varArr = varArr.filter(v => !block.token.params.has(v));
+      }
+      
       if (varArr.length) blockJS.push({js: `; var ${varArr.join()}`});
+
+    }
+    
+    // parentheses - push variables to parent block
+    else if (block.variables.size) {
+      const parentBlock = stack[stack.length - 1];
+      block.variables.forEach(v => parentBlock.variables.add(v));
     }
     
     blockJS.push(endJS);
@@ -176,6 +186,7 @@ export default (tokens, options = {}) => {
 
   // apply current operator
   //  - once applied, block.operands has a single entry - an array
+  //  - funtion creator ops are not handled here
   function applyCurrentOperator() {
     
     // block has operator? - apply it
@@ -208,8 +219,9 @@ export default (tokens, options = {}) => {
   }
 
   // iterate over tokens
-  for (tkn of tokens) {
+  for (let tknIndex = 0; tknIndex < tokens.length; tknIndex++) {
 
+    tkn = tokens[tknIndex];  
     type = tkn.type;
 
     // number or string
@@ -233,49 +245,123 @@ export default (tokens, options = {}) => {
     // one-liner function
     else if (type === 'function') {
       if (tkn.value === '{') tkn.arrow = true;
-      tkn.args = new Set('abcd');
+      tkn.params = new Set('abc');
       openBlock();
     }
 
     // open parentheses
     else if (type === 'openParentheses') {
-      
-      // function body? - change to a function token
-      if (functionCreators.has(block.operator.value)) {
-        tkn.type = 'function'; 
-        if (tkn.value.slice(0, 5) === 'async') {
-          tkn.async = true;
-        }
-        const kind = tkn.async ? tkn.value : tkn.value(5).toLowerCase();
-        if (kind === 'gen') {
-          tkn.generator = true;
-        }
-        else if (kind === 'proc' || kind === 'scope' || kind === 'as') {
-          tkn.arrow = true;
-          tkn[kind] = true;
-        }
-        else if (kind === 'class' || kind === 'extends') {
-          tkn[kind] = true;
-        }
-        
-        !!!!HERE - need to validate other operands for each function kind
+      openBlock();
+    }
 
-        // TO DO
-        // - args, inc for as and asyncAs
-        // - class and extends: need to modify closeBlock to handle these?
+    // close block - if it is a function body, change the block type to
+    // function and apply the function operator
+    else if (type === 'closeBracket') {
 
-
+      // one-liner function
+      if (tkn.value === '}' || tkn.value === ']') {
+        closeBlock();
       }
       
-      openBlock();
-    
+      // parentheses: is a function body if parent block's current operator is
+      // a function creator and the next token triggers the operator to be
+      // applied (or at end of code)      
+      else {
+
+        const parentBlock = stack[stack.length - 1];
+        const parentOp = parentBlock.operator;
+        const nextToken = tokens[tknIndex + 1];
+
+        if (functionCreators.has(parentOp.value) &&
+            (!nextToken || triggerApplyOp.has(nextToken.type))) {
+        
+          block.tkn.type = 'function';
+
+          // add properties indicating type of function
+          if (parentOp.value.slice(0, 5) === 'async') block.tkn.async = true;
+          const kind = block.tkn.async
+            ? parentOp.value.slice(5).toLowerCase()
+            : parentOp.value;
+          if (kind === 'proc' || kind === 'as') block.tkn.arrow = true;
+          else if (kind === 'gen') block.tkn.generator = true;
+          else if (kind === 'scope') block.tkn.arrow = block.tkn.scope = true;
+          else if (kind === 'class') block.tkn.class[kind] = true;
+          
+          // params
+          block.tkn.params = new Set();
+
+          // scope - no param
+          if (kind === 'scope') {
+            if (parentBlock.operands.length) {
+              syntaxError(parentOp, 'invalid number of operands');
+            }
+          }
+          
+          // as - 1 arg, 1 param
+          else if (kind === 'as') {
+            if (parentBlock.operands.length !== 2) {
+              syntaxError(parentOp, 'invalid number of operands');
+            }
+            block.token.as = parentBlock.operands[0];
+            const paramToken = parentBlock.operands[1];
+            checkValidName(paramToken.name, 'parameter');
+            if (paramToken.name === 'rest') {
+              syntaxError(parentOp, 'invalid rest parameter');
+            }
+            block.tkn.params.add(
+              paramToken.name === 'ops' ? 'ops={}' : paramToken.name
+            );
+          }
+          
+          // params for all other function-create kinds
+          else {
+            
+            // extends - first param is name of parent class
+            if (kind === 'extends') {
+              if (parentBlock.operands.length === 0) {
+                syntaxError(parentOp, 'invalid number of operands');
+              }
+              checkValidName(parentBlock.operands[0], 'parent class');
+              block.tkn.extends = parentBlock.operands[0].name;
+            }
+        
+            // check param names
+            const paramTokens = parentBlock.operands;
+            if (kind === 'extends') paramTokens = paramTokens.slice(1);
+            for (let j = 0; j < paramTokens.length; j++) {
+              let paramTkn = paramTokens[j];
+              checkValidName(paramToken.name, 'parameter');
+              if (paramTkn.name === 'ops') {
+                block.tkn.params.add('ops={}');
+              }
+              else if (paramTkn.name === 'rest') {
+                if (j !== paramTokens.length - 1) {
+                  syntaxError(paramTkn, 'rest parameter must be final parameter');
+                }
+                block.tkn.params.add('...rest');
+              }
+              else {
+                block.tkn.params.add(paramTkn.name);
+              }
+            }
+            if (block.tkn.params.size < paramTokens.length) {
+              syntaxError(paramTkn, 'duplicate parameter name');
+            }
+
+          }                 
+        }
+        
+        // close block - changes block to parent block; this needs modified
+        // since we have just 'manually' applied its operator
+        closeBlock();
+        block.operator = null;
+        block.position = null;
+        block.operands = [block.operands.pop()];
+
+      }
     }
 
-    // close block
-    else if (type === 'closeBracket') {
-      if (!block.token) syntaxError(tkn, 'bracket mismatch');
-      closeBlock();
-    }
+    !!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // operator //WHEN UPDATE, CHECK IF FUNC CREATOR AND THAT OP IS BEFORE BODY
     else if (type === 'operator') {
