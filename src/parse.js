@@ -15,10 +15,10 @@ function arityError(operator) {
   syntaxError(operator, 'invalid number of operands');
 }
 
-function checkValidName(tkn, nameType) {
+function checkValidName(tkn, msg) {
   if (Array.isArray(tkn) || tkn.type !== 'identifier' ||
       reserved.nonCommands.has(tkn.name)) {
-    syntaxError(tkn, `invalid ${nameType} name`);
+    syntaxError(tkn, msg);
   }
 }
 
@@ -41,7 +41,10 @@ const triggerApplyOp = new Set([
 ]);
 
 const assignmentOps = new(['=', '#=', '@=', '=:', '\\=', '?=']);
+
 const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
+
+const lhsSetterOps = new([':', '\\:', ',']);
 
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned object
@@ -355,7 +358,7 @@ export default (tokens, options = {}) => {
             if (parentBlock.operands.length !== 2) arityError(parentOp);
             block.token.as = parentBlock.operands[0];
             const paramToken = parentBlock.operands[1];
-            checkValidName(paramToken, 'parameter');
+            checkValidName(paramToken, 'invalid parameter name');
             if (paramToken.name === 'rest') {
               syntaxError(paramToken, 'invalid rest parameter');
             }
@@ -377,7 +380,7 @@ export default (tokens, options = {}) => {
             if (kind === 'extends') paramTokens = paramTokens.slice(1);
             for (let j = 0; j < paramTokens.length; j++) {
               let tj = paramTokens[j];
-              checkValidName(tj, 'parameter');
+              checkValidName(tj, 'invalid parameter name');
               if (tj.name === 'ops') {
                 block.tkn.params.add('ops={}');
               }
@@ -418,9 +421,9 @@ export default (tokens, options = {}) => {
     // operator
     else if (type === 'operator') {
       
-      if (block.operator) applyCurrentOperator();
-      block.operator = tkn;
-      block.position = block.operands.length;
+      // apply currnet operator if exists
+      const currentOp = block.operator;
+      if (currentOp) applyCurrentOperator();
 
       // assignment or update-assignment
       if (assignmentOps.has(tkn.value) || updateOps.has(tkn.value)) {
@@ -428,25 +431,83 @@ export default (tokens, options = {}) => {
         if (block.assignment) {
           syntaxError(tkn, 'mulitple assignment operators in subexpression');
         }
+        
+        block.assign = [];
 
+        // destructure
+        if (tkn.value === '#=' || tkn.value === '@=') {
+          if (block.operands.length === 0) {
+            syntaxError(block.operator,
+              'expected one or more operands on left of assignment');
+          }
+          block.assign.push(tokenWithPosn(tkn,
+            tkn.value === '#=' ? '({' : '['));
+          block.operands.forEach(o => {
+            checkValidName(o, 'invalid variable name');
+            block.variables.add(o.name);
+            block.assign.push(o.name, ',');
+          });
+          block.assign.push(tokenWithPosn(tkn,
+            tkn.value === '#=' ? '} =' : '] ='));
+        }
 
+        // assign to single variable/property
+        else {
 
-        // update-assignment
-        if (updateOps.has(tkn.value)) {
-          if ()
+          if (block.operands.length !== 1) {
+            syntaxError(block.operator,
+              'expected one operand on left-hand side of assignment');
+          }
+          const lhs = block.operands[0];
+
+          // assign to outer variable
+          if (tkn.op === '\\=') {
+            checkValidName(lhs,
+              'invalid variable name on left-hand side of assignment');
+            block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
+          }
+           
+          // conditional assign or default ops
+          else if (tkn.op === '?=' || tkn.op === '=:') {
+            checkValidName(lhs,
+              'invalid variable name on left-hand side of assignment');
+            block.variables.add(lhs.name);
+            block.assign.push(
+              lhs.name,
+              tokenWithPosn(tkn, (tkn.value === '=:' ? ' = ops.' : ' = ')),
+              lhs.name,
+              tokenWithPosn(tkn, ' ?? (')
+            );
+          }
+          
+          // standard assign or update-assign - to variable or property
+          else {
+            let settingVariable = false;
+            if (currentOp) {
+              if (!lhsSetterOps.has(currentOp.value)) {
+                syntaxError(tkn, 'invalid left-hand side of assignment');
+              }
+            }
+            else {
+              checkValidName(tkn, 'invalid left-hand side of assignment');
+              settingVariable = true;
+            }
+            if (block.tkn === '=' && settingVariable) {
+              block.variables.add(lhs.name);
+            }
+            block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
+          }
 
         }
 
-
-
-        // ADD VARIABLES
-
-        // !!!!ADD TO block.assign
-        // - the js propoerty of the assign operator should include the LHS
-        // - make sure happy with precedence, parenths, ...
-
       }
 
+      // non-assignment operator
+      else {
+        block.operator = tkn;
+        block.position = block.operands.length;
+      }
+    
     }
 
     // close subexpression
