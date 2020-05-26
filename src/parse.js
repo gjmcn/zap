@@ -11,11 +11,24 @@ function syntaxError(t, msg) {
     typeof t === 'string' ? t : `${t.line}:${t.column + 1}`}, ${msg}`);
 };
 
+function arityError(operator) {
+  syntaxError(operator, 'invalid number of operands');
+}
+
 function checkValidName(tkn, nameType) {
   if (Array.isArray(tkn) || tkn.type !== 'identifier' ||
       reserved.nonCommands.has(tkn.name)) {
     syntaxError(tkn, `invalid ${nameType} name`);
   }
+}
+
+// new token object with line and column of tkn and given js
+function tokenWithPosn(tkn, js) {
+  return {
+    js,
+    line: tkn.line,
+    column: tkn.column,
+  };
 }
 
 const functionCreators = new Set([
@@ -26,6 +39,9 @@ const functionCreators = new Set([
 const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
 ]);
+
+const assignmentOps = new(['=', '#=', '@=', '=:', '\\=', '?=']);
+const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
 
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned object
@@ -190,14 +206,43 @@ export default (tokens, options = {}) => {
   //  - function creator opertors are not handled here
   function applyCurrentOperator() {
     
-    // block has operator? - apply it
+    // block has operator
     if (block.operator) {
-      block.operands = [applyOperator(block, _z_used)];
+
+      // create-function operators should have been applied manually except for
+      // class or extends with no constructor
+      if (functionCreators.has(block.operator.value)) {
+        if (block.operator.value === 'class' && block.operands.length === 0) {
+          block.operands = [[ tokenWithPosn(block.operator, '(class {})') ]];
+        }
+        else if (block.operator.value === 'extends' &&
+            block.operands.length === 0) {
+          syntaxError(block.operator, 'missing parent class');
+        }
+        else if (block.operator.value === 'extends' &&
+            block.operands.length === 1) {
+          block.operands = [[
+            tokenWithPosn(block.operator, '(class extends '),
+            block.operands[0],
+            tokenWithPosn(block.operator, ' {})')
+          ]];
+        }
+        else {
+          syntaxError(block.operator, 'missing function body');
+        }
+      }
+
+      // apply operator  
+      else {
+        block.operands = [applyOperator(block, _z_used)];
+      }
+
       block.operator = null;
       block.position = null;
+    
     }
 
-    // no operator and a single operand? - check operand is a valid result and
+    // no operator and a single operand - check operand is a valid result and
     // wrap in an array if not already one
     else if (block.operands.length === 1) {
       const op0 = block.operands[0];
@@ -276,6 +321,14 @@ export default (tokens, options = {}) => {
         // the operator to be applied (or at end of code)  
         if (functionCreators.has(parentOp.value) &&
             (!nextToken || triggerApplyOp.has(nextToken.type))) {
+
+          // calling extends with only this block as an operand? - this block
+          // is the parent class and no constructor is passed
+          if (parentOp.value === 'extends' &&
+              parentBlock.operands.length === 0) {
+            closeBlock();
+            return;    
+          }
         
           block.tkn.type = 'function';
 
@@ -294,16 +347,12 @@ export default (tokens, options = {}) => {
 
           // scope - no param
           if (kind === 'scope') {
-            if (parentBlock.operands.length) {
-              syntaxError(parentOp, 'invalid number of operands');
-            }
+            if (parentBlock.operands.length) arityError(parentOp);
           }
           
           // as - 1 arg, 1 param
           else if (kind === 'as') {
-            if (parentBlock.operands.length !== 2) {
-              syntaxError(parentOp, 'invalid number of operands');
-            }
+            if (parentBlock.operands.length !== 2) arityError(parentOp);
             block.token.as = parentBlock.operands[0];
             const paramToken = parentBlock.operands[1];
             checkValidName(paramToken, 'parameter');
@@ -320,9 +369,6 @@ export default (tokens, options = {}) => {
             
             // extends - first param is parent class
             if (kind === 'extends') {
-              if (parentBlock.operands.length === 0) {
-                syntaxError(parentOp, 'invalid number of operands');
-              }
               block.tkn.extends = parentBlock.operands[0];
             }
         
@@ -369,11 +415,38 @@ export default (tokens, options = {}) => {
 
     }
 
-    // operator //WHEN UPDATE, CHECK IF FUNC CREATOR AND THAT OP IS BEFORE BODY
+    // operator
     else if (type === 'operator') {
+      
       if (block.operator) applyCurrentOperator();
       block.operator = tkn;
       block.position = block.operands.length;
+
+      // assignment or update-assignment
+      if (assignmentOps.has(tkn.value) || updateOps.has(tkn.value)) {
+
+        if (block.assignment) {
+          syntaxError(tkn, 'mulitple assignment operators in subexpression');
+        }
+
+
+
+        // update-assignment
+        if (updateOps.has(tkn.value)) {
+          if ()
+
+        }
+
+
+
+        // ADD VARIABLES
+
+        // !!!!ADD TO block.assign
+        // - the js propoerty of the assign operator should include the LHS
+        // - make sure happy with precedence, parenths, ...
+
+      }
+
     }
 
     // close subexpression
