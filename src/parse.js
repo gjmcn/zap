@@ -93,8 +93,8 @@ export default (tokens, options = {}) => {
           tkn.js = '}})';
         }
         else if (block.token.extends) {
-          block.token.js = `(class extends ${
-            block.token.extends} {constructor(${paramsString}) {`;
+          block.token.js = ['(class extends ', block.token.extends,
+            ` {constructor(${paramsString}) {`];
           tkn.js = '}})';
         }
         else {
@@ -318,32 +318,31 @@ export default (tokens, options = {}) => {
           // params for all other function-create kinds
           else {
             
-            // extends - first param is name of parent class
+            // extends - first param is parent class
             if (kind === 'extends') {
               if (parentBlock.operands.length === 0) {
                 syntaxError(parentOp, 'invalid number of operands');
               }
-              checkValidName(parentBlock.operands[0], 'parent class');
-              block.tkn.extends = parentBlock.operands[0].name;
+              block.tkn.extends = parentBlock.operands[0];
             }
         
             // check param names
             const paramTokens = parentBlock.operands;
             if (kind === 'extends') paramTokens = paramTokens.slice(1);
             for (let j = 0; j < paramTokens.length; j++) {
-              let paramTkn = paramTokens[j];
-              checkValidName(paramTkn, 'parameter');
-              if (paramTkn.name === 'ops') {
+              let tj = paramTokens[j];
+              checkValidName(tj, 'parameter');
+              if (tj.name === 'ops') {
                 block.tkn.params.add('ops={}');
               }
-              else if (paramTkn.name === 'rest') {
+              else if (tj.name === 'rest') {
                 if (j !== paramTokens.length - 1) {
-                  syntaxError(paramTkn, 'rest parameter must be final parameter');
+                  syntaxError(tj, 'rest parameter must be final parameter');
                 }
                 block.tkn.params.add('...rest');
               }
               else {
-                block.tkn.params.add(paramTkn.name);
+                block.tkn.params.add(tj.name);
               }
             }
             if (block.tkn.params.size < paramTokens.length) {
@@ -355,9 +354,9 @@ export default (tokens, options = {}) => {
           // close block - changes block to parent block; this needs modified
           // since we have just 'manually' applied its operator
           closeBlock();
+          block.operands = [block.operands.pop()];
           block.operator = null;
           block.position = null;
-          block.operands = [block.operands.pop()];
         
         }
 
@@ -369,8 +368,6 @@ export default (tokens, options = {}) => {
       }
 
     }
-
-    !!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // operator //WHEN UPDATE, CHECK IF FUNC CREATOR AND THAT OP IS BEFORE BODY
     else if (type === 'operator') {
