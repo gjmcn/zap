@@ -41,9 +41,7 @@ const triggerApplyOp = new Set([
 ]);
 
 const assignmentOps = new(['=', '#=', '@=', '=:', '\\=', '?=']);
-
 const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
-
 const lhsSetterOps = new([':', '\\:', ',']);
 
 // parse array of processed tokens to JavaScript
@@ -70,7 +68,8 @@ export default (tokens, options = {}) => {
       operator: null,       // current operator token
       operands: [],         // each entry is an object or an array
       position: null,       // number of operands before operator
-      assign: null,         // current LHS and assignment token
+      assign: null,         // LHS and assignment, an array if used
+      assignOpValue = null, // assignment operator value, e.g. '#='
       variables: new Set(), // local variables - if the block is not a function or the
                             // base block, variables are pushed to the parent block
       js: [],               // each entry is an array representing a subexpression, or
@@ -195,9 +194,9 @@ export default (tokens, options = {}) => {
       const op0 = block.operands.pop();
       if (block.assign) {
         op0.unshift(block.assign);
-        if (block.assign.operator === '#=') op0.unshift({js: '('});
-        if (/^(?:[#?]=|=:)$/.test(block.assign.operator)) op0.push({js: ')'});
+        if (/^(?:[#?]=|=:)$/.test(block.assignOpValue)) op0.push({js: ')'});
         block.assign = null;
+        block.assignOpValue = null;
       }
       if (block.js.length) block.js.push(',');
       block.js.push(op0);
@@ -421,7 +420,7 @@ export default (tokens, options = {}) => {
     // operator
     else if (type === 'operator') {
       
-      // apply currnet operator if exists
+      // apply current operator if exists
       const currentOp = block.operator;
       if (currentOp) applyCurrentOperator();
 
@@ -433,6 +432,7 @@ export default (tokens, options = {}) => {
         }
         
         block.assign = [];
+        block.assignOpValue = tkn.value;
 
         // destructure
         if (tkn.value === '#=' || tkn.value === '@=') {
@@ -451,7 +451,7 @@ export default (tokens, options = {}) => {
             tkn.value === '#=' ? '} =' : '] ='));
         }
 
-        // assign to single variable/property
+        // assign to one variable/property
         else {
 
           if (block.operands.length !== 1) {
@@ -461,14 +461,14 @@ export default (tokens, options = {}) => {
           const lhs = block.operands[0];
 
           // assign to outer variable
-          if (tkn.op === '\\=') {
+          if (tkn.value === '\\=') {
             checkValidName(lhs,
               'invalid variable name on left-hand side of assignment');
             block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
           }
            
           // conditional assign or default ops
-          else if (tkn.op === '?=' || tkn.op === '=:') {
+          else if (tkn.value === '?=' || tkn.value === '=:') {
             checkValidName(lhs,
               'invalid variable name on left-hand side of assignment');
             block.variables.add(lhs.name);
@@ -495,10 +495,17 @@ export default (tokens, options = {}) => {
             if (block.tkn === '=' && settingVariable) {
               block.variables.add(lhs.name);
             }
-            block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
-          }
+            block.assign.push(lhs, tokenWithPosn(tkn,
+              (tkn.value === '^=' ? '**=' : tkn.value)));
+            }
 
         }
+
+        // reset block
+        block.operator = null;
+        block.operands = [];
+        block.position = null;
+        block.js = [];
 
       }
 
@@ -513,61 +520,6 @@ export default (tokens, options = {}) => {
     // close subexpression
     else if (type === 'closeSubexpr') {
       closeSubexpr();
-    }
-
-    // assign or destructure
-    else if (type === 'assign' || type === 'destructure') {
-      if (startedSubexpr()) {
-        syntaxError(tkn, 'assignment must be at start of subexpression');
-      }
-      if (tkn.operator === '=' ||
-          tkn.operator === '=:' ||
-          type === 'destructure') {  //declare as local variable(s) unless arguments
-        let args = block.function.token && block.function.token.args;
-        if (args) args =
-          new Set(Array.from(args, nm => nm.replace('...', '')));
-        let addVariable = (args
-          ? name => { if (!args.has(name)) block.function.variables.add(name) }
-          : name => block.function.variables.add(name));
-        if (type === 'destructure') {
-          let names = [...tkn.names];
-          names.forEach((nm, i) => {
-            if (tkn.operator === '@=' && nm === 'null') {
-              names[i] = '';
-            }
-            else {
-              checkNotReserved(nm, tkn);
-              addVariable(nm.replace('...', ''));
-            }
-          });
-          tkn.js = (tkn.operator === '#=')
-            ? `{${names.join(', ')}} = `
-            : `[${names.join(', ')}] = `;
-        }
-        else {  // = or =:
-          checkNotReserved(tkn.name, tkn);
-          addVariable(tkn.name);
-          if (tkn.operator === '=:') {
-            tkn.js = `${tkn.name} = ops.${tkn.name} ?? (`;
-          }
-          else {
-            tkn.js = `${tkn.name} = `;
-          }
-        }
-      }
-      else {
-        checkNotReserved(tkn.name, tkn);
-        if (tkn.operator === '?=') {
-          tkn.js = `${tkn.name} = ${tkn.name} ?? (`;
-        }
-        else {
-          let op = tkn.operator;
-          if (op === '\\=') op = '=';
-          else if (op === '^=') op = '**=';
-          tkn.js = `${tkn.name} ${op} `;
-        }
-      }
-      block.assign = tkn;
     }
 
   }
