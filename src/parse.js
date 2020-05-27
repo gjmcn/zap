@@ -437,12 +437,18 @@ export default (tokens, options = {}) => {
           }
           block.assign.push(tokenWithPosn(tkn,
             tkn.value === '#=' ? '({' : '['));
+          const lhsNames = new Set();
           block.operands.forEach(o => {
             checkValidName(o,
               'invalid variable name on left-hand side of assignment');
+            lhsNames.add(o.name);
             block.variables.add(o.name);
             block.assign.push(o.name, ',');
           });
+          if (lhsNames.size < block.operands.length) {
+            syntaxError(tkn,
+              'duplicate variable name on left-hand side of assignment');
+          }
           block.assign.push(tokenWithPosn(tkn,
             tkn.value === '#=' ? '} = ' : '] = '));
         }
