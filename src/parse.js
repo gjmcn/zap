@@ -40,9 +40,9 @@ const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
 ]);
 
-const assignmentOps = new(['=', '#=', '@=', '=:', '\\=', '?=']);
+const assignmentOps = new(['=', '#=', '@=', '<-', '\\=', '?=']);
 const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
-const lhsSetterOps = new([':', '\\:', ',']);
+const lhsSetterOps = new([':', '::', ',']);
 
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned object
@@ -194,7 +194,10 @@ export default (tokens, options = {}) => {
       const op0 = block.operands.pop();
       if (block.assign) {
         op0.unshift(block.assign);
-        if (/^(?:[#?]=|=:)$/.test(block.assignOpValue)) op0.push({js: ')'});
+        if (block.assignOpValue === '#=' || block.assignOpValue === '?='||
+            block.assignOpValue === '<-') {
+          op0.push({js: ')'});
+        }
         block.assign = null;
         block.assignOpValue = null;
       }
@@ -424,11 +427,11 @@ export default (tokens, options = {}) => {
       const currentOp = block.operator;
       if (currentOp) applyCurrentOperator();
 
-      // assignment or update-assignment
+      // assignment
       if (assignmentOps.has(tkn.value) || updateOps.has(tkn.value)) {
 
         if (block.assignment) {
-          syntaxError(tkn, 'mulitple assignment operators in subexpression');
+          syntaxError(tkn, 'multiple assignment operators');
         }
         
         block.assign = [];
@@ -437,25 +440,26 @@ export default (tokens, options = {}) => {
         // destructure
         if (tkn.value === '#=' || tkn.value === '@=') {
           if (block.operands.length === 0) {
-            syntaxError(block.operator,
-              'expected one or more operands on left of assignment');
+            syntaxError(tkn,
+              'expected one or more operands on left-hand side of assignment');
           }
           block.assign.push(tokenWithPosn(tkn,
             tkn.value === '#=' ? '({' : '['));
           block.operands.forEach(o => {
-            checkValidName(o, 'invalid variable name');
+            checkValidName(o,
+              'invalid variable name on left-hand side of assignment');
             block.variables.add(o.name);
             block.assign.push(o.name, ',');
           });
           block.assign.push(tokenWithPosn(tkn,
-            tkn.value === '#=' ? '} =' : '] ='));
+            tkn.value === '#=' ? '} = ' : '] = '));
         }
 
         // assign to one variable/property
         else {
 
           if (block.operands.length !== 1) {
-            syntaxError(block.operator,
+            syntaxError(tkn,
               'expected one operand on left-hand side of assignment');
           }
           const lhs = block.operands[0];
@@ -467,14 +471,14 @@ export default (tokens, options = {}) => {
             block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
           }
            
-          // conditional assign or default ops
-          else if (tkn.value === '?=' || tkn.value === '=:') {
+          // conditional assign or use ops
+          else if (tkn.value === '?=' || tkn.value === '<-') {
             checkValidName(lhs,
               'invalid variable name on left-hand side of assignment');
-            block.variables.add(lhs.name);
+            if (tkn.value === '<-') block.variables.add(lhs.name);
             block.assign.push(
               lhs.name,
-              tokenWithPosn(tkn, (tkn.value === '=:' ? ' = ops.' : ' = ')),
+              tokenWithPosn(tkn, (tkn.value === '<-' ? ' = ops.' : ' = ')),
               lhs.name,
               tokenWithPosn(tkn, ' ?? (')
             );
@@ -489,23 +493,21 @@ export default (tokens, options = {}) => {
               }
             }
             else {
-              checkValidName(tkn, 'invalid left-hand side of assignment');
+              checkValidName(lhs, 'invalid left-hand side of assignment');
               settingVariable = true;
             }
-            if (block.tkn === '=' && settingVariable) {
+            if (tkn.value === '=' && settingVariable) {
               block.variables.add(lhs.name);
             }
             block.assign.push(lhs, tokenWithPosn(tkn,
-              (tkn.value === '^=' ? '**=' : tkn.value)));
-            }
+              (tkn.value === '^=' ? ' **= ' : ` ${tkn.value} `)));
+          }
 
         }
 
-        // reset block
-        block.operator = null;
+        // reset block operands - block operator and position were either
+        // already null or were set to null when applied currentOp
         block.operands = [];
-        block.position = null;
-        block.js = [];
 
       }
 
@@ -516,6 +518,8 @@ export default (tokens, options = {}) => {
       }
     
     }
+
+    !!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // close subexpression
     else if (type === 'closeSubexpr') {
