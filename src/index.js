@@ -1,12 +1,12 @@
 import lexer from './lexer.js';
-import processTokens from './process-tokens.js';
+import blocks from './blocks.js';
 import parse from './parse.js';
 
 // compile zap code; returns object with some/all properties:
 // tokens, procTokens, jsTree, sourceMap, js
 export default (code, {
     tokens     = false,  // return tokens 
-    procTokens = false,  // return processed tokens 
+    procTokens = false,  // return tokens after processing blocks 
     sourceMap  = false,  // return source map
     sourceFile = null,   // used for source map 
     jsTree     = false,  // return JS tree 
@@ -21,12 +21,12 @@ export default (code, {
 
   if (procTokens || sourceMap || jsTree || js) {
     
-    const procTkns = processTokens(tkns);
-    if (procTokens) result.procTokens = procTkns;
+    const pTkns = blocks(tkns);
+    if (procTokens) result.procTokens = pTkns;
     
     if (sourceMap || jsTree || js) {
       Object.assign(result,
-        parse(procTkns, {sourceMap, sourceFile, jsTree, js, asyncIIFE}));
+        parse(pTkns, {sourceMap, sourceFile, jsTree, js, asyncIIFE}));
     }
   
   }
