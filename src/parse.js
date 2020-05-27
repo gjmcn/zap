@@ -97,7 +97,7 @@ export default (tokens, options = {}) => {
     
     // base block
     if (isBase) {
-      endJS = {js: ';'};
+      endJS = ';';
     }
 
     // function or parentheses
@@ -155,7 +155,7 @@ export default (tokens, options = {}) => {
         varArr = varArr.filter(v => !block.token.params.has(v));
       }
       
-      if (varArr.length) blockJS.push({js: `; var ${varArr.join()}`});
+      if (varArr.length) blockJS.push(`; var ${varArr.join()}`);
 
     }
     
@@ -176,16 +176,10 @@ export default (tokens, options = {}) => {
 
   }
 
-  // started subexpression
-  function startedSubexpr() {
-    return block.operands.length || block.operator || block.assign;
-  }
-
-  // close subexpression
-  //  - add comma token (unless block.js empty) and array representing
-  //    current subexpression to block.js
+  // close subexpression - add comma token (unless block.js empty) and array
+  // representing current subexpression to block.js
   function closeSubexpr() {
-    if (startedSubexpr()) {
+    if (block.operands.length || block.operator || block.assign) {
       if (block.assign && !(block.operands.length || block.operator)) {
         syntaxError(endOfCode ? 'end of code' : tkn,
           'assignment has no right-hand side');
@@ -196,7 +190,7 @@ export default (tokens, options = {}) => {
         op0.unshift(block.assign);
         if (block.assignOpValue === '#=' || block.assignOpValue === '?='||
             block.assignOpValue === '<-') {
-          op0.push({js: ')'});
+          op0.push(')');
         }
         block.assign = null;
         block.assignOpValue = null;
@@ -430,9 +424,7 @@ export default (tokens, options = {}) => {
       // assignment
       if (assignmentOps.has(tkn.value) || updateOps.has(tkn.value)) {
 
-        if (block.assignment) {
-          syntaxError(tkn, 'multiple assignment operators');
-        }
+        if (block.assign) syntaxError(tkn, 'multiple assignment operators');
         
         block.assign = [];
         block.assignOpValue = tkn.value;
@@ -519,14 +511,15 @@ export default (tokens, options = {}) => {
     
     }
 
-    !!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     // close subexpression
     else if (type === 'closeSubexpr') {
       closeSubexpr();
     }
 
   }
+
+!!!!!!!!!!!!!HERE!!!!!!!!!
+
   endOfCode = true;
   if (stack.length) {
     throw Error(`Zap syntax, unclosed block at end of code`);
