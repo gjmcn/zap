@@ -524,12 +524,7 @@ export default (tokens, options = {}) => {
 
   }
 
-!!!!!!!!!!!!!HERE!!!!!!!!!
-
   endOfCode = true;
-  if (stack.length) {
-    throw Error(`Zap syntax, unclosed block at end of code`);
-  }
   
   // generate JS
   {
