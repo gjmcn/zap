@@ -4,7 +4,6 @@ const m = new Map();
 
 m.set('get',        [3, 3]);
 m.set('set',        [3, 3]);
-m.set('zip',        [1, Infinity]);
 m.set('seq',        [3, 3]);
 m.set('reduce',     [3, 3]);
 m.set('group',      [2, 3]);

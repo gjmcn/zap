@@ -290,39 +290,6 @@ export default {
     }
   },
 
-  *zip(...i) {
-    i = i.map(j => j[Symbol.iterator]());
-    while (1) {
-      let r = i.map(j => j.next());
-      if (r.some(j => j.done)) return;
-      yield r.map(j => j.value);
-    }
-  },
-
-  zipMap(f, ...i) {
-    let q = i.map(j => j[Symbol.iterator]()),
-        k = 0,
-        v = [],
-        r;
-    while (1) {
-      r = q.map(j => j.next());
-      if (r.some(j => j.done)) break;
-      v.push(f(...r.map(j => j.value), k++, i));
-    }
-    return v;
-  },
-  
-  zipEach(f, ...i) {
-    let q = i.map(j => j[Symbol.iterator]()),
-        k = 0,
-        r;
-    while (1) {
-      r = q.map(j => j.next());
-      if (r.some(j => j.done)) break;
-      f(...r.map(j => j.value), k++, i);
-    }
-  },
-
   print(v) {
     console.log(v);
     return v;

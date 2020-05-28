@@ -484,60 +484,12 @@ export default (block, _z_used) => {
       return res;
     }
 
-    else if (op === 'zipEach' || op === 'zipMap') {
-      if (nx < 2) throw arityError(operator);
-      const res = [ opPosn(`_z_.${op}(`), x[nx - 1], ',' ];
-      _z_used.add(op);
-      return addToResult(x.slice(0, -1), res, 'close');
+    else if (op === 'while') {
+      // !!!!!!!!! TO DO !!!!!!!!!!!!!
     }
 
-    else if (op === 'nestEach' || op === 'nestMap') {
-      if (nx < 2) throw arityError(operator);
-      const iterables = x.slice(0, -1);
-      const ni = iterables.length;
-      let argList = iterables.map((_, i) => `a${i}`).join();
-      let s = `((f, ${argList}) => {`;
-      for (let i = 0; i < ni; i++) s += `a${i} = [...a${i}]; `;
-      if (op === 'nestMap') {
-        s += 'let r0 = []';
-        for (let i = 0; i < ni - 1; i++) s += `, r${i + 1}`;
-        s += '; '
-      }
-      for (let i = 0; i < ni; i++) {
-        s += `for (let v${i} of a${i}) {`;
-        if (op === 'nestMap' && i < ni - 1) s += `r${i}.push(r${i + 1} = []); `; 
-      }
-      argList = argList.replace(/a/g, 'v');
-      const closeLoops = '}'.repeat(ni); 
-      s += (op === 'nestMap')
-        ? `r${ni - 1}.push(f(${argList}))${closeLoops} return r0})(`
-        : `f(${argList})${closeLoops}})(`;
-      const res = [ opPosn(s), x[nx - 1], ','];
-      return addToResult(iterables, res, 'close');
-    }
-
-    else if (op === 'while' || op === 'asyncWhile' ||
-             op === 'do'    || op === 'asyncDo') {
-      if (nx !== 1) throw arityError(operator);
-      const isAsync = (op.slice(1, 6) === 'async');
-      let s = `(${isAsync ? 'async ' : ''}function*(t) {`;
-      if (op.slice(-5).toLowerCase() === 'while') {
-        s += `while (${isAsync ? 'await ' : ''}t()) yield})(`;
-      }
-      else {
-        s += `while (1) yield ${isAsync ? 'await ' : ''}t()})(`;
-      }
-      return [ opPosn(s), x[0], ')' ];
-    }
-
-    else if (op === 'nest') {
-      if (nx === 0) throw arityError(operator);
-      let s = `(function*(${x.map((_, i) => `a${i}`).join()}) {`;
-      for (let i = 0; i < x.length; i++) s += `a${i} = [...a${i}]; `;
-      for (let i = 0; i < x.length; i++) s += `for (let v${i} of a${i}) `;
-      s += `yield [${x.map((_, i) => `v${i}`).join()}]})(`;
-      const res = [ opPosn(s) ];
-      return addToResult(x, res, 'close');
+    else if (op === 'do') {
+      // !!!!!!!!! TO DO !!!!!!!!!!!!!
     }
 
     else if (op === 'throw') {
