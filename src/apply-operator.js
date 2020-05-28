@@ -564,38 +564,6 @@ export default (block, _z_used) => {
       return [ opPosn('(() => {debugger})()') ];
     }
     
-    else if (op === 'class') {
-      if (nx > 1) throw arityError(operator);
-      const res = [ opPosn('(class ') ];
-      if (nx === 0) {
-        res.push(opPosn('{})'));
-      }
-      else {
-        if (!Array.isArray(x[0]) || !x[0]._zap_constructor) {
-          throw operandError(operator, 0, nx);
-        }
-        const {start, end} = x[0]._zap_constructor;
-        res.push(opPosn(start), x[0].slice(1, -1), opPosn(end), ')');
-      }
-      return res;
-    }
-
-    else if (op === 'extends') {
-      if (nx < 1 || nx > 2) throw arityError(operator);
-      const res = [ opPosn('(class extends '), x[0] ];
-      if (nx === 1) {
-        res.push(opPosn('{})'));
-      }
-      else {
-        if (!Array.isArray(x[1]) || !x[1]._zap_constructor) {
-          throw operandError(operator, 1, nx);
-        }
-        const {start, end} = x[1]._zap_constructor;
-        res.push(opPosn(start), x[1].slice(1, -1), opPosn(end), ')');
-      }
-      return res;
-    }
-
     else if (op === 'assign') {
       if (nx < 2) throw arityError(operator);
       const res = [ opPosn('Object.assign(') ];

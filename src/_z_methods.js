@@ -557,7 +557,7 @@ export default {
     return x;
   },
 
-  ms(m) {
+  period(m) {
     return new Promise(r => setTimeout(r, m));
   },
 
