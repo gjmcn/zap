@@ -141,5 +141,10 @@ export default code => {
         }, invalid indent - base block cannot be indented`);
   }
 
+  // include end-of-file line and column numbers with the tokens array
+  tokens.lineEnd = line;
+  tokens.columnEnd = column;
+
   return tokens;
+
 };

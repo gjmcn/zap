@@ -40,9 +40,9 @@ const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
 ]);
 
-const assignmentOps = new(['=', '#=', '@=', '<-', '\\=', '?=']);
-const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
-const lhsSetterOps = new([':', '::', ',']);
+const assignmentOps = new Set(['=', '#=', '@=', '<-', '\\=', '?=']);
+const updateOps = new Set(['+=', '-=', '*=', '/=', '%=', '^=']);
+const lhsSetterOps = new Set([':', '::', ',']);
 
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned
@@ -70,7 +70,7 @@ export default (tokens, options = {}) => {
       operands: [],         // each entry is an object or an array
       position: null,       // number of operands before operator
       assign: null,         // LHS and assignment, an array if used
-      assignOpValue = null, // assignment operator value, e.g. '#='
+      assignOpValue: null,  // assignment operator value, e.g. '#='
       variables: new Set(), // local variables - if the block is not a function
                             // and not the base block, variables are pushed to
                             // the parent block
@@ -200,7 +200,7 @@ export default (tokens, options = {}) => {
         block.assign = null;
         block.assignOpValue = null;
       }
-      if (block.js.length) block.js.push(',');
+      if (block.js.length) block.js.push(', ');
       block.js.push(op0);
     }
   }
@@ -404,7 +404,7 @@ export default (tokens, options = {}) => {
           // close block - changes block to parent block; this needs modified
           // since we have just 'manually' applied its operator
           closeBlock();
-          block.operands = [ block.operands.pop()];
+          block.operands = [ block.operands.pop() ];
           block.operator = null;
           block.position = null;
         

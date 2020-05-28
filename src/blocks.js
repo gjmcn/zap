@@ -32,7 +32,7 @@ export default tokens => {
   // throw if inline block open
   function checkInlineNotOpen(tkn) {
     if (typeof block() !== 'number') {
-      throw syntaxError(tkn, 'unclosed brackets');
+      syntaxError(tkn, 'unclosed brackets');
     }
   }
 
@@ -74,7 +74,7 @@ export default tokens => {
 
         // indent not a multiple of 4?
         if (tkn.indent % 4) {
-          syntaxError(tkn, 'invalid indent - not a multiple of 4');
+          syntaxError(tkn, 'invalid indent - must be a multiple of 4 spaces');
         }
 
         // indent increased by more than one block?
@@ -163,6 +163,14 @@ export default tokens => {
 
   // ===== end of code: close open indent blocks ==========
   
-  while (stack.length > 1) closeIndentBlock();
+  const endOfCodeToken = {
+    type: 'endOfCode',
+    value: '(end of code)',
+    line: tokens.lineEnd,
+    column: tokens.columnEnd
+  };
+  while (stack.length > 1) closeIndentBlock(endOfCodeToken);
+
+  return newTokens;
 
 };
