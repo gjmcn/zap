@@ -45,10 +45,11 @@ const updateOps = new(['+=', '-=', '*=', '/=', '%=', '^=']);
 const lhsSetterOps = new([':', '::', ',']);
 
 // parse array of processed tokens to JavaScript
-//  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned object
+//  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned
+//    object
 //  - 'sourceFile' option should be used if 'sourceMap' option true
 //  - 'asyncIIFE' option indicates if wrapper IIFE is to be asynchronous
-//  - returns object with none/some/all properties: 'jsTree', 'sourceMap', 'js' 
+//  - returns object with none/some/all properties: 'jsTree', 'sourceMap', 'js'
 export default (tokens, options = {}) => {
 
   // state
@@ -70,10 +71,11 @@ export default (tokens, options = {}) => {
       position: null,       // number of operands before operator
       assign: null,         // LHS and assignment, an array if used
       assignOpValue = null, // assignment operator value, e.g. '#='
-      variables: new Set(), // local variables - if the block is not a function or the
-                            // base block, variables are pushed to the parent block
-      js: [],               // each entry is an array representing a subexpression, or
-                            // a comma (string) separating these
+      variables: new Set(), // local variables - if the block is not a function
+                            // and not the base block, variables are pushed to
+                            // the parent block
+      js: [],               // each entry is an array representing a subexpr,
+                            // or a comma (string) separating these
     }
     if (!b.token) {
       b.import = [];         // import statements
@@ -86,8 +88,8 @@ export default (tokens, options = {}) => {
   // close block
   //  - add appropriate token objects to start and end of block
   //  - if base block, return the array representing the block's JS tree
-  //  - if not base block, pop stack and push array representing the
-  //    block's JS tree to operands of popped block
+  //  - if not base block, pop the stack and push the current block's JS tree
+  //    (an array) onto the operands of the popped block
   function closeBlock() {
     
     closeSubexpr();
@@ -111,16 +113,19 @@ export default (tokens, options = {}) => {
           tkn.js = '}})';
         }
         else if (block.token.extends) {
-          block.token.js = ['(class extends ', block.token.extends,
-            ` {constructor(${paramsString}) {`];
+          block.token.js = [
+            '(class extends ',
+            block.token.extends,
+            ` {constructor(${paramsString}) {`
+          ];
           tkn.js = '}})';
         }
         else {
           block.token.js = `${block.token.async ? '(async ' : '('}${
             block.token.arrow
               ? `(${paramsString}) => {return `
-              : `function${
-                  block.token.generator ? '*' : ''}(${paramsString}) {return `}`;
+              : `function${block.token.generator ? '*' : ''}(${
+                  paramsString}) {return `}`;
           if (block.token.scope) tkn.js = '})()';
           else if (block.token.as) tkn.js = ['})(', block.token.as, ')'];
           else tkn.js =  '})';
@@ -176,15 +181,15 @@ export default (tokens, options = {}) => {
 
   }
 
-  // close subexpression - add comma token (unless block.js empty) and array
-  // representing current subexpression to block.js
+  // close subexpression - add a comma (unless block.js is empty) and the array
+  // representing the current subexpression to block.js
   function closeSubexpr() {
     if (block.operands.length || block.operator || block.assign) {
       if (block.assign && !(block.operands.length || block.operator)) {
         syntaxError(endOfCode ? 'end of code' : tkn,
           'assignment has no right-hand side');
       }
-      applyCurrentOperator();  // once applied, block.operands has 1 entry - an array
+      applyCurrentOperator();  // block.operands now has 1 entry (an array)
       const op0 = block.operands.pop();
       if (block.assign) {
         op0.unshift(block.assign);
@@ -200,16 +205,15 @@ export default (tokens, options = {}) => {
     }
   }
 
-  // apply current operator
-  //  - once applied, block.operands has a single entry - an array
-  //  - function creator opertors are not handled here
+  // apply current operator - once applied, block.operands has a single entry
+  // (an array)
   function applyCurrentOperator() {
     
     // block has operator
     if (block.operator) {
 
-      // create-function operators should have been applied manually except for
-      // class or extends with no constructor
+      // create-function operator should have been applied 'manually' except
+      // for class or extends with no constructor
       if (functionCreators.has(block.operator.value)) {
         if (block.operator.value === 'class' && block.operands.length === 0) {
           block.operands = [[ tokenWithPosn(block.operator, '(class {})') ]];
@@ -233,7 +237,7 @@ export default (tokens, options = {}) => {
 
       // apply operator  
       else {
-        block.operands = [applyOperator(block, _z_used)];
+        block.operands = [ applyOperator(block, _z_used) ];
       }
 
       block.operator = null;
@@ -247,8 +251,7 @@ export default (tokens, options = {}) => {
       const op0 = block.operands[0];
       if (!Array.isArray(op0)) {
         if (op0.type === 'identifier' && reserved.invalid.has(op0.name)) {
-          syntaxError(`${op0.line}:${op0.column + 1}`,
-            `invalid use of reserved word: ${op0.name}`);
+          syntaxError(op0, `invalid use of reserved word: ${op0.name}`);
         }
         block.operands[0] = [op0];
       }
@@ -315,10 +318,10 @@ export default (tokens, options = {}) => {
         const parentOp = parentBlock.operator;
         const nextToken = tokens[tknIndex + 1];
 
-        // the block is a function body if parent block's current
+        // the block is a function body if the parent block's current
         // operator is a create-function operator and the next token triggers
         // the operator to be applied (or at end of code)  
-        if (functionCreators.has(parentOp.value) &&
+        if (parentOp && functionCreators.has(parentOp.value) &&
             (!nextToken || triggerApplyOp.has(nextToken.type))) {
 
           // calling extends with only this block as an operand? - this block
@@ -329,20 +332,22 @@ export default (tokens, options = {}) => {
             return;    
           }
         
-          block.tkn.type = 'function';
+          block.token.type = 'function';
 
           // add properties indicating type of function
-          if (parentOp.value.slice(0, 5) === 'async') block.tkn.async = true;
-          const kind = block.tkn.async
+          if (parentOp.value.slice(0, 5) === 'async') block.token.async = true;
+          const kind = block.token.async
             ? parentOp.value.slice(5).toLowerCase()
             : parentOp.value;
-          if (kind === 'proc' || kind === 'as') block.tkn.arrow = true;
-          else if (kind === 'gen') block.tkn.generator = true;
-          else if (kind === 'scope') block.tkn.arrow = block.tkn.scope = true;
-          else if (kind === 'class') block.tkn.class = true;
+          if (kind === 'proc' || kind === 'as') block.token.arrow = true;
+          else if (kind === 'gen') block.token.generator = true;
+          else if (kind === 'scope') {
+            block.token.arrow = block.token.scope = true;
+          }
+          else if (kind === 'class') block.token.class = true;
           
           // params
-          block.tkn.params = new Set();
+          block.token.params = new Set();
 
           // scope - no param
           if (kind === 'scope') {
@@ -358,7 +363,7 @@ export default (tokens, options = {}) => {
             if (paramToken.name === 'rest') {
               syntaxError(paramToken, 'invalid rest parameter');
             }
-            block.tkn.params.add(
+            block.token.params.add(
               paramToken.name === 'ops' ? 'ops={}' : paramToken.name
             );
           }
@@ -368,7 +373,7 @@ export default (tokens, options = {}) => {
             
             // extends - first param is parent class
             if (kind === 'extends') {
-              block.tkn.extends = parentBlock.operands[0];
+              block.token.extends = parentBlock.operands[0];
             }
         
             // check param names
@@ -378,19 +383,19 @@ export default (tokens, options = {}) => {
               let tj = paramTokens[j];
               checkValidName(tj, 'invalid parameter name');
               if (tj.name === 'ops') {
-                block.tkn.params.add('ops={}');
+                block.token.params.add('ops={}');
               }
               else if (tj.name === 'rest') {
                 if (j !== paramTokens.length - 1) {
                   syntaxError(tj, 'rest parameter must be final parameter');
                 }
-                block.tkn.params.add('...rest');
+                block.token.params.add('...rest');
               }
               else {
-                block.tkn.params.add(tj.name);
+                block.token.params.add(tj.name);
               }
             }
-            if (block.tkn.params.size < paramTokens.length) {
+            if (block.token.params.size < paramTokens.length) {
               syntaxError(parentOp, 'duplicate parameter name');
             }
 
@@ -399,7 +404,7 @@ export default (tokens, options = {}) => {
           // close block - changes block to parent block; this needs modified
           // since we have just 'manually' applied its operator
           closeBlock();
-          block.operands = [block.operands.pop()];
+          block.operands = [ block.operands.pop()];
           block.operator = null;
           block.position = null;
         
@@ -520,6 +525,11 @@ export default (tokens, options = {}) => {
     // close subexpression
     else if (type === 'closeSubexpr') {
       closeSubexpr();
+    }
+
+    // unhandled token type
+    else {
+      syntaxError(tkn, 'unhandled token type');
     }
 
   }
