@@ -14,7 +14,7 @@ const unquotedOps = new Set([  // not including method call ops
 
 // errors
 function errorStem(operator) {
-  return `Zap syntax at ${operator.line}:${operator.column + 1}, operator ${
+  return `Zap syntax at ${operator.line}:${operator.column + 1}, operator: ${
     operator.value}, `;
 }
 function arityError(operator) {
@@ -32,8 +32,8 @@ function topLevelError(operator) {
 function multipleExportError(operator) {
   return Error(`${errorStem(operator)}can only be used once`);
 }
-function duplicateExportError(operator) {
-  return Error(`${errorStem(operator)}duplicate export name`);
+function duplicateNameError(operator) {
+  return Error(`${errorStem(operator)}duplicate name`);
 }
 
 // apply current operator of block
@@ -135,7 +135,7 @@ export default (block, _z_used) => {
       // unary plus and minus
       if (nx === 1 && (op === '+' || op === '-')) {
         operator.js = op;
-        return ['(', operator, x[0], ')'];
+        return [ '(', operator, x[0], ')' ];
       }
 
       // 2 or more operands
@@ -164,8 +164,6 @@ export default (block, _z_used) => {
       }
 
     }
-
-    ===================HERE========================
 
     // binary operators
     else if (binaryOps.has(op)) {
@@ -199,20 +197,7 @@ export default (block, _z_used) => {
       return res;
     }
 
-    // set property using variable of same name
-    else if (op === '::') {
-      if (nx !== 2) throw arityError(operator);
-      if (position >= nx) throw rightOperandError(operator);
-      const iObj = (position === 0 ? 1 : 0);
-      if (xTypes[position] !== 'identifier' || x[position].unaryMinus ||
-          wordLiterals.has(x[position].name)) {
-        throw operandError(operator, position, nx);
-      }
-      return [
-        opPosn(`((o, v) => {o.${x[position].name} = v; return o})(`),
-        x[iObj], ',', x[position], ')'
-      ];
-    }
+    // -------------HERE--------moved :: to become  attach
 
     // range, given step size
     else if (op === '>>') {
@@ -391,6 +376,20 @@ export default (block, _z_used) => {
       const res = [ '(', x[0] ];
       for (let j = 1; j < nx - 1; j++) res.push(opPosn('['), x[j], ']');
       res.push(opPosn('='), x[nx - 1], ')');
+      return res;
+    }
+
+    else if (op === 'attach') {
+      if (nx < 2) throw arityError(operator);
+      const res = [ opPosn('(o => {') ];
+      const names = new Set();
+      for (let i = 1; i < nx; i++) {
+        if (!isVariableName(i)) throw operandError(operator, i, nx);
+        names.add(x[i].name);
+        res.push('o.', x[i].name, '=', x[i], ';');
+      }
+      if (names.size < nx - 1) throw duplicateNameError(operator);
+      res.push('return o})(', x[0], ')');
       return res;
     }
 
@@ -575,7 +574,7 @@ export default (block, _z_used) => {
       if (!nx) throw arityError(operator);
       x.forEach((xi, i) => {
         if (!isVariableName(i)) throw operandError(operator, i, nx);
-        if (block.export.has(xi.js)) throw duplicateExportError(operator);
+        if (block.export.has(xi.js)) throw duplicateNameError(operator);
         block.export.add(xi.js);
       });
       return [ opPosn('undefined') ];
