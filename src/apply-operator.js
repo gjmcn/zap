@@ -8,8 +8,8 @@ const repeatOps = new Set([
   '+', '-', '*', '/', '%', '^', '&&', '||', '??', '<>', '><'
 ]);
 const binaryOps = new Set(['<', '<=', '>', '>=', '==', '!=']);
-const unquotedOps = new Set([
-  '#', '##', ':', '?:', '+:', '-:', '*:', '/:', '%:', '^:', '\\:'
+const unquotedOps = new Set([  // not including method call ops
+  '#', '##', ':', '?:', '::'
 ]);
 
 // errors
@@ -22,9 +22,6 @@ function arityError(operator) {
 }
 function operandError(operator, i, n) {
   return Error(`${errorStem(operator)}operand ${i + 1} of ${n} is invalid`);
-}
-function spreadError(operator) {
-  return Error(`${errorStem(operator)}invalid spread syntax`);
 }
 function rightOperandError(operator) {
   return Error(`${errorStem(operator)}no right operand`);
@@ -50,52 +47,26 @@ export default (block, _z_used) => {
   
   // what type of op?
   let callingMethod, callingFunction, isCommand, otherOp;
-  if (op === '|' || op === '<|' || op === '?|') callingMethod = true;
+  if (op === '~' || op === '<~' || op === '?~') callingMethod = true;
   else if (op === '\\' || op === '<\\') callingFunction = true;
   else if (commands.has(op)) isCommand = true;
   else otherOp = true;
   
-  // check operands are valid
+  // check operands for invalid identifiers
   for (let i = 0; i < nx; i++) {
-
-    // spread
-    if ((xTypes[i] ? x[i].spread : x[i]._zap_parenthSpread) && (
-          (isCommand && (op !== 'new' || i === 0)) ||
-          (callingFunction && (i === position || 
-            (op === '<\\' && i === (position === 0 ? 1 : 0)))) ||  // first arg cannot have spread with <\
-          (callingMethod && (i === position ||
-            i === (position === 0 ? 1 : 0))) ||
-          (otherOp && (op !== '@' && op !== '@@')))) {
-      throw spreadError(operator);
-    }
-    
-    // identifier name
     if (xTypes[i] === 'identifier' && invalid.has(x[i].name) && (
         !(callingMethod && i === position) &&
         !(otherOp && unquotedOps.has(op)))) {
       throw operandError(operator, i, nx);
     }
-
-  }
-
-  function isRawIdentifier(i) {
-    return xTypes[i] === 'identifier' && !x[i].unaryMinus;
-  }
-
-  function isRawString(i) {
-    return xTypes[i] === 'string' && !x[i].unaryMinus;
-  }
-
-  function isRawNumber(i) {
-    return xTypes[i] === 'number' && !x[i].unaryMinus;
   }
 
   function isVariableName(i) {
-    return isRawIdentifier(i) && !nonCommands.has(x[i]);
+    return xTypes[i] === 'identifier' && !nonCommands.has(x[i]);
   }
 
   function validateImportPath(i) {
-    if (!isRawString(i)) throw operandError(operator, i, nx);
+    if (xTypes[i] !== 'string') throw operandError(operator, i, nx);
     return x[i].js;
   }
 
@@ -160,28 +131,41 @@ export default (block, _z_used) => {
 
     // repeat operators
     else if (repeatOps.has(op)) {
-      if (nx < 2) throw arityError(operator);
-      let minMax, opSymbol, res;
-      if (op === '<>') minMax = '<';
-      else if (op === '><') minMax = '>';
-      else opSymbol = operator.js = (op === '^' ? '**' : op);
-      if (minMax) {
-        res = [ opPosn( nx === 2
-          ? `((x, y) => y ${minMax} x ? y : x)(`
-          : `((...x) => {let r = x[0], j; for (j = 1; j < ${
-              nx}; j++) if (x[j] ${minMax} r) r = x[j]; return r})(`
-        ) ];
-        addToResult(x, res, 'close');
-      } 
-      else {
-        res =  [ '(', x[0], operator, x[1], ')' ];
-        for (let i = 2; i < nx; i++) {
-          res.unshift('(')
-          res.push(opPosn(opSymbol), x[i], ')'); 
-        }
+
+      // unary plus and minus
+      if (nx === 1 && (op === '+' || op === '-')) {
+        operator.js = op;
+        return ['(', operator, x[0], ')'];
       }
-      return res;
+
+      // 2 or more operands
+      else {
+        if (nx < 2) throw arityError(operator);
+        let minMax, opSymbol, res;
+        if (op === '<>') minMax = '<';
+        else if (op === '><') minMax = '>';
+        else opSymbol = operator.js = (op === '^' ? '**' : op);
+        if (minMax) {
+          res = [ opPosn( nx === 2
+            ? `((x, y) => y ${minMax} x ? y : x)(`
+            : `((...x) => {let r = x[0], j; for (j = 1; j < ${
+                nx}; j++) if (x[j] ${minMax} r) r = x[j]; return r})(`
+          ) ];
+          addToResult(x, res, 'close');
+        } 
+        else {
+          res =  [ '(', x[0], operator, x[1], ')' ];
+          for (let i = 2; i < nx; i++) {
+            res.unshift('(')
+            res.push(opPosn(opSymbol), x[i], ')'); 
+          }
+        }
+        return res;
+      }
+
     }
+
+    ===================HERE========================
 
     // binary operators
     else if (binaryOps.has(op)) {
@@ -266,7 +250,7 @@ export default (block, _z_used) => {
           const extra = (op === '?:')
             ? '?.'
             : (op === '\\:' ? '["prototype"]' : '');
-          return isRawIdentifier(position)
+          return xTypes[position] === 'identifier'
             ? [ x[iObj], opPosn(`${extra}["`), x[position], '"]' ]
             : [ x[iObj], opPosn(`${extra}[`),  x[position], ']'  ];
         }
@@ -284,7 +268,7 @@ export default (block, _z_used) => {
             : `o${op === '\\:' ? '.prototype' : ''}[p] ${opSymbol} v; `;
           s += 'return o})(';
           const res = [ opPosn(s), x[iObj] ];
-          isRawIdentifier(position)
+          xTypes[position] === 'identifier'
             ? res.push(',"', x[position], '",')
             : res.push(',' , x[position], ',');
           checkNotReserved(iValue);
@@ -300,10 +284,10 @@ export default (block, _z_used) => {
         const res = [ opPosn('({') ];
         for (let i = 0; i < nx; i += 2) {
           checkNotReserved(i + 1);
-          if (isRawIdentifier(i)) {
+          if (xTypes[i] === 'identifier') {
             res.push('"', x[i], '"');
           }
-          else if (isRawString(i) || isRawNumber(i)) {
+          else if (xTypes[i] === 'string' || xTypes[i] === 'number') {
             res.push(x[i]);
           }
           else {
@@ -322,7 +306,7 @@ export default (block, _z_used) => {
         for (let i = 0; i < nx; i += 2) {
           checkNotReserved(i + 1);
           res.push('[');
-          isRawIdentifier(i) && !wordLiterals.has(x[i].name)
+          (xTypes[i] === 'identifier' && !wordLiterals.has(x[i].name))
             ? res.push('"', x[i], '"')
             : res.push(x[i]);
           res.push(',', x[i + 1], '],');
