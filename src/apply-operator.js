@@ -62,7 +62,7 @@ export default (block, _z_used) => {
   }
 
   function isVariableName(i) {
-    return xTypes[i] === 'identifier' && !nonCommands.has(x[i]);
+    return xTypes[i] === 'identifier' && !nonCommands.has(x[i].name);
   }
 
   function validateImportPath(i) {
@@ -379,18 +379,21 @@ export default (block, _z_used) => {
       return res;
     }
 
+    // !! ALREADY CHECKED !!
     else if (op === 'attach') {
       if (nx < 2) throw arityError(operator);
-      const res = [ opPosn('(o => {') ];
       const names = new Set();
+      let s = '((o';
       for (let i = 1; i < nx; i++) {
         if (!isVariableName(i)) throw operandError(operator, i, nx);
         names.add(x[i].name);
-        res.push('o.', x[i].name, '=', x[i], ';');
+        s += `,v${i}`;
       }
       if (names.size < nx - 1) throw duplicateNameError(operator);
-      res.push('return o})(', x[0], ')');
-      return res;
+      s += ') => {';
+      for (let i = 1; i < nx; i++) s += `o.${x[i].name}=v${i};`;
+      s += 'return o})(';
+      return addToResult(x, [ opPosn(s) ], 'close');
     }
 
     else if (op === 'new') {
