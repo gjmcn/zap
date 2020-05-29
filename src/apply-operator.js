@@ -197,6 +197,12 @@ export default (block, _z_used) => {
       return res;
     }
 
+    // get property
+    else if (op === ',') {
+      if (nx !== 2) throw arityError(operator);
+      return [ x[0], opPosn('['), x[1], ']' ];
+    }
+
     // ops that accept identifiers as property names
     else if (unquotedOps.has(op)) {
       
@@ -205,7 +211,7 @@ export default (block, _z_used) => {
           throw operandError(operator, i, nx);
         }
       }
-      
+
       // get property
       if (op.slice(-1) === ':') {
         if (nx !== 2) throw arityError(operator);
@@ -262,6 +268,9 @@ export default (block, _z_used) => {
     }
 
   }
+
+
+  // !!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   // calling function or method
   else if (callingFunction || callingMethod) {
