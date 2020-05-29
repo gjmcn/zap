@@ -2,8 +2,11 @@
 
 const m = new Map();
 
+m.set('at',         [2, 2]);
 m.set('get',        [3, 3]);
 m.set('set',        [3, 3]);
+m.set('to',         [2, 3]);
+m.set('linSpace',   [3, 3]);
 m.set('seq',        [3, 3]);
 m.set('reduce',     [3, 3]);
 m.set('group',      [2, 3]);
@@ -41,7 +44,6 @@ m.set('exponential',[1, 2]);
 m.set('geometric',  [0, 2]);
 m.set('shuffle',    [1, 1]);
 m.set('period',     [1, 1]);
-m.set('ats',        [2, Infinity]);
 m.set('insert',     [2, 3]);
 m.set('insertEach', [2, 3]);
 m.set('into',       [2, 3]);

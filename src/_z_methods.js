@@ -265,7 +265,7 @@ export default {
 
   // ----- call directly as _z_ methods in generated code -----
 
-  *range(s, e, j = 1) {
+  *to(s, e, j = 1) {
     j = +j, s = +s, e = +e;
     e += (e - s) * 1e-14;
     while (j > 0 ? s < e : s > e) {
@@ -274,7 +274,7 @@ export default {
     }
   },
 
-  *rangeN(s, e, n) {
+  *linSpace(s, e, n) {
     if ((n = +n) === 1) yield (+s + +e) / 2;
     else {
       const j = (+e - +s) / (n - 1);
@@ -528,22 +528,19 @@ export default {
     return new Promise(r => setTimeout(r, m));
   },
 
-  ats(...p) {
-    let q = p[0];
-    let z = p[p.length - 1];
+  at(o, p) {
     let r;
-    for (let j = 1; j < p.length - 1; j++) q = q[p[j]];
-    if (typeof q === 'string') {
+    if (typeof o === 'string') {
       r = '';
-      for (let v of z) r += q[v]; 
+      for (let k of p) r += o[k]; 
     }
-    else if (Array.isArray(q)) {
+    else if (Array.isArray(o)) {
       r = [];
-      for (let v of z) r.push(q[v]); 
+      for (let k of p) r.push(o[k]); 
     }
     else {
       r = {};
-      for (let v of z) r[v] = q[v]; 
+      for (let k of p) r[k] = o[k]; 
     }
     return r;
   },

@@ -197,21 +197,7 @@ export default (block, _z_used) => {
       return res;
     }
 
-    // -------------HERE--------moved :: to become  attach
-
-    // range, given step size
-    else if (op === '>>') {
-      if (nx < 2 || nx > 3) throw arityError(operator);
-      return call_z_method('range');
-    }
-
-    // range, given number of steps
-    else if (op === '>>>') {
-      if (nx !== 3) throw arityError(operator);
-      return call_z_method('rangeN');
-    }
-
-    // ops that accept identifiers as property/method names
+    // ops that accept identifiers as property names
     else if (unquotedOps.has(op)) {
       
       function checkNotReserved(i) {
@@ -220,47 +206,20 @@ export default (block, _z_used) => {
         }
       }
       
-      // get/set properties
+      // get property
       if (op.slice(-1) === ':') {
-
-        if (position >= nx) throw rightOperandError(operator);
+        if (nx !== 2) throw arityError(operator);
+        if (position > 1) throw rightOperandError(operator);
         const iObj = (position === 0 ? 1 : 0);
         checkNotReserved(iObj);
-
-        // get property
-        if (nx === 2) {
-          if (op !== ':' && op !== '?:' && op !== '\\:') {
-            throw arityError(operator);
-          }
-          const extra = (op === '?:')
-            ? '?.'
-            : (op === '\\:' ? '["prototype"]' : '');
-          return xTypes[position] === 'identifier'
-            ? [ x[iObj], opPosn(`${extra}["`), x[position], '"]' ]
-            : [ x[iObj], opPosn(`${extra}[`),  x[position], ']'  ];
-        }
-
-        // set properties
-        else {
-          if (nx !== 3) throw arityError(operator);
-          const iValue = (position === 2 ? 1 : 2);
-          let opSymbol;
-          if (op === ':' || op === '\\:') opSymbol = '=';
-          else if (op !== '?:') opSymbol = (op === '^:' ? '**=' : op[0] + '=');
-          let s = '((o, p, v) => {';
-          s += (op === '?:')
-            ? `if (o[p] === void 0 || o[p] === null) o[p] = v; `
-            : `o${op === '\\:' ? '.prototype' : ''}[p] ${opSymbol} v; `;
-          s += 'return o})(';
-          const res = [ opPosn(s), x[iObj] ];
-          xTypes[position] === 'identifier'
-            ? res.push(',"', x[position], '",')
-            : res.push(',' , x[position], ',');
-          checkNotReserved(iValue);
-          res.push(x[iValue], ')');
-          return res;
-        }
-
+        const extra = (op === '?:')
+          ? '?.'
+          : (op === '::'
+            ? '["prototype"]'
+            : '');
+        return xTypes[position] === 'identifier'
+          ? [ x[iObj], opPosn(`${extra}["`), x[position], '"]' ]
+          : [ x[iObj], opPosn(`${extra}[`),  x[position], ']'  ];
       }
 
       // object literal
@@ -362,21 +321,6 @@ export default (block, _z_used) => {
       const [mn, mx] = _z_arities.get(op);
       if (nx < mn || nx > mx ) throw arityError(operator);
       return call_z_method(op);
-    }
-
-    else if (op === 'at') {
-      if (nx < 2) throw arityError(operator);
-      const res = [ x[0] ];
-      for (let j = 1; j < nx; j++) res.push(opPosn('['), x[j], ']');
-      return res;
-    }
-
-    else if (op === 'to') {
-      if (nx < 3) throw arityError(operator);
-      const res = [ '(', x[0] ];
-      for (let j = 1; j < nx - 1; j++) res.push(opPosn('['), x[j], ']');
-      res.push(opPosn('='), x[nx - 1], ')');
-      return res;
     }
 
     // !! ALREADY CHECKED !!
