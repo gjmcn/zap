@@ -269,9 +269,6 @@ export default (block, _z_used) => {
 
   }
 
-
-  // !!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   // calling function or method
   else if (callingFunction || callingMethod) {
 
@@ -297,19 +294,19 @@ export default (block, _z_used) => {
     else if (callingMethod) {
       if (nx < 2) throw arityError(operator);
       let methodName, res;
-      if (xTypes[position] === 'identifier' && !x[position].unaryMinus) {
+      if (xTypes[position] === 'identifier') {
         methodName = [ '"', x[position], '"' ];
       }
       else {
         methodName = [ x[position] ];
       }
-      if (op === '|' || op === '?|') {
+      if (op === '~' || op === '?~') {
         res = [
           args[0],
-          opPosn('['), ...methodName, opPosn(op === '?|' ? ']?.(' : '](')
+          opPosn('['), ...methodName, opPosn(op === '?~' ? ']?.(' : '](')
         ];
       }
-      else {  // <|
+      else {  // <~
         const methodArg = args.length > 1 ? '...a' : '';
         res = [
           opPosn(`((o, m${methodArg ? `, ${methodArg}`: ''}) => {o[m](${
@@ -322,6 +319,10 @@ export default (block, _z_used) => {
     }
 
   }
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
   // command
   else {
