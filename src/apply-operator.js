@@ -320,10 +320,6 @@ export default (block, _z_used) => {
 
   }
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
   // command
   else {
 
@@ -333,7 +329,6 @@ export default (block, _z_used) => {
       return call_z_method(op);
     }
 
-    // !! ALREADY CHECKED !!
     else if (op === 'attach') {
       if (nx < 2) throw arityError(operator);
       const names = new Set();
@@ -365,12 +360,9 @@ export default (block, _z_used) => {
     }
 
     else if (op === 'delete') {
-      if (nx < 2) throw arityError(operator);
+      if (nx !== 2) throw arityError(operator);
       operator.js = 'delete';
-      const res = [ '(', operator, ' ', x[0] ];
-      for (let j = 1; j < nx; j++) res.push('[', x[j], ']');
-      res.push(')');
-      return res;
+      return [ '(', operator, ' ', x[0], '[', x[1], '])' ];
     }
 
     else if (op === 'await' || op === 'void' || op === 'typeof' || 
