@@ -62,18 +62,18 @@ const reserved = {
     'exponential', 'geometric',
     
     // function
-    'fun', 'proc', 'gen', 'scope', 'as', 'asyncFun', 'asyncProc', 'asyncGen',
-    'asyncScope', 'asyncAs', 'class', 'extends',
+    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'while', 'try',
+    'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
+    'asyncMap', 'asyncWhile', 'asyncTry', 'class', 'extends',
 
     // other
-    'array', 'get', 'set', 'if', 'each', 'awaitEach', 'map', 'awaitMap', 'do',
-    'while', 'seq', 'throw', 'try', 'awaitTry', 'debugger', 'reduce', 'some',
-    'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
-    'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
-    'groupCount', 'bin', 'binCount', 'variance', 'deviation', 'arrObj',
-    'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export', 'import',
-    'importAs', 'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace',
-    'apply', 'call', 'print'
+    'array', 'get', 'set', 'if', 'seq', 'throw', 'debugger', 'reduce',
+    'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
+    'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean',
+    'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation',
+    'arrObj', 'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export',
+    'import', 'importAs', 'importDefault', 'importAll', 'period', 'at', 'to',
+    'linSpace', 'apply', 'call', 'print'
 
   ]),
 
