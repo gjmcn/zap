@@ -395,9 +395,10 @@ export default (block, _z_used) => {
     else if (op === 'each' || op === 'awaitEach' || 
              op === 'map'  || op === 'awaitMap') {
       if (nx < 3 || nx > 5) throw arityError(operator);    
-      let useAwait, useMap, indexName, argName, res;
-      useAwait = (op.slice(0, 5) === 'await');
-      useMap = (op.slice(-3).toLowerCase() === 'map');
+      let isAwait, isMap, indexName, argName, loopBody, s, res;
+      isAwait = (op.slice(0, 5) === 'await');
+      if (isAwait) block.awaitUsed = true;
+      isMap = (op.slice(-3).toLowerCase() === 'map');
       if (!isVariableName(1)) throw operandError(operator, 1, nx);
       if (nx > 3) {
         if (!isVariableName(2)) throw operandError(operator, 2, nx);
@@ -410,27 +411,35 @@ export default (block, _z_used) => {
       else {
         argName = '_z_iter';
       }
-      let s = `(${argName} => {`;
-      if (useMap) s += 'const _z_map = [];';
+      loopBody = x[nx - 1]; 
+      s = '(';
+      if (isAwait || loopBody.awaitUsed) s += 'async ';
+      s += `${argName} => {`;
+      if (isMap) s += 'const _z_map = [];';
       if (indexName) s += 'let _z_index = 0;';
       s += 'for '
-      if (useAwait) s += 'await ';
+      if (isAwait) s += 'await ';
       s += `(let ${x[1].name} of ${argName}) {`;
       if (indexName) s += `let ${indexName} = _z_index++;`;
-      if (useMap) s += '_z_map.push(';
-      res = [ opPosn(s), x[nx - 1] ];
+      if (isMap) s += '_z_map.push(';
+      res = [ opPosn(s), loopBody ];
       res.push(
-        opPosn(useMap ? ')}; return _z_map})(' : '}; return _z_iter})('),
+        opPosn(isMap ? ')}; return _z_map})(' : '}; return _z_iter})('),
         x[0],
         opPosn(')')
       );
       return res;
     }
-
-
-
+    
     else if (op === 'while') {
-      // !!!!!!!!! TO DO !!!!!!!!!!!!!
+      if (nx != 2) throw arityError(operator);
+      return [
+        opPosn(`(${(x[1].awaitUsed) ? 'async ' : ''}() => {while (`),
+        x[0],
+        ') {',
+        x[1],
+        opPosn('}})()')
+      ];
     }
 
     else if (op === 'do') {

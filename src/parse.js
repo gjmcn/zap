@@ -161,7 +161,7 @@ export default (tokens, options = {}) => {
         varArr = varArr.filter(v => !block.token.params.has(v));
       }
       
-      // push variables
+      // declare variables
       if (varArr.length) blockJS.push(`; var ${varArr.join()}`);
 
       // throw if await is used inside a synchronous function
@@ -172,7 +172,7 @@ export default (tokens, options = {}) => {
 
     }
     
-    // parentheses - push variables and awaitUsed to parent block
+    // parentheses - add variables and awaitUsed to parent block
     else {
       const parentBlock = stack[stack.length - 1];
       if (block.variables.size) {
@@ -181,6 +181,7 @@ export default (tokens, options = {}) => {
       if (block.awaitUsed) {
         parentBlock.awaitUsed = true;
       }
+      // blockJS.awaitUsed = block.awaitUsed;  // used by each, map etc
     }
     
     blockJS.push(endJS);
