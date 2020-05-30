@@ -71,9 +71,10 @@ export default (tokens, options = {}) => {
       position: null,       // number of operands before operator
       assign: null,         // LHS and assignment, an array if used
       assignOpValue: null,  // assignment operator value, e.g. '#='
-      variables: new Set(), // local variables - if the block is not a function
-                            // and not the base block, variables are pushed to
-                            // the parent block
+      variables: new Set(), // names of local variables - these bubble up to
+                            // the parent function or base block
+      awaitUsed: false,     // indicates if await is used inside the block - 
+                            // bubbles up to the parent function or base block
       js: [],               // each entry is an array representing a subexpr,
                             // or a comma (string) separating these
     }
@@ -144,12 +145,12 @@ export default (tokens, options = {}) => {
     
     }
 
-    // base block or function - declare variables
+    // base block or function - declare variables, check async/await
     if (isBase || block.token.type === 'function') {
      
       let varArr = [...block.variables];
 
-      // base block
+      // base block - do not declare variables that are exported
       if (isBase) {
         varArr = varArr.filter(v => !block.export.has(v));
         if (_z_used.size) varArr.push('_z_');
@@ -160,14 +161,26 @@ export default (tokens, options = {}) => {
         varArr = varArr.filter(v => !block.token.params.has(v));
       }
       
+      // push variables
       if (varArr.length) blockJS.push(`; var ${varArr.join()}`);
+
+      // throw if await is used inside a synchronous function
+      if (block.awaitUsed && !isBase && !block.token.async) {
+        syntaxError(isBase ? '(end of code)' : tkn,
+          'await inside synchronous function');
+      }
 
     }
     
-    // parentheses - push variables to parent block
-    else if (block.variables.size) {
+    // parentheses - push variables and awaitUsed to parent block
+    else {
       const parentBlock = stack[stack.length - 1];
-      block.variables.forEach(v => parentBlock.variables.add(v));
+      if (block.variables.size) {
+        block.variables.forEach(v => parentBlock.variables.add(v));
+      }
+      if (block.awaitUsed) {
+        parentBlock.awaitUsed = true;
+      }
     }
     
     blockJS.push(endJS);
@@ -186,7 +199,7 @@ export default (tokens, options = {}) => {
   function closeSubexpr() {
     if (block.operands.length || block.operator || block.assign) {
       if (block.assign && !(block.operands.length || block.operator)) {
-        syntaxError(endOfCode ? 'end of code' : tkn,
+        syntaxError(endOfCode ? '(end of code)' : tkn,
           'assignment has no right-hand side');
       }
       applyCurrentOperator();  // block.operands now has 1 entry (an array)
@@ -260,7 +273,7 @@ export default (tokens, options = {}) => {
     // multiple operands error - this function is never called with no operator
     // and no operands
     else {
-      syntaxError(endOfCode ? 'end of code' : tkn,
+      syntaxError(endOfCode ? '(end of code)' : tkn,
         'multiple operands but no operator');
     }
 
