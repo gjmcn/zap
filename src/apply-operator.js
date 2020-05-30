@@ -355,7 +355,7 @@ export default (block, _z_used) => {
 
     else if (op === 'in' || op === 'instanceof') {
       if (nx !== 2) throw arityError(operator);
-      operator.js = op.slice(1);
+      operator.js = op;
       return [ '(', x[0], ' ', operator, ' ', x[1], ')' ];
     }
 
@@ -368,7 +368,7 @@ export default (block, _z_used) => {
     else if (op === 'await' || op === 'void' || op === 'typeof' || 
         op === 'yield' || op === 'yieldFrom') {
       if (nx !== 1) throw arityError(operator);
-      operator.js = (op === 'yieldFrom') ? 'yield*' : op.slice(1);
+      operator.js = (op === 'yieldFrom') ? 'yield*' : op;
       return [ '(', operator, ' ', x[0], ')' ];
     }
 
@@ -389,32 +389,44 @@ export default (block, _z_used) => {
       return res;
     }
 
+    !!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!
+
     else if (op === 'each' || op === 'awaitEach' || 
-              op === 'map'  || op === 'awaitMap') {
-      const isAwait = (op.slice(1, 6) === 'await');
-      const isMap = (op.slice(-3).toLowerCase() === 'map');
-      let s = isAwait
-        ? '(await (async (i, f) => {let j = 0'
-        : '((i, f) => {let j = 0';
-      if (isMap) s+= ', r = []';
-      s += `; for ${isAwait ? 'await ' : ''}(let v of i) `;
-      if (isMap) s += 'r[j] = ';
-      if (isAwait) s += 'await ';
-      s += `f(v, j++, i); return ${isMap ? 'r' : 'i'}})(`;
-      const res = [ opPosn(s) ]; 
-      if (nx === 1) {
-        res.push(opPosn('(function*() {while(1) yield})(),'), x[0], 
-          isAwait ? '))' : ')');
+             op === 'map'  || op === 'awaitMap') {
+      if (nx < 3 || nx > 5) throw arityError(operator);    
+      let useAwait, useMap, indexName, argName, res;
+      useAwait = (op.slice(0, 5) === 'await');
+      useMap = (op.slice(-3).toLowerCase() === 'map');
+      if (!isVariableName(1)) throw operandError(operator, 1, nx);
+      if (nx > 3) {
+        if (!isVariableName(2)) throw operandError(operator, 2, nx);
+        indexName = x[2].name;
       }
-      else if (nx === 2) {
-        addToResult(x, res, 'close');
-        if (isAwait) res.push(')');
+      if (nx > 4) {
+        if (!isVariableName(3)) throw operandError(operator, 3, nx);
+        argName = x[3].name;
       }
       else {
-        throw arityError(operator);
+        argName = '_z_iter';
       }
+      let s = `(${argName} => {`;
+      if (useMap) s += 'const _z_map = [];';
+      if (indexName) s += 'let _z_index = 0;';
+      s += 'for '
+      if (useAwait) s += 'await ';
+      s += `(let ${x[1].name} of ${argName}) {`;
+      if (indexName) s += `let ${indexName} = _z_index++;`;
+      if (useMap) s += '_z_map.push(';
+      res = [ opPosn(s), x[nx - 1] ];
+      res.push(
+        opPosn(useMap ? ')}; return _z_map})(' : '}; return _z_iter})('),
+        x[0],
+        opPosn(')')
+      );
       return res;
     }
+
+
 
     else if (op === 'while') {
       // !!!!!!!!! TO DO !!!!!!!!!!!!!
