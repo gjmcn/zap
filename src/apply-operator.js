@@ -395,22 +395,8 @@ export default (block, _z_used) => {
       return [ opPosn('(e => {throw e})('), x[0], ')' ];
     }
 
-    else if (op === 'try' || op === 'awaitTry') {
-      if (nx < 1 || nx > 3) throw arityError(operator);
-      const res = [ opPosn(
-        op === 'try'
-          ? `((t, c = () => {}, f) => {let r; try {r = t()} catch (e) {r = c(e)}${
-            nx === 3 ? ` finally {f()}` : ''} return r})(`
-          : `(await (async (t, c = async () => {}, f) => {let r; try {r = await t()} catch (e) {r = await c(e)}${
-            nx === 3 ? ` finally {await f()}` : ''} return r})(`
-      ) ];
-      addToResult(x, res, 'close');
-      if (op === 'awaitTry') res.push(')');
-      return res;
-    }
-
     else if (op === 'debugger') {
-      if (nx !== 0) throw arityError(operator);
+      if (nx) throw arityError(operator);
       return [ opPosn('(() => {debugger})()') ];
     }
     
@@ -422,15 +408,9 @@ export default (block, _z_used) => {
 
     else if (op === 'pick') {
       let res;
-      if (nx === 1) {
-        res = call_z_method('pickDoc');
-      }
-      else if (nx === 2) {
-        res = call_z_method('pickIn');
-      }
-      else {
-        throw arityError(operator);
-      }
+      if      (nx === 1) res = call_z_method('pickDoc');
+      else if (nx === 2) res = call_z_method('pickIn');
+      else throw arityError(operator);
       return res;
     }
 
@@ -453,7 +433,7 @@ export default (block, _z_used) => {
         block.import.push([ opPosn(`import {${
           x.slice(1).map(tkn => tkn.js).join(', ')}} from ${src};\n`) ]);
       }
-      return [ opPosn('undefined') ];
+      return [ opPosn('(void 0)') ];
     }
 
     else if (op === 'importAs') {
@@ -469,7 +449,7 @@ export default (block, _z_used) => {
       block.import.push([
         opPosn(`import {${variableList.join(', ')}} from ${src};\n`)
       ]);
-      return [ opPosn('undefined') ];
+      return [ opPosn('(void 0)') ];
     }
 
     else if (op === 'importDefault' || op === 'importAll') {
@@ -480,7 +460,7 @@ export default (block, _z_used) => {
       let s = 'import ';
       if (op === 'importAll') s += '* as ';
       block.import.push([ opPosn(s + `${x[1].js} from ${src};\n`) ]);
-      return [ opPosn('undefined') ];
+      return [ opPosn('(void 0)') ];
     }
 
     else if (op === 'export') {
@@ -492,7 +472,7 @@ export default (block, _z_used) => {
         if (block.export.has(xi.js)) throw duplicateNameError(operator);
         block.export.add(xi.js);
       });
-      return [ opPosn('undefined') ];
+      return [ opPosn('(void 0)') ];
     }
 
   }

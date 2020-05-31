@@ -298,12 +298,6 @@ export default {
     while (1) yield f();
   },
 
-  map(i, f) {
-    let m = [];
-    for (let q of i) m.push(f(q));
-    return m;
-  },
-
   print(v) {
     console.log(v);
     return v;
@@ -402,6 +396,13 @@ export default {
       if (!f(v, j++, i)) return false;
     }
     return true;
+  },
+
+  map(i, f) {
+    let m = [],
+        j = 0;
+    for (let q of i) m.push(f(q, j++, i));
+    return m;
   },
 
   filter(i, f) {
