@@ -291,7 +291,7 @@ export default (block, _z_used) => {
     }
 
     // method
-    else if (callingMethod) {
+    else {
       if (nx < 2) throw arityError(operator);
       let methodName, res;
       if (xTypes[position] === 'identifier') {
@@ -388,6 +388,17 @@ export default (block, _z_used) => {
       for (let xi of x) res.push(opPosn('...'), xi, ',');
       res.push(opPosn(']'));
       return res;
+    }
+
+    else if (op === 'call') {
+      if (!nx) throw arityError(operator);
+      const res = [ x[0], opPosn('(') ];
+      return addToResult(x.slice(1), res, 'close');
+    }
+    
+    else if (op === 'apply') {
+      if (nx !== 2) throw arityError(operator);
+      return [ x[0], opPosn('(...'), x[1], ')' ];
     }
 
     else if (op === 'throw') {
