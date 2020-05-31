@@ -298,6 +298,12 @@ export default {
     while (1) yield f();
   },
 
+  map(i, f) {
+    let m = [];
+    for (let q of i) m.push(f(q));
+    return m;
+  },
+
   print(v) {
     console.log(v);
     return v;
