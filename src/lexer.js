@@ -100,6 +100,7 @@ export default code => {
                 tkn.type = 'operator';
               }
               else {
+                if (tkn.value === 'else') tkn.value = 'true';
                 tkn.name = tkn.value;
               }
             }
