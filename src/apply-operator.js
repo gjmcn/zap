@@ -390,62 +390,9 @@ export default (block, _z_used) => {
       return res;
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!
 
-    else if (op === 'each' || op === 'awaitEach' || 
-             op === 'map'  || op === 'awaitMap') {
-      if (nx < 3 || nx > 5) throw arityError(operator);    
-      let isAwait, isMap, indexName, argName, loopBody, s, res;
-      isAwait = (op.slice(0, 5) === 'await');
-      if (isAwait) block.awaitUsed = true;
-      isMap = (op.slice(-3).toLowerCase() === 'map');
-      if (!isVariableName(1)) throw operandError(operator, 1, nx);
-      if (nx > 3) {
-        if (!isVariableName(2)) throw operandError(operator, 2, nx);
-        indexName = x[2].name;
-      }
-      if (nx > 4) {
-        if (!isVariableName(3)) throw operandError(operator, 3, nx);
-        argName = x[3].name;
-      }
-      else {
-        argName = '_z_iter';
-      }
-      loopBody = x[nx - 1]; 
-      s = '(';
-      if (isAwait || loopBody.awaitUsed) s += 'async ';
-      s += `${argName} => {`;
-      if (isMap) s += 'const _z_map = [];';
-      if (indexName) s += 'let _z_index = 0;';
-      s += 'for '
-      if (isAwait) s += 'await ';
-      s += `(let ${x[1].name} of ${argName}) {`;
-      if (indexName) s += `let ${indexName} = _z_index++;`;
-      if (isMap) s += '_z_map.push(';
-      res = [ opPosn(s), loopBody ];
-      res.push(
-        opPosn(isMap ? ')}; return _z_map})(' : '}; return _z_iter})('),
-        x[0],
-        opPosn(')')
-      );
-      return res;
-    }
     
-    else if (op === 'while') {
-      if (nx != 2) throw arityError(operator);
-      return [
-        opPosn(`(${(x[1].awaitUsed) ? 'async ' : ''}() => {while (`),
-        x[0],
-        ') {',
-        x[1],
-        opPosn('}})()')
-      ];
-    }
-
-    else if (op === 'do') {
-      // !!!!!!!!! TO DO !!!!!!!!!!!!!
-    }
-
     else if (op === 'throw') {
       if (nx !== 1) throw arityError(operator);
       return [ opPosn('(e => {throw e})('), x[0], ')' ];
