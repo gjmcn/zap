@@ -390,9 +390,6 @@ export default (block, _z_used) => {
       return res;
     }
 
-    !!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!
-
-    
     else if (op === 'throw') {
       if (nx !== 1) throw arityError(operator);
       return [ opPosn('(e => {throw e})('), x[0], ')' ];

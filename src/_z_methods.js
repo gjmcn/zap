@@ -284,10 +284,18 @@ export default {
   },
 
   *seq(v, t, u) {
-    while(t(v)) {
+    while (t(v)) {
       yield v;
       v = u(v);
     }
+  },
+
+  *while(f) {
+    while (f()) yield;
+  },
+
+  *do(f) {
+    while (1) yield f();
   },
 
   print(v) {
