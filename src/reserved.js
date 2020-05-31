@@ -62,9 +62,9 @@ const reserved = {
     'exponential', 'geometric',
     
     // function
-    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'try', 'asyncFun',
+    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'try', 'catch', 'asyncFun',
     'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncTry',
-    'class', 'extends',
+    'asyncCatch', 'class', 'extends',
 
     // other
     'array', 'get', 'set', 'if', 'seq', 'throw', 'debugger', 'reduce',
@@ -78,10 +78,10 @@ const reserved = {
   ]),
 
   invalid: new Set([
-    'break', 'catch', 'const', 'continue', 'default', 'else', 'finally',
-    'for', 'function', 'let', 'return', 'switch', 'var', 'with', 'enum',
-    'implements', 'interface', 'package', 'private', 'protected', 'public',
-    'static', '_z_', '_z_index', '_z_iter'
+    'break', 'const', 'continue', 'default', 'else', 'finally', 'for',
+    'function', 'let', 'return', 'switch', 'var', 'with', 'enum', 'implements',
+    'interface', 'package', 'private', 'protected', 'public', 'static', '_z_',
+    '_z_index', '_z_iter'
   ])
 
 };
