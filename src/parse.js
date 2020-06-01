@@ -125,6 +125,7 @@ export default (tokens, options = {}) => {
       // function
       if (block.token.type === 'function') {
         const paramsString = [...block.token.params].join();
+        const asyncString = block.token.async ? 'async ' : '';
         
         // class
         if (block.token.class) {
@@ -145,27 +146,44 @@ export default (tokens, options = {}) => {
 
         // each
         else if (block.token.each) {
-            // !!! TO DO !!!
+          const params = block.token.params;
+          const iterParam = (params.length === 5 ? params[3] : '_z_iter');
+          const valParam = (params.length > 2 ? params[1] : '_z_val');
+          const indexParam = (params.length > 3 ? params[2] : null);
+          s = `(${asyncString}${iterParam} => {`;
+          if (indexParam) s += `let _z_index = 0; `;
+          s += `for (let ${valParam} of ${iterParam}) {`;
+          if (indexParam) s += `let ${indexParam} = _z_index++; `;
+          startJS.push(tokenWithPosn(block.token, s));
+          endJS.push(
+            tokenWithPosn(tkn,`} return ${iterParam}})(`),
+            block.token.each,
+            ')'  
+          );
         }
 
         // try
         else if (block.token.try) {
-            // !!! TO DO !!!
+          startJS.push(tokenWithPosn(block.token,
+            `(${asyncString}() => {try {`));
+          endJS.push(tokenWithPosn(tkn, '} catch e {return e}})()'));
         }
 
         // catch
         else if (block.token.catch) {
-            // !!! TO DO !!!
+          startJS.push(tokenWithPosn(block.token,
+            `(${asyncString}${paramsString} => {if (${paramsString}) {`));
+          endJS.push(tokenWithPosn(tkn,
+            '}})('), block.token.catch, ')');
         }
 
         // all other function kinds
         else {
           startJS.push(tokenWithPosn(block.token, 
-            `${block.token.async ? '(async ' : '('}${
-              block.token.arrow
-                ? `(${paramsString}) => {return `
-                : `function${block.token.generator ? '*' : ''}(${
-                    paramsString}) {return `}`));
+            `(${asyncString}${block.token.arrow
+              ? `(${paramsString}) => {return `
+              : `function${block.token.gen ? '*' : ''}(${
+                  paramsString}) {return `}`));
           if (block.token.scope) {
             endJS.push(tokenWithPosn(tkn, '})()'));
           }

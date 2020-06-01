@@ -81,7 +81,7 @@ const reserved = {
     'break', 'const', 'continue', 'default', 'else', 'finally', 'for',
     'function', 'let', 'return', 'switch', 'var', 'with', 'enum', 'implements',
     'interface', 'package', 'private', 'protected', 'public', 'static', '_z_',
-    '_z_index', '_z_iter'
+    '_z_val', '_z_index', '_z_iter'
   ])
 
 };
