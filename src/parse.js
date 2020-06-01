@@ -33,7 +33,7 @@ const lhsSetterOps = new Set([
 function syntaxError(t, msg) {
   throw Error(`Zap syntax at ${
     typeof t === 'string' ? t : `${t.line}:${t.column + 1}`}, ${msg}`);
-};
+}
 
 function arityError(operator) {
   syntaxError(operator, 'invalid number of operands');
@@ -102,7 +102,7 @@ export default (tokens, options = {}) => {
 
   // close block
   //  - add appropriate token objects to start and end of block
-  //  - if base block, return the array representing the block's JS tree
+  //  - if base block, return the block's JS tree (an array)
   //  - if not base block, pop the stack and push the current block's JS tree
   //    (an array) onto the operands of the popped block
   function closeBlock() {
@@ -110,53 +110,83 @@ export default (tokens, options = {}) => {
     closeSubexpr();
     const isBase = !block.token;
     const blockJS = block.js;
-    let endJS;
+    const endJS = [];
     
     // base block
     if (isBase) {
-      endJS = ';';
+      endJS.push(';');
     }
-
+    
     // function or parentheses
     else {
+      
+      const startJS = [];
       
       // function
       if (block.token.type === 'function') {
         const paramsString = [...block.token.params].join();
+        
+        // class
         if (block.token.class) {
-          block.token.js = `(class {constructor(${paramsString}) {`;
-          tkn.js = '}})';
+          startJS.push(tokenWithPosn(block.token,
+            `(class {constructor(${paramsString}) {`));
+          endJS.push(tokenWithPosn(tkn, '}})'));
         }
+
+        // extends
         else if (block.token.extends) {
-          block.token.js = [
-            '(class extends ',
+          startJS.push(
+            tokenWithPosn(block.token, '(class extends '),
             block.token.extends,
-            ` {constructor(${paramsString}) {`
-          ];
-          tkn.js = '}})';
+            tokenWithPosn(block.token,` {constructor(${paramsString}) {`)
+          );
+          endJS.push(tokenWithPosn(tkn, '}})'));
         }
+
+        // each
+        else if (block.token.each) {
+            // !!! TO DO !!!
+        }
+
+        // try
+        else if (block.token.try) {
+            // !!! TO DO !!!
+        }
+
+        // catch
+        else if (block.token.catch) {
+            // !!! TO DO !!!
+        }
+
+        // all other function kinds
         else {
-          block.token.js = `${block.token.async ? '(async ' : '('}${
-            block.token.arrow
-              ? `(${paramsString}) => {return `
-              : `function${block.token.generator ? '*' : ''}(${
-                  paramsString}) {return `}`;
-          if (block.token.scope) tkn.js = '})()';
-          else if (block.token.as) tkn.js = ['})(', block.token.as, ')'];
-          else tkn.js =  '})';
+          startJS.push(tokenWithPosn(block.token, 
+            `${block.token.async ? '(async ' : '('}${
+              block.token.arrow
+                ? `(${paramsString}) => {return `
+                : `function${block.token.generator ? '*' : ''}(${
+                    paramsString}) {return `}`));
+          if (block.token.scope) {
+            endJS.push(tokenWithPosn(tkn, '})()'));
+          }
+          else if (block.token.as) {
+            endJS.push(tokenWithPosn(tkn, '})('), block.token.as, ')');
+          }
+          else {
+            endJS.push(tokenWithPosn(tkn, '})'));
+          }
         }
       }
 
       // parentheses
       else {
         if (blockJS.length === 0) syntaxError(tkn, 'empty block');
-        block.token.js = '(';
-        tkn.js = ')';
+        startJS.push(tokenWithPosn(block.token, '('));
+        endJS.push(tokenWithPosn(tkn, ')'));
       }
 
-      blockJS.unshift(block.token);
-      endJS = tkn;
-    
+      blockJS.unshift(startJS);
+
     }
 
     // base block or function - declare variables, check async/await
@@ -356,95 +386,98 @@ export default (tokens, options = {}) => {
           // is the parent class and no constructor is passed
           if (parentOp.value === 'extends' &&
               parentBlock.operands.length === 0) {
-            closeBlock();
-            return;    
+            closeBlock();  
           }
-        
-          block.token.type = 'function';
 
-          // add async, arrow and kind properties to block token
-          if (parentOp.value.slice(0, 5) === 'async') block.token.async = true;
-          if (arrowCreators.has(parentOp.value)) block.token.arrow = true;
-          const kind = parentOp.value.replace('async', '').toLowerCase();
-          block.token.kind = kind;
-          
-          // params
-          block.token.params = new Set();
-
-          // scope, try - no params
-          if (kind === 'scope' || kind === 'try') {
-            if (parentBlock.operands.length) arityError(parentOp);
-          }
-          
-          // as, catch - 1 arg, 1 param
-          else if (kind === 'as' || kind === 'catch') {
-            if (parentBlock.operands.length !== 2) arityError(parentOp);
-            block.token[kind] = parentBlock.operands[0];
-            const paramToken = parentBlock.operands[1];
-            checkValidName(paramToken, parentOp, 'invalid parameter name');
-            if (paramToken.name === 'rest') {
-              syntaxError(paramToken, 'invalid rest parameter');
-            }
-            else if (paramToken.name === 'ops' && kind === 'catch') {
-              syntaxError(paramToken, 'invalid ops parameter');
-            }
-            block.token.params.add(
-              paramToken.name === 'ops' ? 'ops={}' : paramToken.name
-            );
-          }
-          
-          // params for all other function-create kinds
           else {
+        
+            block.token.type = 'function';
 
-            // each - first operand is the iterable
-            if (kind === 'each') {
-              if (parentBlock.operands.length === 0) arityError(parentOp);
-              block.token.each = parentBlock.operands[0];
+            // add async, arrow and kind properties to block token
+            if (parentOp.value.slice(0, 5) === 'async') block.token.async = true;
+            if (arrowCreators.has(parentOp.value)) block.token.arrow = true;
+            const kind = parentOp.value.replace('async', '').toLowerCase();
+            block.token.kind = kind;
+            
+            // params
+            block.token.params = new Set();
+
+            // scope, try - no params
+            if (kind === 'scope' || kind === 'try') {
+              if (parentBlock.operands.length) arityError(parentOp);
             }
             
-            // extends - first operand is the parent class (has at least one
-            // operand or would have returned above)
-            else if (kind === 'extends') {
-              block.token.extends = parentBlock.operands[0];
-            }
-        
-            // check param names
-            let paramTokens = parentBlock.operands;
-            if (kind === 'each' || kind === 'extends') {
-              paramTokens = paramTokens.slice(1);
-            }
-            for (let j = 0; j < paramTokens.length; j++) {
-              let tj = paramTokens[j];
-              checkValidName(tj, parentOp, 'invalid parameter name');
-              if (kind === 'each' &&
-                  (tj.name === 'ops' || tj.name === 'rest')) {
-                syntaxError(tj, `invalid ${tj.name} parameter`);
+            // as, catch - 1 arg, 1 param
+            else if (kind === 'as' || kind === 'catch') {
+              if (parentBlock.operands.length !== 2) arityError(parentOp);
+              block.token[kind] = parentBlock.operands[0];
+              const paramToken = parentBlock.operands[1];
+              checkValidName(paramToken, parentOp, 'invalid parameter name');
+              if (paramToken.name === 'rest') {
+                syntaxError(paramToken, 'invalid rest parameter');
               }
-              else if (tj.name === 'ops') {
-                block.token.params.add('ops={}');
+              else if (paramToken.name === 'ops' && kind === 'catch') {
+                syntaxError(paramToken, 'invalid ops parameter');
               }
-              else if (tj.name === 'rest') {
-                if (j !== paramTokens.length - 1) {
-                  syntaxError(tj, 'rest parameter must be final parameter');
+              block.token.params.add(
+                paramToken.name === 'ops' ? 'ops={}' : paramToken.name
+              );
+            }
+            
+            // params for all other function-create kinds
+            else {
+
+              // each - first operand is the iterable
+              if (kind === 'each') {
+                if (parentBlock.operands.length === 0) arityError(parentOp);
+                block.token.each = parentBlock.operands[0];
+              }
+              
+              // extends - first operand is the parent class (has at least one
+              // operand or would have handled above)
+              else if (kind === 'extends') {
+                block.token.extends = parentBlock.operands[0];
+              }
+          
+              // check param names
+              let paramTokens = parentBlock.operands;
+              if (kind === 'each' || kind === 'extends') {
+                paramTokens = paramTokens.slice(1);
+              }
+              for (let j = 0; j < paramTokens.length; j++) {
+                let tj = paramTokens[j];
+                checkValidName(tj, parentOp, 'invalid parameter name');
+                if (kind === 'each' &&
+                    (tj.name === 'ops' || tj.name === 'rest')) {
+                  syntaxError(tj, `invalid ${tj.name} parameter`);
                 }
-                block.token.params.add('...rest');
+                else if (tj.name === 'ops') {
+                  block.token.params.add('ops={}');
+                }
+                else if (tj.name === 'rest') {
+                  if (j !== paramTokens.length - 1) {
+                    syntaxError(tj, 'rest parameter must be final parameter');
+                  }
+                  block.token.params.add('...rest');
+                }
+                else {
+                  block.token.params.add(tj.name);
+                }
               }
-              else {
-                block.token.params.add(tj.name);
+              if (block.token.params.size < paramTokens.length) {
+                syntaxError(parentOp, 'duplicate parameter name');
               }
+
             }
-            if (block.token.params.size < paramTokens.length) {
-              syntaxError(parentOp, 'duplicate parameter name');
-            }
+
+            // close block - changes block to parent block; this needs modified
+            // since we have just 'manually' applied its operator
+            closeBlock();
+            block.operands = [ block.operands.pop() ];
+            block.operator = null;
+            block.position = null;
 
           }
-
-          // close block - changes block to parent block; this needs modified
-          // since we have just 'manually' applied its operator
-          closeBlock();
-          block.operands = [ block.operands.pop() ];
-          block.operator = null;
-          block.position = null;
         
         }
 
@@ -573,7 +606,7 @@ export default (tokens, options = {}) => {
   }
 
   endOfCode = true;
-  
+
   // generate JS
   {
 
