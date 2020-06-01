@@ -128,14 +128,14 @@ export default (tokens, options = {}) => {
         const asyncString = block.token.async ? 'async ' : '';
         
         // class
-        if (block.token.class) {
+        if (block.token.kind === 'class') {
           startJS.push(tokenWithPosn(block.token,
             `(class {constructor(${paramsString}) {`));
           endJS.push(tokenWithPosn(tkn, '}})'));
         }
 
         // extends
-        else if (block.token.extends) {
+        else if (block.token.kind === 'extends') {
           startJS.push(
             tokenWithPosn(block.token, '(class extends '),
             block.token.extends,
@@ -145,12 +145,12 @@ export default (tokens, options = {}) => {
         }
 
         // each
-        else if (block.token.each) {
-          const params = block.token.params;
-          const iterParam = (params.length === 5 ? params[3] : '_z_iter');
-          const valParam = (params.length > 2 ? params[1] : '_z_val');
-          const indexParam = (params.length > 3 ? params[2] : null);
-          s = `(${asyncString}${iterParam} => {`;
+        else if (block.token.kind === 'each') {
+          const params = [...block.token.params];
+          const valParam =   (params.length > 0 ? params[0] : '_z_val');
+          const indexParam = (params.length > 1 ? params[1] : null);
+          const iterParam =  (params.length > 2 ? params[2] : '_z_iter');
+          let s = `(${asyncString}${iterParam} => {`;
           if (indexParam) s += `let _z_index = 0; `;
           s += `for (let ${valParam} of ${iterParam}) {`;
           if (indexParam) s += `let ${indexParam} = _z_index++; `;
@@ -163,14 +163,14 @@ export default (tokens, options = {}) => {
         }
 
         // try
-        else if (block.token.try) {
+        else if (block.token.kind === 'try') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}() => {try {`));
-          endJS.push(tokenWithPosn(tkn, '} catch e {return e}})()'));
+          endJS.push(tokenWithPosn(tkn, '} catch (e) {return e}})()'));
         }
 
         // catch
-        else if (block.token.catch) {
+        else if (block.token.kind === 'catch') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}${paramsString} => {if (${paramsString}) {`));
           endJS.push(tokenWithPosn(tkn,
@@ -182,7 +182,7 @@ export default (tokens, options = {}) => {
           startJS.push(tokenWithPosn(block.token, 
             `(${asyncString}${block.token.arrow
               ? `(${paramsString}) => {return `
-              : `function${block.token.gen ? '*' : ''}(${
+              : `function${block.token.kind === 'gen' ? '*' : ''}(${
                   paramsString}) {return `}`));
           if (block.token.scope) {
             endJS.push(tokenWithPosn(tkn, '})()'));
