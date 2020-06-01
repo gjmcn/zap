@@ -4,7 +4,31 @@ import _z_methods from './_z_methods.js';
 import sourceMapObject from 'source-map';
 const {SourceNode} = sourceMapObject;
 
-// helper functions and constants
+
+// ===== helper functions and constants ===================
+
+ // groups of operator
+const functionCreators = new Set([
+  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'try', 'catch', 'asyncFun',
+  'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncTry',
+  'asyncCatch', 'class', 'extends'
+]);
+const arrowCreators = new Set([
+  'proc', 'scope', 'as', 'each', 'try', 'catch', 'asyncProc', 'asyncScope',
+  'asyncAs', 'asyncEach', 'asyncTry', 'asyncCatch'
+]);
+const triggerApplyOp = new Set([
+  'closeSubexpr', 'closeBracket', 'operator'
+]);
+const assignmentOps = new Set([
+  '=', '#=', '@=', '<-', '\\=', '?='
+]);
+const updateOps = new Set([
+  '+=', '-=', '*=', '/=', '%=', '^='
+]);
+const lhsSetterOps = new Set([
+  ':', '::', ','
+]);
 
 function syntaxError(t, msg) {
   throw Error(`Zap syntax at ${
@@ -15,10 +39,10 @@ function arityError(operator) {
   syntaxError(operator, 'invalid number of operands');
 }
 
-function checkValidName(tkn, msg) {
+function checkValidName(tkn, errTkn, msg) {
   if (Array.isArray(tkn) || tkn.type !== 'identifier' ||
       reserved.nonCommands.has(tkn.name)) {
-    syntaxError(tkn, msg);
+    syntaxError(errTkn, msg);
   }
 }
 
@@ -31,18 +55,8 @@ function tokenWithPosn(tkn, js) {
   };
 }
 
-const functionCreators = new Set([
-  'fun', 'proc', 'gen', 'scope', 'as', 'asyncFun', 'asyncProc', 'asyncGen',
-  'asyncScope', 'asyncAs', 'class', 'extends'
-]);
 
-const triggerApplyOp = new Set([
-  'closeSubexpr', 'closeBracket', 'operator'
-]);
-
-const assignmentOps = new Set(['=', '#=', '@=', '<-', '\\=', '?=']);
-const updateOps = new Set(['+=', '-=', '*=', '/=', '%=', '^=']);
-const lhsSetterOps = new Set([':', '::', ',']);
+ // ===== exported parse function ==========================
 
 // parse array of processed tokens to JavaScript
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned
@@ -338,7 +352,7 @@ export default (tokens, options = {}) => {
         if (parentOp && functionCreators.has(parentOp.value) &&
             (!nextToken || triggerApplyOp.has(nextToken.type))) {
 
-          // calling extends with only this block as an operand? - this block
+          // applying extends with only this block as an operand? - this block
           // is the parent class and no constructor is passed
           if (parentOp.value === 'extends' &&
               parentBlock.operands.length === 0) {
@@ -348,34 +362,31 @@ export default (tokens, options = {}) => {
         
           block.token.type = 'function';
 
-          // add properties indicating type of function
+          // add async, arrow and kind properties to block token
           if (parentOp.value.slice(0, 5) === 'async') block.token.async = true;
-          const kind = block.token.async
-            ? parentOp.value.slice(5).toLowerCase()
-            : parentOp.value;
-          if (kind === 'proc' || kind === 'as') block.token.arrow = true;
-          else if (kind === 'gen') block.token.generator = true;
-          else if (kind === 'scope') {
-            block.token.arrow = block.token.scope = true;
-          }
-          else if (kind === 'class') block.token.class = true;
+          if (arrowCreators.has(parentOp.value)) block.token.arrow = true;
+          const kind = parentOp.value.replace('async', '').toLowerCase();
+          block.token.kind = kind;
           
           // params
           block.token.params = new Set();
 
-          // scope - no param
-          if (kind === 'scope') {
+          // scope, try - no params
+          if (kind === 'scope' || kind === 'try') {
             if (parentBlock.operands.length) arityError(parentOp);
           }
           
-          // as - 1 arg, 1 param
-          else if (kind === 'as') {
+          // as, catch - 1 arg, 1 param
+          else if (kind === 'as' || kind === 'catch') {
             if (parentBlock.operands.length !== 2) arityError(parentOp);
-            block.token.as = parentBlock.operands[0];
+            block.token[kind] = parentBlock.operands[0];
             const paramToken = parentBlock.operands[1];
-            checkValidName(paramToken, 'invalid parameter name');
+            checkValidName(paramToken, parentOp, 'invalid parameter name');
             if (paramToken.name === 'rest') {
               syntaxError(paramToken, 'invalid rest parameter');
+            }
+            else if (paramToken.name === 'ops' && kind === 'catch') {
+              syntaxError(paramToken, 'invalid ops parameter');
             }
             block.token.params.add(
               paramToken.name === 'ops' ? 'ops={}' : paramToken.name
@@ -384,19 +395,32 @@ export default (tokens, options = {}) => {
           
           // params for all other function-create kinds
           else {
+
+            // each - first operand is the iterable
+            if (kind === 'each') {
+              if (parentBlock.operands.length === 0) arityError(parentOp);
+              block.token.each = parentBlock.operands[0];
+            }
             
-            // extends - first param is parent class
-            if (kind === 'extends') {
+            // extends - first operand is the parent class (has at least one
+            // operand or would have returned above)
+            else if (kind === 'extends') {
               block.token.extends = parentBlock.operands[0];
             }
         
             // check param names
-            const paramTokens = parentBlock.operands;
-            if (kind === 'extends') paramTokens = paramTokens.slice(1);
+            let paramTokens = parentBlock.operands;
+            if (kind === 'each' || kind === 'extends') {
+              paramTokens = paramTokens.slice(1);
+            }
             for (let j = 0; j < paramTokens.length; j++) {
               let tj = paramTokens[j];
-              checkValidName(tj, 'invalid parameter name');
-              if (tj.name === 'ops') {
+              checkValidName(tj, parentOp, 'invalid parameter name');
+              if (kind === 'each' &&
+                  (tj.name === 'ops' || tj.name === 'rest')) {
+                syntaxError(tj, `invalid ${tj.name} parameter`);
+              }
+              else if (tj.name === 'ops') {
                 block.token.params.add('ops={}');
               }
               else if (tj.name === 'rest') {
@@ -458,7 +482,7 @@ export default (tokens, options = {}) => {
             tkn.value === '#=' ? '({' : '['));
           const lhsNames = new Set();
           block.operands.forEach(o => {
-            checkValidName(o,
+            checkValidName(o, tkn,
               'invalid variable name on left-hand side of assignment');
             lhsNames.add(o.name);
             block.variables.add(o.name);
@@ -483,14 +507,14 @@ export default (tokens, options = {}) => {
 
           // assign to outer variable
           if (tkn.value === '\\=') {
-            checkValidName(lhs,
+            checkValidName(lhs, tkn,
               'invalid variable name on left-hand side of assignment');
             block.assign.push(lhs, tokenWithPosn(tkn, ' = '));
           }
            
           // conditional assign or use ops
           else if (tkn.value === '?=' || tkn.value === '<-') {
-            checkValidName(lhs,
+            checkValidName(lhs, tkn,
               'invalid variable name on left-hand side of assignment');
             if (tkn.value === '<-') block.variables.add(lhs.name);
             block.assign.push(
@@ -510,7 +534,7 @@ export default (tokens, options = {}) => {
               }
             }
             else {
-              checkValidName(lhs, 'invalid left-hand side of assignment');
+              checkValidName(lhs, tkn, 'invalid left-hand side of assignment');
               settingVariable = true;
             }
             if (tkn.value === '=' && settingVariable) {
