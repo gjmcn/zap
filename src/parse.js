@@ -236,8 +236,7 @@ export default (tokens, options = {}) => {
 
       // throw if await is used inside a synchronous function
       if (block.awaitUsed && !isBase && !block.token.async) {
-        syntaxError(isBase ? '(end of code)' : tkn,
-          'await inside synchronous function');
+        syntaxError(tkn, 'await inside synchronous function');
       }
 
     }
@@ -251,7 +250,6 @@ export default (tokens, options = {}) => {
       if (block.awaitUsed) {
         parentBlock.awaitUsed = true;
       }
-      // blockJS.awaitUsed = block.awaitUsed;  // used by each, map etc
     }
     
     blockJS.push(endJS);
