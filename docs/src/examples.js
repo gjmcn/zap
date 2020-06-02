@@ -3,136 +3,116 @@ module.exports = new Map([
 '',
 ''
 ], [
-  'html - inputs',
-`draw = [
-  s = + (colors :0 :value)','(range :value)'%,'(colors :1 :value)')';
-  panels :0 $style 'background' (+ 'linear-gradient(to right,'s);
-  panels :1 $style 'background' (+ 'radial-gradient('s)];
-
-colors = @ '#ff0000' '#00ff00' $encode 'input'
-  $attr 'type' 'color'
-  $attr 'value' [a]
-  $on 'input' draw;
-
-range = $input
-  $attr 'type' 'range'
-  $style 'display' 'block'
-  $style 'width' '250px'
-  $on 'input' draw;
-
-panels = 2 $div  
-  $style 'width' '250px'
-  $style 'height' '250px';
-
-\\draw;
-
-colors |concat range panels
-  $style 'margin' '10px 10px 0 0'
-  $into ($fragment);`
-], [
   'html - quiz',
-`buttonStyle = [a
-  $style 'text-align' 'center'
-  $style 'margin' '2px'
-  $style 'padding' '5px 0'
-  $style 'border' '1px solid gray'
-  $style 'cursor' 'pointer'];
+`buttonStyle = fun btn
+    btn
+    | style 'text-align' 'center'
+    | style 'margin' '2px'
+    | style 'padding' '5px 0'
+    | style 'border' '1px solid gray'
+    | style 'cursor' 'pointer'
 
 question isCorrect @= 2 $h1
-  $style 'display' 'inline-block'
-  $style 'margin-left' '30px';
-  
-(grid = $div)
-  $insert (1 >> 41 10 $encode 'div')
-    $style 'display' 'flex'
-    $insertEach [
-      a >> (a + 9) $encode 'div'
-        $text [a]
-        $style 'flex' '1 1 0'
-        \\buttonStyle
-        $on 'click' [
-          isCorrect $text (this $text $number == answer ? '😄' '😞')]];
+| style 'display' 'inline-block'
+| style 'margin-left' '30px'
+
+grid = $div
+grid
+| insert (1 to 41 10 encode 'div')
+| style 'display' 'flex'
+| insertEach
+    fun rowStart
+        rowStart to (rowStart + 9) encode 'div'
+        | text [a]
+        | style 'flex' '1 1 0'
+        | \\buttonStyle
+        | on 'click' [isCorrect text (this text number == answer ? '😄' '😞')]
 
 newQuestion = $div
-  $text 'New Question'
-  \\buttonStyle
-  $on 'click' [
-    x y @= 1 8 $randomInt 2;
-    question $text (+ x' × 'y);
-    answer \\= x * y;
-    isCorrect $text '😕'];
+| text 'New Question'
+| \\buttonStyle
+| on 'click'
+    fun
+        x y @= 1 8 randomInt 2
+        question text (+ x' × 'y)
+        answer \\= x * y
+        isCorrect text '😕'
 
-answer = null;
-newQuestion |click;
-@ question isCorrect grid newQuestion
-  $into ($fragment);`
+answer = null
+newQuestion ~click
+@ question isCorrect grid newQuestion into (fragment)`
 ], [
   'svg - tile map',
 `// Median house price by borough (2015, London DataStore)
 data = 'https://gist.githubusercontent.com/gjmcn/5b1b472d28d49a1d02f4c80515313967/raw/66547019d51748cfb68118398dcc49fe2141329c/london-2015-tile-data.json'
-  \\fetch $await |json $await;
+| \\fetch await ~json await
 
 viz = $svg
-  $attr 'width' 600 
-  $attr 'height' 600
-  $attr 'font-size' '0.17px'
-  $attr 'font-family' 'sans-serif';
+| attr 'width' 600 
+| attr 'height' 600
+| attr 'font-size' '0.17px'
+| attr 'font-family' 'sans-serif'
   
-g = viz $insert ($g)
-  $attr 'transform' 'translate(0,450) scale(75)';  
+g = viz insert ($g)
+| attr 'transform' 'translate(0,450) scale(75)'  
   
-g $insert (data $encodeSVG 'rect')
-  $attr 'x' [a :xTile]
-  $attr 'y' [a :yTile $neg]
-  $attr 'width' 0.97
-  $attr 'height' 0.97
-  $attr 'fill' 'red'
-  $attr 'opacity' [a :HousePrice - 2e5 / 1e6];
+g insert (data encodeSVG 'rect')
+| attr 'x' [a :xTile]
+| attr 'y' [a :yTile -]
+| attr 'width' 0.97
+| attr 'height' 0.97
+| attr 'fill' 'red'
+| attr 'opacity' [a :HousePrice - 2e5 / 1e6]
   
-g $insert (data $encodeSVG 'text')
-  $text [a :Borough |slice 0 7]
-  $attr 'x' [a :xTile + 0.05] 
-  $attr 'y' [a :yTile $neg + 0.2];
+g insert (data encodeSVG 'text')
+| text [a :Borough ~slice 0 7]
+| attr 'x' [a :xTile + 0.05] 
+| attr 'y' [a :yTile - + 0.2]
 
-viz;`
+viz`
 ],  [
   'canvas - bubbles',
 `// these can be changed
-width   = 400;
-height  = 500;
-n       = 100;
-speed   = ~4;
-grow    = 0.4;
-burst   = 0.05;
-frames  = 400;
+width   = 400
+height  = 500
+n       = 100
+speed   = -4
+grow    = 0.4
+burst   = 0.05
+frames  = 400
 
 // array of bubble objects
-bubbles = 0 >>> width n $map [xi -> #
-  x xi
-  y (height - ($random * height / 10))
-  r 1
-  color (+ 'rgba('($randomInt 0 200 3 |join)',0.7)')];
+bubbles = 0 linSpace width n map
+    fun xi
+        #
+        | x xi
+        | y (height - (random * height / 10))
+        | r 1
+        | color (+ 'rgba('(randomInt 0 200 3 ~join)',0.7)')
 
 // canvas and context
-canvas ctx @= # ::width ::height $sketch;
-canvas $style 'background' '#eef';
+canvas ctx @= # attach width height sketch
+canvas style 'background' '#eef'
 
 // draw loop
-draw = [
-  ctx |clearRect 0 0 width height;
-  bubbles $each [b ->
-    $random < burst ?
-      (b :y height :r 1)
-      (b +:y speed +:r grow);
-    ctx 
-      :fillStyle (b :color)
-      <|beginPath
-      <|arc (b :x) (b :y) (b :r) 0 7
-      <|fill];
-  (frames -= 1) ? (window |requestAnimationFrame draw)];
+draw = fun
+    ctx ~clearRect 0 0 width height
+    bubbles each b
+        if (random < burst)
+            b :y = height
+            b :r = 1
+        | else
+            b :y += speed
+            b :r += grow
+        ctx :fillStyle = b :color
+        ctx
+        | <~beginPath
+        | <~arc (b :x) (b :y) (b :r) 0 7
+        | <~fill
+    (frames -= 1) ? (window ~requestAnimationFrame draw)
 
-\\draw;
-canvas;`  
+\\draw
+canvas`  
 ], [
 'canvas - snow',
 `// based on: https://p5js.org/examples/simulate-snowflakes.html
