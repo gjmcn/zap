@@ -151,14 +151,15 @@ export default (tokens, options = {}) => {
         else if (block.token.kind === 'each') {
           const valParam   = (nParams > 0 ? paramsArray[0] : '_z_val');
           const indexParam = (nParams > 1 ? paramsArray[1] : null);
-          const iterParam  = (nParams > 2 ? paramsArray[2] : '_z_iter');
-          let s = `(${asyncString}${iterParam} => {`;
+          const iterParam  = (nParams > 2 ? paramsArray[2] : null);
+          let s = `(${asyncString}_z_iter => {`;
           if (indexParam) s += `let _z_index = 0; `;
-          s += `for (let ${valParam} of ${iterParam}) {`;
+          s += `for (let ${valParam} of _z_iter) {`;
+          if (iterParam) s += `let ${iterParam} = _z_iter; `;
           if (indexParam) s += `let ${indexParam} = _z_index++; `;
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
-            tokenWithPosn(tkn,`} return ${iterParam}})(`),
+            tokenWithPosn(tkn,`} return _z_iter})(`),
             block.token.each,
             ')'  
           );
