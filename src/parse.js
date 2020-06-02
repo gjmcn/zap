@@ -124,7 +124,10 @@ export default (tokens, options = {}) => {
       
       // function
       if (block.token.type === 'function') {
-        const paramsString = [...block.token.params].join();
+        
+        const paramsArray = [...block.token.params];
+        const nParams = paramsArray.length; 
+        const paramsString = paramsArray.join();
         const asyncString = block.token.async ? 'async ' : '';
         
         // class
@@ -146,10 +149,9 @@ export default (tokens, options = {}) => {
 
         // each
         else if (block.token.kind === 'each') {
-          const params = [...block.token.params];
-          const valParam =   (params.length > 0 ? params[0] : '_z_val');
-          const indexParam = (params.length > 1 ? params[1] : null);
-          const iterParam =  (params.length > 2 ? params[2] : '_z_iter');
+          const valParam   = (nParams > 0 ? paramsArray[0] : '_z_val');
+          const indexParam = (nParams > 1 ? paramsArray[1] : null);
+          const iterParam  = (nParams > 2 ? paramsArray[2] : '_z_iter');
           let s = `(${asyncString}${iterParam} => {`;
           if (indexParam) s += `let _z_index = 0; `;
           s += `for (let ${valParam} of ${iterParam}) {`;
@@ -173,8 +175,11 @@ export default (tokens, options = {}) => {
         else if (block.token.kind === 'catch') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}${paramsString} => {if (${paramsString}) {`));
-          endJS.push(tokenWithPosn(tkn,
-            '}})('), block.token.catch, ')');
+          endJS.push(
+            tokenWithPosn(tkn, '}})('),
+            block.token.catch,
+            ')'
+          );
         }
 
         // all other function kinds
@@ -184,21 +189,22 @@ export default (tokens, options = {}) => {
               ? `(${paramsString}) => {return `
               : `function${block.token.kind === 'gen' ? '*' : ''}(${
                   paramsString}) {return `}`));
-          if (block.token.scope) {
+          if (block.token.kind === 'scope') {
             endJS.push(tokenWithPosn(tkn, '})()'));
           }
-          else if (block.token.as) {
+          else if (block.token.kind === 'as') {
             endJS.push(tokenWithPosn(tkn, '})('), block.token.as, ')');
           }
           else {
             endJS.push(tokenWithPosn(tkn, '})'));
           }
         }
+
       }
 
       // parentheses
       else {
-        if (blockJS.length === 0) syntaxError(tkn, 'empty block');
+        if (blockJS.length === 0) syntaxError(tkn, 'invalid empty block');
         startJS.push(tokenWithPosn(block.token, '('));
         endJS.push(tokenWithPosn(tkn, ')'));
       }
@@ -218,7 +224,9 @@ export default (tokens, options = {}) => {
         if (_z_used.size) varArr.push('_z_');
       }
 
-      // function - do not declare variables that are params
+      // function - do not declare variables that are params (does not catch
+      // ops and rest, but this does not matter - declaring params has no
+      // impact, it is just redundant code)
       else if (block.token.params.size) {  
         varArr = varArr.filter(v => !block.token.params.has(v));
       }
@@ -447,7 +455,10 @@ export default (tokens, options = {}) => {
 
               // each - first operand is the iterable
               if (kind === 'each') {
-                if (parentBlock.operands.length === 0) arityError(parentOp);
+                if (parentBlock.operands.length === 0 ||
+                    parentBlock.operands.length > 4) {
+                      arityError(parentOp);
+                }
                 block.token.each = parentBlock.operands[0];
               }
               
