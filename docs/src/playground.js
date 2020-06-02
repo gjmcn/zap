@@ -35,7 +35,7 @@
   const editor = ace.edit("editor", {
     fontSize: 13.6,
     fontFamily: "'Source Code Pro', monospace",
-    tabSize: 2,
+    tabSize: 4,
     useSoftTabs: true,
     highlightActiveLine: false,
     useWorker: false,
