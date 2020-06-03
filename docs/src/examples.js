@@ -9,8 +9,7 @@ module.exports = new Map([
     | style 'text-align' 'center'
     | style 'margin' '2px'
     | style 'padding' '5px 0'
-    | style 'border' '1px solid gray'
-    | style 'cursor' 'pointer'
+    | style 'background-color' '#dde'
 
 question isCorrect @= 2 $h1
 | style 'display' 'inline-block'
@@ -109,7 +108,8 @@ draw = fun
         | <~beginPath
         | <~arc (b :x) (b :y) (b :r) 0 7
         | <~fill
-    (frames -= 1) ? (window ~requestAnimationFrame draw)
+    if (frames -= 1)
+        window ~requestAnimationFrame draw
 
 \\draw
 canvas`  
@@ -118,56 +118,57 @@ canvas`
 `// based on: https://p5js.org/examples/simulate-snowflakes.html
 
 // these can be changed
-width = 400;
-height = 600;
-minSize = 1;
-maxSize = 2;
-angularSpeed = 0.004;
-n = 500;
-frames = 400;
+width = 400
+height = 600
+minSize = 1
+maxSize = 2
+angularSpeed = 0.004
+n = 500
+frames = 400
 
 // array for each flake property
-y = $random 0 height n;
-s = $random minSize maxSize n;            
-t = $random 0 (Math :PI * 2) n;          // initial angle
-r = $random 0 (width / 2 ^ 2) n $sqrt;   // radius of spiral
+y = random 0 height n
+s = random minSize maxSize n            
+t = random 0 (Math :PI * 2) n         // initial angle
+r = random 0 (width / 2 ^ 2) n sqrt   // radius of spiral
 
 // canvas and context
-canvas ctx @= # ::width ::height $sketch;
-canvas $style 'background' 'black';
-ctx :fillStyle '#fff';
+canvas ctx @= # attach width height sketch
+canvas style 'background' 'black'
+ctx :fillStyle = '#fff'
 
 // draw loop
-draw = [
-  ctx |clearRect 0 0 width height;
-  y \\= s \`^ 1.1 \`+\` y \`% height;
-  y $each [yi i ->
-    theta = angularSpeed * frames + (t $at i);
-    xi = theta $sin * (r $at i) + (width / 2) % width;
-    ctx 
-      <|beginPath
-      <|arc xi yi (s $at i) 0 7
-      <|fill];
-  (frames -= 1) ? (window |requestAnimationFrame draw)];
+draw = fun
+    ctx ~clearRect 0 0 width height
+    y \\= s \`^ 1.1 \`+\` y \`% height
+    y each yi i
+        theta = angularSpeed * frames + (t , i)
+        xi = theta sin * (r , i) + (width / 2) % width
+        ctx 
+        | <~beginPath
+        | <~arc xi yi (s , i) 0 7
+        | <~fill
+    if (frames -= 1)
+        window ~requestAnimationFrame draw
 
-\\draw;
-canvas;`
+\\draw
+canvas`
 ], [
   'data analysis',
   `iris = 'https://raw.githubusercontent.com/vega/vega/master/docs/data/iris.json'
-  \\fetch $await |json $await;
+| \\fetch await ~json await
 
 // petal length > 6
-iris $filter [a :petalLength > 6];
+iris filter [a :petalLength > 6]
 
 // order by sepal length
-iris $order [a :sepalLength - (b :sepalLength)];
+iris order [a :sepalLength - (b :sepalLength)]
 
 // count by species
-iris $groupCount [a :species];
+iris groupCount [a :species]
 
 // mean petal width by species
-iris $group [a :species] [a $mean [a :petalWidth]];
+iris group [a :species] [a mean [a :petalWidth]]
 
 // comment later code to print an earlier result`
 ], [
