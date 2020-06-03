@@ -403,13 +403,6 @@ export default {
     return true;
   },
 
-  map(i, f) {
-    let m = [],
-        j = 0;
-    for (let q of i) m.push(f(q, j++, i));
-    return m;
-  },
-
   filter(i, f) {
     let r = [],
         j = 0;

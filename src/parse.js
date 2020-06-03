@@ -9,13 +9,13 @@ const {SourceNode} = sourceMapObject;
 
  // groups of operator
 const functionCreators = new Set([
-  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'try', 'catch', 'asyncFun',
-  'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncTry',
-  'asyncCatch', 'class', 'extends'
+  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'try', 'catch',
+  'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
+  'asyncMap', 'asyncTry', 'asyncCatch', 'class', 'extends'
 ]);
 const arrowCreators = new Set([
-  'proc', 'scope', 'as', 'each', 'try', 'catch', 'asyncProc', 'asyncScope',
-  'asyncAs', 'asyncEach', 'asyncTry', 'asyncCatch'
+  'proc', 'scope', 'as', 'each', 'map', 'try', 'catch', 'asyncProc',
+  'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap', 'asyncTry', 'asyncCatch'
 ]);
 const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
@@ -129,16 +129,17 @@ export default (tokens, options = {}) => {
         const nParams = paramsArray.length; 
         const paramsString = paramsArray.join();
         const asyncString = block.token.async ? 'async ' : '';
+        const kind = block.token.kind;
         
         // class
-        if (block.token.kind === 'class') {
+        if (kind === 'class') {
           startJS.push(tokenWithPosn(block.token,
             `(class {constructor(${paramsString}) {`));
           endJS.push(tokenWithPosn(tkn, '}})'));
         }
 
         // extends
-        else if (block.token.kind === 'extends') {
+        else if (kind === 'extends') {
           startJS.push(
             tokenWithPosn(block.token, '(class extends '),
             block.token.extends,
@@ -147,33 +148,38 @@ export default (tokens, options = {}) => {
           endJS.push(tokenWithPosn(tkn, '}})'));
         }
 
-        // each
-        else if (block.token.kind === 'each') {
+        // each, map
+        else if (kind === 'each' || kind === 'map') {
           const valParam   = (nParams > 0 ? paramsArray[0] : '_z_val');
           const indexParam = (nParams > 1 ? paramsArray[1] : null);
           const iterParam  = (nParams > 2 ? paramsArray[2] : null);
           let s = `(${asyncString}_z_iter => {`;
-          if (indexParam) s += `let _z_index = 0; `;
+          if (indexParam || kind === 'map') s += `let _z_index = -1; `;
+          if (kind === 'map') s += 'let _z_map = []; ';
           s += `for (let ${valParam} of _z_iter) {`;
           if (iterParam) s += `let ${iterParam} = _z_iter; `;
-          if (indexParam) s += `let ${indexParam} = _z_index++; `;
+          if (indexParam) s += `let ${indexParam} = ++_z_index; `;
+          if (kind === 'map' && !indexParam) s+= `++_z_index; `;
+          if (kind === 'map') s += '_z_map[_z_index] = '
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
-            tokenWithPosn(tkn,`} return _z_iter})(`),
+            tokenWithPosn(
+              tkn,`} return ${kind === 'map' ? '_z_map' : '_z_iter'}})(`
+            ),
             block.token.each,
             ')'  
           );
         }
 
         // try
-        else if (block.token.kind === 'try') {
+        else if (kind === 'try') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}() => {try {`));
           endJS.push(tokenWithPosn(tkn, '} catch (e) {return e}})()'));
         }
 
         // catch
-        else if (block.token.kind === 'catch') {
+        else if (kind === 'catch') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}${paramsString} => {if (${paramsString}) {`));
           endJS.push(
@@ -188,12 +194,12 @@ export default (tokens, options = {}) => {
           startJS.push(tokenWithPosn(block.token, 
             `(${asyncString}${block.token.arrow
               ? `(${paramsString}) => {return `
-              : `function${block.token.kind === 'gen' ? '*' : ''}(${
+              : `function${kind === 'gen' ? '*' : ''}(${
                   paramsString}) {return `}`));
-          if (block.token.kind === 'scope') {
+          if (kind === 'scope') {
             endJS.push(tokenWithPosn(tkn, '})()'));
           }
-          else if (block.token.kind === 'as') {
+          else if (kind === 'as') {
             endJS.push(tokenWithPosn(tkn, '})('), block.token.as, ')');
           }
           else {
@@ -452,13 +458,13 @@ export default (tokens, options = {}) => {
             // params for all other function-create kinds
             else {
 
-              // each - first operand is the iterable
-              if (kind === 'each') {
+              // each, map - first operand is the iterable
+              if (kind === 'each' || kind === 'map') {
                 if (parentBlock.operands.length === 0 ||
                     parentBlock.operands.length > 4) {
                       arityError(parentOp);
                 }
-                block.token.each = parentBlock.operands[0];
+                block.token[kind] = parentBlock.operands[0];
               }
               
               // extends - first operand is the parent class (has at least one
@@ -469,13 +475,13 @@ export default (tokens, options = {}) => {
           
               // check param names
               let paramTokens = parentBlock.operands;
-              if (kind === 'each' || kind === 'extends') {
+              if (kind === 'each' || kind === 'map' || kind === 'extends') {
                 paramTokens = paramTokens.slice(1);
               }
               for (let j = 0; j < paramTokens.length; j++) {
                 let tj = paramTokens[j];
                 checkValidName(tj, parentOp, 'invalid parameter name');
-                if (kind === 'each' &&
+                if ((kind === 'each' || kind === 'map') &&
                     (tj.name === 'ops' || tj.name === 'rest')) {
                   syntaxError(tj, `invalid ${tj.name} parameter`);
                 }
@@ -586,7 +592,7 @@ export default (tokens, options = {}) => {
             );
           }
           
-          // standard assign or update-assign - to variable or property
+          // standard assign or update-assign - to a variable or a property
           else {
             let settingVariable = false;
             if (currentOp) {

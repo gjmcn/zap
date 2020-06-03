@@ -62,9 +62,9 @@ const reserved = {
     'exponential', 'geometric',
     
     // function
-    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'try', 'catch', 'asyncFun',
-    'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncTry',
-    'asyncCatch', 'class', 'extends',
+    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'try', 'catch',
+    'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
+    'asyncMap', 'asyncTry', 'asyncCatch', 'class', 'extends',
 
     // other
     'array', 'getter', 'setter', 'set', 'if', 'seq', 'throw', 'debugger',
@@ -73,7 +73,7 @@ const reserved = {
     'mean', 'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation',
     'arrObj', 'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export',
     'import', 'importAs', 'importDefault', 'importAll', 'period', 'at', 'to',
-    'linSpace', 'apply', 'call', 'print', 'map', 'while', 'do'
+    'linSpace', 'apply', 'call', 'print', 'while', 'do'
 
   ]),
 
@@ -81,7 +81,7 @@ const reserved = {
     'break', 'const', 'continue', 'default', 'else', 'finally', 'for',
     'function', 'let', 'return', 'switch', 'var', 'with', 'enum', 'implements',
     'interface', 'package', 'private', 'protected', 'public', 'static', '_z_',
-    '_z_val', '_z_index', '_z_iter'
+    '_z_val', '_z_index', '_z_iter', '_z_map'
   ])
 
 };
