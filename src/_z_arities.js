@@ -3,8 +3,9 @@
 const m = new Map();
 
 m.set('at',         [2, 2]);
-m.set('get',        [3, 3]);
 m.set('set',        [3, 3]);
+m.set('getter',     [3, 3]);
+m.set('setter',     [3, 3]);
 m.set('to',         [2, 3]);
 m.set('linSpace',   [3, 3]);
 m.set('seq',        [3, 3]);

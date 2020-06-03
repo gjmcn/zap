@@ -67,10 +67,10 @@ const reserved = {
     'asyncCatch', 'class', 'extends',
 
     // other
-    'array', 'get', 'set', 'if', 'seq', 'throw', 'debugger', 'reduce',
-    'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
-    'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean',
-    'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation',
+    'array', 'getter', 'setter', 'set', 'if', 'seq', 'throw', 'debugger',
+    'reduce', 'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex',
+    'sum', 'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex',
+    'mean', 'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation',
     'arrObj', 'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export',
     'import', 'importAs', 'importDefault', 'importAll', 'period', 'at', 'to',
     'linSpace', 'apply', 'call', 'print', 'map', 'while', 'do'

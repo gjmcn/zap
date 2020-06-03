@@ -303,7 +303,12 @@ export default {
     return v;
   },
 
-  get(o, p, f) {
+  set(o, p, v) {
+    o[p] = v;
+    return o;
+  },
+
+  getter(o, p, f) {
     return Object.defineProperty(o, p, {
       get: f,
       configurable: true,
@@ -311,7 +316,7 @@ export default {
     });
   },
 
-  set(o, p, f) {
+  setter(o, p, f) {
     return Object.defineProperty(o, p, {
       set: f,
       configurable: true,
