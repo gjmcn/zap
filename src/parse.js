@@ -154,6 +154,15 @@ export default (tokens, options = {}) => {
           const indexParam = (nParams > 1 ? paramsArray[1] : null);
           const iterParam  = (nParams > 2 ? paramsArray[2] : null);
           const isMap = (kind === 'map');
+          if (isMap) {
+            if (blockJS.length) {
+              blockJS.unshift('(');
+              blockJS.push(')');
+            }
+            else {
+              blockJS.push('void 0');
+            }
+          }
           let s = `(${asyncString}_z_x => {`;
           if (indexParam || isMap) s += `let _z_i = -1; `;
           if (isMap) s += 'let _z_m = []; ';
@@ -161,13 +170,10 @@ export default (tokens, options = {}) => {
           if (iterParam) s += `let ${iterParam} = _z_x; `;
           if (indexParam) s += `let ${indexParam} = ++_z_i; `;
           else if (isMap) s += `++_z_i; `;
-          if (isMap) s += '_z_m[_z_i] = (';
+          if (isMap) s += '_z_m[_z_i] = ';
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
-            tokenWithPosn(tkn, isMap
-              ? ')} return _z_m})('
-              : '} return _z_x})('
-            ),
+            tokenWithPosn(tkn, `} return _z_${isMap ? 'm' : 'x'}})(`),
             block.token[kind],
             ')'  
           );
