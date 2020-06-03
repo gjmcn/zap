@@ -150,23 +150,25 @@ export default (tokens, options = {}) => {
 
         // each, map
         else if (kind === 'each' || kind === 'map') {
-          const valParam   = (nParams > 0 ? paramsArray[0] : '_z_val');
+          const valParam   = (nParams > 0 ? paramsArray[0] : '_z_v');
           const indexParam = (nParams > 1 ? paramsArray[1] : null);
           const iterParam  = (nParams > 2 ? paramsArray[2] : null);
-          let s = `(${asyncString}_z_iter => {`;
-          if (indexParam || kind === 'map') s += `let _z_index = -1; `;
-          if (kind === 'map') s += 'let _z_map = []; ';
-          s += `for (let ${valParam} of _z_iter) {`;
-          if (iterParam) s += `let ${iterParam} = _z_iter; `;
-          if (indexParam) s += `let ${indexParam} = ++_z_index; `;
-          if (kind === 'map' && !indexParam) s+= `++_z_index; `;
-          if (kind === 'map') s += '_z_map[_z_index] = '
+          const isMap = (kind === 'map');
+          let s = `(${asyncString}_z_x => {`;
+          if (indexParam || isMap) s += `let _z_i = -1; `;
+          if (isMap) s += 'let _z_m = []; ';
+          s += `for (let ${valParam} of _z_x) {`;
+          if (iterParam) s += `let ${iterParam} = _z_x; `;
+          if (indexParam) s += `let ${indexParam} = ++_z_i; `;
+          else if (isMap) s += `++_z_i; `;
+          if (isMap) s += '_z_m[_z_i] = (';
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
-            tokenWithPosn(
-              tkn,`} return ${kind === 'map' ? '_z_map' : '_z_iter'}})(`
+            tokenWithPosn(tkn, isMap
+              ? ')} return _z_m})('
+              : '} return _z_x})('
             ),
-            block.token.each,
+            block.token[kind],
             ')'  
           );
         }

@@ -174,7 +174,7 @@ iris group [a :species] [a mean [a :petalWidth]]
 // comment later code to print an earlier result`
 ], [
   'classification',
-`// rerun to resample data the following can be changed:
+`// rerun to resample data; the following can be changed:
 nLabeled = 200
 nTest = 100
 k = 3
@@ -183,31 +183,28 @@ dist = [a :x - (b :x) ^ 2 + (a :y - (b :y) ^ 2)]
 // k-nearest-neighbor classifier
 knn = fun data testPoint
     data
-    | map [a \\dist testPoint]    // distances to test point 
-    | orderIndex                 // indices of sorted dists
-    | ~slice 0 k                 // top k
-    | map [data :(a) :category]  // corresponding labels
-    | groupCount [a]             // frequency count (a map)
-    | max [a :1] :0              // most frequent label
+    | map d (d \\dist testPoint)    // distances to test point 
+    | orderIndex                   // indices of sorted dists
+    | ~slice 0 k                   // top k
+    | map i (data :(i) :category)  // corresponding labels
+    | groupCount [a]               // frequency count (a map)
+    | max [a :1] :0                // most frequent label
 
 // random data points in unit square
 labeled = 1 to nLabeled map
-    fun
-        #
-        | x (random)
-        | y (random) 
-        | \\[a set 'category' (a :x ^ 3 + 0.2 > (a :y) number)]
+    #
+    | x (random)
+    | y (random) 
+    | \\[a set 'category' (a :x ^ 3 + 0.2 > (a :y) number)]
 test = 1 to nTest map
-    fun
-        #
-        | x (random)
-        | y (random)
-        | \\[a set 'predicted' (labeled \\knn a)]
-boundary = 0 linSpace 1 100 map
-    fun x
-        #
-        | x x
-        | y (x ^ 3 + 0.2 <> 1)
+    #
+    | x (random)
+    | y (random)
+    | \\[a set 'predicted' (labeled \\knn a)]
+boundary = 0 linSpace 1 100 map x
+    #
+    | x x
+    | y (x ^ 3 + 0.2 <> 1)
 
 // Vega-Lite plot
 vegaEmbed = 'vega-embed@6.5.2' \\require await
