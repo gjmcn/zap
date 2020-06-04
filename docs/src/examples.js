@@ -82,17 +82,16 @@ burst   = 0.05
 frames  = 400
 
 // array of bubble objects
-bubbles = 0 linSpace width n map
-    fun xi
-        #
-        | x xi
-        | y (height - (random * height / 10))
-        | r 1
-        | color (+ 'rgba('(randomInt 0 200 3 ~join)',0.7)')
+bubbles = 0 width linSpace n map xi
+    #
+    | x xi
+    | y (height - (random * height / 10))
+    | r 1
+    | color (+ 'rgba('(randomInt 0 200 3 ~join)',0.7)')
 
 // canvas and context
 canvas ctx @= # attach width height sketch
-canvas style 'background' '#eef'
+canvas style 'border' '1px solid gray'
 
 // draw loop
 draw = fun
@@ -175,7 +174,7 @@ iris group [a :species] [a mean [a :petalWidth]]
 ], [
   'classification',
 `// rerun to resample data; the following can be changed:
-nLabeled = 200
+nTrain = 200
 nTest = 100
 k = 3
 dist = [a :x - (b :x) ^ 2 + (a :y - (b :y) ^ 2)]
@@ -183,31 +182,35 @@ dist = [a :x - (b :x) ^ 2 + (a :y - (b :y) ^ 2)]
 // k-nearest-neighbor classifier
 knn = fun data testPoint
     data
-    | map d (d \\dist testPoint)    // distances to test point 
-    | orderIndex                   // indices of sorted dists
-    | ~slice 0 k                   // top k
-    | map i (data :(i) :category)  // corresponding labels
-    | groupCount [a]               // frequency count (a map)
-    | max [a :1] :0                // most frequent label
+    | map d (d \\dist testPoint)  // distances to test point 
+    | orderIndex                 // indices of sorted dists
+    | ~slice 0 k                 // top k
+    | map i (data :(i) :label)   // corresponding labels
+    | groupCount [a]             // frequency count (a map)
+    | max [a :1] :0              // most frequent label
 
-// random data points in unit square
-labeled = 1 to nLabeled map
+// training data
+training = 1 to nTrain map
     #
     | x (random)
     | y (random) 
-    | \\[a set 'category' (a :x ^ 3 + 0.2 > (a :y) number)]
+    | as pt (pt set 'label' (pt :x ^ 3 + 0.2 > (pt :y) number))
+
+// test data
 test = 1 to nTest map
     #
     | x (random)
     | y (random)
-    | \\[a set 'predicted' (labeled \\knn a)]
-boundary = 0 linSpace 1 100 map x
+    | as pt (pt set 'predicted' (training \\knn pt))
+
+// decision boundary
+boundary = 0 1 linSpace 100 map x
     #
     | x x
     | y (x ^ 3 + 0.2 <> 1)
 
 // Vega-Lite plot
-vegaEmbed = 'vega-embed@6.5.2' \\require await
+vegaEmbed = 'vega-embed@6.8.0' \\require await
 enc = fun
     #
     | x (# field 'x' type 'quantitative')
@@ -227,8 +230,8 @@ $div <\\vegaEmbed
         |
             #
             | mark 'circle'
-            | data (# values labeled)
-            | encoding (\\enc set 'color' (# field 'category' type 'nominal'))
+            | data (# values training)
+            | encoding (\\enc set 'color' (# field 'label' type 'nominal'))
         |
             #
             | mark 'point'
@@ -240,108 +243,121 @@ $div <\\vegaEmbed
 `
 ], [
   'winner',
-`// choose a winner or a loser
+`// choose a winner or loser
 
 list = $div
-  $style 'margin' '20px 0 0 10px';
+| style 'margin' '20px 0 0 10px'
 
-add = $button
-  $text '+'
-  $on 'click' [
-    list $insert ($div)
-      $html (+ "
-        <span style='font: 34px/60px serif; padding: 10px'>😐</span>
-        <input type='text' style='width: 200px; font-size: 24px'
-               placeholder='"(list :children :length)"'>")];
-          
-remove = $button
-  $text '-'
-  $on 'click' [list :children :length > 2 ? (list :lastChild $remove)];
+addPlayer = $button
+| text '+'
+| on 'click'
+    fun
+        list insert ($div)
+        | html
+            + "<span style='font: 34px/60px serif; padding: 10px'>😐</span>
+               <input type='text' style='width: 200px; font-size: 24px'
+                      placeholder='"(list :children :length)"'>"
+              
+removePlayer = $button
+| text '-'
+| on 'click' [list :children :length > 2 ? (list :lastChild remove)]
   
 winLose = $button
-  $text '😄'
-  $on 'click' [this $text (this $text == '😄' ? '😭' '😄')];
+| text '😄'
+| on 'click' [this text (this text == '😄' ? '😭' '😄')]
   
 start = $button
-  $text 'Start'
-  $on 'click' {
-    buttons $attr 'disabled' true;
-    players = list $pick 'span';
-    n = players :length;
-    shift = $randomInt 0 n;
-    0 >> 25 $awaitEach {
-      a ^ 2 + 50 $ms $await;
-      players
-        $text '😐'
-        $style 'opacity' '0.5';
-      players :(shift + a % n)
-        $text (winLose $text)
-        $style 'opacity' '1'};
-    players :(shift + 25 % n) $text (winLose $text + '▸');
-    buttons $removeAttr 'disabled'};
+| text 'Start'
+| on 'click'
+    asyncFun
+        buttons attr 'disabled' true
+        players = list pick 'span'
+        n = players :length
+        shift = randomInt 0 n
+        0 to 25 asyncEach i
+            i ^ 2 + 50 period await
+            players
+            | text '😐'
+            | style 'opacity' '0.5'
+            players :(i + shift % n)
+            | text (winLose text)
+            | style 'opacity' '1'
+        | await
+        players :(25 + shift % n) text (winLose text + '▸')
+        buttons removeAttr 'disabled'
    
-buttons = @ add remove winLose start
-  $style 'font-size' '18px'
-  $style 'padding' '5px 24px'
-  $style 'margin' '5px';
+buttons = @ addPlayer removePlayer winLose start
+| style 'font-size' '18px'
+| style 'padding' '5px 24px'
+| style 'margin' '5px'
   
-add <|click <|click;
-buttons |concat list $into ($fragment);
+addPlayer <~click <~click
+buttons ~concat list into (fragment)
 `
+],  [
+  'vega-lite plot',
+`$div <\\('vega-embed@6.8.0' \\require await)
+    #
+    | repeat (@ 'Horsepower' 'Miles_per_Gallon' 'Acceleration' 'Displacement')
+    | columns 2
+    | spec
+        #
+        | data (# url 'https://raw.githubusercontent.com/vega/vega/master/docs/data/cars.json')
+        | mark 'bar'
+        | encoding
+            # 
+            | x
+                #
+                | field (# repeat 'repeat')
+                | 'bin' true
+                | type 'quantitative'
+            | y
+                #
+                | aggregate 'count'
+                | type 'quantitative'
+            | color
+                #
+                | field 'Origin'
+                | type 'nominal'`  
 ], [
-  'd3',
-`// based on: https://observablehq.com/@d3/bar-chart
+  'p5 kaleidoscope',
+`// draw on the canvas
+// (based on https://p5js.org/examples/interaction-kaleidoscope.html)
 
-d3 = 'd3@5.12.0' \\require $await;
+// ==============================================================
+// For now, reload the playground when finished with each drawing
+// to terminate the draw loop
+// ==============================================================
 
-data = d3 |csv 
-  'https://gist.githubusercontent.com/mbostock/81aa27912ad9b1ed577016797a780b2c/raw/3a807eb0cbb0f5904053ac2f9edf765e2f87a2f5/alphabet.csv'
-  [# name (a :letter) value (a :frequency $number)] $await
-    |sort [b :value - (a :value)];
-    
-width = 700;
-height = 500;
-margin = # top 20 right 0 bottom 30 left 40;    
-    
-x = d3 |scaleBand
-    |domain (data |map [a :name])
-    |range (@ (margin :left) (width - (margin :right)))
-    |padding 0.1;
-    
-y = d3 |scaleLinear
-    |domain (@ 0 (d3 |max data [a :value])) |nice
-    |range (@ (height - (margin :bottom)) (margin :top));
-    
-xAxis = [a
-    |attr 'transform' (+ 'translate(0,'(height - (margin :bottom))')')
-    <\\(d3 |axisBottom x |tickSizeOuter 0)];
+// this can be changed
+symmetry = 10
 
-yAxis = [a
-    |attr 'transform' (+ 'translate('(margin :left)',0)')
-    <\\(d3 |axisLeft y)
-    <\\[a |select '.domain' |remove]];
-    
-svg = d3 |create 'svg'
-    |attr 'viewBox' (@ 0 0 width height);
+f = fun p
 
-svg |append 'g'
-      |attr 'fill' 'steelblue'
-    |selectAll 'rect'
-    |data data
-    |join 'rect'
-      |attr 'x' [a :name \\x]
-      |attr 'y' [a :value \\y]
-      |attr 'height' [0 \\y - (a :value \\y)]
-      |attr 'width' (x |bandwidth);
+    p :setup = fun
+        p ~createCanvas 600 600
+        p ~angleMode 'degrees'
+        p ~background 230
 
-svg |append 'g'
-    \\xAxis;
+    p :draw = fun
+        mouseX mouseY pmouseX pmouseY width height #= p
+        p ~translate (width / 2) (height / 2)
+        if ((mouseX > 0) && (mouseX < width) && (mouseY > 0) && (mouseY < height))
+            mx = mouseX - (width / 2)
+            my = mouseY - (height / 2)
+            pmx = pmouseX - (width / 2)
+            pmy = pmouseY - (height / 2)
+            if (p :mouseIsPressed)
+                1 to symmetry each
+                    p ~rotate (360 / symmetry)
+                    p ~strokeWeight 3
+                    p ~line mx my pmx pmy
+                    p ~push
+                    p ~scale 1 (-1)
+                    p ~line mx my pmx pmy
+                    p ~pop
 
-svg |append 'g'
-    \\yAxis;
-
-svg |node;
-
-`
+// use p5 in instance mode     
+'p5@1.0.0' \\require await new f :canvas`
 ],
 ]);
