@@ -104,10 +104,9 @@ draw = fun
             b :y += speed
             b :r += grow
         ctx :fillStyle = b :color
-        ctx
-        | <~beginPath
-        | <~arc (b :x) (b :y) (b :r) 0 7
-        | <~fill
+        ctx ~beginPath
+        ctx ~arc (b :x) (b :y) (b :r) 0 7
+        ctx ~fill
     if (frames -= 1)
         window ~requestAnimationFrame draw
 
@@ -144,10 +143,9 @@ draw = fun
     y each yi i
         theta = angularSpeed * frames + (t , i)
         xi = theta sin * (r , i) + (width / 2) % width
-        ctx 
-        | <~beginPath
-        | <~arc xi yi (s , i) 0 7
-        | <~fill
+        ctx ~beginPath
+        ctx ~arc xi yi (s , i) 0 7
+        ctx ~fill
     if (frames -= 1)
         window ~requestAnimationFrame draw
 
@@ -322,7 +320,7 @@ buttons ~concat list into (fragment)
 ], [
   'p5 kaleidoscope',
 `// draw on the canvas
-// (based on https://p5js.org/examples/interaction-kaleidoscope.html)
+// (based on: https://p5js.org/examples/interaction-kaleidoscope.html)
 
 // ==============================================================
 // For now, reload the playground when finished with each drawing
