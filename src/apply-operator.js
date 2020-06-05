@@ -383,6 +383,12 @@ export default (block, _z_used) => {
       return res;
     }
 
+    else if (op === 'stop') {
+      if (nx) throw arityError(operator);
+      block.stopUsed = true;
+      return [ opPosn('(void 0)') ];
+    }
+
     else if (op === 'array') {
       let res = [ opPosn('[') ];
       for (let xi of x) res.push(opPosn('...'), xi, ',');

@@ -9,13 +9,14 @@ const {SourceNode} = sourceMapObject;
 
  // groups of operator
 const functionCreators = new Set([
-  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'try', 'catch',
+  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
   'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
-  'asyncMap', 'asyncTry', 'asyncCatch', 'class', 'extends'
+  'asyncMap', 'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends'
 ]);
 const arrowCreators = new Set([
-  'proc', 'scope', 'as', 'each', 'map', 'try', 'catch', 'asyncProc',
-  'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap', 'asyncTry', 'asyncCatch'
+  'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch', 'asyncProc',
+  'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap', 'asyncDo', 'asyncTry',
+  'asyncCatch'
 ]);
 const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
@@ -89,6 +90,8 @@ export default (tokens, options = {}) => {
                             // the parent function or base block
       awaitUsed: false,     // indicates if await is used inside the block - 
                             // bubbles up to the parent function or base block
+      stopUsed: false,      // indicates if stop is used inside the block - 
+                            // bubbles up to the parent function or base block
       js: [],               // each entry is an array representing a subexpr,
                             // or a comma (string) separating these
     }
@@ -111,6 +114,7 @@ export default (tokens, options = {}) => {
     const isBase = !block.token;
     const blockJS = block.js;
     const endJS = [];
+    const kind = block.token && block.token.kind;
     
     // base block
     if (isBase) {
@@ -129,7 +133,6 @@ export default (tokens, options = {}) => {
         const nParams = paramsArray.length; 
         const paramsString = paramsArray.join();
         const asyncString = block.token.async ? 'async ' : '';
-        const kind = block.token.kind;
         
         // class
         if (kind === 'class') {
@@ -228,7 +231,7 @@ export default (tokens, options = {}) => {
 
     }
 
-    // base block or function - declare variables, check async/await
+    // base block or function - declare variables, check async/await and stop
     if (isBase || block.token.type === 'function') {
      
       let varArr = [...block.variables];
@@ -254,9 +257,15 @@ export default (tokens, options = {}) => {
         syntaxError(tkn, 'await inside synchronous function');
       }
 
+      // throw if stop used and not inside a loop
+      if (block.stopUsed &&
+          kind !== 'each' && kind !== 'map' && kind !== 'do') {
+        syntaxError(tkn, 'invalid use of stop');
+      }
+
     }
     
-    // parentheses - add variables and awaitUsed to parent block
+    // parentheses - add variables, awaitUsed and stopUsed to parent block
     else {
       const parentBlock = stack[stack.length - 1];
       if (block.variables.size) {
@@ -264,6 +273,9 @@ export default (tokens, options = {}) => {
       }
       if (block.awaitUsed) {
         parentBlock.awaitUsed = true;
+      }
+      if (block.stopUsed) {
+        parentBlock.stopUsed = true;
       }
     }
     

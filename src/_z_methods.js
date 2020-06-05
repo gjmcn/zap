@@ -290,23 +290,6 @@ export default {
     }
   },
 
-  // *while(f) {
-  //   while (f()) yield;
-  // },
-
-  while(t) {
-    let q;
-    const g = (function*() {
-      while (t()) yield q;
-    })();
-    q = g.return.bind(g);
-    return g;   
-  },
-
-  *do(f) {
-    while (1) yield f();
-  },
-
   print(v) {
     console.log(v);
     return v;

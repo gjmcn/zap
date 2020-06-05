@@ -17,7 +17,7 @@ const options = yargs
   .option('n', { alias: 'nodes',       describe: 'Print the JavaScript tree produced by the parser', type: 'boolean' }) 
   .option('p', { alias: 'print',       describe: 'Print the generated JavaScript',                   type: 'boolean' })
   .option('t', { alias: 'tokens',      describe: 'Print the tokens produced by the lexer',           type: 'boolean' })
-  .option('r', { alias: 'proc',        describe: 'Print the processed tokens',                       type: 'boolean' })
+  .option('r', { alias: 'proc',        describe: 'Print the tokens after processing blocks',         type: 'boolean' })
   .option('v', { alias: 'version',                                                                   type: 'boolean' })
   .argv;
 
