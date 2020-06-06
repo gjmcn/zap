@@ -130,7 +130,6 @@ export default (tokens, options = {}) => {
       if (block.token.type === 'function') {
         
         const paramsArray = [...block.token.params];
-        const nParams = paramsArray.length; 
         const paramsString = paramsArray.join();
         const asyncString = block.token.async ? 'async ' : '';
         
