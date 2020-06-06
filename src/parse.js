@@ -153,9 +153,7 @@ export default (tokens, options = {}) => {
 
         // each, map
         else if (kind === 'each' || kind === 'map') {
-          const valParam   = (nParams > 0 ? paramsArray[0] : '_z_v');
-          const indexParam = (nParams > 1 ? paramsArray[1] : null);
-          const iterParam  = (nParams > 2 ? paramsArray[2] : null);
+          const [valParam = '_z_v', indexParam, iterParam] = paramsArray;
           const isMap = (kind === 'map');
           if (isMap) {
             if (blockJS.length) {
@@ -188,14 +186,13 @@ export default (tokens, options = {}) => {
 
         // do
         else if (kind === 'do') {
-          const indexParam = paramsArray[0] || '_z_i';
           const doLimit = block.token.doLimit;
           let s = `(${asyncString}${doLimit ? '_z_l' : '()'} => {`;
           if (block.stopUsed) s += 'let _z_s; ';
           s += doLimit
-            ? `for (let ${indexParam} = 0; ${indexParam} < _z_l; ${
-                indexParam}++) {`
+            ? `for (let _z_i = 0; _z_i < _z_l; _z_i++) {`
             : 'while (1) {';
+          if (paramsArray[0]) s += `let ${paramsArray[0]} = _z_i; `;
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(tokenWithPosn(tkn,
             `${block.stopUsed ? '; if (_z_s) break' : ''}}})(`));
