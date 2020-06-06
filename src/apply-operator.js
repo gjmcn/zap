@@ -386,7 +386,7 @@ export default (block, _z_used) => {
     else if (op === 'stop') {
       if (nx) throw arityError(operator);
       block.stopUsed = true;
-      return [ opPosn('(void 0)') ];
+      return [ opPosn('(_z_s = 1, void 0)') ];
     }
 
     else if (op === 'array') {

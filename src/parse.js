@@ -169,6 +169,7 @@ export default (tokens, options = {}) => {
           let s = `(${asyncString}_z_x => {`;
           if (indexParam || isMap) s += `let _z_i = -1; `;
           if (isMap) s += 'let _z_m = []; ';
+          if (block.stopUsed) s += 'let _z_s; ';
           s += `for (let ${valParam} of _z_x) {`;
           if (iterParam) s += `let ${iterParam} = _z_x; `;
           if (indexParam) s += `let ${indexParam} = ++_z_i; `;
@@ -176,10 +177,30 @@ export default (tokens, options = {}) => {
           if (isMap) s += '_z_m[_z_i] = ';
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
-            tokenWithPosn(tkn, `} return _z_${isMap ? 'm' : 'x'}})(`),
+            tokenWithPosn(tkn,
+              `${block.stopUsed ? '; if (_z_s) break' : ''}} return _z_${
+                isMap ? 'm' : 'x'}})(`
+            ),
             block.token[kind],
             ')'  
           );
+        }
+
+        // do
+        else if (kind === 'do') {
+          const indexParam = paramsArray[0] || '_z_i';
+          const doLimit = block.token.doLimit;
+          let s = `(${asyncString}${doLimit ? '_z_l' : '()'} => {`;
+          if (block.stopUsed) s += 'let _z_s; ';
+          s += doLimit
+            ? `for (let ${indexParam} = 0; ${indexParam} < _z_l; ${
+                indexParam}++) {`
+            : 'while (1) {';
+          startJS.push(tokenWithPosn(block.token, s));
+          endJS.push(tokenWithPosn(tkn,
+            `${block.stopUsed ? '; if (_z_s) break' : ''}}})(`));
+          if (doLimit) endJS.push(doLimit);
+          endJS.push(')');
         }
 
         // try
@@ -242,9 +263,7 @@ export default (tokens, options = {}) => {
         if (_z_used.size) varArr.push('_z_');
       }
 
-      // function - do not declare variables that are params (does not catch
-      // ops and rest, but this does not matter - declaring params has no
-      // impact, it is just redundant code)
+      // function - do not declare variables that are params
       else if (block.token.params.size) {  
         varArr = varArr.filter(v => !block.token.params.has(v));
       }
@@ -445,8 +464,12 @@ export default (tokens, options = {}) => {
             block.token.type = 'function';
 
             // add async, arrow and kind properties to block token
-            if (parentOp.value.slice(0, 5) === 'async') block.token.async = true;
-            if (arrowCreators.has(parentOp.value)) block.token.arrow = true;
+            if (parentOp.value.slice(0, 5) === 'async') {
+              block.token.async = true;
+            }
+            if (arrowCreators.has(parentOp.value)) {
+              block.token.arrow = true;
+            }
             const kind = parentOp.value.replace('async', '').toLowerCase();
             block.token.kind = kind;
             
@@ -473,6 +496,21 @@ export default (tokens, options = {}) => {
               block.token.params.add(
                 paramToken.name === 'ops' ? 'ops={}' : paramToken.name
               );
+            }
+
+            // do
+            else if (kind === 'do') {
+              if (parentBlock.operands.length > 2) arityError(parentOp);
+              block.token.doLimit = parentBlock.operands[0];
+              if (parentBlock.operands.length === 2) {
+                const paramToken = parentBlock.operands[1];
+                checkValidName(paramToken, parentOp, 'invalid parameter name');
+                if (paramToken.name === 'rest' || paramToken.name === 'ops') {
+                  syntaxError(
+                    paramToken, `invalid ${paramToken.name} parameter`);
+                }
+                block.token.params.add(paramToken.name);
+              }
             }
             
             // params for all other function-create kinds
