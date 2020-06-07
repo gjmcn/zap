@@ -272,7 +272,7 @@ start = $button
         players = list pick 'span'
         n = players :length
         shift = randomInt 0 n
-        0 to 25 asyncEach i
+        26 asyncDo i
             i ^ 2 + 50 period await
             players
             | text '😐'
@@ -294,7 +294,9 @@ buttons ~concat list into (fragment)
 `
 ],  [
   'vega-lite plot',
-`$div <\\('vega-embed@6.8.0' \\require await)
+`vegaEmbed = ('vega-embed@6.8.0' \\require await)
+
+$div <\\vegaEmbed
     #
     | repeat (@ 'Horsepower' 'Miles_per_Gallon' 'Acceleration' 'Displacement')
     | columns 2
@@ -346,7 +348,7 @@ f = fun p
             pmx = pmouseX - (width / 2)
             pmy = pmouseY - (height / 2)
             if (p :mouseIsPressed)
-                1 to symmetry each
+                symmetry do
                     p ~rotate (360 / symmetry)
                     p ~strokeWeight 3
                     p ~line mx my pmx pmy
