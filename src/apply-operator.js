@@ -436,6 +436,11 @@ export default (block, _z_used) => {
       return [ opPosn('document.createDocumentFragment()') ];
     }
 
+    else if (op === 'load') {
+      if (nx !== 1) throw arityError(operator);
+      return [ opPosn('import('), x[0], ')' ];
+    }
+
     else if (op === 'import') {
       if (block.token) throw topLevelError(operator);
       if (!nx) throw arityError(operator);
