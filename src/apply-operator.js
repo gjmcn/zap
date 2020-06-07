@@ -27,7 +27,7 @@ function rightOperandError(operator) {
   return Error(`${errorStem(operator)}no right operand`);
 }
 function topLevelError(operator) {
-  return Error(`${errorStem(operator)}cannot be used inside functions or parentheses`);
+  return Error(`${errorStem(operator)}can only be used at top-level scope`);
 }
 function multipleExportError(operator) {
   return Error(`${errorStem(operator)}can only be used once`);
