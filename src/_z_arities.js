@@ -8,7 +8,6 @@ m.set('getter',     [3, 3]);
 m.set('setter',     [3, 3]);
 m.set('to',         [2, 3]);
 m.set('linSpace',   [3, 3]);
-m.set('seq',        [3, 3]);
 m.set('reduce',     [3, 3]);
 m.set('group',      [2, 3]);
 m.set('groupCount', [2, 3]);

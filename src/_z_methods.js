@@ -283,13 +283,6 @@ export default {
     }
   },
 
-  *seq(v, t, u) {
-    while (t(v)) {
-      yield v;
-      v = u(v);
-    }
-  },
-
   print(v) {
     console.log(v);
     return v;
