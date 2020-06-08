@@ -34,7 +34,7 @@
       </select>
     </span>
 
-    <a href="https://github.com/gjmcn/zap">GitHub</a>
+    <a href="https://github.com/gjmcn/zap" target="_blank">GitHub</a>
     <a href="index.html" target="_blank">Docs</a>
 
   </nav>
@@ -48,7 +48,7 @@
     <h2>The Zap Playground</h2>
     <p>Write code or pick an example from the menu.</p>
     
-    <p>Code is automatically wrapped in an asynchronous function, so variables are not global (unless explicitly attached to the <code>window</code> object) and <code>await</code> can be used. The resolved value of the promise returned by the function is displayed &mdash; or rendered if it is an HTML element or fragment.</p>
+    <p>Code is automatically wrapped in an asynchronous function, so variables are not global (unless explicitly attached to the <code>window</code> object) and <code>await</code> can be used. The resolved value of the promise returned by the function is displayed &mdash; or rendered if it is an HTML/SVG element or fragment.</p>
 
     <h3>Loading Modules</h3>
     <p>The playground has a global <code>require</code> function (from <a href="https://github.com/d3/d3-require" target="_blank">d3-require</a>) for loading UMD modules. <code>require</code> uses <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr</a> by default, so a module can be loaded using e.g.</p>
@@ -67,7 +67,7 @@
     <ul>
       <li>Reload the page to clear global variables, timers and recursively called functions.</li>
       <li>The <code>print</code> operator prints to the JavaScript console, not the playground's result panel.</li>
-      <li>Currently, there is no save feature. (The playground does 'remember' code between visits/reloads.)</li>
+      <li>Currently, there is no save feature. (The playground does remember code between visits/reloads.)</li>
       <li>Currently, there is no mechanism for handling long-running synchronous code &mdash; the browser will freeze. Results from asynchronous code are ignored if new code is run in the meantime. </li>
     </ul>
     <h3>Keyboard Shortcuts</h3>

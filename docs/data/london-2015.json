@@ -1,0 +1,266 @@
+[
+  {
+    "Borough": "City of London",
+    "Part": "Inner",
+    "Income": 61100,
+    "HousePrice": 768900,
+    "xTile": 4,
+    "yTile": 3
+  },
+  {
+    "Borough": "Barking and Dagenham",
+    "Part": "Outer",
+    "Income": 21800,
+    "HousePrice": 244000,
+    "xTile": 7,
+    "yTile": 3
+  },
+  {
+    "Borough": "Barnet",
+    "Part": "Outer",
+    "Income": 27100,
+    "HousePrice": 444000,
+    "xTile": 3,
+    "yTile": 5
+  },
+  {
+    "Borough": "Bexley",
+    "Part": "Outer",
+    "Income": 24400,
+    "HousePrice": 275000,
+    "xTile": 7,
+    "yTile": 2
+  },
+  {
+    "Borough": "Brent",
+    "Part": "Outer",
+    "Income": 22700,
+    "HousePrice": 405000,
+    "xTile": 2,
+    "yTile": 4
+  },
+  {
+    "Borough": "Bromley",
+    "Part": "Outer",
+    "Income": 28100,
+    "HousePrice": 372250,
+    "xTile": 5,
+    "yTile": 1
+  },
+  {
+    "Borough": "Camden",
+    "Part": "Inner",
+    "Income": 33100,
+    "HousePrice": 705000,
+    "xTile": 3,
+    "yTile": 4
+  },
+  {
+    "Borough": "Croydon",
+    "Part": "Outer",
+    "Income": 25100,
+    "HousePrice": 300000,
+    "xTile": 4,
+    "yTile": 1
+  },
+  {
+    "Borough": "Ealing",
+    "Part": "Outer",
+    "Income": 24600,
+    "HousePrice": 428150,
+    "xTile": 1,
+    "yTile": 4
+  },
+  {
+    "Borough": "Enfield",
+    "Part": "Outer",
+    "Income": 25300,
+    "HousePrice": 320000,
+    "xTile": 4,
+    "yTile": 6
+  },
+  {
+    "Borough": "Greenwich",
+    "Part": "Inner",
+    "Income": 24600,
+    "HousePrice": 345000,
+    "xTile": 6,
+    "yTile": 2
+  },
+  {
+    "Borough": "Hackney",
+    "Part": "Inner",
+    "Income": 26000,
+    "HousePrice": 483522,
+    "xTile": 5,
+    "yTile": 4
+  },
+  {
+    "Borough": "Hammersmith and Fulham",
+    "Part": "Inner",
+    "Income": 30100,
+    "HousePrice": 730000,
+    "xTile": 1,
+    "yTile": 3
+  },
+  {
+    "Borough": "Haringey",
+    "Part": "Outer",
+    "Income": 25800,
+    "HousePrice": 430000,
+    "xTile": 4,
+    "yTile": 5
+  },
+  {
+    "Borough": "Harrow",
+    "Part": "Outer",
+    "Income": 26100,
+    "HousePrice": 392925,
+    "xTile": 2,
+    "yTile": 5
+  },
+  {
+    "Borough": "Havering",
+    "Part": "Outer",
+    "Income": 24900,
+    "HousePrice": 285000,
+    "xTile": 7,
+    "yTile": 4
+  },
+  {
+    "Borough": "Hillingdon",
+    "Part": "Outer",
+    "Income": 25300,
+    "HousePrice": 350000,
+    "xTile": 0,
+    "yTile": 4
+  },
+  {
+    "Borough": "Hounslow",
+    "Part": "Outer",
+    "Income": 24700,
+    "HousePrice": 355000,
+    "xTile": 0,
+    "yTile": 3
+  },
+  {
+    "Borough": "Islington",
+    "Part": "Inner",
+    "Income": 31000,
+    "HousePrice": 580000,
+    "xTile": 4,
+    "yTile": 4
+  },
+  {
+    "Borough": "Kensington and Chelsea",
+    "Part": "Inner",
+    "Income": 38700,
+    "HousePrice": 1178000,
+    "xTile": 2,
+    "yTile": 3
+  },
+  {
+    "Borough": "Kingston upon Thames",
+    "Part": "Outer",
+    "Income": 29100,
+    "HousePrice": 406500,
+    "xTile": 2,
+    "yTile": 1
+  },
+  {
+    "Borough": "Lambeth",
+    "Part": "Inner",
+    "Income": 27300,
+    "HousePrice": 450000,
+    "xTile": 3,
+    "yTile": 2
+  },
+  {
+    "Borough": "Lewisham",
+    "Part": "Inner",
+    "Income": 24900,
+    "HousePrice": 353000,
+    "xTile": 5,
+    "yTile": 2
+  },
+  {
+    "Borough": "Merton",
+    "Part": "Outer",
+    "Income": 27600,
+    "HousePrice": 410000,
+    "xTile": 3,
+    "yTile": 1
+  },
+  {
+    "Borough": "Newham",
+    "Part": "Outer",
+    "Income": 20200,
+    "HousePrice": 305000,
+    "xTile": 6,
+    "yTile": 3
+  },
+  {
+    "Borough": "Redbridge",
+    "Part": "Outer",
+    "Income": 25700,
+    "HousePrice": 345000,
+    "xTile": 6,
+    "yTile": 4
+  },
+  {
+    "Borough": "Richmond upon Thames",
+    "Part": "Outer",
+    "Income": 35800,
+    "HousePrice": 570000,
+    "xTile": 1,
+    "yTile": 2
+  },
+  {
+    "Borough": "Southwark",
+    "Part": "Inner",
+    "Income": 27700,
+    "HousePrice": 470000,
+    "xTile": 4,
+    "yTile": 2
+  },
+  {
+    "Borough": "Sutton",
+    "Part": "Outer",
+    "Income": 25900,
+    "HousePrice": 316300,
+    "xTile": 3,
+    "yTile": 0
+  },
+  {
+    "Borough": "Tower Hamlets",
+    "Part": "Inner",
+    "Income": 26600,
+    "HousePrice": 419000,
+    "xTile": 5,
+    "yTile": 3
+  },
+  {
+    "Borough": "Waltham Forest",
+    "Part": "Outer",
+    "Income": 22700,
+    "HousePrice": 365000,
+    "xTile": 5,
+    "yTile": 5
+  },
+  {
+    "Borough": "Wandsworth",
+    "Part": "Inner",
+    "Income": 32900,
+    "HousePrice": 555578,
+    "xTile": 2,
+    "yTile": 2
+  },
+  {
+    "Borough": "Westminster",
+    "Part": "Inner",
+    "Income": 35100,
+    "HousePrice": 910000,
+    "xTile": 3,
+    "yTile": 3
+  }
+]

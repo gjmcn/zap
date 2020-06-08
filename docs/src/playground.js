@@ -40,7 +40,7 @@
     highlightActiveLine: false,
     useWorker: false,
     enableBasicAutocompletion: true,
-    enableLiveAutocompletion: true
+    // enableLiveAutocompletion: true
   });
   editor.setTheme("ace/theme/tomorrow_night_bright");
   editor.session.setMode(`ace/mode/zap`);
