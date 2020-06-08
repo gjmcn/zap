@@ -62,9 +62,9 @@ const reserved = {
     'exponential', 'geometric',
     
     // function
-    'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
-    'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
-    'asyncMap', 'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends',
+    'fun', 'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
+    'asyncFun', 'asyncProc', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap',
+    'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends',
 
     // other
     'array', 'getter', 'setter', 'set', 'if', 'seq', 'throw', 'debugger',

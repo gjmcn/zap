@@ -370,6 +370,7 @@ export default (block, _z_used) => {
       if (nx !== 1) throw arityError(operator);
       operator.js = (op === 'yieldFrom') ? 'yield*' : op;
       if (op === 'await') block.awaitUsed = true;
+      else if (op === 'yield' || op === 'yieldFrom') block.yieldUsed = true;
       return [ '(', operator, ' ', x[0], ')' ];
     }
 

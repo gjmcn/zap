@@ -9,14 +9,12 @@ const {SourceNode} = sourceMapObject;
 
  // groups of operator
 const functionCreators = new Set([
-  'fun', 'proc', 'gen', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
-  'asyncFun', 'asyncProc', 'asyncGen', 'asyncScope', 'asyncAs', 'asyncEach',
-  'asyncMap', 'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends'
+  'fun', 'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
+  'asyncFun', 'asyncProc', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap',
+  'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends'
 ]);
-const arrowCreators = new Set([
-  'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch', 'asyncProc',
-  'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap', 'asyncDo', 'asyncTry',
-  'asyncCatch'
+const yieldKinds = new Set([
+  'fun', 'scope', 'as', 'each', 'do'
 ]);
 const loopKinds = new Set([
   'each', 'map', 'do'
@@ -91,10 +89,10 @@ export default (tokens, options = {}) => {
       assignOpValue: null,  // assignment operator value, e.g. '#='
       variables: new Set(), // names of local variables - these bubble up to
                             // the parent function or base block
-      awaitUsed: false,     // indicates if await is used inside the block - 
-                            // bubbles up to the parent function or base block
-      stopUsed: false,      // indicates if stop is used inside the block - 
-                            // bubbles up to the parent function or base block
+      awaitUsed: false,     // awaitUsed, stopUsed and yieldUsed indicate
+      stopUsed: false,      // whether await, stop and yield/yieldFrom are used
+      yieldUsed: false,     // inside the block - if truthy, these properties
+                            // bubble up to the parent function or base block
       js: [],               // each entry is an array representing a subexpr,
                             // or a comma (string) separating these
     }
@@ -116,182 +114,181 @@ export default (tokens, options = {}) => {
     closeSubexpr();
     const isBase = !block.token;
     const blockJS = block.js;
+    const startJS = [];
     const endJS = [];
     const kind = block.token && block.token.kind;
     
     // base block
     if (isBase) {
+      if (block.stopUsed) {
+        syntaxError('(top-level scope)', 'invalid use of stop');
+      }
+      if (block.yieldUsed) {
+        syntaxError('(top-level scope)', 'invalid use of yield');
+      }
       let varArray = [...block.variables].filter(v => !block.export.has(v));
       if (_z_used.size) varArray.push('_z_');
       endJS.push(varArray.length ? `; var ${varArray.join()};` : ';');
     }
     
-    // function or parentheses
-    else {
-      
-      const startJS = [];
-      
-      // function
-      if (block.token.type === 'function') {
-        
-        const paramsArray = [...block.token.params];
-        const paramsString = paramsArray.join();
-        const asyncString = block.token.async ? 'async ' : '';
-        let varArray = [...block.variables];
-        if (block.token.params.size) {  
-          varArray = varArray.filter(v => !block.token.params.has(v));
-        }
-        const varString = varArray.length
-          ? `${loopKinds.has(kind) ? 'let ' : 'var '}${varArray.join()}`
-          : '';
-        
-        // class
-        if (kind === 'class') {
-          startJS.push(tokenWithPosn(block.token,
-            `(class {constructor(${paramsString}) {`));
-          endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
-        }
+    // function
+    else if (block.token.type === 'function') {
 
-        // extends
-        else if (kind === 'extends') {
-          startJS.push(
-            tokenWithPosn(block.token, '(class extends '),
-            block.token.extends,
-            tokenWithPosn(block.token,` {constructor(${paramsString}) {`)
-          );
-          endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
-        }
+      // check for invalid use of await, stop or yield
+      if (block.awaitUsed && !block.token.async) {
+        syntaxError(tkn, 'await used inside synchronous scope');
+      }
+      if (block.stopUsed && !loopKinds.has(kind)) {
+        syntaxError(tkn, 'stop used inside non-loop scope');
+      }
+      if (block.yieldUsed && !yieldKinds.has(kind)) {
+        syntaxError(tkn, 'invalid use of yield');
+      }
+      
+      // parameters and variables
+      const paramsArray = [...block.token.params];
+      const paramsString = paramsArray.join();
+      const asyncString = block.token.async ? 'async ' : '';
+      let varArray = [...block.variables];
+      if (block.token.params.size) {  
+        varArray = varArray.filter(v => !block.token.params.has(v));
+      }
+      const varString = varArray.length
+        ? `${loopKinds.has(kind) ? 'let ' : 'var '}${varArray.join()}`
+        : '';
+      
+      // class
+      if (kind === 'class') {
+        startJS.push(tokenWithPosn(block.token,
+          `(class {constructor(${paramsString}) {`));
+        endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
+      }
 
-        // each, map
-        else if (kind === 'each' || kind === 'map') {
-          const [valParam = '_z_v', indexParam, iterParam] = paramsArray;
-          const isMap = (kind === 'map');
-          if (isMap) {
-            if (blockJS.length) {
-              blockJS.unshift('(');
-              blockJS.push(')');
-            }
-            else {
-              blockJS.push('void 0');
-            }
+      // extends
+      else if (kind === 'extends') {
+        startJS.push(
+          tokenWithPosn(block.token, '(class extends '),
+          block.token.extends,
+          tokenWithPosn(block.token,` {constructor(${paramsString}) {`)
+        );
+        endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
+      }
+
+      // each, map
+      else if (kind === 'each' || kind === 'map') {
+        const [valParam = '_z_v', indexParam, iterParam] = paramsArray;
+        const isMap = (kind === 'map');
+        if (isMap) {
+          if (blockJS.length) {
+            blockJS.unshift('(');
+            blockJS.push(')');
           }
-          let s = `(${asyncString}_z_x => {`;
-          if (indexParam || isMap) s += `let _z_i = -1; `;
-          if (isMap) s += 'let _z_m = []; ';
-          if (block.stopUsed) s += 'let _z_s; ';
-          s += `for (let ${valParam} of _z_x) {`;
-          if (iterParam) s += `let ${iterParam} = _z_x; `;
-          if (indexParam) s += `let ${indexParam} = ++_z_i; `;
-          else if (isMap) s += `++_z_i; `;
-          if (varString) s += `${varString}; `;
-          if (isMap) s += '_z_m[_z_i] = ';
-          startJS.push(tokenWithPosn(block.token, s));
+          else {
+            blockJS.push('void 0');
+          }
+        }
+        let s = `(${asyncString}`;
+        s += block.yieldUsed ? 'function*(_z_x) {' : '_z_x => {';
+        if (indexParam || isMap) s += `let _z_i = -1; `;
+        if (isMap) s += 'let _z_m = []; ';
+        if (block.stopUsed) s += 'let _z_s; ';
+        s += `for (let ${valParam} of _z_x) {`;
+        if (iterParam) s += `let ${iterParam} = _z_x; `;
+        if (indexParam) s += `let ${indexParam} = ++_z_i; `;
+        else if (isMap) s += `++_z_i; `;
+        if (varString) s += `${varString}; `;
+        if (isMap) s += '_z_m[_z_i] = ';
+        startJS.push(tokenWithPosn(block.token, s));
+        endJS.push(
+          tokenWithPosn(tkn,
+            `${block.stopUsed ? '; if (_z_s) break' : ''}} return _z_${
+              isMap ? 'm' : 'x'}})(`
+          ),
+          block.token[kind],
+          ')'  
+        );
+      }
+
+      // do
+      else if (kind === 'do') {
+        const doLimit = block.token.doLimit;
+        let s = `(${asyncString}`;
+        const sig = doLimit ? '(_z_l)' : '()';
+        s += block.yieldUsed ? `function*${sig} {` : `${sig} => {`;
+        if (block.stopUsed) s += 'let _z_s; ';
+        s += doLimit
+          ? `for (let _z_i = 0; _z_i < _z_l; _z_i++) {`
+          : 'while (1) {';
+        if (paramsArray[0]) s += `let ${paramsArray[0]} = _z_i; `;
+        if (varString) s += `${varString}; `;
+        startJS.push(tokenWithPosn(block.token, s));
+        endJS.push(tokenWithPosn(tkn,
+          `${block.stopUsed ? '; if (_z_s) break' : ''}}})(`));
+        if (doLimit) endJS.push(doLimit);
+        endJS.push(')');
+      }
+
+      // try
+      else if (kind === 'try') {
+        startJS.push(tokenWithPosn(block.token,
+          `(${asyncString}() => {try {`));
+        endJS.push(tokenWithPosn(tkn,
+          `} catch (e) {return e} ${varString}})()`));
+      }
+
+      // catch
+      else if (kind === 'catch') {
+        startJS.push(tokenWithPosn(block.token,
+          `(${asyncString}${paramsString} => {if (${paramsString}) {`));
+        endJS.push(
+          tokenWithPosn(tkn, `} ${varString}})(`),
+          block.token.catch,
+          ')'
+        );
+      }
+
+      // all other function kinds: fun, proc, scope, as
+      else {
+        let s = `(${asyncString}`;
+        if (block.yieldUsed)      s += `function*(${paramsString})`;
+        else if (kind === 'fun')  s += `function(${paramsString})`;
+        else                      s += `(${paramsString}) =>`;
+        s += ' {return '; 
+        startJS.push(tokenWithPosn(block.token, s));
+        if (kind === 'as') {
           endJS.push(
-            tokenWithPosn(tkn,
-              `${block.stopUsed ? '; if (_z_s) break' : ''}} return _z_${
-                isMap ? 'm' : 'x'}})(`
-            ),
-            block.token[kind],
-            ')'  
-          );
-        }
-
-        // do
-        else if (kind === 'do') {
-          const doLimit = block.token.doLimit;
-          let s = `(${asyncString}${doLimit ? '_z_l' : '()'} => {`;
-          if (block.stopUsed) s += 'let _z_s; ';
-          s += doLimit
-            ? `for (let _z_i = 0; _z_i < _z_l; _z_i++) {`
-            : 'while (1) {';
-          if (paramsArray[0]) s += `let ${paramsArray[0]} = _z_i; `;
-          if (varString) s += `${varString}; `;
-          startJS.push(tokenWithPosn(block.token, s));
-          endJS.push(tokenWithPosn(tkn,
-            `${block.stopUsed ? '; if (_z_s) break' : ''}}})(`));
-          if (doLimit) endJS.push(doLimit);
-          endJS.push(')');
-        }
-
-        // try
-        else if (kind === 'try') {
-          startJS.push(tokenWithPosn(block.token,
-            `(${asyncString}() => {try {`));
-          endJS.push(tokenWithPosn(tkn,
-            `} catch (e) {return e} ${varString}})()`));
-        }
-
-        // catch
-        else if (kind === 'catch') {
-          startJS.push(tokenWithPosn(block.token,
-            `(${asyncString}${paramsString} => {if (${paramsString}) {`));
-          endJS.push(
-            tokenWithPosn(tkn, `} ${varString}})(`),
-            block.token.catch,
+            tokenWithPosn(tkn, `; ${varString}})(`),
+            block.token.as,
             ')'
           );
         }
-
-        // all other function kinds
         else {
-          startJS.push(tokenWithPosn(block.token, 
-            `(${asyncString}${block.token.arrow
-              ? `(${paramsString}) => {return `
-              : `function${kind === 'gen' ? '*' : ''}(${
-                  paramsString}) {return `}`));
-          if (kind === 'scope') {
-            endJS.push(tokenWithPosn(tkn, `; ${varString}})()`));
-          }
-          else if (kind === 'as') {
-            endJS.push(
-              tokenWithPosn(tkn, `; ${varString}})(`),
-              block.token.as,
-              ')'
-            );
-          }
-          else {
-            endJS.push(tokenWithPosn(tkn, `; ${varString}})`));
-          }
+          endJS.push(tokenWithPosn(tkn,
+            `; ${varString}})${kind === 'scope' ? '()' : ''}`));
         }
-
       }
-
-      // parentheses
-      else {
-        if (blockJS.length === 0) syntaxError(tkn, 'invalid empty block');
-        startJS.push(tokenWithPosn(block.token, '('));
-        endJS.push(tokenWithPosn(tkn, ')'));
-      }
-
-      blockJS.unshift(startJS);
 
     }
 
-    // base block or function - check async/await and stop
-    if (isBase || block.token.type === 'function') {
-      if (block.awaitUsed && !isBase && !block.token.async) {
-        syntaxError(tkn, 'await inside synchronous scope');
-      }
-      if (block.stopUsed && !loopKinds.has(kind)) {
-        syntaxError(isBase ? '(top-level scope)' : tkn, 'invalid use of stop');
-      }
-    }
-    
-    // parentheses - add variables, awaitUsed and stopUsed to parent block
+    // parentheses
     else {
+      if (blockJS.length === 0) syntaxError(tkn, 'invalid empty block');
+      startJS.push(tokenWithPosn(block.token, '('));
+      endJS.push(tokenWithPosn(tkn, ')'));
       const parentBlock = stack[stack.length - 1];
       if (block.variables.size) {
         block.variables.forEach(v => parentBlock.variables.add(v));
       }
-      if (block.awaitUsed) {
-        parentBlock.awaitUsed = true;
-      }
-      if (block.stopUsed) {
-        parentBlock.stopUsed = true;
-      }
+      if (block.awaitUsed) parentBlock.awaitUsed = true;
+      if (block.stopUsed)  parentBlock.stopUsed = true;
+      if (block.yieldUsed) parentBlock.yieldUsed = true;
     }
-    
+
+    // push to start and end of block
+    if (!isBase) blockJS.unshift(startJS);    
     blockJS.push(endJS);
+
+    // return/push blockJS of closed block
     if (isBase) {
       return blockJS;
     }
@@ -413,7 +410,7 @@ export default (tokens, options = {}) => {
 
     // one-liner function
     else if (type === 'function') {
-      if (tkn.value === '{') tkn.arrow = true;
+      tkn.kind = (tkn.value === '{' ? 'proc' : 'fun');
       tkn.params = new Set('abc');
       openBlock();
     }
@@ -456,12 +453,9 @@ export default (tokens, options = {}) => {
         
             block.token.type = 'function';
 
-            // add async, arrow and kind properties to block token
+            // add async and kind properties to block token
             if (parentOp.value.slice(0, 5) === 'async') {
               block.token.async = true;
-            }
-            if (arrowCreators.has(parentOp.value)) {
-              block.token.arrow = true;
             }
             const kind = parentOp.value.replace('async', '').toLowerCase();
             block.token.kind = kind;
