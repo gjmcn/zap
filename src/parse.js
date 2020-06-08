@@ -18,6 +18,9 @@ const arrowCreators = new Set([
   'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap', 'asyncDo', 'asyncTry',
   'asyncCatch'
 ]);
+const loopKinds = new Set([
+  'each', 'map', 'do'
+]);
 const triggerApplyOp = new Set([
   'closeSubexpr', 'closeBracket', 'operator'
 ]);
@@ -118,7 +121,9 @@ export default (tokens, options = {}) => {
     
     // base block
     if (isBase) {
-      endJS.push(';');
+      let varArray = [...block.variables].filter(v => !block.export.has(v));
+      if (_z_used.size) varArray.push('_z_');
+      endJS.push(varArray.length ? `; var ${varArray.join()};` : ';');
     }
     
     // function or parentheses
@@ -132,12 +137,19 @@ export default (tokens, options = {}) => {
         const paramsArray = [...block.token.params];
         const paramsString = paramsArray.join();
         const asyncString = block.token.async ? 'async ' : '';
+        let varArray = [...block.variables];
+        if (block.token.params.size) {  
+          varArray = varArray.filter(v => !block.token.params.has(v));
+        }
+        const varString = varArray.length
+          ? `${loopKinds.has(kind) ? 'let ' : 'var '}${varArray.join()}`
+          : '';
         
         // class
         if (kind === 'class') {
           startJS.push(tokenWithPosn(block.token,
             `(class {constructor(${paramsString}) {`));
-          endJS.push(tokenWithPosn(tkn, '}})'));
+          endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
         }
 
         // extends
@@ -147,7 +159,7 @@ export default (tokens, options = {}) => {
             block.token.extends,
             tokenWithPosn(block.token,` {constructor(${paramsString}) {`)
           );
-          endJS.push(tokenWithPosn(tkn, '}})'));
+          endJS.push(tokenWithPosn(tkn, `; ${varString}}})`));
         }
 
         // each, map
@@ -171,6 +183,7 @@ export default (tokens, options = {}) => {
           if (iterParam) s += `let ${iterParam} = _z_x; `;
           if (indexParam) s += `let ${indexParam} = ++_z_i; `;
           else if (isMap) s += `++_z_i; `;
+          if (varString) s += `${varString}; `;
           if (isMap) s += '_z_m[_z_i] = ';
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(
@@ -192,6 +205,7 @@ export default (tokens, options = {}) => {
             ? `for (let _z_i = 0; _z_i < _z_l; _z_i++) {`
             : 'while (1) {';
           if (paramsArray[0]) s += `let ${paramsArray[0]} = _z_i; `;
+          if (varString) s += `${varString}; `;
           startJS.push(tokenWithPosn(block.token, s));
           endJS.push(tokenWithPosn(tkn,
             `${block.stopUsed ? '; if (_z_s) break' : ''}}})(`));
@@ -203,7 +217,8 @@ export default (tokens, options = {}) => {
         else if (kind === 'try') {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}() => {try {`));
-          endJS.push(tokenWithPosn(tkn, '} catch (e) {return e}})()'));
+          endJS.push(tokenWithPosn(tkn,
+            `} catch (e) {return e} ${varString}})()`));
         }
 
         // catch
@@ -211,7 +226,7 @@ export default (tokens, options = {}) => {
           startJS.push(tokenWithPosn(block.token,
             `(${asyncString}${paramsString} => {if (${paramsString}) {`));
           endJS.push(
-            tokenWithPosn(tkn, '}})('),
+            tokenWithPosn(tkn, `} ${varString}})(`),
             block.token.catch,
             ')'
           );
@@ -225,13 +240,17 @@ export default (tokens, options = {}) => {
               : `function${kind === 'gen' ? '*' : ''}(${
                   paramsString}) {return `}`));
           if (kind === 'scope') {
-            endJS.push(tokenWithPosn(tkn, '})()'));
+            endJS.push(tokenWithPosn(tkn, `; ${varString}})()`));
           }
           else if (kind === 'as') {
-            endJS.push(tokenWithPosn(tkn, '})('), block.token.as, ')');
+            endJS.push(
+              tokenWithPosn(tkn, `; ${varString}})(`),
+              block.token.as,
+              ')'
+            );
           }
           else {
-            endJS.push(tokenWithPosn(tkn, '})'));
+            endJS.push(tokenWithPosn(tkn, `; ${varString}})`));
           }
         }
 
@@ -248,36 +267,14 @@ export default (tokens, options = {}) => {
 
     }
 
-    // base block or function - declare variables, check async/await and stop
+    // base block or function - check async/await and stop
     if (isBase || block.token.type === 'function') {
-     
-      let varArr = [...block.variables];
-
-      // base block - do not declare variables that are exported
-      if (isBase) {
-        varArr = varArr.filter(v => !block.export.has(v));
-        if (_z_used.size) varArr.push('_z_');
-      }
-
-      // function - do not declare variables that are params
-      else if (block.token.params.size) {  
-        varArr = varArr.filter(v => !block.token.params.has(v));
-      }
-      
-      // declare variables
-      if (varArr.length) blockJS.push(`; var ${varArr.join()}`);
-
-      // throw if await is used inside a synchronous function
       if (block.awaitUsed && !isBase && !block.token.async) {
-        syntaxError(tkn, 'await inside synchronous function');
+        syntaxError(tkn, 'await inside synchronous scope');
       }
-
-      // throw if stop used and not inside a loop
-      if (block.stopUsed &&
-          kind !== 'each' && kind !== 'map' && kind !== 'do') {
-        syntaxError(tkn, 'invalid use of stop');
+      if (block.stopUsed && !loopKinds.has(kind)) {
+        syntaxError(isBase ? '(top-level scope)' : tkn, 'invalid use of stop');
       }
-
     }
     
     // parentheses - add variables, awaitUsed and stopUsed to parent block
