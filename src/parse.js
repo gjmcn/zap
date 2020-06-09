@@ -116,7 +116,6 @@ export default (tokens, options = {}) => {
     const blockJS = block.js;
     const startJS = [];
     const endJS = [];
-    const kind = block.token && block.token.kind;
     
     // base block
     if (isBase) {
@@ -133,6 +132,8 @@ export default (tokens, options = {}) => {
     
     // function
     else if (block.token.type === 'function') {
+
+      const kind = block.token.kind;
 
       // check for invalid use of await, stop or yield
       if (block.awaitUsed && !block.token.async) {
