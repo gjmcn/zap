@@ -25,7 +25,7 @@ x = 5;
 + 'double 'x' is '(2 * x);  // 'double 5 is 10'
 ```
 
-#### Arrays and Sets
+#### Arrays and Sets {#arrays-and-sets}
 
 Use the `@` operator for an array, and `@@` for a set:
 
