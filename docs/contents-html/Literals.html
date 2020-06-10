@@ -1,57 +1,54 @@
 <h2>Literals</h2>
 <hr>
 <h4>Basics</h4>
-<pre><code>5;           // 5 (number)
-5.6;         // 5.6 (number)
-5e-2;        // 0.05 (number)
-'abc';       // 'abc' (string)
-&quot;abc&quot;;       // 'abc' (string)
+<pre><code>5           // 5 (number)
+5.6         // 5.6 (number)
+5e-2        // 0.05 (number)
+'abc'       // 'abc' (string)
+&quot;abc&quot;       // 'abc' (string)
 &quot;a
-bc&quot;;         // 'a\nbc' (&quot;...&quot; strings can be multiline)
-&amp;/abc/;      // /abc/ (regular expression)
-false;       // false (boolean)
-null;        // null
-undefined;   // undefined
+bc&quot;         // 'a\nbc' (&quot;...&quot; strings can be multiline)
+&amp;/abc/      // /abc/ (regular expression)
+false       // false (boolean)
+null        // null
+undefined   // undefined
 </code></pre>
-<p>There is no string interpolation in Zap; just use <code>+</code> and optionally, omit spaces:</p>
-<pre><code>x = 5;
-+ 'double 'x' is '(2 * x);  // 'double 5 is 10'
+<p>There is no string interpolation in Zap; just use <code>+</code> (which sums all of its operands) and optionally, omit spaces:</p>
+<pre><code>x = 5
++ 'double 'x' is '(2 * x)  // 'double 5 is 10'
 </code></pre>
 <h4 id="arrays-and-sets">Arrays and Sets</h4>
 <p>Use the <code>@</code> operator for an array, and <code>@@</code> for a set:</p>
-<pre><code>@;        // empty array
-@ 5 6;    // [5, 6]
+<pre><code>@        // empty array
+@ 5 6    // [5, 6]
 
-@@;       // empty set
-@@ 5 6;   // Set {5, 6}
+@@       // empty set
+@@ 5 6   // Set {5, 6}
 </code></pre>
-<p><code>@</code> and <code>@@</code> interpret each operand as an element. Use <a href="?Spread">spread syntax</a> to extract elements from iterables.</p>
-<pre><code>@@ 'ab';      // Set {'ab'}
-@@ ...'ab';   // Set {'a', 'b'}
-
-@@ 'ab' 'cd';         // Set {'ab', 'cd'}
-@@ ...'ab' ...'cd';   // Set {'a', 'b', 'c', 'd'}
+<p>Note that <code>@@</code> interpret each operand as an element, whereas the <code>Set</code> constructor extract elements from iterable:</p>
+<pre><code>@@ 'ab'        // Set {'ab'}
+new Set 'ab'   // Set {'a', 'b'}
 </code></pre>
 <h4 id="objects-and-maps">Objects and Maps</h4>
 <p>Use the <code>#</code> operator to create an object, and <code>##</code> for a map:</p>
-<pre><code>#;             // empty object
-# u 5 v 6;     // {u: 5, v: 6}
+<pre><code>#             // empty object
+# u 5 v 6     // {u: 5, v: 6}
 
-##;            // empty map
-## u 5 v 6;    // Map {'u' =&gt; 5, 'v' =&gt; 6}
+##            // empty map
+## u 5 v 6    // Map {'u' =&gt; 5, 'v' =&gt; 6}
 </code></pre>
 <p>As with any Zap code, use whitespace as required for readability:</p>
 <pre><code># width 200
   height 100
-  color 'red';   // {width: 200, height: 100, color: 'red'} 
+  color 'red'   // {width: 200, height: 100, color: 'red'} 
 </code></pre>
 <p><code>#</code> and <code>##</code> use the <a href="?Evaluation#identifier-name-rule">identifier-name rule</a>, which is why the property names in the above examples need not be quoted. Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:</p>
-<pre><code>w = 'width';
-x = @ 'height' 'col';
+<pre><code>w = 'width'
+x = @ 'height' 'col'
 
 # (w) 200
   (x :0) 100
-  (x :1 + 'or') 'red';   // {width: 200, height: 100, color: 'red'} 
+  (x :1 + 'or') 'red'   // {width: 200, height: 100, color: 'red'} 
 </code></pre>
 
 
