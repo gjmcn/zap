@@ -13,10 +13,6 @@ false       // false (boolean)
 null        // null
 undefined   // undefined
 </code></pre>
-<p>There is no string interpolation in Zap; just use <code>+</code> (which sums all of its operands) and optionally, omit spaces:</p>
-<pre><code>x = 5
-+ 'double 'x' is '(2 * x)  // 'double 5 is 10'
-</code></pre>
 <h4 id="arrays-and-sets">Arrays and Sets</h4>
 <p>Use the <code>@</code> operator for an array, and <code>@@</code> for a set:</p>
 <pre><code>@        // empty array
@@ -25,31 +21,19 @@ undefined   // undefined
 @@       // empty set
 @@ 5 6   // Set {5, 6}
 </code></pre>
-<p>Note that <code>@@</code> interpret each operand as an element, whereas the <code>Set</code> constructor extract elements from iterable:</p>
+<p>Note that <code>@@</code> interprets each operand as an element, whereas the <code>Set</code> constructor extracts elements from an iterable:</p>
 <pre><code>@@ 'ab'        // Set {'ab'}
 new Set 'ab'   // Set {'a', 'b'}
 </code></pre>
 <h4 id="objects-and-maps">Objects and Maps</h4>
-<p>Use the <code>#</code> operator to create an object, and <code>##</code> for a map:</p>
+<p>Use the <code>#</code> operator for an object, and <code>##</code> for a map:</p>
 <pre><code>#             // empty object
 # u 5 v 6     // {u: 5, v: 6}
 
 ##            // empty map
 ## u 5 v 6    // Map {'u' =&gt; 5, 'v' =&gt; 6}
 </code></pre>
-<p>As with any Zap code, use whitespace as required for readability:</p>
-<pre><code># width 200
-  height 100
-  color 'red'   // {width: 200, height: 100, color: 'red'} 
-</code></pre>
-<p><code>#</code> and <code>##</code> use the <a href="?Evaluation#identifier-name-rule">identifier-name rule</a>, which is why the property names in the above examples need not be quoted. Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:</p>
-<pre><code>w = 'width'
-x = @ 'height' 'col'
-
-# (w) 200
-  (x :0) 100
-  (x :1 + 'or') 'red'   // {width: 200, height: 100, color: 'red'} 
-</code></pre>
+<p><code>#</code> and <code>##</code> use the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>, which is why the property names in the above examples need not be quoted.</p>
 
 
 <br><br><br>

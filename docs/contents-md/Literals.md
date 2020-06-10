@@ -18,13 +18,6 @@ null        // null
 undefined   // undefined
 ```
 
-There is no string interpolation in Zap; just use `+` (which sums all of its operands) and optionally, omit spaces:
-
-```
-x = 5
-+ 'double 'x' is '(2 * x)  // 'double 5 is 10'
-```
-
 #### Arrays and Sets {#arrays-and-sets}
 
 Use the `@` operator for an array, and `@@` for a set:
@@ -44,25 +37,9 @@ Note that `@@` interprets each operand as an element, whereas the `Set` construc
 new Set 'ab'   // Set {'a', 'b'}
 ```
 
-We could extract elements from an iterable to an array using `from` array method, but Zap has the simpler `array` operator for this:
-
-```
-x = 5 6        // [5, 6]
-x array        // [5, 6], shallow copy of x
-'ab' array     // ['a', 'b']
-5 to 8 array   // [5, 6, 7, 8]
-```
-
-The final example ebove uses the range operator [`to`](?Ranges#to).
-
-!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-NOTE ABOUT no map mathod in `array`
-
 #### Objects and Maps {#objects-and-maps}
 
-Use the `#` operator to create an object, and `##` for a map:
+Use the `#` operator for an object, and `##` for a map:
 
 ```
 #             // empty object
@@ -72,21 +49,4 @@ Use the `#` operator to create an object, and `##` for a map:
 ## u 5 v 6    // Map {'u' => 5, 'v' => 6}
 ```
 
-As with any Zap code, use whitespace as required for readability:
-
-```
-# width 200
-  height 100
-  color 'red'   // {width: 200, height: 100, color: 'red'} 
-```
-
-`#` and `##` use the [identifier-name rule](?Evaluation#identifier-name-rule), which is why the property names in the above examples need not be quoted. Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:
-
-```
-w = 'width'
-x = @ 'height' 'col'
-
-# (w) 200
-  (x :0) 100
-  (x :1 + 'or') 'red'   // {width: 200, height: 100, color: 'red'} 
-```
+`#` and `##` use the [identifier-name rule](?Syntax#identifier-name-rule), which is why the property names in the above examples need not be quoted.
