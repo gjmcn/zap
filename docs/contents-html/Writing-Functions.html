@@ -1,43 +1,43 @@
 <h2>Writing Functions</h2>
 <hr>
 <p>Use square brackets to create a function. By default, a function has parameters <code>a</code>, <code>b</code>, <code>c</code> and <code>d</code>. To use custom parameter names, list them after the opening bracket followed by <code>-&gt;</code>:</p>
-<pre><code>f = [a + b];          // function
-g = [u v -&gt; u + v];   // function
+<pre><code>f = [a + b]          // function
+g = [u v -&gt; u + v]   // function
 
-\f 5 10;   // 15 
-\g 5 10;   // 15
+\f 5 10   // 15 
+\g 5 10   // 15
 
-f :length;      // 4 (number of parameters)
-g :length;      // 2
-[] :length;     // 4
-[-&gt;] :length;   // 0
+f :length      // 4 (number of parameters)
+g :length      // 2
+[] :length     // 4
+[-&gt;] :length   // 0
 </code></pre>
 <blockquote>
 <p>If an inner function must see the parameters of an outer function, at least one of the functions must have custom parameter names — otherwise the parameters of the outer function will be 'shadowed'.</p>
 </blockquote>
 <h4>Rest Syntax</h4>
 <p>Rest syntax can be used with the final parameter:</p>
-<pre><code>f = [x ...y -&gt; y];
-\f 5 6 7;   // [6, 7]
+<pre><code>f = [x ...y -&gt; y]
+\f 5 6 7   // [6, 7]
 </code></pre>
 <h4>Defaults</h4>
 <p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value. The default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed:</p>
 <pre><code>f = [
-  a ?= 5;
-  a + 10];
+  a ?= 5
+  a + 10]
 
-\f;   // 15  
+\f   // 15  
 </code></pre>
 <h4 id="options">Options</h4>
 <p>A parameter called <code>ops</code> ('options') automatically defaults to an empty object. The assignment operator <code>=:</code> is specifially for working with <code>ops</code> objects. <code>=:</code> assigns a property of <code>ops</code> to a variable of the same name; the given default value is used if the property does not exist, or is <code>undefined</code> or <code>null</code>:</p>
 <pre><code>area = [ops -&gt;
-  width =: 5;
-  height =: 10;
-  width * height];
+  width =: 5
+  height =: 10
+  width * height]
 
-# width 20 height 30 \area;   // 600
-# height 30 \area;            // 150
-\area;                        // 50
+# width 20 height 30 \area   // 600
+# height 30 \area            // 150
+\area                        // 50
 </code></pre>
 <p><code>ops</code> can be used alongside other parameters:</p>
 <pre><code>f = [x ops ...y -&gt;

@@ -5,16 +5,16 @@
 Use square brackets to create a function. By default, a function has parameters `a`, `b`, `c` and `d`. To use custom parameter names, list them after the opening bracket followed by `->`:
 
 ```
-f = [a + b];          // function
-g = [u v -> u + v];   // function
+f = [a + b]          // function
+g = [u v -> u + v]   // function
 
-\f 5 10;   // 15 
-\g 5 10;   // 15
+\f 5 10   // 15 
+\g 5 10   // 15
 
-f :length;      // 4 (number of parameters)
-g :length;      // 2
-[] :length;     // 4
-[->] :length;   // 0
+f :length      // 4 (number of parameters)
+g :length      // 2
+[] :length     // 4
+[->] :length   // 0
 ```
 
 > If an inner function must see the parameters of an outer function, at least one of the functions must have custom parameter names &mdash; otherwise the parameters of the outer function will be 'shadowed'.
@@ -24,8 +24,8 @@ g :length;      // 2
 Rest syntax can be used with the final parameter:
 
 ```
-f = [x ...y -> y];
-\f 5 6 7;   // [6, 7]
+f = [x ...y -> y]
+\f 5 6 7   // [6, 7]
 ```
 
 #### Defaults
@@ -34,10 +34,10 @@ Use [`?=`](?Assignment#conditional-assignment) to set a default parameter value.
 
 ```
 f = [
-  a ?= 5;
-  a + 10];
+  a ?= 5
+  a + 10]
 
-\f;   // 15  
+\f   // 15  
 ```
 
 #### Options {#options}
@@ -46,13 +46,13 @@ A parameter called `ops` ('options') automatically defaults to an empty object. 
 
 ```
 area = [ops ->
-  width =: 5;
-  height =: 10;
-  width * height];
+  width =: 5
+  height =: 10
+  width * height]
 
-# width 20 height 30 \area;   // 600
-# height 30 \area;            // 150
-\area;                        // 50
+# width 20 height 30 \area   // 600
+# height 30 \area            // 150
+\area                        // 50
 ```
 
 `ops` can be used alongside other parameters:
