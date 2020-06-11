@@ -1,102 +1,103 @@
 <h2>Get Property</h2>
 <hr>
-<h5 id="at"><code>$at</code></h5>
-<p><code>$at</code> gets an object/array property or a character from a string. Use additional operands to get a nested property:</p>
-<pre><code>circle = #
-  radius 50
-  center (@ 100 200)
-  color 'red';
-
-r = 'radius';
-
-circle $at 'radius';     // 50
-circle $at r;            // 50
-circle $at 'center' 1;   // 200   
-circle $at 'color' 2;    // 'd'
-circle 'color' $at 2;    // 'd'
-</code></pre>
-<hr>
-<h5 id="ats"><code>$ats</code></h5>
-<p><code>$ats</code> is like <a href="#at"><code>$at</code></a>, but <code>$ats</code> can get multiple properties or characters — the final operand of <code>$ats</code> must be an iterable.</p>
-<p><code>$ats</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>$ats</code> returns an array.</p>
-<pre><code>// array of objects
-data = @
-  (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
-  (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
-  (# Name 'ford ranger'   Horsepower 79 Origin 'USA');
-
-data $ats (@ 2 0);
-  // [
-  //   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}
-  //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
-  // ]
-
-data 2 $ats (@ 'Name' 'Origin');
-  // {Name: 'ford ranger', Origin: 'USA'}
-
-data 0 'Origin' $ats (@ 1 3);   // 'uo'
-</code></pre>
-<p>The final operand of <code>$ats</code> can be any iterable. For example, a string or a <a href="?Generators#range">range</a>:</p>
-<pre><code># u 5 v 6 w 7 $ats 'uw';                    // {u: 5, w 7}
-@ 0 10 20 30 40 50 60 70 $ats (1 &gt;&gt; 7 2);   // [10, 30, 50, 70]
-</code></pre>
-<hr>
 <h5 id="colon-getter"><code>:</code></h5>
-<p><code>:</code> with two operands gets an object/array property or a character from a string. <code>:</code> uses the <a href="?Evaluation#right-operand-rule">right operand rule</a> and the <a href="?Evaluation#identifier-name-rule">identifier-name rule</a>:</p>
-<pre><code>circle = #
-  radius 50
-  center (@ 100 200)
-  color 'red';
+<p><code>:</code> gets an object/array property or a character from a string. <code>:</code> uses the <a href="?Syntax#right-operand-rule">right operand rule</a> and the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
+<pre><code>circle = 
+    #
+    | radius 50
+    | center (@ 100 200)
+    | color 'red'
 
-r = 'radius';
+r = 'radius'
 
-circle :radius;            // 50
-:radius circle;            // 50
-circle :(r);               // 50
-circle :('rad' + 'ius');   // 50
-circle :center :1;         // 200   
-circle :color :2;          // 'd'
+circle :radius            // 50
+:radius circle            // 50
+circle :(r)               // 50
+circle :('rad' + 'ius')   // 50
+circle :center :1         // 200   
+circle :color :2          // 'd'
 </code></pre>
-<p>Use <code>:</code> with three operands to <a href="?Set-Property#colon-setter">set a property</a>.</p>
 <hr>
-<h5 id="colon-proto-getter"><code>\:</code></h5>
-<p><code>\:</code> is like <a href="#colon-getter"><code>:</code></a>, but gets a property from the object's prototype:</p>
-<pre><code>Array :prototype :slice;   // function
-Array \:slice;             // same function
+<h5 id="colon-proto-getter"><code>::</code></h5>
+<p><code>::</code> is like <a href="#colon-getter"><code>:</code></a>, but gets a property from the object's prototype:</p>
+<pre><code>Array :prototype :slice   // function
+Array ::slice             // same function
 </code></pre>
 <hr>
 <h5 id="conditional-get"><code>?:</code></h5>
 <p><code>?:</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>?:</code> short-circuits and returns <code>undefined</code> if the object is <code>null</code> or <code>undefined</code>:</p>
-<pre><code>o = # u 5 v (# x 10 y 20);   // {u: 5, v: {x: 10, y: 20}}
+<pre><code>o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
 
-o :v :y;    // 20
-
-o :q;       // undefined
-o :q :y;    // TypeError: Cannot read property 'y' of undefined
-o :q ?:y;   // undefined
+o :q       // undefined
+o :q :y    // TypeError: Cannot read property 'y' of undefined
+o :q ?:y   // undefined
 </code></pre>
 <hr>
-<h5 id="get"><code>$get</code></h5>
+<h5 id="comma-getter"><code>,</code></h5>
+<p><code>,</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
+<pre><code>circle = 
+    #
+    | radius 50
+    | center (@ 100 200)
+    | color 'red'
+
+r = 'radius'
+
+circle , 'radius'          // 50
+circle , r                 // 50
+circle , ('rad' + 'ius')   // 50
+circle , 'center' , 1      // 200   
+circle , 'color' , 2       // 'd'
+</code></pre>
+<hr>
+<h5 id="at"><code>at</code></h5>
+<p><code>at</code> can get multiple properties or characters — the second operand of <code>at</code> must be an iterable.</p>
+<p><code>at</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>at</code> returns an array.</p>
+<pre><code>// array of objects
+data =
+    @
+    | (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
+    | (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
+    | (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
+
+data at (@ 2 0)
+    // [
+    //   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}
+    //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
+    // ]
+
+data :2 at (@ 'Name' 'Origin')
+    // {Name: 'ford ranger', Origin: 'USA'}
+
+data :0 :Origin at (@ 1 3)   // 'uo'
+</code></pre>
+<p>The second operand of <code>at</code> can be any iterable. For example, a string or a <a href="?Ranges">range</a>:</p>
+<pre><code># u 5 v 6 w 7 at 'uw'        // {u: 5, w 7}
+'abcdefghij' at (1 to 9 2)   // 'bdfhj'
+</code></pre>
+<hr>
+<h5 id="getter"><code>getter</code></h5>
 <p>Use a custom getter function for a property:</p>
-<pre><code>o = # celsius 10;
+<pre><code>o = # celsius 10
+o getter 'fahrenheit' [this :celsius * 1.8 + 32]
 
-o $get 'fahrenheit' [this :celsius * 1.8 + 32];
-o :fahrenheit;   // 50
+o :fahrenheit     // 50
 
-o :celsius 20;   // set celsius property to 20 
-o :fahrenheit;   // 68
+o :celsius = 20   // 20 (set celsius property to 20)
+o :fahrenheit     // 68
 </code></pre>
 <p>In general:</p>
-<pre><code>o $get 'x' f;
+<pre><code>o getter 'x' f
 </code></pre>
 <p>is equivalent to:</p>
-<pre><code>Object |defineProperty o 'x' (#
-  get f
-  configurable true
-  enumerable true);
+<pre><code>Object ~defineProperty o 'x'
+    #
+    | get f
+    | configurable true
+    | enumerable true
 </code></pre>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a> for details.</p>
-<p><code>$get</code> returns the modified object.</p>
+<p><code>getter</code> returns the modified object.</p>
 
 
 <br><br><br>
