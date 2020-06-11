@@ -10,14 +10,14 @@
 </thead>
 <tbody>
 <tr>
-<td><code>~</code></td>
-<td>1</td>
-<td>unary minus (high precedence)</td>
+<td><code>+</code> <code>-</code></td>
+<td>1+</td>
+<td>unary plus/minus, add, subtract</td>
 </tr>
 <tr>
-<td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code></td>
+<td><code>*</code> <code>/</code> <code>%</code> <code>^</code></td>
 <td>2+</td>
-<td>add, subtract, multiply, divide, remainder, exponentiate</td>
+<td>multiply, divide, remainder, exponentiate</td>
 </tr>
 <tr>
 <td><code>&lt;&gt;</code> <code>&gt;&lt;</code></td>
@@ -27,7 +27,7 @@
 <tr>
 <td><code>&amp;&amp;</code> <code>||</code> <code>??</code></td>
 <td>2+</td>
-<td>and, or, nullish coalescing (only <code>null</code>, <code>undefined</code> 'falsy')</td>
+<td>and, or, nullish coalescing</td>
 </tr>
 <tr>
 <td><code>?</code></td>
@@ -55,14 +55,14 @@
 <td>assign</td>
 </tr>
 <tr>
-<td><code>=:</code></td>
-<td>2</td>
-<td>assign, use option of same name or default</td>
-</tr>
-<tr>
 <td><code>\=</code></td>
 <td>2</td>
-<td>assign to 'most local' variable</td>
+<td>assign, do not trigger creation of local variable</td>
+</tr>
+<tr>
+<td><code>&lt;-</code></td>
+<td>2</td>
+<td>assign, use option of same name or default</td>
 </tr>
 <tr>
 <td><code>?=</code></td>
@@ -86,28 +86,18 @@
 </tr>
 <tr>
 <td><code>:</code></td>
-<td>2-3</td>
-<td>get/set property</td>
-</tr>
-<tr>
-<td><code>\:</code></td>
-<td>2-3</td>
-<td>get/set property of prototype</td>
-</tr>
-<tr>
-<td><code>?:</code></td>
-<td>2-3</td>
-<td>conditional get/set property</td>
-</tr>
-<tr>
-<td><code>+:</code> <code>-:</code> <code>*:</code> <code>/:</code> <code>%:</code> <code>^:</code></td>
-<td>3</td>
-<td>update-set property</td>
+<td>2</td>
+<td>get property</td>
 </tr>
 <tr>
 <td><code>::</code></td>
 <td>2</td>
-<td>set property using variable of same name</td>
+<td>get property of prototype</td>
+</tr>
+<tr>
+<td><code>?:</code></td>
+<td>2</td>
+<td>conditional get property</td>
 </tr>
 <tr>
 <td><code>\</code></td>
@@ -116,23 +106,18 @@
 </tr>
 <tr>
 <td><code>&lt;\</code></td>
-<td>1+</td>
+<td>2+</td>
 <td>call function, return first argument</td>
 </tr>
 <tr>
-<td><code>|</code></td>
+<td><code>~</code></td>
 <td>2+</td>
 <td>call method</td>
 </tr>
 <tr>
-<td><code>&lt;|</code></td>
+<td><code>&lt;~</code></td>
 <td>2+</td>
 <td>call method, return calling object</td>
-</tr>
-<tr>
-<td><code>?|</code></td>
-<td>2+</td>
-<td>conditional call method</td>
 </tr>
 <tr>
 <td><code>#</code></td>
@@ -154,27 +139,13 @@
 <td>0+</td>
 <td>set literal</td>
 </tr>
-<tr>
-<td><code>&gt;&gt;</code></td>
-<td>2-3</td>
-<td>range, given step size</td>
-</tr>
-<tr>
-<td><code>&gt;&gt;&gt;</code></td>
-<td>3</td>
-<td>range, given number of steps</td>
-</tr>
 </tbody>
 </table>
-<blockquote>
-<p><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>&lt;&gt;</code>, <code>&gt;&lt;</code> can take more than two operands, e.g. <code>+ 1 2 3</code> returns <code>6</code>.</p>
-</blockquote>
-<blockquote>
-<p><code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>?</code>, <code>=:</code>, <code>?=</code>, <code>?:</code> (getter only) and <code>?|</code> use short-circuit evaluation.</p>
-</blockquote>
-<blockquote>
-<p>There is no unary plus. Use <a href="?Elementwise"><code>$number</code></a> to convert values to numbers.</p>
-</blockquote>
+<p>The operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>&lt;&gt;</code> and <code>&gt;&lt;</code> can take more than two operands:</p>
+<pre><code>+ 1 2 3            // 6
++ 'a' 'bc' 'def'   // 'abcdef'
+</code></pre>
+<p>The operators <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>?</code>, <code>&lt;-</code>, <code>?=</code> and <code>?:</code> use short-circuit evaluation.</p>
 
 
 <br><br><br>

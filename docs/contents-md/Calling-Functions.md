@@ -36,21 +36,6 @@ Array ~isArray x      // true
 x \(Array :isArray)   // true
 ```
 
-`?~` is like `~`, but `?~` short-circuits and returns `undefined` if the method does not exist (i.e. is `null` or `undefined`):
-
-```
-o = # f [5] v 6   // {f: function, v: 6}
-
-o ~f    // 5
-o ?~f   // 5
-
-o ~g    // TypeError: o.g is not a function
-o ?~g   // undefined
-
-o ~v    // TypeError: o.v is not a function
-o ?~v   // TypeError: o.v is not a function
-```
-
 #### Return Calling Object or First Argument {#return-first}
 
 `<~` is like `~`, but `<~` always returns the calling object. For example, we can use `<~` to chain the array methods `push` and `shift` (neither of which return the calling array):

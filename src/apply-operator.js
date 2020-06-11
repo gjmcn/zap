@@ -47,7 +47,7 @@ export default (block, _z_used) => {
   
   // what type of op?
   let callingMethod, callingFunction, isCommand, otherOp;
-  if (op === '~' || op === '<~' || op === '?~') callingMethod = true;
+  if (op === '~' || op === '<~') callingMethod = true;
   else if (op === '\\' || op === '<\\') callingFunction = true;
   else if (commands.has(op)) isCommand = true;
   else otherOp = true;
@@ -300,11 +300,8 @@ export default (block, _z_used) => {
       else {
         methodName = [ x[position] ];
       }
-      if (op === '~' || op === '?~') {
-        res = [
-          args[0],
-          opPosn('['), ...methodName, opPosn(op === '?~' ? ']?.(' : '](')
-        ];
+      if (op === '~') {
+        res = [ args[0], opPosn('['), ...methodName, opPosn('](') ];
       }
       else {  // <~
         const methodArg = args.length > 1 ? '...a' : '';
