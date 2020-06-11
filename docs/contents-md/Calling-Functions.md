@@ -53,7 +53,7 @@ o ?~v   // TypeError: o.v is not a function
 
 #### Return Calling Object or First Argument {#return-first}
 
-`<~` is like `~`, but always returns the calling object. For example, we can use `<~` to chain the array methods `push` and `shift` (neither of which return the calling array):
+`<~` is like `~`, but `<~` always returns the calling object. For example, we can use `<~` to chain the array methods `push` and `shift` (neither of which return the calling array):
 
 ```
 @ 5 6 <~push 7 <~shift   // [6, 7]
@@ -63,7 +63,7 @@ Similarly, `<\` is like the function call operator `\`, but `<\` returns the fir
 
 #### `call` and `apply` {#call-and-apply}
 
-`call` can be used as an alternative to `\` to call functions. The first operand of `call` is the function; any other operands are passed to the function:
+The first operand of `call` must be a function; any other operands are passed to the function:
 
 ```
 f = [a + b]   // function (adds its arguments)
@@ -74,9 +74,9 @@ f call 5 10   // 15
 `apply` is like `call`, but any arguments for the function are passed inside a single iterable:
 
 ```
-f = [a + b]        // function
+f = [a + b]        // function (adds its arguments)
 f apply (@ 5 10)   // 15
 apply f (@ 5 10)   // 15
 ```
 
-> `call` and `apply` are like the function methods [`call`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call) and [`apply`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply) respectively, but the Zap operators do not set the `this` value of the function. Also, the `apply` operator can take any iterable.
+> `call` and `apply` are like the function methods [`call`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call) and [`apply`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply) respectively, but the Zap operators do not specify the value of `this`. Also, the `apply` operator can take any iterable, whereas the `apply` method is restricted to array-like objects.

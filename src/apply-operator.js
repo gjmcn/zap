@@ -404,8 +404,11 @@ export default (block, _z_used) => {
     }
     
     else if (op === 'apply') {
-      if (nx !== 2) throw arityError(operator);
-      return [ x[0], opPosn('(...'), x[1], ')' ];
+      let res;
+      if (nx === 1) res = [ x[0], opPosn('()') ];
+      else if (nx === 2) res = [ x[0], opPosn('(...'), x[1], ')' ];
+      else throw arityError(operator);
+      return res;
     }
 
     else if (op === 'throw') {
