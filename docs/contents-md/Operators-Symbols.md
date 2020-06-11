@@ -19,6 +19,7 @@
 | `+=` `-=` `*=` `/=` `%=` `^=` | 2 | update-assign |
 | `#=` | 2+ | destructure object |
 | `@=` | 2+ | destructure array |
+| `,`  | 2 | get property |
 | `:`  | 2 | get property |
 | `::` | 2 | get property of prototype |
 | `?:` | 2 | conditional get property |

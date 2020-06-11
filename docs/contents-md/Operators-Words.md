@@ -4,59 +4,65 @@
 
 #### JavaScript Operators
 
-[`$await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) [`$delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete) [`$in`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in) [`$instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) [`$new`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new) [`$typeof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof) [`$yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield) [`$yieldFrom`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*) [`$void`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void)   
+[`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) [`delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete) [`in`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in) [`instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) [`new`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new) [`typeof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof) [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield) [`yieldFrom`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*) [`void`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void)   
 
-The operators behave the same as their JavaScript counterparts except that:
+These operators behave the same as their JavaScript counterparts except that:
 
-  * `$delete` is passed the name of the property to delete as a separate operand:
+  * `delete` takes two operands: an object and a property name:
 
     ```
-    o $delete 'u';       // delete property 'u' of o
-    o 'u' $delete 'v';   // delete property 'v' of o :u
-    o :u $delete 'v';    // delete property 'v' of o :u
+    o = # u 5 v 6
+    o delete 'u'    // true
+    o               // {v: 6}
     ```
   
-  * The constructor and its arguments are passed to `$new` as separate operands. Unlike other operators, [spread syntax](?Spread) _can_ be used with `$new` (with any operand except the constructor):
+  * The operands of `new` are a constructor and arguments to pass to the constructor (the constructor is not called explicitly):
 
     ```
-    $new Date;                  // current local date and time
-    $new Date '2050';           // 01 January 2050, 00:00:00
-    $new Date 2050 11;          // 01 December, 2050, 00:00:00
-    $new Date ...(@ 2050 11);   // 01 December, 2050, 00:00:00
+    new Date           // current local date and time
+    new Date '2050'    // 01 January 2050, 00:00:00
+    new Date 2050 11   // 01 December, 2050, 00:00:00
     ```
 
-  * JavaScript's `yield*` is called `$yieldFrom` in Zap.
+  * JavaScript's `yield*` is called `yieldFrom` in Zap.
 
-#### Loop, Map, Sequence
-
-[`$asyncDo`](?Generators#do-and-while) [`$asyncWhile`](?Generators#do-and-while) 
-[`$awaitEach`](?Loops#async-loops) [`$awaitMap`](?Loops#async-loops)  [`$do`](?Generators#do-and-while) [`$each`](?Loops)  [`$map`](?Loops) [`$nest`](?Generators#nest) [`$nestEach`](?Loops#nested-loops) [`$nestMap`](?Loops#nested-loops) [`$seq`](?Generators#seq) [`$while`](?Generators#do-and-while) [`$zip`](?Generators#zip) [`$zipEach`](?Loops#zipped-loops) [`$zipMap`](?Loops#zipped-loops) 
+---
 
 #### Elementwise Math
 
-[`$abs`](?Elementwise) [`$acos`](?Elementwise) [`$acosh`](?Elementwise) [`$asin`](?Elementwise) [`$asinh`](?Elementwise) [`$atan`](?Elementwise) [`$atanh`](?Elementwise) [`$cbrt`](?Elementwise) [`$ceil`](?Elementwise) [`$clz32`](?Elementwise) [`$cos`](?Elementwise) [`$cosh`](?Elementwise) [`$exp`](?Elementwise) [`$expm1`](?Elementwise) [`$floor`](?Elementwise) [`$fround`](?Elementwise) [`$log`](?Elementwise) [`$log10`](?Elementwise) [`$log1p`](?Elementwise)  [`$log2`](?Elementwise) [`$round`](?Elementwise) [`$sign`](?Elementwise) [`$sin`](?Elementwise) [`$sinh`](?Elementwise) [`$sqrt`](?Elementwise) [`$tan`](?Elementwise) [`$tanh`](?Elementwise) [`$trunc`](?Elementwise)
+[`abs`](?Elementwise) [`acos`](?Elementwise) [`acosh`](?Elementwise) [`asin`](?Elementwise) [`asinh`](?Elementwise) [`atan`](?Elementwise) [`atanh`](?Elementwise) [`cbrt`](?Elementwise) [`ceil`](?Elementwise) [`clz32`](?Elementwise) [`cos`](?Elementwise) [`cosh`](?Elementwise) [`exp`](?Elementwise) [`expm1`](?Elementwise) [`floor`](?Elementwise) [`fround`](?Elementwise) [`log`](?Elementwise) [`log10`](?Elementwise) [`log1p`](?Elementwise)  [`log2`](?Elementwise) [`round`](?Elementwise) [`sign`](?Elementwise) [`sin`](?Elementwise) [`sinh`](?Elementwise) [`sqrt`](?Elementwise) [`tan`](?Elementwise) [`tanh`](?Elementwise) [`trunc`](?Elementwise)
 
 #### Elementwise Other
 
-[`$boolean`](?Elementwise) [`$date`](?Elementwise) [`$isFinite`](?Elementwise) [`$isInteger`](?Elementwise) [`$isNaN`](?Elementwise) [`$neg`](?Elementwise) [`$not`](?Elementwise) [`$number`](?Elementwise) [`$string`](?Elementwise) [`$toLowerCase`](?Elementwise) [`$toUpperCase`](?Elementwise) [`$trim`](?Elementwise) [`$trimEnd`](?Elementwise) [`$trimStart`](?Elementwise)   
+[`boolean`](?Elementwise) [`date`](?Elementwise) [`isFinite`](?Elementwise) [`isInteger`](?Elementwise) [`isNaN`](?Elementwise) [`neg`](?Elementwise) [`not`](?Elementwise) [`number`](?Elementwise) [`string`](?Elementwise) [`toLowerCase`](?Elementwise) [`toUpperCase`](?Elementwise) [`trim`](?Elementwise) [`trimEnd`](?Elementwise) [`trimStart`](?Elementwise)
 
 #### Filter, Group, Reduce, Sort
 
-[`$bin`](?Order-and-Bin#bin)  [`$binCount`](?Order-and-Bin#bin) [`$count`](?Reduce#count) [`$deviation`](?Reduce#sum) [`$every`](?Reduce#every) [`$filter`](?Filter-and-Group#filter)  [`$find`](?Reduce#find) [`$findIndex`](?Reduce#find) [`$group`](?Filter-and-Group#group) [`$groupCount`](?Filter-and-Group#group) [`$max`](?Reduce#min) [`$maxIndex`](?Reduce#min) [`$mean`](?Reduce#sum) [`$min`](?Reduce#min) [`$minIndex`](?Reduce#min) [`$order`](?Order-and-Bin#order) [`$orderIndex`](?Order-and-Bin#order) [`$reduce`](?Reduce) [`$some`](?Reduce#every) [`$sum`](?Reduce#sum) [`$sumCumu`](?Reduce#sum-cumu) [`$variance`](?Reduce#sum)
+[`bin`](?Order-and-Bin#bin)  [`binCount`](?Order-and-Bin#bin) [`count`](?Reduce#count) [`deviation`](?Reduce#sum) [`every`](?Reduce#every) [`filter`](?Filter-and-Group#filter)  [`find`](?Reduce#find) [`findIndex`](?Reduce#find) [`group`](?Filter-and-Group#group) [`groupCount`](?Filter-and-Group#group) [`max`](?Reduce#min) [`maxIndex`](?Reduce#min) [`mean`](?Reduce#sum) [`min`](?Reduce#min) [`minIndex`](?Reduce#min) [`order`](?Order-and-Bin#order) [`orderIndex`](?Order-and-Bin#order) [`reduce`](?Reduce) [`some`](?Reduce#every) [`sum`](?Reduce#sum) [`sumCumu`](?Reduce#sum-cumu) [`variance`](?Reduce#sum)
 
-#### Random and Shuffle
-[`$binomial`](?Random-and-Shuffle#binomial) [`$categorical`](?Random-and-Shuffle#categorical) [`$exponential`](?Random-and-Shuffle#exponential) [`$geometric`](?Random-and-Shuffle#geometric) [`$logNormal`](?Random-and-Shuffle#log-normal) [`$normal`](?Random-and-Shuffle#normal) [`$random`](?Random-and-Shuffle#random) [`$randomInt`](?Random-and-Shuffle#random-int) [`$shuffle`](?Random-and-Shuffle#shuffle)
+#### Get/Set Property
+
+[`assign`](?Set-Property#copy-properties) [`at`](?Get-Property#at) [`attach`](?Set-Property#attach) [`getter`](?Get-Property#getter) [`set`](?Set-Property#set) [`setter`](?Set-Property#setter)
 
 #### Import and Export
-[`$export`](?Import-and-Export#export) [`$import`](?Import-and-Export#import) [`$importAll`](?Import-and-Export#import-all)  [`$importAs`](?Import-and-Export#import-as) [`$importDefault`](?Import-and-Export#import-default)
+[`export`](?Import-and-Export#export) [`import`](?Import-and-Export#import) [`importAll`](?Import-and-Export#import-all) [`importAs`](?Import-and-Export#import-as) [`importDefault`](?Import-and-Export#import-default) [`load`](?Import-and-Export#load)
 
 #### Other
 
-[`$at`](?Get-Property#at) [`$ats`](?Get-Property#ats) [`$array`](?Spread#array)  [`$arrObj`](?Tabular-Data#array-of-objects) [`$assign`](?Set-Property#copy-properties) [`$awaitTry`](?Errors) [`$class`](?Object-Oriented-Programming#extends-example) [`$debugger`](?Print-and-Debug#debugger) [`$extends`](?Object-Oriented-Programming#extends-example) [`$get`](?Get-Property#get) [`$if`](?Conditional) [`$ms`](?Print-and-Debug#ms) [`$objArr`](?Tabular-Data#object-of-arrays) [`$print`](?Print-and-Debug#print) [`$set`](?Set-Property#set) [`$throw`](?Errors) [`$to`](?Set-Property#to) [`$transpose`](?Tabular-Data#transpose) [`$try`](?Errors)
+[`array`](?Loops#array) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Errors) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
+
+#### Random and Shuffle
+[`binomial`](?Random-and-Shuffle#binomial) [`categorical`](?Random-and-Shuffle#categorical) [`exponential`](?Random-and-Shuffle#exponential) [`geometric`](?Random-and-Shuffle#geometric) [`logNormal`](?Random-and-Shuffle#log-normal) [`normal`](?Random-and-Shuffle#normal) [`random`](?Random-and-Shuffle#random) [`randomInt`](?Random-and-Shuffle#random-int) [`shuffle`](?Random-and-Shuffle#shuffle)
+
+#### Scope
+
+[`as`](Writing-Functions#as) [`asyncAs`](Writing-Functions#as) [`asyncCatch`](?Errors) [`asyncDo`](?Loops#do) [`asyncEach`](?Loops#each) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#map) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Writing-Functions#scope) [`asyncTry`](?Errors) [`catch`](?Errors) [`class`](?Classes) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Writing-Functions#scope) [`try`](?Errors) 
+
+---
 
 #### DOM
 
-[`$addClass`](?DOM#add-class) [`$attr`](?DOM#attr) [`$create`](?DOM#create) [`$createSVG`](?DOM#create) [`$encode`](?DOM#encode) [`$encodeSVG`](?DOM#encode) [`$fragment`](?DOM#fragment) [`$hasAttr`](?DOM#has-attr) [`$hasClass`](?DOM#has-attr) [`$html`](?DOM#html) [`$insert`](?DOM#insert) [`$insertEach`](?DOM#insert-each) [`$into`](?DOM#into) [`$lower`](?DOM#lower) [`$off`](?DOM#on) [`$on`](?DOM#on) [`$prop`](?DOM#attr) [`$raise`](?DOM#lower) [`$remove`](?DOM#remove) [`$removeAttr`](?DOM#remove-attr) [`$removeClass`](?DOM#add-class) [`$removeStyle`](?DOM#remove-attr)  [`$pick`](?DOM#pick) [`$sketch`](?DOM#sketch) [`$style`](?DOM#attr) [`$text`](?DOM#html)
+[`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`pick`](?DOM#pick) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html)
 
 ##### HTML Elements
 
