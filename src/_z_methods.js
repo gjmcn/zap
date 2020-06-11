@@ -288,7 +288,7 @@ export default {
     return v;
   },
 
-  set(o, p, v) {
+  chg(o, p, v) {
     o[p] = v;
     return o;
   },

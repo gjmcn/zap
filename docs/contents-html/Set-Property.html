@@ -1,121 +1,74 @@
 <h2>Set Property</h2>
 <hr>
-<h5 id="to"><code>$to</code></h5>
-<p><code>$to</code> sets an object/array property. Use additional operands to set a nested property (the last operand is always the new value). <code>$to</code> returns the new value of the property:</p>
-<pre><code>circle = #
-  radius 50
-  center (@ 100 200);
+<h5>Assignment</h5>
+<p>The assignment operators <code>=</code>, <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> can be used to set an object/array property:</p>
+<pre><code>circle = # radius 50 center (@ 100 200)
 
-r = 'radius';
+circle :radius = 60      // 60
+circle :center :1 += 5   // 205
 
-circle 'radius' $to 60;      // 60  (circle is {radius: 60, center: [100, 200]})
-circle r $to 70;             // 70  (circle is {radius: 70, center: [100, 200]})
-circle 'center' 1 $to 300;   // 300 (circle is {radius: 70, center: [100, 300]})
+circle   // {radius: 60, center: [100, 205]}
 </code></pre>
 <hr>
-<h5 id="colon-setter"><code>:</code></h5>
-<p><code>:</code> with three operands sets an object/array property. <code>:</code> uses the <a href="?Evaluation#right-operand-rule">right operand rule</a> and the <a href="?Evaluation#identifier-name-rule">identifier-name rule</a>. When used as a setter, <code>:</code> returns the modified object:</p>
-<pre><code>circle = #
-  radius 50
-  center (@ 100 200);
-
-r = 'radius';
-
-circle :radius 60;       // {radius: 60, center: [100, 200]}
-:radius circle 70;       // {radius: 70, center: [100, 200]}
-circle :(r) 80;          // {radius: 80, center: [100, 200]}
-circle :center :1 300;   // [100, 300]
-circle
-  :radius 90
-  :color 'red';          // {radius: 90, center: [100, 300], color: 'red'}
-</code></pre>
-<p>Use <code>:</code> with two operands to <a href="?Get-Property#colon-getter">get a property</a>.</p>
-<hr>
-<h5 id="colon-proto-setter"><code>\:</code></h5>
-<p><code>\:</code> is like <a href="#colon-setter"><code>:</code></a>, but sets a property on the object's prototype:</p>
-<pre><code>Person = [this :name a];
-
-// without \: (returns the prototype of Person)
-Person :prototype :whisper [this :name |toLowerCase];
-
-// with \: (returns Person)
-Person \:shout [this :name |toUpperCase];
-
-alex = $new Person 'Alex';
-alex |whisper;   // 'alex'
-alex |shout;     // 'ALEX'
-</code></pre>
-<hr>
-<h5><code>+:</code> <code>-:</code> <code>*:</code> <code>/:</code> <code>%:</code> <code>^:</code></h5>
-<p>The 'update-setters' are like <code>:</code>, but use the current value of the property to compute the new value:</p>
-<pre><code>o = # u 5 v 6;
-o +:u 1 *:v 2;   // {u: 6, v: 12}
-</code></pre>
-<hr>
-<h5 id="conditional-set"><code>?:</code></h5>
-<p><code>?:</code> is like <a href="#colon-setter"><code>:</code></a>, but only sets a property if its current value is <code>null</code>, <code>undefined</code> or the property does not exist.</p>
-<pre><code>o = # u null v 6;
-o ?:u 10 ?:v 20 ?:w 30;   // {u: 10, v: 6, w: 30}
+<h5 id="chg"><code>chg</code></h5>
+<p>Set an object/array property. <code>chg</code> returns the modified object:</p>
+<pre><code>o = # u 5 v 6
+o 
+| chg 'u' 10
+| chg 'w' 20   // {u: 10, v: 6, w: 20} 
 </code></pre>
 <blockquote>
-<p>When used as a setter, <code>?:</code> will throw an error if the object is <code>null</code> or <code>undefined</code> — unlike when <code>?:</code> is used as a <a href="?Get-Property#conditional-get">getter</a>.</p>
-</blockquote>
-<blockquote>
-<p>When used as a setter, <code>?:</code> does not currently use short-circuit evaluation.</p>
+<p>Setting a property with <code>chg</code> is equivalent to using assignment; it is not equivalent to using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a>.</p>
 </blockquote>
 <hr>
-<h5><code>::</code></h5>
-<p><code>::</code> sets a property using a variable of the same name:</p>
-<pre><code>width = 100;
-height = 200;
-color = 'red';
+<h5 id="attach"><code>attach</code></h5>
+<p><code>attach</code> sets a properties using variables of the same name:</p>
+<pre><code>width = 100
+height = 200
+color = 'red'
 
-rect = # ::width;        // {width: 100}
-rect ::height ::color;   // {width: 100, height: 200, color: 'red'}
-</code></pre>
-<p><code>::</code> uses the <a href="?Evaluation#right-operand-rule">right operand rule</a>:</p>
-<pre><code>o = # u 5;
-v = 6;
-::v o;   // {u: 5, v: 6}
+rect = # attach width      // {width: 100}
+rect attach height color   // {width: 100, height: 200, color: 'red'}
 </code></pre>
 <hr>
-<h5 id="copy-properties"><code>$assign</code></h5>
-<p>The <code>$assign</code> operator copies properties from its second, third, fourth, ... operands to its first operand:</p>
-<pre><code>o = # u 5 v 6;
-p = # v 7 w 8;
+<h5 id="copy-properties"><code>assign</code></h5>
+<p>The <code>assign</code> operator copies properties from its second, third, fourth, ... operands to its first operand:</p>
+<pre><code>o = # u 5 v 6
+p = # v 7 w 8
 
-# $assign o;     // {u: 5, v: 6} (shallow copy o)
-# $assign o p;   // {u: 5, v: 7, w: 8}
-o $assign p;     // {u: 5, v: 7, w: 8}
+# assign o     // {u: 5, v: 6} (shallow copy o)
+# assign o p   // {u: 5, v: 7, w: 8}
+o assign p     // {u: 5, v: 7, w: 8}
 </code></pre>
-<p><code>$assign</code> is shorthand for calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"><code>Object :assign</code></a>.</p>
+<p><code>assign</code> is shorthand for calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"><code>Object :assign</code></a>.</p>
 <hr>
-<h5 id="set"><code>$set</code></h5>
+<h5 id="set"><code>set</code></h5>
 <p>Use a custom setter function for a property:</p>
-<pre><code>o = # celsius 10;
+<pre><code>o = # celsius 10
 
-o $get 'fahrenheit' [this :celsius * 1.8 + 32];
-o $set 'fahrenheit' [this :celsius (a - 32 / 1.8)];
+o getter 'fahrenheit' [this :celsius * 1.8 + 32]
+o setter 'fahrenheit' [this :celsius (a - 32 / 1.8)]
 
-o :fahrenheit;   // 50
+o :fahrenheit   // 50
 
-o :celsius 20;
-o :fahrenheit;   // 68
+o :celsius 20
+o :fahrenheit   // 68
 
-o :fahrenheit 86;
-o :celsius;      // 30
+o :fahrenheit 86
+o :celsius      // 30
 </code></pre>
 <p>In general:</p>
-<pre><code>o $set 'x' f;
+<pre><code>o setter 'x' f
 </code></pre>
 <p>is equivalent to:</p>
-<pre><code>Object |defineProperty o 'x' (#
-  set f
-  configurable true
-  enumerable true);
+<pre><code>Object ~defineProperty o 'x'
+    #
+    | set f
+    | configurable true
+    | enumerable true
 </code></pre>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a> for details.</p>
-<p><code>$set</code> returns the modified object.</p>
+<p><code>setter</code> returns the modified object.</p>
 
 
 <br><br><br>

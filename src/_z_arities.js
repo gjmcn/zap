@@ -3,7 +3,7 @@
 const m = new Map();
 
 m.set('at',         [2, 2]);
-m.set('set',        [3, 3]);
+m.set('chg',        [3, 3]);
 m.set('getter',     [3, 3]);
 m.set('setter',     [3, 3]);
 m.set('to',         [2, 3]);

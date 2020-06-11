@@ -42,7 +42,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Get/Set Property
 
-[`assign`](?Set-Property#copy-properties) [`at`](?Get-Property#at) [`attach`](?Set-Property#attach) [`getter`](?Get-Property#getter) [`set`](?Set-Property#set) [`setter`](?Set-Property#setter)
+[`assign`](?Set-Property#copy-properties) [`at`](?Get-Property#at) [`attach`](?Set-Property#attach) [`chg`](?Set-Property#chg) [`getter`](?Get-Property#getter) [`setter`](?Set-Property#setter)
 
 #### Import and Export
 [`export`](?Import-and-Export#export) [`import`](?Import-and-Export#import) [`importAll`](?Import-and-Export#import-all) [`importAs`](?Import-and-Export#import-as) [`importDefault`](?Import-and-Export#import-default) [`load`](?Import-and-Export#load)

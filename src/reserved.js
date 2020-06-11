@@ -67,7 +67,7 @@ const reserved = {
     'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends',
 
     // other
-    'array', 'getter', 'setter', 'set', 'if', 'throw', 'debugger', 'reduce',
+    'array', 'getter', 'setter', 'chg', 'if', 'throw', 'debugger', 'reduce',
     'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
     'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean',
     'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation', 'arrObj',
