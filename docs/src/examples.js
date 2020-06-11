@@ -104,14 +104,14 @@ training = 1 to nTrain map
     #
     | x (random)
     | y (random) 
-    | as pt (pt set 'label' (pt :x ^ 3 + 0.2 > (pt :y) number))
+    | as pt (pt chg 'label' (pt :x ^ 3 + 0.2 > (pt :y) number))
 
 // test data
 test = 1 to nTest map
     #
     | x (random)
     | y (random)
-    | as pt (pt set 'predicted' (training \\knn pt))
+    | as pt (pt chg 'predicted' (training \\knn pt))
 
 // decision boundary
 boundary = 0 1 linSpace 100 map x
@@ -136,20 +136,20 @@ $div <\\vegaEmbed
             #
             | mark 'area'
             | data (# values boundary)
-            | encoding (\\enc set 'color' (# value '#fcf1e5'))
+            | encoding (\\enc chg 'color' (# value '#fcf1e5'))
         |
             #
             | mark 'circle'
             | data (# values training)
-            | encoding (\\enc set 'color' (# field 'label' type 'nominal'))
+            | encoding (\\enc chg 'color' (# field 'label' type 'nominal'))
         |
             #
             | mark 'point'
             | data (# values test)
             | encoding
                 \\enc
-                | set 'color' (# field 'predicted' type 'nominal')
-                | set 'shape' (# field 'predicted' type 'nominal')
+                | chg 'color' (# field 'predicted' type 'nominal')
+                | chg 'shape' (# field 'predicted' type 'nominal')
 `
 ], [
 'html - quiz',
