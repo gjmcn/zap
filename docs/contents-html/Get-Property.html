@@ -1,6 +1,6 @@
 <h2>Get Property</h2>
 <hr>
-<h5 id="colon-getter"><code>:</code></h5>
+<h4 id="colon-getter"><code>:</code></h4>
 <p><code>:</code> gets an object/array property or a character from a string. <code>:</code> uses the <a href="?Syntax#right-operand-rule">right operand rule</a> and the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
 <pre><code>circle = 
     #
@@ -18,13 +18,13 @@ circle :center :1         // 200
 circle :color :2          // 'd'
 </code></pre>
 <hr>
-<h5 id="colon-proto-getter"><code>::</code></h5>
+<h4 id="colon-proto-getter"><code>::</code></h4>
 <p><code>::</code> is like <a href="#colon-getter"><code>:</code></a>, but gets a property from the object's prototype:</p>
 <pre><code>Array :prototype :slice   // function
 Array ::slice             // same function
 </code></pre>
 <hr>
-<h5 id="conditional-get"><code>?:</code></h5>
+<h4 id="conditional-get"><code>?:</code></h4>
 <p><code>?:</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>?:</code> short-circuits and returns <code>undefined</code> if the object is <code>null</code> or <code>undefined</code>:</p>
 <pre><code>o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
 
@@ -33,7 +33,7 @@ o :q :y    // TypeError: Cannot read property 'y' of undefined
 o :q ?:y   // undefined
 </code></pre>
 <hr>
-<h5 id="comma-getter"><code>,</code></h5>
+<h4 id="comma-getter"><code>,</code></h4>
 <p><code>,</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
 <pre><code>circle = 
     #
@@ -50,7 +50,7 @@ circle , 'center' , 1      // 200
 circle , 'color' , 2       // 'd'
 </code></pre>
 <hr>
-<h5 id="at"><code>at</code></h5>
+<h4 id="at"><code>at</code></h4>
 <p><code>at</code> can get multiple properties or characters — the second operand of <code>at</code> must be an iterable.</p>
 <p><code>at</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>at</code> returns an array.</p>
 <pre><code>// array of objects
@@ -76,7 +76,7 @@ data :0 :Origin at (@ 1 3)   // 'uo'
 'abcdefghij' at (1 to 9 2)   // 'bdfhj'
 </code></pre>
 <hr>
-<h5 id="getter"><code>getter</code></h5>
+<h4 id="getter"><code>getter</code></h4>
 <p>Use a custom getter function for a property:</p>
 <pre><code>o = # celsius 10
 o 'fahrenheit' getter [this :celsius * 1.8 + 32]

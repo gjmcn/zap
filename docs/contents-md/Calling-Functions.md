@@ -20,6 +20,8 @@ add = [a + b]         // function
 \add (\double 5) 20   // 30 (nested calls)
 ```
 
+---
+
 #### Methods {#calling-methods}
 
 `\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](?Syntax#right-operand-rule) and the [identifier-name rule](?Syntax#identifier-name-rule):
@@ -36,6 +38,8 @@ Array ~isArray x      // true
 x \(Array :isArray)   // true
 ```
 
+---
+
 #### Return Calling Object or First Argument {#return-first}
 
 `<~` is like `~`, but `<~` always returns the calling object. For example, we can use `<~` to chain the array methods `push` and `shift` (neither of which return the calling array):
@@ -45,6 +49,8 @@ x \(Array :isArray)   // true
 ```
 
 Similarly, `<\` is like the function call operator `\`, but `<\` returns the first argument passed to the function.
+
+---
 
 #### `call` and `apply` {#call-and-apply}
 

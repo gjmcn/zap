@@ -1,6 +1,6 @@
 <h2>Set Property</h2>
 <hr>
-<h5>Assignment</h5>
+<h4>Assignment</h4>
 <p>The assignment operator <code>=</code> and the update-assignment operators <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> can be used to set an object/array property:</p>
 <pre><code>circle = # radius 50 center (@ 100 200)
 
@@ -11,7 +11,7 @@ circle :center :1 += 5   // 205
 circle   // {radius: 60, center: [100, 205], color: 'red'}
 </code></pre>
 <hr>
-<h5 id="chg"><code>chg</code></h5>
+<h4 id="chg"><code>chg</code></h4>
 <p><code>chg</code> takes an object/array, a property name and a new value for the property. <code>chg</code> sets the property and returns the modified object:</p>
 <pre><code>o = # u 5 v 6
 o 
@@ -22,7 +22,7 @@ o
 <p>Setting a property with <code>chg</code> is equivalent to using assignment; it is not equivalent to using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a>.</p>
 </blockquote>
 <hr>
-<h5 id="attach"><code>attach</code></h5>
+<h4 id="attach"><code>attach</code></h4>
 <p><code>attach</code> sets properties using variables of the same name:</p>
 <pre><code>width = 100
 height = 200
@@ -32,7 +32,7 @@ rect = # attach width      // {width: 100}
 rect attach height color   // {width: 100, height: 200, color: 'red'}
 </code></pre>
 <hr>
-<h5 id="copy-properties"><code>assign</code></h5>
+<h4 id="copy-properties"><code>assign</code></h4>
 <p>The <code>assign</code> operator copies properties from its second, third, fourth, ... operands to its first operand:</p>
 <pre><code>o = # u 5 v 6
 p = # v 7 w 8
@@ -43,7 +43,7 @@ o assign p     // {u: 5, v: 7, w: 8}
 </code></pre>
 <p><code>assign</code> is shorthand for calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"><code>Object :assign</code></a>.</p>
 <hr>
-<h5 id="setter"><code>setter</code></h5>
+<h4 id="setter"><code>setter</code></h4>
 <p>Use a custom setter function for a property:</p>
 <pre><code>o = # celsius 10
 

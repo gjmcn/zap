@@ -2,7 +2,7 @@
 
 ---
 
-##### Assignment
+#### Assignment
 
 The assignment operator `=` and the update-assignment operators `+=`, `-=`, `*=`, `/=`, `%=`, `^=` can be used to set an object/array property:
 
@@ -18,7 +18,7 @@ circle   // {radius: 60, center: [100, 205], color: 'red'}
 
 ---
 
-##### `chg` {#chg}
+#### `chg` {#chg}
 
 `chg` takes an object/array, a property name and a new value for the property. `chg` sets the property and returns the modified object:
 
@@ -33,7 +33,7 @@ o
 
 ---
 
-##### `attach` {#attach}
+#### `attach` {#attach}
 
 `attach` sets properties using variables of the same name:
 
@@ -48,7 +48,7 @@ rect attach height color   // {width: 100, height: 200, color: 'red'}
 
 ---
 
-##### `assign` {#copy-properties}
+#### `assign` {#copy-properties}
 
 The `assign` operator copies properties from its second, third, fourth, ... operands to its first operand:
 
@@ -65,7 +65,7 @@ o assign p     // {u: 5, v: 7, w: 8}
 
 ---
 
-##### `setter` {#setter}
+#### `setter` {#setter}
 
 Use a custom setter function for a property:
 

@@ -1,49 +1,87 @@
 <h2>Writing Functions</h2>
 <hr>
-<p>Use square brackets to create a function. By default, a function has parameters <code>a</code>, <code>b</code>, <code>c</code> and <code>d</code>. To use custom parameter names, list them after the opening bracket followed by <code>-&gt;</code>:</p>
-<pre><code>f = [a + b]          // function
-g = [u v -&gt; u + v]   // function
+<p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new.target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
+<p>The body of a function is a <a href="?Scope">scope block</a>. A function returns the value of the final expression evaluated in the body.</p>
+<hr>
+<h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
+<p>Create a regular function. The operands of <code>fun</code> are the parameter names and the function body:</p>
+<pre><code>// no paramaters, body in parentheses
+f = fun (5)
+\f   // 5
 
-\f 5 10   // 15 
-\g 5 10   // 15
+// 2 paramaters, body in parentheses
+f = fun x y (x + y)
+\f 5 10   // 15
 
-f :length      // 4 (number of parameters)
-g :length      // 2
-[] :length     // 4
-[-&gt;] :length   // 0
+// 2 parameters, body in indented block
+f = fun x y
+    z = x + y
+    z + 30 / z
+\f 5 10   // 3
+</code></pre>
+<p>Use <code>asyncFun</code> for an asynchronous function. The following example uses <a href="?Print-and-Debug#period"><code>period</code></a> to ceate a promise that resolves after the <code>delay</code> milliseconds:</p>
+<pre><code>af = asyncFun delay
+    delay period await
+    print 'done'
+
+1000 \af
+</code></pre>
+<hr>
+<h4 id="proc"><code>proc</code>, <code>asyncProc</code></h4>
+<p>As <a href="#fun"><code>fun</code></a> and <a href="#fun"><code>asyncFun</code></a>, but <code>proc</code> and <code>asyncProc</code> create a procedure.</p>
+<hr>
+<h4 id="bracket-functions">Bracket Functions</h4>
+<p>Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a regular function and curly brackets for a procedure. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>:</p>
+<pre><code>f = [5]       // regular function
+\f   // 5     // 5 
+
+f = [a + 5]   // regular function
+\f 10         // 15
+
+f = {a + b}   // procedure
+\f 10 5       // 15
 </code></pre>
 <blockquote>
-<p>If an inner function must see the parameters of an outer function, at least one of the functions must have custom parameter names — otherwise the parameters of the outer function will be 'shadowed'.</p>
+<p>When bracket functions are nested, the inner function cannot see the parameters of the outer function because of the shared parameter names.</p>
 </blockquote>
-<h4>Rest Syntax</h4>
-<p>Rest syntax can be used with the final parameter:</p>
-<pre><code>f = [x ...y -&gt; y]
-\f 5 6 7   // [6, 7]
-</code></pre>
-<h4>Defaults</h4>
-<p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value. The default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed:</p>
-<pre><code>f = [
-  a ?= 5
-  a + 10]
+<hr>
+<h4>The <code>rest</code> Parameter</h4>
+<p>If the final parameter of a function is called <code>rest</code>, it collects 'the rest of the arguments' in an array:</p>
+<pre><code>f = fun x y rest
+    rest
+\f 5 6 7 8   // [7, 8]
 
-\f   // 15  
+f = fun rest
+    rest
+\f 5 6 7 8   // [5, 6, 7, 8]
 </code></pre>
-<h4 id="options">Options</h4>
-<p>A parameter called <code>ops</code> ('options') automatically defaults to an empty object. The assignment operator <code>=:</code> is specifially for working with <code>ops</code> objects. <code>=:</code> assigns a property of <code>ops</code> to a variable of the same name; the given default value is used if the property does not exist, or is <code>undefined</code> or <code>null</code>:</p>
-<pre><code>area = [ops -&gt;
-  width =: 5
-  height =: 10
-  width * height]
+<hr>
+<h4>Default Parameters</h4>
+<p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value (so the default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed):</p>
+<pre><code>f = fun x
+  x ?= 5
+  x + 10
+
+\f 3   // 13
+\f     // 15  
+</code></pre>
+<hr>
+<h4 id="options">The <code>ops</code> Parameter</h4>
+<p>A parameter called <code>ops</code> ('options') automatically defaults to an empty object. The assignment operator <code>&lt;-</code> is specifically for working with <code>ops</code> objects. <code>&lt;-</code> assigns a property of <code>ops</code> to a variable of the same name; the given default value is used if the property does not exist, or is <code>undefined</code> or <code>null</code>:</p>
+<pre><code>area = fun ops
+    width &lt;- 5
+    height &lt;- 10
+    width * height
 
 # width 20 height 30 \area   // 600
 # height 30 \area            // 150
 \area                        // 50
 </code></pre>
-<p><code>ops</code> can be used alongside other parameters:</p>
-<pre><code>f = [x ops ...y -&gt;
-  u =: 5;
-  v =: 6;
-  @ x u v y];
+<p><code>ops</code> can be used with other parameters:</p>
+<pre><code>f = fun x ops rest
+    u &lt;- 5
+    v &lt;- 6
+    @ x u v rest
 
 \f 10 (# u 20) 30 40;   // [10, 20, 6, [30, 40]]   
 </code></pre>
@@ -51,51 +89,24 @@ g :length      // 2
 <p>Except for defaulting to an empty object, there is nothing special about <code>ops</code> — it can be used and modified like any other object.</p>
 </blockquote>
 <blockquote>
-<p><code>=:</code> simply looks for the variable <code>ops</code> and gets the required property. <code>ops</code> will typically be an argument of the current function, but need not be.</p>
+<p><code>&lt;-</code> simply looks for the variable <code>ops</code> and gets the required property. <code>ops</code> will typically be an argument of the current function, but need not be.</p>
 </blockquote>
 <blockquote>
-<p><code>=:</code> uses short-circuit evaluation: if the relevant property of <code>ops</code> is neither <code>null</code> nor <code>undefined</code>, the second operand of <code>=:</code> is not evaluated.</p>
+<p><code>&lt;-</code> uses short-circuit evaluation: if the relevant property of <code>ops</code> is neither <code>null</code> nor <code>undefined</code>, the second operand of <code>&lt;-</code> is not evaluated.</p>
 </blockquote>
-<h4>Asynchronous Functions</h4>
-<p>Use curly brackets for an asynchronous function:</p>
-<pre><code>f = {
-  data = a \fetch $await |json $await;
-  + 'Rows in data: '(data :length) $print};
+<hr>
+<h4 id="generator-functions">Generators</h4>
+<p>If <code>yield</code> or <code>yieldFrom</code> are used inside a function body, a generator function is created:</p>
+<pre><code>f = fun
+    yield 5
+    yield 10   // generator function
 
-// custom parameter name
-g = {url -&gt;
-  data = url \fetch $await |json $await;
-  + 'Rows in data: '(data :length) $print};
+g = \f         // generator
+g ~next        // {value: 5, done: false}
 </code></pre>
-<h4 id="generator-functions">Generator Functions</h4>
-<p>Use <code>**</code> immediately after the opening bracket for a generator function:</p>
-<pre><code>f = [**
-  5 $yield;   
-  6 $yield];   // generator function
-
-g = \f;        // generator
-g |next;       // {value: 5, done: false}
-</code></pre>
-<h4>Arrow Functions</h4>
-<p>Functions compile to standard JavaScript function expressions by default. Use <code>=&gt;</code> rather than <code>-&gt;</code> for a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>:</p>
-<pre><code>f = [x =&gt; x + 5];   // arrow function
-\f 10;   // 15
-</code></pre>
-<h4>Immediately Invoked Function Expressions</h4>
-<p>As in JavaScript, we can use immediately invoked function expressions (IIFEs):</p>
-<pre><code>// IIFE with no arguments
-\[5];   // 5
-
-// IIFE with 2 arguments
-5 10 \[a + b];   // 15
-5 \[a + b] 10;   // 15
-\[a + b] 5 10;   // 15
-
-// asynchronous IIFE
-\{
-  data = someURL \fetch $await |json $await;
-  + 'Rows in data: '(data :length) $print};
-</code></pre>
+<blockquote>
+<p>Procedures cannot be generators, so <code>yield</code> and <code>yieldFrom</code> cannot be used inside procedures.</p>
+</blockquote>
 
 
 <br><br><br>

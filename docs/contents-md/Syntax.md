@@ -30,6 +30,8 @@ In general, Zap does not use operator associativity, position or precedence rule
 
 > If adjacent operators are represented by symbols, they must be separated by whitespace.
 
+---
+
 #### Parentheses and Indentation {#parenth-and-indent}
 
 Parentheses can be used for precedence:
@@ -78,9 +80,13 @@ We can close an indented block (or more than one) and continue the expression wi
 
 Four spaces must be used for indentation. Use 'soft tabs' in code editors so that tabs are converted to spaces.
 
+---
+
 #### Identifiers {#identifiers}
 
 The term _identifier_ is used frequently in these docs. An identifier is any combination of letters (currently only `a`-`z`, `A`-`Z`), digits (`0`-`9`), `_` and `$`, but cannot start with a digit. 
+
+---
 
 #### Special Behavior
 

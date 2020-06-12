@@ -18,6 +18,8 @@ null        // null
 undefined   // undefined
 ```
 
+---
+
 #### Arrays and Sets {#arrays-and-sets}
 
 Use the `@` operator for an array, and `@@` for a set:
@@ -36,6 +38,8 @@ Note that `@@` interprets each operand as an element, whereas the `Set` construc
 @@ 'ab'        // Set {'ab'}
 new Set 'ab'   // Set {'a', 'b'}
 ```
+
+---
 
 #### Objects and Maps {#objects-and-maps}
 

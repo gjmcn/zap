@@ -2,7 +2,7 @@
 
 ---
 
-##### `:` {#colon-getter}
+#### `:` {#colon-getter}
 
 `:` gets an object/array property or a character from a string. `:` uses the [right operand rule](?Syntax#right-operand-rule) and the [identifier-name rule](?Syntax#identifier-name-rule):
 
@@ -25,7 +25,7 @@ circle :color :2          // 'd'
 
 ---
 
-##### `::` {#colon-proto-getter}
+#### `::` {#colon-proto-getter}
 
 `::` is like [`:`](#colon-getter), but gets a property from the object's prototype:
 
@@ -36,7 +36,7 @@ Array ::slice             // same function
 
 ---
 
-##### `?:` {#conditional-get}
+#### `?:` {#conditional-get}
 
 `?:` is like [`:`](#colon-getter), but `?:` short-circuits and returns `undefined` if the object is `null` or `undefined`:
 
@@ -50,7 +50,7 @@ o :q ?:y   // undefined
 
 ---
 
-##### `,` {#comma-getter}
+#### `,` {#comma-getter}
 
 `,` is like [`:`](#colon-getter), but `,` does not use the [right operand rule](?Syntax#right-operand-rule) or the [identifier-name rule](?Syntax#identifier-name-rule):
 
@@ -72,7 +72,7 @@ circle , 'color' , 2       // 'd'
 
 ---
 
-##### `at` {#at}
+#### `at` {#at}
 
 `at` can get multiple properties or characters &mdash; the second operand of `at` must be an iterable.
 
@@ -107,7 +107,7 @@ The second operand of `at` can be any iterable. For example, a string or a [rang
 
 ---
 
-##### `getter` {#getter}
+#### `getter` {#getter}
 
 Use a custom getter function for a property:
 

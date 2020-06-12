@@ -12,6 +12,7 @@ add = [a + b]         // function
 \double 5 \add 20     // 30 (piped calls)
 \add (\double 5) 20   // 30 (nested calls)
 </code></pre>
+<hr>
 <h4 id="calling-methods">Methods</h4>
 <p><code>\</code> can be used to call methods, but there is also a dedicated method call operator <code>~</code> which is often more convenient. <code>~</code> uses both the <a href="?Syntax#right-operand-rule">right operand rule</a> and the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
 <pre><code>x = @ 5 6 7 8
@@ -24,11 +25,13 @@ Array ~isArray x      // true
 \(Array :isArray) x   // true
 x \(Array :isArray)   // true
 </code></pre>
+<hr>
 <h4 id="return-first">Return Calling Object or First Argument</h4>
 <p><code>&lt;~</code> is like <code>~</code>, but <code>&lt;~</code> always returns the calling object. For example, we can use <code>&lt;~</code> to chain the array methods <code>push</code> and <code>shift</code> (neither of which return the calling array):</p>
 <pre><code>@ 5 6 &lt;~push 7 &lt;~shift   // [6, 7]
 </code></pre>
 <p>Similarly, <code>&lt;\</code> is like the function call operator <code>\</code>, but <code>&lt;\</code> returns the first argument passed to the function.</p>
+<hr>
 <h4 id="call-and-apply"><code>call</code> and <code>apply</code></h4>
 <p>The first operand of <code>call</code> must be a function; any other operands are passed to the function:</p>
 <pre><code>f = [a + b]   // function (adds its arguments)

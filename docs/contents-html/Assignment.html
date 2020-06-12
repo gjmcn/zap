@@ -7,18 +7,21 @@
 <pre><code>x = 5   // 5
 x       // 5
 </code></pre>
+<hr>
 <h4>Update-Assignment</h4>
 <p>Use <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> for update-assignments:</p>
 <pre><code>x = 5     // 5
 x += 10   // 15
 x         // 15
 </code></pre>
+<hr>
 <h4 id="conditional-assignment">Conditional Assignment</h4>
 <p>Use <code>?=</code> for <em>conditional assignment</em>: if the variable (the first operand) is currently <code>undefined</code> or <code>null</code>, the second operand is evaluated and the result is assigned to the variable. If the variable <em>is not</em> currently <code>undefined</code> or <code>null</code>, the variable is assigned its current value and the second operand is not evaluated (short-circuit evaluation):</p>
 <pre><code>x = null
 x ?= 5    // 5 (x is 5)
 x ?= 10   // 5 (x is 5)
 </code></pre>
+<hr>
 <h4 id="destructuring">Destructuring Assignment</h4>
 <p>Use <code>#=</code> to destructure an object:</p>
 <pre><code>o = # h 5 i 6 j 7
@@ -29,6 +32,7 @@ h j z #= o   // returns o, h is 5, j is 7, z is undefined
 u v @= x       // returns x, u is 5, v is 6
 u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined 
 </code></pre>
+<hr>
 <h4>Other Assignment Operators</h4>
 <ul>
 <li>
