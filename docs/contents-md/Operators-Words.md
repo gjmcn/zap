@@ -56,7 +56,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Scope
 
-[`as`](Writing-Functions#as) [`asyncAs`](Writing-Functions#as) [`asyncCatch`](?Errors) [`asyncDo`](?Loops#do) [`asyncEach`](?Loops#each) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#map) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Writing-Functions#scope) [`asyncTry`](?Errors) [`catch`](?Errors) [`class`](?Classes) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Writing-Functions#scope) [`try`](?Errors) 
+[`as`](Writing-Functions#as) [`asyncAs`](Writing-Functions#as) [`asyncCatch`](?Errors) [`asyncDo`](?Loops#do) [`asyncEach`](?Loops#each) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#map) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Writing-Functions#scope) [`asyncTry`](?Errors) [`catch`](?Errors) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Writing-Functions#scope) [`try`](?Errors) 
 
 ---
 
