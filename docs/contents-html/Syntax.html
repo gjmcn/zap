@@ -58,8 +58,8 @@
 <h4 id="identifiers">Identifiers</h4>
 <p>The term <em>identifier</em> is used frequently in these docs. An identifier is any combination of letters (currently only <code>a</code>-<code>z</code>, <code>A</code>-<code>Z</code>), digits (<code>0</code>-<code>9</code>), <code>_</code> and <code>$</code>, but cannot start with a digit.</p>
 <hr>
-<h4>Special Behavior</h4>
-<p>Some operators do not follow the normal syntax rules:</p>
+<h4>Special Cases</h4>
+<p>Additional rules apply to some operators:</p>
 <h6 id="right-operand-rule">The Right Operand Rule</h6>
 <p>The main <a href="?Get-Property">get property</a> and <a href="?Calling-Functions">call function/method</a> operators use the <em>right operand rule</em>: the first right operand is the property or function. We typically omit space to the right of operators that use this rule.</p>
 <pre><code>f = [a + b]   // function (adds its arguments)
@@ -93,6 +93,17 @@ y = x = 8     // syntax error, multiple assignments are not allowed
 <p><a href="?Assignment#destructuring">Destructuring assignment operators</a> must be placed after the last variable being assigned to:</p>
 <pre><code>x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
+</code></pre>
+<h5 id="body-rules">Body</h5>
+<p>Operators that open a new <a href="?Scope">scope</a> take a <em>body</em> as their final operand. The body must be in parentheses or be an indented block. Also, the body cannot be before the operator:</p>
+<pre><code>fun x y
+    x + y         // function
+
+fun x y (x + y)   // function
+
+x y fun (x + y)   // function
+
+x y (x + y) fun   // syntax error, missing function body
 </code></pre>
 
 

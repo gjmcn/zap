@@ -3,9 +3,9 @@
 ---
 
 
-A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new.target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
+A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new :target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
 
-The body of a function is a [scope block](?Scope). A function returns the value of the final expression evaluated in the body.
+The [body](?Syntax#body-rules) of a function opens a new [scope](?Scope). A function returns the value of the last expression evaluated in the body.
 
 ---
 
@@ -14,11 +14,11 @@ The body of a function is a [scope block](?Scope). A function returns the value 
 Create a regular function. The operands of `fun` are the parameter names and the function body:
 
 ```
-// no paramaters, body in parentheses
+// no parameters, body in parentheses
 f = fun (5)
 \f   // 5
 
-// 2 paramaters, body in parentheses
+// 2 parameters, body in parentheses
 f = fun x y (x + y)
 \f 5 10   // 15
 
@@ -29,14 +29,14 @@ f = fun x y
 \f 5 10   // 3
 ```
 
-Use `asyncFun` for an asynchronous function. The following example uses [`period`](?Print-and-Debug#period) to ceate a promise that resolves after `delay` milliseconds:
+Use `asyncFun` to create an asynchronous function. The following example uses [`period`](?Print-and-Debug#period) to create a promise that resolves after `delay` milliseconds:
 
 ```
 af = asyncFun delay
     delay period await
     print 'done'
 
-1000 \af
+1000 \af   // prints 'done' after 1000 ms
 ```
 
 ---
@@ -52,8 +52,11 @@ As [`fun`](#fun) and [`asyncFun`](#fun), but `proc` and `asyncProc` create a pro
 Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a regular function and curly brackets for a procedure. Bracket functions have parameters `a`, `b` and `c`:
 
 ```
+f = []        // regular function (body is empty)
+\f            // undefined
+
 f = [5]       // regular function
-\f   // 5     // 5 
+\f            // 5 
 
 f = [a + 5]   // regular function
 \f 10         // 15
@@ -66,7 +69,7 @@ f = {a + b}   // procedure
 
 ---
 
-#### The `rest` Parameter
+#### The `rest` Parameter {#rest}
 
 If the final parameter of a function is called `rest`, it collects 'the rest of the arguments' in an array:
 
@@ -82,14 +85,14 @@ f = fun rest
 
 ---
 
-#### Default Parameters
+#### Default Parameters {#default-parameters}
 
-Use [`?=`](?Assignment#conditional-assignment) to set a default parameter value (so the default is used if `undefined` or `null` is passed, or if no value is passed):
+Use [`?=`](?Assignment#conditional-assignment) to set a default parameter value &mdash; the default is used if `undefined` or `null` is passed, or if no value is passed:
 
 ```
 f = fun x
-  x ?= 5
-  x + 10
+    x ?= 5
+    x + 10
 
 \f 3   // 13
 \f     // 15  
@@ -120,14 +123,14 @@ f = fun x ops rest
     v <- 6
     @ x u v rest
 
-\f 10 (# u 20) 30 40;   // [10, 20, 6, [30, 40]]   
+\f 10 (# u 20) 30 40   // [10, 20, 6, [30, 40]]   
 ```
 
 > Except for defaulting to an empty object, there is nothing special about `ops` &mdash; it can be used and modified like any other object.
 
-> `<-` simply looks for the variable `ops` and gets the required property. `ops` will typically be an argument of the current function, but need not be.
+> `<-` simply looks for the variable `ops` and gets the required property. `ops` will typically be a parameter of the current function, but need not be.
 
-> `<-` uses short-circuit evaluation: if the relevant property of `ops` is neither `null` nor `undefined`, the second operand of `<-` is not evaluated.
+> `<-` uses short-circuit evaluation: if the relevant property of `ops` is neither `null` nor `undefined`, the right-hand side of `<-` is not evaluated.
 
 ---
 
@@ -144,4 +147,9 @@ g = \f         // generator
 g ~next        // {value: 5, done: false}
 ```
 
-> Procedures cannot be generators, so `yield` and `yieldFrom` cannot be used inside procedures.
+Note that a procedure cannot be a generator function:
+
+```
+proc
+    yield 5   // syntax error, invalid use of yield
+```

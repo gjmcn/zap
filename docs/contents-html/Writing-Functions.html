@@ -1,15 +1,15 @@
 <h2>Writing Functions</h2>
 <hr>
-<p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new.target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
-<p>The body of a function is a <a href="?Scope">scope block</a>. A function returns the value of the final expression evaluated in the body.</p>
+<p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new :target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
+<p>The <a href="?Syntax#body-rules">body</a> of a function opens a new <a href="?Scope">scope</a>. A function returns the value of the last expression evaluated in the body.</p>
 <hr>
 <h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
 <p>Create a regular function. The operands of <code>fun</code> are the parameter names and the function body:</p>
-<pre><code>// no paramaters, body in parentheses
+<pre><code>// no parameters, body in parentheses
 f = fun (5)
 \f   // 5
 
-// 2 paramaters, body in parentheses
+// 2 parameters, body in parentheses
 f = fun x y (x + y)
 \f 5 10   // 15
 
@@ -19,12 +19,12 @@ f = fun x y
     z + 30 / z
 \f 5 10   // 3
 </code></pre>
-<p>Use <code>asyncFun</code> for an asynchronous function. The following example uses <a href="?Print-and-Debug#period"><code>period</code></a> to ceate a promise that resolves after the <code>delay</code> milliseconds:</p>
+<p>Use <code>asyncFun</code> to create an asynchronous function. The following example uses <a href="?Print-and-Debug#period"><code>period</code></a> to create a promise that resolves after <code>delay</code> milliseconds:</p>
 <pre><code>af = asyncFun delay
     delay period await
     print 'done'
 
-1000 \af
+1000 \af   // prints 'done' after 1000 ms
 </code></pre>
 <hr>
 <h4 id="proc"><code>proc</code>, <code>asyncProc</code></h4>
@@ -32,8 +32,11 @@ f = fun x y
 <hr>
 <h4 id="bracket-functions">Bracket Functions</h4>
 <p>Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a regular function and curly brackets for a procedure. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>:</p>
-<pre><code>f = [5]       // regular function
-\f   // 5     // 5 
+<pre><code>f = []        // regular function (body is empty)
+\f            // undefined
+
+f = [5]       // regular function
+\f            // 5 
 
 f = [a + 5]   // regular function
 \f 10         // 15
@@ -45,7 +48,7 @@ f = {a + b}   // procedure
 <p>When bracket functions are nested, the inner function cannot see the parameters of the outer function because of the shared parameter names.</p>
 </blockquote>
 <hr>
-<h4>The <code>rest</code> Parameter</h4>
+<h4 id="rest">The <code>rest</code> Parameter</h4>
 <p>If the final parameter of a function is called <code>rest</code>, it collects 'the rest of the arguments' in an array:</p>
 <pre><code>f = fun x y rest
     rest
@@ -56,11 +59,11 @@ f = fun rest
 \f 5 6 7 8   // [5, 6, 7, 8]
 </code></pre>
 <hr>
-<h4>Default Parameters</h4>
-<p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value (so the default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed):</p>
+<h4 id="default-parameters">Default Parameters</h4>
+<p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value — the default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed:</p>
 <pre><code>f = fun x
-  x ?= 5
-  x + 10
+    x ?= 5
+    x + 10
 
 \f 3   // 13
 \f     // 15  
@@ -83,16 +86,16 @@ f = fun rest
     v &lt;- 6
     @ x u v rest
 
-\f 10 (# u 20) 30 40;   // [10, 20, 6, [30, 40]]   
+\f 10 (# u 20) 30 40   // [10, 20, 6, [30, 40]]   
 </code></pre>
 <blockquote>
 <p>Except for defaulting to an empty object, there is nothing special about <code>ops</code> — it can be used and modified like any other object.</p>
 </blockquote>
 <blockquote>
-<p><code>&lt;-</code> simply looks for the variable <code>ops</code> and gets the required property. <code>ops</code> will typically be an argument of the current function, but need not be.</p>
+<p><code>&lt;-</code> simply looks for the variable <code>ops</code> and gets the required property. <code>ops</code> will typically be a parameter of the current function, but need not be.</p>
 </blockquote>
 <blockquote>
-<p><code>&lt;-</code> uses short-circuit evaluation: if the relevant property of <code>ops</code> is neither <code>null</code> nor <code>undefined</code>, the second operand of <code>&lt;-</code> is not evaluated.</p>
+<p><code>&lt;-</code> uses short-circuit evaluation: if the relevant property of <code>ops</code> is neither <code>null</code> nor <code>undefined</code>, the right-hand side of <code>&lt;-</code> is not evaluated.</p>
 </blockquote>
 <hr>
 <h4 id="generator-functions">Generators</h4>
@@ -104,9 +107,10 @@ f = fun rest
 g = \f         // generator
 g ~next        // {value: 5, done: false}
 </code></pre>
-<blockquote>
-<p>Procedures cannot be generators, so <code>yield</code> and <code>yieldFrom</code> cannot be used inside procedures.</p>
-</blockquote>
+<p>Note that a procedure cannot be a generator function:</p>
+<pre><code>proc
+    yield 5   // syntax error, invalid use of yield
+</code></pre>
 
 
 <br><br><br>

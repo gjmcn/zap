@@ -88,9 +88,9 @@ The term _identifier_ is used frequently in these docs. An identifier is any com
 
 ---
 
-#### Special Behavior
+#### Special Cases
 
-Some operators do not follow the normal syntax rules:
+Additional rules apply to some operators:
 
 ###### The Right Operand Rule {#right-operand-rule}
 
@@ -145,4 +145,19 @@ y = x = 8     // syntax error, multiple assignments are not allowed
 ```
 x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
+```
+
+##### Body {#body-rules}
+
+Operators that open a new [scope](?Scope) take a _body_ as their final operand. The body must be in parentheses or be an indented block. Also, the body cannot be before the operator:
+
+```
+fun x y
+    x + y         // function
+
+fun x y (x + y)   // function
+
+x y fun (x + y)   // function
+
+x y (x + y) fun   // syntax error, missing function body
 ```
