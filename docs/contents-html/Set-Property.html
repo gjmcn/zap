@@ -1,7 +1,7 @@
 <h2>Set Property</h2>
 <hr>
 <h5>Assignment</h5>
-<p>The assignment operator <code>=</code>, and the update-assignment operators <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> can be used to set an object/array property:</p>
+<p>The assignment operator <code>=</code> and the update-assignment operators <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> can be used to set an object/array property:</p>
 <pre><code>circle = # radius 50 center (@ 100 200)
 
 circle :color = 'red'    // 'red'
@@ -12,7 +12,7 @@ circle   // {radius: 60, center: [100, 205], color: 'red'}
 </code></pre>
 <hr>
 <h5 id="chg"><code>chg</code></h5>
-<p>Set an object/array property. <code>chg</code> returns the modified object:</p>
+<p><code>chg</code> takes an object/array, a property name and a new value for the property. <code>chg</code> sets the property and returns the modified object:</p>
 <pre><code>o = # u 5 v 6
 o 
 | chg 'u' 10
@@ -23,7 +23,7 @@ o
 </blockquote>
 <hr>
 <h5 id="attach"><code>attach</code></h5>
-<p><code>attach</code> sets a properties using variables of the same name:</p>
+<p><code>attach</code> sets properties using variables of the same name:</p>
 <pre><code>width = 100
 height = 200
 color = 'red'
@@ -47,8 +47,8 @@ o assign p     // {u: 5, v: 7, w: 8}
 <p>Use a custom setter function for a property:</p>
 <pre><code>o = # celsius 10
 
-o getter 'fahrenheit' [this :celsius * 1.8 + 32]
-o setter 'fahrenheit' [this :celsius = a - 32 / 1.8]
+o 'fahrenheit' getter [this :celsius * 1.8 + 32]
+o 'fahrenheit' setter [this :celsius = a - 32 / 1.8]
 
 o :fahrenheit   // 50
 
@@ -59,7 +59,7 @@ o :fahrenheit = 86
 o :celsius      // 30
 </code></pre>
 <p>In general:</p>
-<pre><code>o setter 'x' f
+<pre><code>o 'x' setter f
 </code></pre>
 <p>is equivalent to:</p>
 <pre><code>Object ~defineProperty o 'x'

@@ -113,7 +113,7 @@ Use a custom getter function for a property:
 
 ```
 o = # celsius 10
-o getter 'fahrenheit' [this :celsius * 1.8 + 32]
+o 'fahrenheit' getter [this :celsius * 1.8 + 32]
 
 o :fahrenheit     // 50
 
@@ -124,7 +124,7 @@ o :fahrenheit     // 68
 In general:
 
 ```
-o getter 'x' f
+o 'x' getter f
 ```
 
 is equivalent to:

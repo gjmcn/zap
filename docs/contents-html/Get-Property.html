@@ -79,7 +79,7 @@ data :0 :Origin at (@ 1 3)   // 'uo'
 <h5 id="getter"><code>getter</code></h5>
 <p>Use a custom getter function for a property:</p>
 <pre><code>o = # celsius 10
-o getter 'fahrenheit' [this :celsius * 1.8 + 32]
+o 'fahrenheit' getter [this :celsius * 1.8 + 32]
 
 o :fahrenheit     // 50
 
@@ -87,7 +87,7 @@ o :celsius = 20   // 20 (set celsius property to 20)
 o :fahrenheit     // 68
 </code></pre>
 <p>In general:</p>
-<pre><code>o getter 'x' f
+<pre><code>o 'x' getter f
 </code></pre>
 <p>is equivalent to:</p>
 <pre><code>Object ~defineProperty o 'x'
