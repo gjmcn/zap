@@ -1,5 +1,35 @@
 <h2>Loops</h2>
 <hr>
+<h4 id="each"><code>each</code></h4>
+<p>The first operand of <code>each</code> is the iterable to loop over; the final operand is the loop <a href="?Syntax#body-rules">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
+<pre><code>// body in parentheses, prints: 4 5 6
+@ 4 5 6 each x (print x)
+
+// body is an indented block, prints: 4,0 5,1 6,2
+@ 4 5 6 each x i
+    + x','i
+</code></pre>
+<hr>
+<h4 id="map"><code>map</code></h4>
+<p>!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+<hr>
+<h4 id="do"><code>do</code></h4>
+<hr>
+<h4 id="async-loops"><code>asyncEach</code>, <code>asyncMap</code>, <code>asyncDo</code></h4>
+<p>Asynchronous versions of <a href="#each"><code>each</code></a>, <a href="#map"><code>map</code></a> and <a href="#do"><code>do</code></a>. These operators return a promise that resolves to the equivalent of that returned by the synchrnous version of the operator.</p>
+<p><code>await</code> can be used in body of asynchronous loops, regardless of the parent scope  -- USE ASYNCSCOPE ...</p>
+<p>In the following example, we use an <code>asyncScope</code> so that we can</p>
+<pre><code>
+
+</code></pre>
+<hr>
+<h4 id="loop-variables">Loop Parameters and Variables</h4>
+<p>Loop parameters and any variables created inside the loop body are local to each step of the loop — they are effectively created fresh each step.</p>
+<hr>
+<h4 id="stop">Breaking from Loops</h4>
+<hr>
+<h4 id="yield-in-loops">Using 'yield'</h4>
+<hr>
 <p>Use <code>$each</code> or <code>$map</code> to loop over an iterable. <code>$each</code> and <code>$map</code> are passed an iterable and a callback function; <code>$each</code> returns the iterable whereas <code>$map</code> collects the values returned by the callback in an array:</p>
 <pre><code>x = @ 5 6;
 x $each [a $print];   // prints 5 6, returns x 
@@ -51,50 +81,6 @@ $print 'done';
   $print 'done'};
 </code></pre>
 <p>As demonstrated in the above example, <code>$awaitEach</code> (and <code>$awaitMap</code>) is itself awaited — <code>'done'</code> is printed <em>after</em> the numbers are printed.</p>
-<h4 id="zipped-loops">Zipped Loops</h4>
-<p><code>$zipEach</code> and <code>$zipMap</code> take one or more iterables and a callback function. The callback is passed the first element of each iterable, then the second element of each iterable, ...</p>
-<pre><code>x = @ 5 6 7;       // [5, 6, 7]
-y = @@ 50 60 70;   // Set {50, 60, 70}
-
-x y $zipEach [a + b $print];    // prints 55 66 77
-x y $zipMap [a + b];            // [55, 66, 77]
-</code></pre>
-<p><code>$zipEach</code> and <code>$zipMap</code> return when the end of the shortest iterable is reached. <code>$zipEach</code> returns <code>undefined</code>, <code>$zipMap</code> returns an array.</p>
-<p>The callback is passed the current index and the iterables (in an array) after the elements. If any of the iterables is a generator, its return method can be used to exit the loop (at the end of the current step):</p>
-<pre><code>x = 5 &gt;&gt; 10;        // generator (5 6 7 8 9 10)
-y = 50 &gt;&gt; 100 10;   // generator (50 60 70 80 90 100)
-
-x y $zipMap [xi yi i iterables -&gt;
-  i == 2 ? (iterables :0 |return);
-  xi + yi];         // [55, 66, 77]
-</code></pre>
-<blockquote>
-<p><a href="?Generators#zip"><code>$zip</code></a> returns a generator that iterates over multiple iterables simultaneously.</p>
-</blockquote>
-<h4 id="nested-loops">Nested Loops</h4>
-<p><code>$nestEach</code> and <code>$nestMap</code> take one or more iterables and a callback function, and loop over the iterables as in a nested loop. <code>$nestEach</code> returns <code>undefined</code>, <code>$nestMap</code> returns nested arrays:</p>
-<pre><code>x = @ 10 20;   // [10, 20]
-y = @ 5 6 7;   // [5, 6, 7]
-
-// explicit nested loop, prints 15 16 17 25 26 27
-// (use custom parameter names to avoid shadowing)
-x $each [xi -&gt;
-  y $each [yi -&gt;
-    xi + yi $print]];
-
-// using nestEach, prints 15 16 17 25 26 27
-x y $nestEach [a + b $print];
-
-// using nestMap, returns [[15, 16, 17], [25, 26, 27]]
-x y $nestMap [a + b];
-</code></pre>
-<p><code>$nestEach</code> and <code>$nestMap</code> create a new array from each iterable and loop over these arrays. This allows generators (which can only be used once) to be used with <code>$nestEach</code> and <code>$nestMap</code>. However, it also means that the <code>return</code> method of a generator <em>cannot</em> be used to exit the loop.</p>
-<blockquote>
-<p><code>$nestEach</code> and <code>$nestMap</code> do <em>not</em> pass the loop indices or the iterables to the callback.</p>
-</blockquote>
-<blockquote>
-<p><a href="?Generators#nest"><code>$nest</code></a> returns a generator for a nested loop.</p>
-</blockquote>
 
 
 <br><br><br>

@@ -2,6 +2,67 @@
 
 ---
 
+#### `each` {#each}
+
+The first operand of `each` is the iterable to loop over; the final operand is the loop [body](?Syntax#body-rules). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
+
+```
+// body in parentheses, prints: 4 5 6
+@ 4 5 6 each x (print x)
+
+// body is an indented block, prints: 4,0 5,1 6,2
+@ 4 5 6 each x i
+    + x','i
+```
+
+---
+
+#### `map` {#map}
+
+!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+---
+
+#### `do` {#do}
+
+
+---
+
+#### `asyncEach`, `asyncMap`, `asyncDo` {#async-loops}
+
+Asynchronous versions of [`each`](#each), [`map`](#map) and [`do`](#do). These operators return a promise that resolves to the equivalent of that returned by the synchrnous version of the operator.
+
+`await` can be used in body of asynchronous loops, regardless of the parent scope  -- USE ASYNCSCOPE ...
+
+
+In the following example, we use an `asyncScope` so that we can 
+
+
+```
+
+
+```
+
+
+---
+
+#### Loop Parameters and Variables {#loop-variables}
+
+Loop parameters and any variables created inside the loop body are local to each step of the loop &mdash; they are effectively created fresh each step.
+
+---
+
+#### Breaking from Loops {#stop}
+
+
+---
+
+#### Using 'yield' {'#yield-in-loops}
+
+
+-------------------------
+
+
 Use `$each` or `$map` to loop over an iterable. `$each` and `$map` are passed an iterable and a callback function; `$each` returns the iterable whereas `$map` collects the values returned by the callback in an array:
 
 ```
@@ -68,56 +129,3 @@ url = 'https://www.random.org/decimal-fractions/?num=1&dec=10&col=1&format=plain
 
 As demonstrated in the above example, `$awaitEach` (and `$awaitMap`) is itself awaited &mdash; `'done'` is printed _after_ the numbers are printed.
 
-#### Zipped Loops {#zipped-loops}
-
-`$zipEach` and `$zipMap` take one or more iterables and a callback function. The callback is passed the first element of each iterable, then the second element of each iterable, ...
-
-```
-x = @ 5 6 7;       // [5, 6, 7]
-y = @@ 50 60 70;   // Set {50, 60, 70}
-
-x y $zipEach [a + b $print];    // prints 55 66 77
-x y $zipMap [a + b];            // [55, 66, 77]
-```
-
-`$zipEach` and `$zipMap` return when the end of the shortest iterable is reached. `$zipEach` returns `undefined`, `$zipMap` returns an array.
-
-The callback is passed the current index and the iterables (in an array) after the elements. If any of the iterables is a generator, its return method can be used to exit the loop (at the end of the current step):
-
-```
-x = 5 >> 10;        // generator (5 6 7 8 9 10)
-y = 50 >> 100 10;   // generator (50 60 70 80 90 100)
-
-x y $zipMap [xi yi i iterables ->
-  i == 2 ? (iterables :0 |return);
-  xi + yi];         // [55, 66, 77]
-```
-
-> [`$zip`](?Generators#zip) returns a generator that iterates over multiple iterables simultaneously.
-
-#### Nested Loops {#nested-loops}
-
-`$nestEach` and `$nestMap` take one or more iterables and a callback function, and loop over the iterables as in a nested loop. `$nestEach` returns `undefined`, `$nestMap` returns nested arrays:
-
-```
-x = @ 10 20;   // [10, 20]
-y = @ 5 6 7;   // [5, 6, 7]
-
-// explicit nested loop, prints 15 16 17 25 26 27
-// (use custom parameter names to avoid shadowing)
-x $each [xi ->
-  y $each [yi ->
-    xi + yi $print]];
-
-// using nestEach, prints 15 16 17 25 26 27
-x y $nestEach [a + b $print];
-
-// using nestMap, returns [[15, 16, 17], [25, 26, 27]]
-x y $nestMap [a + b];
-```
-
-`$nestEach` and `$nestMap` create a new array from each iterable and loop over these arrays. This allows generators (which can only be used once) to be used with `$nestEach` and `$nestMap`. However, it also means that the `return` method of a generator _cannot_ be used to exit the loop.
-
-> `$nestEach` and `$nestMap` do _not_ pass the loop indices or the iterables to the callback.
-
-> [`$nest`](?Generators#nest) returns a generator for a nested loop.
