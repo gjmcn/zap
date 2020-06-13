@@ -4,6 +4,8 @@
 
 #### `class` {#class}
 
+Create a class.
+
 We can use a regular function as a constructor:
 
 ```
@@ -14,9 +16,9 @@ Animal = fun name age
 alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
 ```
 
-The `class` operator is used just like [`fun`](?Writing-Functions#fun), but creates an actual class. Furthermore, when `class` is used:
+The `class` operator is used just like [`fun`](?Writing-Functions#fun), but returns a class rather than a function. Furthermore, when `class` is used:
 
-* If the constructor's [body](?Syntax#body-rules) is empty, the arguments are automatically added to `this`:
+* If the constructor's [body](?Syntax#body-rules) is empty, the parameters are automatically added to `this`:
 
     ```
     Animal = class name age ()
@@ -42,11 +44,14 @@ The `class` operator is used just like [`fun`](?Writing-Functions#fun), but crea
 
     ```
     Animal = class name ()
-    \Animal 'Alex'   // TypeError: Class constructor Animal cannot
-                     // be invoked without 'new'
+    
+    new Animal 'Alex'   // Animal {name: "Alex"}
+    
+    \Animal 'Alex'      // TypeError: Class constructor Animal cannot
+                        // be invoked without 'new'
     ```
 
-Use  [`::`](?Get-Property#colon-proto-getter) to add functions to an objects prototype — i.e. to add methods to a class:
+Use [`::`](?Get-Property#colon-proto-getter) to add a function to an object's prototype — i.e. to add a method to a class:
 
 ```
 Animal = class name ()
@@ -62,7 +67,9 @@ alex ~speak   // 'Alex makes a noise'
 
 #### `extends` {#extends}
 
-Create a subclass. `extends` is like `class` except that:
+Create a subclass.
+
+`extends` is like [`class`](#class) except that:
 
 * The first operand of `extends` is the parent class.
 
@@ -85,10 +92,10 @@ colin = new Cat 'Colin'
 colin ~speak   // 'Colin meows'
 
 debra = new Dog 'Debra' 'doberman'
-debra ~speak   // 'Debra the doberman speaks'  
+debra ~speak   // 'Debra the doberman barks'  
 ```
 
-In the `Dog` constructor above, we call `super` to call the constructor of the parent class. In general, `super` must be called in the constructor of a subclass &mdash; and the call must be before `this` is used.
+In the `Dog` constructor above, we call `super` to call the constructor of the parent class. In fact, a subclass constructor _must_ call `super` &mdash; and the call must be before `this` is used.
 
 When using `extends`, the parent class need not have been created with `class`; it can be a regular function or a built-in object:
 
