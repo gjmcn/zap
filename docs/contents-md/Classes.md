@@ -2,17 +2,54 @@
 
 ---
 
-The `class` and `extends` operators described in this section allow specifying a constructor function while creating the class. The body of the constructor opens a new [scope](?Scope); the return value of the constructor is ignored.
-
----
-
 #### `class` {#class}
 
-`class` is used like [`fun`](?Writing-Functions#fun) to simultaneously create a class and its contructor function. After creating a class, we can use [`::`](?Get-Property#colon-proto-getter) to add functions to the class prototype &mdash; i.e. to add methods:
+We can use a regular function as a constructor:
 
 ```
-Animal = class name
+Animal = fun name age
     this :name = name
+    this :age = age
+
+alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
+```
+
+The `class` operator is used just like [`fun`](?Writing-Functions#fun), but creates an actual class. Furthermore, when `class` is used:
+
+* If the constructor's [body](?Syntax#body-rules) is empty, the arguments are automatically added to `this`:
+
+    ```
+    Animal = class name age ()
+
+    // is equivalent to:
+
+    Animal = class name age
+        this :name = name
+        this :age = age
+    ```
+
+* The constructor always returns the new instance:
+
+    ```
+    Animal = fun (# u 5)     // function
+    new Animal               // {u: 5}
+
+    Animal = class (# u 5)   // class
+    new Animal               // Animal {}
+    ```
+
+*  Calling the constructor throws an error:
+
+    ```
+    Animal = class name ()
+    \Animal 'Alex'   // TypeError: Class constructor Animal cannot
+                     // be invoked without 'new'
+    ```
+
+Use  [`::`](?Get-Property#colon-proto-getter) to add functions to an objects prototype — i.e. to add methods to a class:
+
+```
+Animal = class name ()
 
 Animal ::speak = fun
     + (this :name)' makes a noise'
@@ -21,58 +58,45 @@ alex = new Animal 'Alex'
 alex ~speak   // 'Alex makes a noise'
 ```
 
-> The distinction between a class and a standard function is rarely important &mdash; we could use `fun` in the above example.
-
-> A constructor can have a [`rest`](?Writing-Functions#rest) parameter and/or an [`ops`](?Writing-Functions#ops) parameter.
-
-Use `class` with no operands to create a class without specifying a constructor:
-
-```
-Animal = class
-Alex = new Animal
-```
-
 ---
 
 #### `extends` {#extends}
 
-Create a subclass. `extends` is used like `class` except that the first operand is the parent class:
+Create a subclass. `extends` is like `class` except that:
+
+* The first operand of `extends` is the parent class.
+
+* If the constructor [body](?Syntax#body-rules) is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.
 
 ```
-Animal = class name
-    this :name = name
+Animal = class name ()
+
+Cat = extends Animal ()   // default constructor
+Cat ::speak = fun
+    + (this :name)' meows'
 
 Dog = extends Animal name breed
-    \super name
+    \super name   // see below
     this :breed = breed
-
 Dog ::speak = fun
     + (this :name)' the '(this :breed)' barks'
 
-alex = new Dog 'Alex' 'pug'
-alex ~speak   // 'Alex the pug barks'
+colin = new Cat 'Colin'
+colin ~speak   // 'Colin meows'
+
+debra = new Dog 'Debra' 'doberman'
+debra ~speak   // 'Debra the doberman speaks'  
 ```
 
-In the example above, we call `super` inside the `Dog` constructor to call the constructor of the parent class (`Animal`). `super` must be called in the child constructor, before `this` is used &mdash; and must be called somewhere in the constructor even if `this` is not used.
+In the `Dog` constructor above, we call `super` to call the constructor of the parent class. In general, `super` must be called in the constructor of a subclass &mdash; and the call must be before `this` is used.
 
-Use `class` with no operands to create a subclass without specifying a constructor. In this case, the subclass has a default constructor that passes its arguments to the parent constructor:
-
-```
-Animal = class name
-    this :name = name
-
-Dog = extends Animal
-
-Dog ::speak = fun
-    + (this :name)' barks'
-
-alex = new Dog 'Alex'
-alex ~speak   // 'Alex barks'
-```
-
-`extends` can be used to subclass built-in objects:
+When using `extends`, the parent class need not have been created with `class`; it can be a regular function or a built-in object:
 
 ```
-Vector = extends Array
-v = new Vector 3
+Animal = fun ()             // function
+Dog = extends Animal ()     // class
+new Dog                     // Dog {}
+
+Vector = extends Array ()   // class
+new Vector 3                // Vector [empty × 3]
 ```

@@ -1,11 +1,45 @@
 <h2>Classes</h2>
 <hr>
-<p>The <code>class</code> and <code>extends</code> operators described in this section allow specifying a constructor function while creating the class. The body of the constructor opens a new <a href="?Scope">scope</a>; the return value of the constructor is ignored.</p>
-<hr>
 <h4 id="class"><code>class</code></h4>
-<p><code>class</code> is used like <a href="?Writing-Functions#fun"><code>fun</code></a> to simultaneously create a class and its contructor function. After creating a class, we can use <a href="?Get-Property#colon-proto-getter"><code>::</code></a> to add functions to the class prototype — i.e. to add methods:</p>
-<pre><code>Animal = class name
+<p>We can use a regular function as a constructor:</p>
+<pre><code>Animal = fun name age
     this :name = name
+    this :age = age
+
+alex = new Animal 'Alex' 8   // Animal {name: &quot;Alex&quot;, age: 8}
+</code></pre>
+<p>The <code>class</code> operator is used just like <a href="?Writing-Functions#fun"><code>fun</code></a>, but creates an actual class. Furthermore, when <code>class</code> is used:</p>
+<ul>
+<li>
+<p>If the constructor's <a href="?Syntax#body-rules">body</a> is empty, the arguments are automatically added to <code>this</code>:</p>
+<pre><code>Animal = class name age ()
+
+// is equivalent to:
+
+Animal = class name age
+    this :name = name
+    this :age = age
+</code></pre>
+</li>
+<li>
+<p>The constructor always returns the new instance:</p>
+<pre><code>Animal = fun (# u 5)     // function
+new Animal               // {u: 5}
+
+Animal = class (# u 5)   // class
+new Animal               // Animal {}
+</code></pre>
+</li>
+<li>
+<p>Calling the constructor throws an error:</p>
+<pre><code>Animal = class name ()
+\Animal 'Alex'   // TypeError: Class constructor Animal cannot
+                 // be invoked without 'new'
+</code></pre>
+</li>
+</ul>
+<p>Use  <a href="?Get-Property#colon-proto-getter"><code>::</code></a> to add functions to an objects prototype — i.e. to add methods to a class:</p>
+<pre><code>Animal = class name ()
 
 Animal ::speak = fun
     + (this :name)' makes a noise'
@@ -13,48 +47,43 @@ Animal ::speak = fun
 alex = new Animal 'Alex'
 alex ~speak   // 'Alex makes a noise'
 </code></pre>
-<blockquote>
-<p>The distinction between a class and a standard function is rarely important — we could use <code>fun</code> in the above example.</p>
-</blockquote>
-<blockquote>
-<p>A constructor can have a <a href="?Writing-Functions#rest"><code>rest</code></a> parameter and/or an <a href="?Writing-Functions#ops"><code>ops</code></a> parameter.</p>
-</blockquote>
-<p>Use <code>class</code> with no operands to create a class without specifying a constructor:</p>
-<pre><code>Animal = class
-Alex = new Animal
-</code></pre>
 <hr>
 <h4 id="extends"><code>extends</code></h4>
-<p>Create a subclass. <code>extends</code> is used like <code>class</code> except that the first operand is the parent class:</p>
-<pre><code>Animal = class name
-    this :name = name
+<p>Create a subclass. <code>extends</code> is like <code>class</code> except that:</p>
+<ul>
+<li>
+<p>The first operand of <code>extends</code> is the parent class.</p>
+</li>
+<li>
+<p>If the constructor <a href="?Syntax#body-rules">body</a> is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.</p>
+</li>
+</ul>
+<pre><code>Animal = class name ()
+
+Cat = extends Animal ()   // default constructor
+Cat ::speak = fun
+    + (this :name)' meows'
 
 Dog = extends Animal name breed
-    \super name
+    \super name   // see below
     this :breed = breed
-
 Dog ::speak = fun
     + (this :name)' the '(this :breed)' barks'
 
-alex = new Dog 'Alex' 'pug'
-alex ~speak   // 'Alex the pug barks'
+colin = new Cat 'Colin'
+colin ~speak   // 'Colin meows'
+
+debra = new Dog 'Debra' 'doberman'
+debra ~speak   // 'Debra the doberman speaks'  
 </code></pre>
-<p>In the example above, we call <code>super</code> inside the <code>Dog</code> constructor to call the constructor of the parent class (<code>Animal</code>). <code>super</code> must be called in the child constructor, before <code>this</code> is used — and must be called somewhere in the constructor even if <code>this</code> is not used.</p>
-<p>Use <code>class</code> with no operands to create a subclass without specifying a constructor. In this case, the subclass has a default constructor that passes its arguments to the parent constructor:</p>
-<pre><code>Animal = class name
-    this :name = name
+<p>In the <code>Dog</code> constructor above, we call <code>super</code> to call the constructor of the parent class. In general, <code>super</code> must be called in the constructor of a subclass — and the call must be before <code>this</code> is used.</p>
+<p>When using <code>extends</code>, the parent class need not have been created with <code>class</code>; it can be a regular function or a built-in object:</p>
+<pre><code>Animal = fun ()             // function
+Dog = extends Animal ()     // class
+new Dog                     // Dog {}
 
-Dog = extends Animal
-
-Dog ::speak = fun
-    + (this :name)' barks'
-
-alex = new Dog 'Alex'
-alex ~speak   // 'Alex barks'
-</code></pre>
-<p><code>extends</code> can be used to subclass built-in objects:</p>
-<pre><code>Vector = extends Array
-v = new Vector 3
+Vector = extends Array ()   // class
+new Vector 3                // Vector [empty × 3]
 </code></pre>
 
 
