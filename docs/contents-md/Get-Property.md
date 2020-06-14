@@ -27,7 +27,7 @@ circle :color :2          // 'd'
 
 #### `::` {#colon-proto-getter}
 
-`::` is like [`:`](#colon-getter), but gets a property from the object's prototype:
+As [`:`](#colon-getter), but `::` gets a property from the object's prototype:
 
 ```
 Array :prototype :slice   // function
@@ -38,7 +38,7 @@ Array ::slice             // same function
 
 #### `?:` {#conditional-get}
 
-`?:` is like [`:`](#colon-getter), but `?:` short-circuits and returns `undefined` if the object is `null` or `undefined`:
+As [`:`](#colon-getter), but `?:` short-circuits and returns `undefined` if the object is `null` or `undefined`:
 
 ```
 o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
@@ -52,7 +52,7 @@ o :q ?:y   // undefined
 
 #### `,` {#comma-getter}
 
-`,` is like [`:`](#colon-getter), but `,` does not use the [right operand rule](?Syntax#right-operand-rule) or the [identifier-name rule](?Syntax#identifier-name-rule):
+As [`:`](#colon-getter), but `,` does not use the [right operand rule](?Syntax#right-operand-rule) or the [identifier-name rule](?Syntax#identifier-name-rule):
 
 ```
 circle = 

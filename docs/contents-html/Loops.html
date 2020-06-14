@@ -1,19 +1,74 @@
 <h2>Loops</h2>
 <hr>
 <h4 id="each"><code>each</code></h4>
+<p>Loop over an iterable.</p>
 <p>The first operand of <code>each</code> is the iterable to loop over; the final operand is the loop <a href="?Syntax#body-rules">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
 <pre><code>// body in parentheses, prints: 4 5 6
 @ 4 5 6 each x (print x)
 
-// body is an indented block, prints: 4,0 5,1 6,2
-@ 4 5 6 each x i
-    + x','i
+// body is an indented block, prints: 'a0' 'b1' 'c2'
+'abc' each s i
+    s + i
+</code></pre>
+<p>Use <code>stop</code> to exit a loop <em>at the end the current step</em>:</p>
+<pre><code>// prints 4 5 6
+@ 4 5 6 7 8 each x
+    print x
+    if (x &gt; 5)
+        stop
+
+// prints 4 5 6
+@ 4 5 6 7 8 each x
+    if (x &gt; 5)
+        stop
+    print x
 </code></pre>
 <hr>
 <h4 id="map"><code>map</code></h4>
-<p>!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+<p>As <a href="#map"><code>each</code></a>, but <code>map</code> collects the value of the body (the last expression evaluated) at each step in an array:</p>
+<pre><code>@ 4 5 6 map x (x + 10)   // [14, 15, 16]
+
+// returns [14, 15, 16]
+@ 4 5 6 7 8 map x i
+    if (i &lt; 4)
+        x + 10
+    | else
+        stop
+</code></pre>
 <hr>
 <h4 id="do"><code>do</code></h4>
+<p>Loop a given number of times.</p>
+<p>The final operand of <code>do</code> is the loop <a href="?Syntax#body-rules">body</a>. The optional operands are the number of steps and the current index:</p>
+<pre><code>// prints 0 1 2 3 4
+5 do i
+    print i
+</code></pre>
+<p>Use <code>stop</code> to exit a loop <em>at the end the current step</em>.</p>
+<p>Use <code>Infinity</code> as the number of steps when there there is no actual limit on the number of steps, but the index parameter is required:</p>
+<pre><code>// prints 0 1 2 3 4
+Infinity do i
+    print i
+    i += 1
+    if (i == 5)
+        stop
+</code></pre>
+<p>If only the loop body is given, the number of steps defaults to <code>Infinity</code>:</p>
+<pre><code>x = 1
+do
+    x *= 2
+    if (x &gt; 20)
+        stop
+x   // 32
+</code></pre>
+<p>Even though <code>stop</code> only exits a loop at the end of the current step, we can use <code>if</code> with an <code>else</code> branch to effectively exit a loop at the point where <code>stop</code> is encountered:</p>
+<pre><code>x = 25
+do
+    if (x &gt; 20)
+        stop
+    | else
+        x *= 2
+x   // 25
+</code></pre>
 <hr>
 <h4 id="async-loops"><code>asyncEach</code>, <code>asyncMap</code>, <code>asyncDo</code></h4>
 <p>Asynchronous versions of <a href="#each"><code>each</code></a>, <a href="#map"><code>map</code></a> and <a href="#do"><code>do</code></a>. These operators return a promise that resolves to the equivalent of that returned by the synchrnous version of the operator.</p>
@@ -25,8 +80,6 @@
 <hr>
 <h4 id="loop-variables">Loop Parameters and Variables</h4>
 <p>Loop parameters and any variables created inside the loop body are local to each step of the loop — they are effectively created fresh each step.</p>
-<hr>
-<h4 id="stop">Breaking from Loops</h4>
 <hr>
 <h4 id="yield-in-loops">Using 'yield'</h4>
 <hr>

@@ -4,45 +4,130 @@
 
 #### `each` {#each}
 
+Loop over an iterable.
+
 The first operand of `each` is the iterable to loop over; the final operand is the loop [body](?Syntax#body-rules). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
 
 ```
 // body in parentheses, prints: 4 5 6
 @ 4 5 6 each x (print x)
 
-// body is an indented block, prints: 4,0 5,1 6,2
-@ 4 5 6 each x i
-    + x','i
+// body is an indented block, prints: 'a0' 'b1' 'c2'
+'abc' each s i
+    s + i
+```
+
+Use `stop` to exit a loop _at the end the current step_:
+
+```
+// prints 4 5 6
+@ 4 5 6 7 8 each x
+    print x
+    if (x > 5)
+        stop
+
+// prints 4 5 6
+@ 4 5 6 7 8 each x
+    if (x > 5)
+        stop
+    print x
 ```
 
 ---
 
 #### `map` {#map}
 
-!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+As [`each`](#map), but `map` collects the value of the body (the last expression evaluated) at each step in an array:
+
+```
+@ 4 5 6 map x (x + 10)   // [14, 15, 16]
+
+// returns [14, 15, 16]
+@ 4 5 6 7 8 map x i
+    if (i < 4)
+        x + 10
+    | else
+        stop
+```
 
 ---
 
 #### `do` {#do}
 
+Loop a given number of times.
+
+The final operand of `do` is the loop [body](?Syntax#body-rules). The optional operands are the number of steps and the current index:
+
+```
+// prints 0 1 2 3 4
+5 do i
+    print i
+```
+
+Use `stop` to exit a loop _at the end the current step_. 
+
+Use `Infinity` as the number of steps when there there is no actual limit on the number of steps, but the index parameter is required:
+
+```
+// prints 0 1 2 3 4
+Infinity do i
+    print i
+    i += 1
+    if (i == 5)
+        stop
+```
+
+If only the loop body is given, the number of steps defaults to `Infinity`:
+
+```
+x = 1
+do
+    x *= 2
+    if (x > 20)
+        stop
+x   // 32
+```
+
+Even though `stop` only exits a loop at the end of the current step, we can use `if` with an `else` branch to effectively exit a loop at the point where `stop` is encountered:
+
+```
+x = 25
+do
+    if (x > 20)
+        stop
+    | else
+        x *= 2
+x   // 25
+```
 
 ---
 
 #### `asyncEach`, `asyncMap`, `asyncDo` {#async-loops}
 
-Asynchronous versions of [`each`](#each), [`map`](#map) and [`do`](#do). These operators return a promise that resolves to the equivalent of that returned by the synchrnous version of the operator.
+Asynchronous versions of [`each`](#each), [`map`](#map) and [`do`](#do).
 
-`await` can be used in body of asynchronous loops, regardless of the parent scope  -- USE ASYNCSCOPE ...
+These operators return a promise that resolves to the equivalent of that returned by the synchronous version of the operator.
 
-
-In the following example, we use an `asyncScope` so that we can 
-
+`await` can be used in the body of asynchronous loops. The following example uses [`period`](?Print-and-Debug#period) to create a promise that resolves after `delay` milliseconds:
 
 ```
-
-
+// wait 1000 ms, print 5,  wait 1000 ms, print 6 
+@ 5 6 asyncEach x
+    period 1000 await
+    print x
 ```
 
+If the parent [scope](#Scope) of an asynchronous loop is asynchronous, we can `await` the loop itself. The following example uses [`asyncScope`](?Scope#scope-op) to create an asynchrnouse scope:
+
+```
+// returns a promise thet resolves to 
+@ 5 6 ayncMap x
+    period 1000 await
+    x + 10
+
+
+!!!!!!!!!!!would we actually aawait inside the loop also with map?????????????????
+```
 
 ---
 
@@ -50,9 +135,6 @@ In the following example, we use an `asyncScope` so that we can
 
 Loop parameters and any variables created inside the loop body are local to each step of the loop &mdash; they are effectively created fresh each step.
 
----
-
-#### Breaking from Loops {#stop}
 
 
 ---

@@ -54,6 +54,8 @@ Similarly, `<\` is like the function call operator `\`, but `<\` returns the fir
 
 #### `call` and `apply` {#call-and-apply}
 
+Call a function.
+
 The first operand of `call` must be a function; any other operands are passed to the function:
 
 ```

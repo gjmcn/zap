@@ -19,13 +19,13 @@ circle :color :2          // 'd'
 </code></pre>
 <hr>
 <h4 id="colon-proto-getter"><code>::</code></h4>
-<p><code>::</code> is like <a href="#colon-getter"><code>:</code></a>, but gets a property from the object's prototype:</p>
+<p>As <a href="#colon-getter"><code>:</code></a>, but <code>::</code> gets a property from the object's prototype:</p>
 <pre><code>Array :prototype :slice   // function
 Array ::slice             // same function
 </code></pre>
 <hr>
 <h4 id="conditional-get"><code>?:</code></h4>
-<p><code>?:</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>?:</code> short-circuits and returns <code>undefined</code> if the object is <code>null</code> or <code>undefined</code>:</p>
+<p>As <a href="#colon-getter"><code>:</code></a>, but <code>?:</code> short-circuits and returns <code>undefined</code> if the object is <code>null</code> or <code>undefined</code>:</p>
 <pre><code>o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
 
 o :q       // undefined
@@ -34,7 +34,7 @@ o :q ?:y   // undefined
 </code></pre>
 <hr>
 <h4 id="comma-getter"><code>,</code></h4>
-<p><code>,</code> is like <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
+<p>As <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
 <pre><code>circle = 
     #
     | radius 50
