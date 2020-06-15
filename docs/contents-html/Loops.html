@@ -1,58 +1,62 @@
 <h2>Loops</h2>
 <hr>
+<blockquote>
+<p>Operators for working with iterables (including loop operators, but also see e.g. <a href="?Reduce">Reduce</a>, <a href="?Filter-and-Group">Filter and Group</a>, <a href="?Order-and-Bin">Order and Bin</a>, <a href="?Backticks">Backticks</a> and <a href="?Tabular-Data">Tabular Data</a>) treat empty array elements as normal elements (with value <code>undefined</code>). In contrast, some array methods ignore empty elements.</p>
+</blockquote>
+<hr>
 <h4 id="each"><code>each</code></h4>
 <p>Loop over an iterable.</p>
-<p>The first operand of <code>each</code> is the iterable to loop over; the final operand is the loop <a href="?Syntax#body-rules">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
+<p>The first operand of <code>each</code> is the iterable; the final operand is the loop <a href="?Syntax#body-rules">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
 <pre><code>// body in parentheses, prints: 4 5 6
 @ 4 5 6 each x (print x)
 
-// body is an indented block, prints: 'a0' 'b1' 'c2'
+// body in indented block, prints: 'a0' 'b1' 'c2'
 'abc' each s i
-    s + i
+    s + i print
 </code></pre>
-<p>Use <code>stop</code> to exit a loop <em>at the end the current step</em>:</p>
+<p><code>each</code> returns the iterable.</p>
+<p>Use <code>stop</code> to exit a loop <em>at the end of the current step</em>:</p>
 <pre><code>// prints 4 5 6
 @ 4 5 6 7 8 each x
     print x
-    if (x &gt; 5)
+    if (x == 6)
         stop
 
 // prints 4 5 6
 @ 4 5 6 7 8 each x
-    if (x &gt; 5)
+    if (x == 6)
         stop
     print x
 </code></pre>
 <hr>
 <h4 id="map"><code>map</code></h4>
-<p>As <a href="#map"><code>each</code></a>, but <code>map</code> collects the value of the body (the last expression evaluated) at each step in an array:</p>
+<p>As <a href="#each"><code>each</code></a>, but <code>map</code> collects the value of the body (the last expression evaluated) at each step in an array:</p>
 <pre><code>@ 4 5 6 map x (x + 10)   // [14, 15, 16]
 
 // returns [14, 15, 16]
 @ 4 5 6 7 8 map x i
-    if (i &lt; 4)
-        x + 10
-    | else
+    if (i == 2)
         stop
+    x + 10
 </code></pre>
 <hr>
 <h4 id="do"><code>do</code></h4>
-<p>Loop a given number of times.</p>
-<p>The final operand of <code>do</code> is the loop <a href="?Syntax#body-rules">body</a>. The optional operands are the number of steps and the current index:</p>
+<p>Basic loop.</p>
+<p>The final operand of <code>do</code> is the loop <a href="?Syntax#body-rules">body</a>. The optional operands are the maximum number of steps and the current index:</p>
 <pre><code>// prints 0 1 2 3 4
 5 do i
     print i
 </code></pre>
-<p>Use <code>stop</code> to exit a loop <em>at the end the current step</em>.</p>
-<p>Use <code>Infinity</code> as the number of steps when there there is no actual limit on the number of steps, but the index parameter is required:</p>
+<p><code>do</code> returns <code>undefined</code>.</p>
+<p>Use <code>stop</code> to exit a loop <em>at the end of the current step</em>.</p>
+<p>Use <code>Infinity</code> as the maximum number of steps when there is no actual maximum, but the index parameter is required:</p>
 <pre><code>// prints 0 1 2 3 4
 Infinity do i
     print i
-    i += 1
-    if (i == 5)
+    if (i == 4)
         stop
 </code></pre>
-<p>If only the loop body is given, the number of steps defaults to <code>Infinity</code>:</p>
+<p>If only the loop body is given, the maximum number of steps defaults to <code>Infinity</code>:</p>
 <pre><code>x = 1
 do
     x *= 2
@@ -69,71 +73,51 @@ do
         x *= 2
 x   // 25
 </code></pre>
+<p>The maximum number of steps is fixed before the loop starts:</p>
+<pre><code>// prints 0 1 2 3 4
+n = 5
+n do i
+    n += 10
+    print i
+</code></pre>
 <hr>
 <h4 id="async-loops"><code>asyncEach</code>, <code>asyncMap</code>, <code>asyncDo</code></h4>
-<p>Asynchronous versions of <a href="#each"><code>each</code></a>, <a href="#map"><code>map</code></a> and <a href="#do"><code>do</code></a>. These operators return a promise that resolves to the equivalent of that returned by the synchrnous version of the operator.</p>
-<p><code>await</code> can be used in body of asynchronous loops, regardless of the parent scope  -- USE ASYNCSCOPE ...</p>
-<p>In the following example, we use an <code>asyncScope</code> so that we can</p>
-<pre><code>
-
+<p>Asynchronous versions of <a href="#each"><code>each</code></a>, <a href="#map"><code>map</code></a> and <a href="#do"><code>do</code></a>.</p>
+<p>These operators return a promise that resolves to:</p>
+<ul>
+<li><code>asyncEach</code>: the iterable</li>
+<li><code>asyncMap</code>: a new array</li>
+<li><code>asyncDo</code>: <code>undefined</code></li>
+</ul>
+<p><code>await</code> can be used in the body of an asynchronous loop. The following example uses <a href="?Print-and-Debug#period"><code>period</code></a> to create a promise that resolves after 1000 milliseconds:</p>
+<pre><code>// wait 1000 ms, print 5, wait 1000 ms, print 6 
+@ 5 6 asyncEach x
+    period 1000 await
+    print x
+</code></pre>
+<p>If the parent <a href="?Scope">scope</a> of an asynchronous loop is asynchronous, we can <code>await</code> the loop itself. The following example uses <a href="?Scope#scope-op"><code>asyncScope</code></a> to create an asynchronous scope:</p>
+<pre><code>// wait 1000 ms, print 5, wait 1000 ms, print 6, print 'done'
+asyncScope
+    @ 5 6 asyncEach x
+        period 1000 await
+        print x
+    | await
+    print 'done'
 </code></pre>
 <hr>
 <h4 id="loop-variables">Loop Parameters and Variables</h4>
-<p>Loop parameters and any variables created inside the loop body are local to each step of the loop — they are effectively created fresh each step.</p>
+<p>Loop parameters, and variables created inside the loop body are local to a single step of the loop. Assigning a new value to a parameter/variable will not affect its value at the next step, nor will it affect the behavior of the loop.</p>
 <hr>
-<h4 id="yield-in-loops">Using 'yield'</h4>
-<hr>
-<p>Use <code>$each</code> or <code>$map</code> to loop over an iterable. <code>$each</code> and <code>$map</code> are passed an iterable and a callback function; <code>$each</code> returns the iterable whereas <code>$map</code> collects the values returned by the callback in an array:</p>
-<pre><code>x = @ 5 6;
-x $each [a $print];   // prints 5 6, returns x 
-x $map [a + 10];      // [15, 16]
+<h4 id="yield-in-loops">Using <code>yield</code> and <code>yieldFrom</code></h4>
+<p>If <code>yield</code> or <code>yieldFrom</code> is used in the body of an <a href="#each"><code>each</code></a>, <a href="#do"><code>do</code></a>, <a href="#async-loops"><code>asyncEach</code></a> or <a href="#async-loops"><code>asyncDo</code></a> loop, the operator returns a generator (or asynchronous generator):</p>
+<pre><code>g = @ 5 6 7 each x (yield x)   // generator
+g array                        // [5, 6, 7]
 
-o = # u 5 v 6;
-Object |values o $map [a + 10];   // [15, 16]
-
-m = ## u 5 v 6;            // Map {'u' =&gt; 5, 'v' =&gt; 6}
-m |values $map [a + 10];   // [15, 16]
+@ 5 6 7 each x
+    yield x
+    yieldFrom 'ab'   // generator
+| array              // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
 </code></pre>
-<p>The callback is passed the 'current index' as its second argument and the iterable as the third argument:</p>
-<pre><code>@ 5 6 7 $map [b];         // [0, 1, 2]
-@ 5 6 7 $map [c |join];   // ['5,6,7', '5,6,7', '5,6,7']
-</code></pre>
-<p>If used with a single operand (a function), <code>$each</code> and <code>$map</code> automatically create an 'infinite generator' that yields <code>undefined</code> until its <code>return</code> method is called:</p>
-<pre><code>// prints 0 1 2 3
-$each [
-  b $print;
-  b == 3 ? (c |return)];
-</code></pre>
-<blockquote>
-<p>Calling a generator's <code>return</code> method exits a loop <em>at the end</em> of the current step.</p>
-</blockquote>
-<blockquote>
-<p>When <code>$each</code> or <code>$map</code> is used with a single operand, the loop has at least one step. Use <a href="?Generators#do-and-while"><code>$while</code></a> when the loop may have zero steps.</p>
-</blockquote>
-<blockquote>
-<p>Operators for working with iterables (including the operators in this section, but also see e.g. <a href="?Reduce">Reduce</a>, <a href="?Filter-and-Group">Filter and Group</a>, <a href="?Order-and-Bin">Order and Bin</a>, <a href="?Backticks">Backticks</a> and <a href="?Tabular-Data">Tabular Data</a>) treat empty array elements as normal elements (with value <code>undefined</code>). In contrast, some array methods ignore empty elements.</p>
-</blockquote>
-<h4 id="async-loops">Asynchronous Loops</h4>
-<p>The callback function of <code>$each</code> or <code>$map</code> can be asynchronous:</p>
-<pre><code>// web service that returns a random number
-url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
-
-// prints 'done', then prints 3 random numbers
-1 &gt;&gt; 3 $each {url \fetch $await |text $await $number $print};
-$print 'done';
-</code></pre>
-<p>In the above example, the loop moves to the next step without waiting for the promise returned by the callback to resolve. If we had used <code>$map</code>, the returned array would contain the promises. In contrast to this behavior, <code>$awaitEach</code> and <code>$awaitMap</code> await both the iterable and the callback at each step. Like <code>$each</code> and <code>$map</code>, <code>$awaitEach</code> and <code>$awaitMap</code> use an infinite synchronous generator by default.</p>
-<p><code>$awaitEach</code> and <code>$awaitMap</code> can only be used inside an asynchronous function:</p>
-<pre><code>url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
-
-\{
-  // prints random numbers until &gt; 0.9, then prints 'done'
-  $awaitEach {
-    x = url \fetch $await |text $await $number $print;
-    x &gt; 0.9 ? (c |return)};
-  $print 'done'};
-</code></pre>
-<p>As demonstrated in the above example, <code>$awaitEach</code> (and <code>$awaitMap</code>) is itself awaited — <code>'done'</code> is printed <em>after</em> the numbers are printed.</p>
 
 
 <br><br><br>

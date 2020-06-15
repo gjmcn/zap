@@ -2,33 +2,39 @@
 
 ---
 
+> Operators for working with iterables (including loop operators, but also see e.g. [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and [Tabular Data](?Tabular-Data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
+
+---
+
 #### `each` {#each}
 
 Loop over an iterable.
 
-The first operand of `each` is the iterable to loop over; the final operand is the loop [body](?Syntax#body-rules). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
+The first operand of `each` is the iterable; the final operand is the loop [body](?Syntax#body-rules). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
 
 ```
 // body in parentheses, prints: 4 5 6
 @ 4 5 6 each x (print x)
 
-// body is an indented block, prints: 'a0' 'b1' 'c2'
+// body in indented block, prints: 'a0' 'b1' 'c2'
 'abc' each s i
-    s + i
+    s + i print
 ```
 
-Use `stop` to exit a loop _at the end the current step_:
+`each` returns the iterable.
+
+Use `stop` to exit a loop _at the end of the current step_:
 
 ```
 // prints 4 5 6
 @ 4 5 6 7 8 each x
     print x
-    if (x > 5)
+    if (x == 6)
         stop
 
 // prints 4 5 6
 @ 4 5 6 7 8 each x
-    if (x > 5)
+    if (x == 6)
         stop
     print x
 ```
@@ -37,26 +43,25 @@ Use `stop` to exit a loop _at the end the current step_:
 
 #### `map` {#map}
 
-As [`each`](#map), but `map` collects the value of the body (the last expression evaluated) at each step in an array:
+As [`each`](#each), but `map` collects the value of the body (the last expression evaluated) at each step in an array:
 
 ```
 @ 4 5 6 map x (x + 10)   // [14, 15, 16]
 
 // returns [14, 15, 16]
 @ 4 5 6 7 8 map x i
-    if (i < 4)
-        x + 10
-    | else
+    if (i == 2)
         stop
+    x + 10
 ```
 
 ---
 
 #### `do` {#do}
 
-Loop a given number of times.
+Basic loop.
 
-The final operand of `do` is the loop [body](?Syntax#body-rules). The optional operands are the number of steps and the current index:
+The final operand of `do` is the loop [body](?Syntax#body-rules). The optional operands are the maximum number of steps and the current index:
 
 ```
 // prints 0 1 2 3 4
@@ -64,20 +69,21 @@ The final operand of `do` is the loop [body](?Syntax#body-rules). The optional o
     print i
 ```
 
-Use `stop` to exit a loop _at the end the current step_. 
+`do` returns `undefined`.
 
-Use `Infinity` as the number of steps when there there is no actual limit on the number of steps, but the index parameter is required:
+Use `stop` to exit a loop _at the end of the current step_.
+
+Use `Infinity` as the maximum number of steps when there is no actual maximum, but the index parameter is required:
 
 ```
 // prints 0 1 2 3 4
 Infinity do i
     print i
-    i += 1
-    if (i == 5)
+    if (i == 4)
         stop
 ```
 
-If only the loop body is given, the number of steps defaults to `Infinity`:
+If only the loop body is given, the maximum number of steps defaults to `Infinity`:
 
 ```
 x = 1
@@ -100,114 +106,67 @@ do
 x   // 25
 ```
 
+The maximum number of steps is fixed before the loop starts:
+
+```
+// prints 0 1 2 3 4
+n = 5
+n do i
+    n += 10
+    print i
+```
+
 ---
 
 #### `asyncEach`, `asyncMap`, `asyncDo` {#async-loops}
 
 Asynchronous versions of [`each`](#each), [`map`](#map) and [`do`](#do).
 
-These operators return a promise that resolves to the equivalent of that returned by the synchronous version of the operator.
+These operators return a promise that resolves to:
 
-`await` can be used in the body of asynchronous loops. The following example uses [`period`](?Print-and-Debug#period) to create a promise that resolves after `delay` milliseconds:
+* `asyncEach`: the iterable
+* `asyncMap`: a new array
+* `asyncDo`: `undefined`
+
+`await` can be used in the body of an asynchronous loop. The following example uses [`period`](?Print-and-Debug#period) to create a promise that resolves after 1000 milliseconds:
 
 ```
-// wait 1000 ms, print 5,  wait 1000 ms, print 6 
+// wait 1000 ms, print 5, wait 1000 ms, print 6 
 @ 5 6 asyncEach x
     period 1000 await
     print x
 ```
 
-If the parent [scope](#Scope) of an asynchronous loop is asynchronous, we can `await` the loop itself. The following example uses [`asyncScope`](?Scope#scope-op) to create an asynchrnouse scope:
+If the parent [scope](?Scope) of an asynchronous loop is asynchronous, we can `await` the loop itself. The following example uses [`asyncScope`](?Scope#scope-op) to create an asynchronous scope:
 
 ```
-// returns a promise thet resolves to 
-@ 5 6 ayncMap x
-    period 1000 await
-    x + 10
-
-
-!!!!!!!!!!!would we actually aawait inside the loop also with map?????????????????
+// wait 1000 ms, print 5, wait 1000 ms, print 6, print 'done'
+asyncScope
+    @ 5 6 asyncEach x
+        period 1000 await
+        print x
+    | await
+    print 'done'
 ```
 
 ---
 
 #### Loop Parameters and Variables {#loop-variables}
 
-Loop parameters and any variables created inside the loop body are local to each step of the loop &mdash; they are effectively created fresh each step.
-
-
+Loop parameters, and variables created inside the loop body are local to a single step of the loop. Assigning a new value to a parameter/variable will not affect its value at the next step, nor will it affect the behavior of the loop.
 
 ---
 
-#### Using 'yield' {'#yield-in-loops}
+#### Using `yield` and `yieldFrom` {'#yield-in-loops}
 
-
--------------------------
-
-
-Use `$each` or `$map` to loop over an iterable. `$each` and `$map` are passed an iterable and a callback function; `$each` returns the iterable whereas `$map` collects the values returned by the callback in an array:
+If `yield` or `yieldFrom` is used in the body of an [`each`](#each), [`do`](#do), [`asyncEach`](#async-loops) or [`asyncDo`](#async-loops) loop, the operator returns a generator (or asynchronous generator):
 
 ```
-x = @ 5 6;
-x $each [a $print];   // prints 5 6, returns x 
-x $map [a + 10];      // [15, 16]
+g = @ 5 6 7 each x (yield x)   // generator
+g array                        // [5, 6, 7]
 
-o = # u 5 v 6;
-Object |values o $map [a + 10];   // [15, 16]
-
-m = ## u 5 v 6;            // Map {'u' => 5, 'v' => 6}
-m |values $map [a + 10];   // [15, 16]
+@ 5 6 7 each x
+    yield x
+    yieldFrom 'ab'   // generator
+| array              // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
 ```
-
-The callback is passed the 'current index' as its second argument and the iterable as the third argument:
-
-```
-@ 5 6 7 $map [b];         // [0, 1, 2]
-@ 5 6 7 $map [c |join];   // ['5,6,7', '5,6,7', '5,6,7']
-```
-
-If used with a single operand (a function), `$each` and `$map` automatically create an 'infinite generator' that yields `undefined` until its `return` method is called:
-
-```
-// prints 0 1 2 3
-$each [
-  b $print;
-  b == 3 ? (c |return)];
-```
-
-> Calling a generator's `return` method exits a loop _at the end_ of the current step.
-
-> When `$each` or `$map` is used with a single operand, the loop has at least one step. Use [`$while`](?Generators#do-and-while) when the loop may have zero steps.
-
-> Operators for working with iterables (including the operators in this section, but also see e.g. [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and [Tabular Data](?Tabular-Data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
-
-#### Asynchronous Loops {#async-loops}
-
-The callback function of `$each` or `$map` can be asynchronous:
-
-```
-// web service that returns a random number
-url = 'https://www.random.org/decimal-fractions/?num=1&dec=10&col=1&format=plain&rnd=new';
-
-// prints 'done', then prints 3 random numbers
-1 >> 3 $each {url \fetch $await |text $await $number $print};
-$print 'done';
-```
-
-In the above example, the loop moves to the next step without waiting for the promise returned by the callback to resolve. If we had used `$map`, the returned array would contain the promises. In contrast to this behavior, `$awaitEach` and `$awaitMap` await both the iterable and the callback at each step. Like `$each` and `$map`, `$awaitEach` and `$awaitMap` use an infinite synchronous generator by default. 
-
-`$awaitEach` and `$awaitMap` can only be used inside an asynchronous function:
-
-```
-url = 'https://www.random.org/decimal-fractions/?num=1&dec=10&col=1&format=plain&rnd=new';
-
-\{
-  // prints random numbers until > 0.9, then prints 'done'
-  $awaitEach {
-    x = url \fetch $await |text $await $number $print;
-    x > 0.9 ? (c |return)};
-  $print 'done'};
-```
-
-As demonstrated in the above example, `$awaitEach` (and `$awaitMap`) is itself awaited &mdash; `'done'` is printed _after_ the numbers are printed.
-

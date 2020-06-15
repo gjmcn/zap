@@ -43,7 +43,7 @@ m.set('binomial',   [1, 3]);
 m.set('exponential',[1, 2]);
 m.set('geometric',  [0, 2]);
 m.set('shuffle',    [1, 1]);
-m.set('period',     [1, 1]);
+m.set('period',     [1, 2]);
 m.set('insert',     [2, 3]);
 m.set('insertEach', [2, 3]);
 m.set('into',       [2, 3]);

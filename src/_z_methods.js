@@ -522,8 +522,8 @@ export default {
     return x;
   },
 
-  period(m) {
-    return new Promise(r => setTimeout(r, m));
+  period(m, x) {
+    return new Promise(r => setTimeout(() => r(x), m));
   },
 
   at(o, p) {
