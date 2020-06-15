@@ -2,53 +2,71 @@
 
 ---
 
-Use the `$throw` operator to throw an error:
+#### `throw` {#throw}
+
+Use the `throw` operator to throw an exception:
 
 ```
-\Error 'something went wrong' $throw;
+\Error 'something went wrong' throw
 ```
 
-Use the `$try` operator to catch and handle errors. `$try` is passed three callback functions (only the first is required):
-
-* _attempt_: function that may throw an error.
-
-* _catch_: function to call if _attempt_ throws an error; _catch_ is passed the error.
-
-* _finally_: a function that is called after _attempt_ and _catch_ regardless of whether an error was thrown.
- 
-```
-// ignores error
-$try [null :x];
-
-// prints error message
-$try [null :x] [a :message $print];
-
-// prints 'finally'
-$try [null :x] [] ['finally' $print];
-
-// prints error message then 'finally'
-$try [null :x] [a :message $print] ['finally' $print];
-```
-
-> To use _finally_ without _catch_, _catch_ must be an empty function (`[]`) or `undefined`.
-
-`$try` returns the result of _attempt_ unless it throws an error, in which case `$try` returns the result of _catch_ (or `undefined` if _catch_ is omitted).
-
-`$awaitTry` is like `$try`, but waits for each callback. `$awaitTry` can only be used inside an asynchronous function:
+The exception need not be an `Error` object, it can be anything:
 
 ```
-// web service that returns a random number between 0 and 1
-url = 'https://www.random.org/decimal-fractions/?num=1&dec=10&col=1&format=plain&rnd=new';
-
-\{
-  // prints 'Problem: small number', then prints 'done'
-  $awaitTry 
-    {
-      x = url \fetch $await |text $await $number;
-      x <= 1 ? (\Error 'small number' $throw)}
-    [err ->
-      + 'Problem: '(err :message) $print];
-  $print 'done'};
+@ 5 6 7 throw
 ```
 
-As demonstrated in the above example, `$awaitTry` is itself awaited &mdash; `'done'` is printed _after_ the error message.
+---
+
+#### `try`, `asyncTry` {#try}
+
+The single operand of `try` is the [body](?Syntax#body-rules). The code in the body is executed; if it throws, `try` immediately returns whatever was thrown:
+
+```
+// prints 1, returns the Error object (2 is not printed)
+try
+    print 1
+    \Error 'something went wrong' throw
+    print 2
+```
+
+If the body of `try` does not throw, `try` returns `undefined`.
+
+
+`asyncTry` is the asynchronous version of `try`. `asyncTry` returns a promise that resolves to whatever was thrown, or `undefined` if nothing was thrown. `await` can be used in the body of `asyncTry` &mdash; see [`catch`](#catch) for an example.
+
+---
+
+#### `catch`, `asyncCatch` {#catch}
+
+`catch` takes three operands:
+
+* an expression: typically an application of [`try`](#try)
+* a parameter: takes the value of the expression (the parameter is local to the body)
+* a [body](?Syntax#body-rules)
+
+The body is only executed if the `try` expression is truthy:
+
+```
+// prints 'something went wrong!'
+try
+    \Error 'something went wrong' throw
+| catch err
+    + (err :message)'!' print
+```
+
+`catch` returns `undefined`.
+
+If the parent scope is asynchronous, `catch` can `await` an `asyncTry`. The following example uses [`asyncScope`](?Scope#scope-op) to create an asynchronous scope and [`period`](?Print-and-Debug#period) to create a promise that resolves after 1000 milliseconds:
+
+```
+// waits 1000 ms, prints 'something went wrong!'
+asyncScope
+    asyncTry
+        period 1000 await
+        \Error 'something went wrong' throw
+    | await catch err
+        + (err :message)'!' print
+```
+
+`asyncCatch` is the asynchronous version of `catch`. `asyncCatch` returns a promise that resolves to `undefined`. `await` can be used in the body of `asyncCatch`.

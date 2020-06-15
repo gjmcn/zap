@@ -1,51 +1,49 @@
 <h2>Errors</h2>
 <hr>
-<p>Use the <code>$throw</code> operator to throw an error:</p>
-<pre><code>\Error 'something went wrong' $throw;
+<h4 id="throw"><code>throw</code></h4>
+<p>Use the <code>throw</code> operator to throw an exception:</p>
+<pre><code>\Error 'something went wrong' throw
 </code></pre>
-<p>Use the <code>$try</code> operator to catch and handle errors. <code>$try</code> is passed three callback functions (only the first is required):</p>
+<p>The exception need not be an <code>Error</code> object, it can be anything:</p>
+<pre><code>@ 5 6 7 throw
+</code></pre>
+<hr>
+<h4 id="try"><code>try</code>, <code>asyncTry</code></h4>
+<p>The single operand of <code>try</code> is the <a href="?Syntax#body-rules">body</a>. The code in the body is executed; if it throws, <code>try</code> immediately returns whatever was thrown:</p>
+<pre><code>// prints 1, returns the Error object (2 is not printed)
+try
+    print 1
+    \Error 'something went wrong' throw
+    print 2
+</code></pre>
+<p>If the body of <code>try</code> does not throw, <code>try</code> returns <code>undefined</code>.</p>
+<p><code>asyncTry</code> is the asynchronous version of <code>try</code>. <code>asyncTry</code> returns a promise that resolves to whatever was thrown, or <code>undefined</code> if nothing was thrown. <code>await</code> can be used in the body of <code>asyncTry</code> — see <a href="#catch"><code>catch</code></a> for an example.</p>
+<hr>
+<h4 id="catch"><code>catch</code>, <code>asyncCatch</code></h4>
+<p><code>catch</code> takes three operands:</p>
 <ul>
-<li>
-<p><em>attempt</em>: function that may throw an error.</p>
-</li>
-<li>
-<p><em>catch</em>: function to call if <em>attempt</em> throws an error; <em>catch</em> is passed the error.</p>
-</li>
-<li>
-<p><em>finally</em>: a function that is called after <em>attempt</em> and <em>catch</em> regardless of whether an error was thrown.</p>
-</li>
+<li>an expression: typically an application of <a href="#try"><code>try</code></a></li>
+<li>a parameter: takes the value of the expression (the parameter is local to the body)</li>
+<li>a <a href="?Syntax#body-rules">body</a></li>
 </ul>
-<pre><code>// ignores error
-$try [null :x];
-
-// prints error message
-$try [null :x] [a :message $print];
-
-// prints 'finally'
-$try [null :x] [] ['finally' $print];
-
-// prints error message then 'finally'
-$try [null :x] [a :message $print] ['finally' $print];
+<p>The body is only executed if the <code>try</code> expression is truthy:</p>
+<pre><code>// prints 'something went wrong!'
+try
+    \Error 'something went wrong' throw
+| catch err
+    + (err :message)'!' print
 </code></pre>
-<blockquote>
-<p>To use <em>finally</em> without <em>catch</em>, <em>catch</em> must be an empty function (<code>[]</code>) or <code>undefined</code>.</p>
-</blockquote>
-<p><code>$try</code> returns the result of <em>attempt</em> unless it throws an error, in which case <code>$try</code> returns the result of <em>catch</em> (or <code>undefined</code> if <em>catch</em> is omitted).</p>
-<p><code>$awaitTry</code> is like <code>$try</code>, but waits for each callback. <code>$awaitTry</code> can only be used inside an asynchronous function:</p>
-<pre><code>// web service that returns a random number between 0 and 1
-url = 'https://www.random.org/decimal-fractions/?num=1&amp;dec=10&amp;col=1&amp;format=plain&amp;rnd=new';
-
-\{
-  // prints 'Problem: small number', then prints 'done'
-  $awaitTry 
-    {
-      x = url \fetch $await |text $await $number;
-      x &lt;= 1 ? (\Error 'small number' $throw)}
-    [err -&gt;
-      + 'Problem: '(err :message) $print];
-  $print 'done'};
+<p><code>catch</code> returns <code>undefined</code>.</p>
+<p>If the parent scope is asynchronous, <code>catch</code> can <code>await</code> an <code>asyncTry</code>. The following example uses <a href="?Scope#scope-op"><code>asyncScope</code></a> to create an asynchronous scope and <a href="?Print-and-Debug#period"><code>period</code></a> to create a promise that resolves after 1000 milliseconds:</p>
+<pre><code>// waits 1000 ms, prints 'something went wrong!'
+asyncScope
+    asyncTry
+        period 1000 await
+        \Error 'something went wrong' throw
+    | await catch err
+        + (err :message)'!' print
 </code></pre>
-<p>As demonstrated in the above example, <code>$awaitTry</code> is itself awaited — <code>'done'</code> is printed <em>after</em> the error message.</p>
+<p><code>asyncCatch</code> is the asynchronous version of <code>catch</code>. <code>asyncCatch</code> returns a promise that resolves to <code>undefined</code>. <code>await</code> can be used in the body of <code>asyncCatch</code>.</p>
 
 
 <br><br><br>
