@@ -110,8 +110,8 @@ asyncScope
 <hr>
 <h4 id="yield-in-loops">Using <code>yield</code> and <code>yieldFrom</code></h4>
 <p>If <code>yield</code> or <code>yieldFrom</code> is used in the body of an <a href="#each"><code>each</code></a>, <a href="#do"><code>do</code></a>, <a href="#async-loops"><code>asyncEach</code></a> or <a href="#async-loops"><code>asyncDo</code></a> loop, the operator returns a generator (or asynchronous generator):</p>
-<pre><code>g = @ 5 6 7 each x (yield x)   // generator
-g array                        // [5, 6, 7]
+<pre><code>g = 5 do i (yield i)   // generator
+g array                // [0, 1, 2, 3, 4]
 
 @ 5 6 7 each x
     yield x

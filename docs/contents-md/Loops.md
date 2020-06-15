@@ -162,8 +162,8 @@ Loop parameters, and variables created inside the loop body are local to a singl
 If `yield` or `yieldFrom` is used in the body of an [`each`](#each), [`do`](#do), [`asyncEach`](#async-loops) or [`asyncDo`](#async-loops) loop, the operator returns a generator (or asynchronous generator):
 
 ```
-g = @ 5 6 7 each x (yield x)   // generator
-g array                        // [5, 6, 7]
+g = 5 do i (yield i)   // generator
+g array                // [0, 1, 2, 3, 4]
 
 @ 5 6 7 each x
     yield x

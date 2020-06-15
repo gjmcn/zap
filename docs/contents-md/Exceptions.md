@@ -1,4 +1,4 @@
-## Errors
+## Exceptions
 
 ---
 

@@ -49,14 +49,14 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Other
 
-[`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Errors#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
+[`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Exceptions#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
 
 #### Random and Shuffle
 [`binomial`](?Random-and-Shuffle#binomial) [`categorical`](?Random-and-Shuffle#categorical) [`exponential`](?Random-and-Shuffle#exponential) [`geometric`](?Random-and-Shuffle#geometric) [`logNormal`](?Random-and-Shuffle#log-normal) [`normal`](?Random-and-Shuffle#normal) [`random`](?Random-and-Shuffle#random) [`randomInt`](?Random-and-Shuffle#random-int) [`shuffle`](?Random-and-Shuffle#shuffle)
 
 #### Scope
 
-[`as`](Scope#as) [`asyncAs`](Scope#as) [`asyncCatch`](?Errors#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Scope#scope-op) [`asyncTry`](?Errors#try) [`catch`](?Errors#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Scope#scope-op) [`try`](?Errors#try) 
+[`as`](Scope#as) [`asyncAs`](Scope#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Scope#scope-op) [`asyncTry`](?Exceptions#try) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Scope#scope-op) [`try`](?Exceptions#try) 
 
 ---
 
