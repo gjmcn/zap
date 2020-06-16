@@ -34,7 +34,7 @@ try
     + (err :message)'!' print
 </code></pre>
 <p><code>catch</code> returns <code>undefined</code>.</p>
-<p>If the parent scope is asynchronous, <code>catch</code> can <code>await</code> an <code>asyncTry</code>:</p>
+<p>Here is an example of using <code>catch</code> with <a href="#try"><code>asyncTry</code></a>:</p>
 <pre><code>// waits 1000 ms, prints 'something went wrong!'
 asyncScope
     asyncTry

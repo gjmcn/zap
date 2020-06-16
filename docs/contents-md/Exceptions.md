@@ -56,7 +56,7 @@ try
 
 `catch` returns `undefined`.
 
-If the parent scope is asynchronous, `catch` can `await` an `asyncTry`:
+Here is an example of using `catch` with [`asyncTry`](#try):
 
 ```
 // waits 1000 ms, prints 'something went wrong!'
