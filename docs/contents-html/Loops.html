@@ -95,7 +95,7 @@ n do i
     period 1000 await
     print x
 </code></pre>
-<p>If the parent <a href="?Scope">scope</a> of an asynchronous loop is asynchronous, we can <code>await</code> the loop itself:</p>
+<p>In the following example, we <code>await</code> the loop itself:</p>
 <pre><code>// wait 1000 ms, print 5, wait 1000 ms, print 6, print 'done'
 asyncScope
     @ 5 6 asyncEach x
@@ -115,8 +115,8 @@ g array                // [0, 1, 2, 3, 4]
 
 @ 5 6 7 each x
     yield x
-    yieldFrom 'ab'   // generator
-| array              // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
+    yieldFrom 'ab'
+| array                // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
 </code></pre>
 <blockquote>
 <p><code>yield</code> and <code>yieldFrom</code> turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own <code>this</code>, <code>arguments</code>, <code>super</code> and <code>new :target</code>.</p>

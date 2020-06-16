@@ -38,7 +38,7 @@ af = asyncFun delay
     delay period await
     print 'done'
 
-1000 \af   // prints 'done' after 1000 ms
+1000 \af   // waits 1000 ms, prints 'done'
 ```
 
 ---
@@ -138,7 +138,7 @@ f = fun x ops rest
 
 #### `scope`, `asyncScope` {#scope-op}
 
-`scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all functions, variables created inside the [body](?Syntax#body-rules) of `scope` are local:
+Using `scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all [body](?Syntax#body-rules) operands, variables created inside the body of `scope` are local:
 
 ```
 x = 5
@@ -149,25 +149,20 @@ y   // 30
 x   // 5
 ```
 
-`asyncSope` is the asynchronous version of `scope`. `asyncScope` returns a promise that resolves to the returned value. `await` can be used in the body of `asyncScope`:
+`asyncScope` is the asynchronous version of `scope` &mdash; so `asyncScope` returns a promise rather than returning a value directly. `await` can be used in the body of `asyncScope`:
 
 ```
-// waits 1000 ms, prints 15
+// waits 1000 ms, prints 5
 asyncScope
-    x = 5
-    asyncScope
-        period 1000 await
-        y = 10
-        x += y
-    | await
-    print x
+    period 1000 await
+    print 5
 ```
 
 ---
 
 #### `as`, `asyncAs` {#as}
 
-Like [`scope`](#scope-op), but the [body](?Syntax#body-rules) is preceded by the value to pass to the function, and a parameter by which to refer to the value. The following example uses [`max`](?Reduce#min):
+Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](?Syntax#body-rules) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](?Reduce#min) operator:
 
 ```
 // array of objects
@@ -181,8 +176,6 @@ dogs =
 dogs max [a :age] as oldest
     + 'The oldest dog '(oldest :name)' is '(oldest :age)
 ```
-
-`asyncAs` is the asynchronous versions of `as`. `asyncAs` returns a promise that resolves to the returned value. `await` can be used in the body of `asyncAs`.
 
 > The parameter of `as` can be [`ops`](#options), but not [`rest`](#rest).
 
@@ -208,4 +201,14 @@ proc
     yield 5   // syntax error, invalid use of yield
 ```
 
-`yield` or `yieldFrom` _can_ be used inside [`scope`](#scope-op), [`asyncScope`](#scope-op), [`as`](#as) and [`asyncAs`](#as), but the operator will then behave more like a [regular function](#writing-functions) than a [procedure](#writing-functions) &mdash; in particular, the body will have its own `this`.
+`yield` and `yieldFrom` _can_ be used inside [`scope`](#scope-op), [`asyncScope`](#scope-op), [`as`](#as) and [`asyncAs`](#as):
+
+```
+g = scope
+    yield 5
+    yield 10   // generator
+
+g ~next        // {value: 5, done: false}
+```
+
+> When `yield` or `yieldFrom` are used in [`scope`](#scope-op), [`asyncScope`](#scope-op), [`as`](#as) or [`asyncAs`](#as), the operator will behave like a [regular function](#writing-functions) rather than a [procedure](#writing-functions) &mdash; in particular, the body will have its own `this`.

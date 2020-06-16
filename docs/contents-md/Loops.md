@@ -137,7 +137,7 @@ These operators return a promise that resolves to:
     print x
 ```
 
-If the parent [scope](?Scope) of an asynchronous loop is asynchronous, we can `await` the loop itself:
+In the following example, we `await` the loop itself:
 
 ```
 // wait 1000 ms, print 5, wait 1000 ms, print 6, print 'done'
@@ -167,8 +167,8 @@ g array                // [0, 1, 2, 3, 4]
 
 @ 5 6 7 each x
     yield x
-    yieldFrom 'ab'   // generator
-| array              // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
+    yieldFrom 'ab'
+| array                // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
 ```
 
 > `yield` and `yieldFrom` turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own `this`, `arguments`, `super` and `new :target`.
