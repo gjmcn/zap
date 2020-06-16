@@ -32,7 +32,6 @@ try
 
 If the body of `try` does not throw, `try` returns `undefined`.
 
-
 `asyncTry` is the asynchronous version of `try`. `asyncTry` returns a promise that resolves to whatever was thrown, or `undefined` if nothing was thrown. `await` can be used in the body of `asyncTry` &mdash; see [`catch`](#catch) for an example.
 
 ---
@@ -57,7 +56,7 @@ try
 
 `catch` returns `undefined`.
 
-If the parent scope is asynchronous, `catch` can `await` an `asyncTry`. The following example uses [`asyncScope`](?Scope#scope-op) to create an asynchronous scope and [`period`](?Print-and-Debug#period) to create a promise that resolves after 1000 milliseconds:
+If the parent scope is asynchronous, `catch` can `await` an `asyncTry`:
 
 ```
 // waits 1000 ms, prints 'something went wrong!'

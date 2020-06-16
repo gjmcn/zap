@@ -34,7 +34,7 @@ try
     + (err :message)'!' print
 </code></pre>
 <p><code>catch</code> returns <code>undefined</code>.</p>
-<p>If the parent scope is asynchronous, <code>catch</code> can <code>await</code> an <code>asyncTry</code>. The following example uses <a href="?Scope#scope-op"><code>asyncScope</code></a> to create an asynchronous scope and <a href="?Print-and-Debug#period"><code>period</code></a> to create a promise that resolves after 1000 milliseconds:</p>
+<p>If the parent scope is asynchronous, <code>catch</code> can <code>await</code> an <code>asyncTry</code>:</p>
 <pre><code>// waits 1000 ms, prints 'something went wrong!'
 asyncScope
     asyncTry

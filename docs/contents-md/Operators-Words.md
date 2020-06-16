@@ -56,7 +56,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Scope
 
-[`as`](Scope#as) [`asyncAs`](Scope#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](Writing-Functions#proc) [`asyncScope`](Scope#scope-op) [`asyncTry`](?Exceptions#try) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](Writing-Functions#fun) [`map`](?Loops#map) [`proc`](Writing-Functions#proc) [`scope`](Scope#scope-op) [`try`](?Exceptions#try) 
+[`as`](?Writing-Functions#as) [`asyncAs`](?Writing-Functions#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](?Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncTry`](?Exceptions#try) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](?Writing-Functions#fun) [`map`](?Loops#map) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`try`](?Exceptions#try) 
 
 ---
 

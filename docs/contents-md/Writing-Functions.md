@@ -1,17 +1,19 @@
-## Writing Functions
+## Writing Functions {#writing-functions}
 
 ---
 
 
 A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new :target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
 
-The [body](?Syntax#body-rules) of a function opens a new [scope](?Scope). A function returns the value of the last expression evaluated in the body.
+A function returns the value of the last expression evaluated.
 
 ---
 
 #### `fun`, `asyncFun` {#fun}
 
-Create a regular function. The operands of `fun` are the parameter names and the function body:
+Create a regular function.
+
+The operands of `fun` are the parameter names and the function [body](?Syntax#body-rules):
 
 ```
 // no parameters, body in parentheses
@@ -43,13 +45,13 @@ af = asyncFun delay
 
 #### `proc`, `asyncProc` {#proc}
 
-As [`fun`](#fun) and [`asyncFun`](#fun), but `proc` and `asyncProc` create a procedure.
+As [`fun`](#fun) and [`asyncFun`](#fun), but `proc` and `asyncProc` create a [procedure](#writing-functions).
 
 ---
 
 #### Bracket Functions {#bracket-functions}
 
-Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a regular function and curly brackets for a procedure. Bracket functions have parameters `a`, `b` and `c`:
+Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a [regular function](#writing-functions) and curly brackets for a [procedure](#writing-functions). Bracket functions have parameters `a`, `b` and `c`:
 
 ```
 f = []        // regular function (body is empty)
@@ -134,9 +136,61 @@ f = fun x ops rest
 
 ---
 
-#### Generators {#generator-functions}
+#### `scope`, `asyncScope` {#scope-op}
 
-If `yield` or `yieldFrom` are used inside a function body, a generator function is created:
+`scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all functions, variables created inside the [body](?Syntax#body-rules) of `scope` are local:
+
+```
+x = 5
+y = scope
+    x = 10
+    x + 20
+y   // 30
+x   // 5
+```
+
+`asyncSope` is the asynchronous version of `scope`. `asyncScope` returns a promise that resolves to the returned value. `await` can be used in the body of `asyncScope`:
+
+```
+// waits 1000 ms, prints 15
+asyncScope
+    x = 5
+    asyncScope
+        period 1000 await
+        y = 10
+        x += y
+    | await
+    print x
+```
+
+---
+
+#### `as`, `asyncAs` {#as}
+
+Like [`scope`](#scope-op), but the [body](?Syntax#body-rules) is preceded by the value to pass to the function, and a parameter by which to refer to the value. The following example uses [`max`](?Reduce#min):
+
+```
+// array of objects
+dogs = 
+    @
+    | (# name 'Alex' age 3) 
+    | (# name 'Beth' age 8) 
+    | (# name 'Cody' age 2)
+
+// returns 'The oldest dog Beth is 8'
+dogs max [a :age] as oldest
+    + 'The oldest dog '(oldest :name)' is '(oldest :age)
+```
+
+`asyncAs` is the asynchronous versions of `as`. `asyncAs` returns a promise that resolves to the returned value. `await` can be used in the body of `asyncAs`.
+
+> The parameter of `as` can be [`ops`](#options), but not [`rest`](#rest).
+
+---
+
+#### Generator Functions {#generator-functions}
+
+If `yield` or `yieldFrom` are used inside the body of [`fun`](#fun) (or [`asyncFun`](#fun)), a generator function (or asynchronous generator function) is created:
 
 ```
 f = fun
@@ -147,9 +201,11 @@ g = \f         // generator
 g ~next        // {value: 5, done: false}
 ```
 
-Note that a procedure cannot be a generator function:
+A [procedure](#writing-functions) cannot be a generator function:
 
 ```
 proc
     yield 5   // syntax error, invalid use of yield
 ```
+
+`yield` or `yieldFrom` _can_ be used inside [`scope`](#scope-op), [`asyncScope`](#scope-op), [`as`](#as) and [`asyncAs`](#as), but the operator will then behave more like a [regular function](#writing-functions) than a [procedure](#writing-functions) &mdash; in particular, the body will have its own `this`.

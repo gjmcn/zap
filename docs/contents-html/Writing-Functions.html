@@ -1,10 +1,11 @@
-<h2>Writing Functions</h2>
+<h2 id="writing-functions">Writing Functions</h2>
 <hr>
 <p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new :target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
-<p>The <a href="?Syntax#body-rules">body</a> of a function opens a new <a href="?Scope">scope</a>. A function returns the value of the last expression evaluated in the body.</p>
+<p>A function returns the value of the last expression evaluated.</p>
 <hr>
 <h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
-<p>Create a regular function. The operands of <code>fun</code> are the parameter names and the function body:</p>
+<p>Create a regular function.</p>
+<p>The operands of <code>fun</code> are the parameter names and the function <a href="?Syntax#body-rules">body</a>:</p>
 <pre><code>// no parameters, body in parentheses
 f = fun (5)
 \f   // 5
@@ -28,10 +29,10 @@ f = fun x y
 </code></pre>
 <hr>
 <h4 id="proc"><code>proc</code>, <code>asyncProc</code></h4>
-<p>As <a href="#fun"><code>fun</code></a> and <a href="#fun"><code>asyncFun</code></a>, but <code>proc</code> and <code>asyncProc</code> create a procedure.</p>
+<p>As <a href="#fun"><code>fun</code></a> and <a href="#fun"><code>asyncFun</code></a>, but <code>proc</code> and <code>asyncProc</code> create a <a href="#writing-functions">procedure</a>.</p>
 <hr>
 <h4 id="bracket-functions">Bracket Functions</h4>
-<p>Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a regular function and curly brackets for a procedure. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>:</p>
+<p>Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a <a href="#writing-functions">regular function</a> and curly brackets for a <a href="#writing-functions">procedure</a>. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>:</p>
 <pre><code>f = []        // regular function (body is empty)
 \f            // undefined
 
@@ -98,8 +99,47 @@ f = fun rest
 <p><code>&lt;-</code> uses short-circuit evaluation: if the relevant property of <code>ops</code> is neither <code>null</code> nor <code>undefined</code>, the right-hand side of <code>&lt;-</code> is not evaluated.</p>
 </blockquote>
 <hr>
-<h4 id="generator-functions">Generators</h4>
-<p>If <code>yield</code> or <code>yieldFrom</code> are used inside a function body, a generator function is created:</p>
+<h4 id="scope-op"><code>scope</code>, <code>asyncScope</code></h4>
+<p><code>scope</code> is equivalent to writing a <a href="#writing-functions">procedure</a> with no parameters and immediately calling it. Like all functions, variables created inside the <a href="?Syntax#body-rules">body</a> of <code>scope</code> are local:</p>
+<pre><code>x = 5
+y = scope
+    x = 10
+    x + 20
+y   // 30
+x   // 5
+</code></pre>
+<p><code>asyncSope</code> is the asynchronous version of <code>scope</code>. <code>asyncScope</code> returns a promise that resolves to the returned value. <code>await</code> can be used in the body of <code>asyncScope</code>:</p>
+<pre><code>// waits 1000 ms, prints 15
+asyncScope
+    x = 5
+    asyncScope
+        period 1000 await
+        y = 10
+        x += y
+    | await
+    print x
+</code></pre>
+<hr>
+<h4 id="as"><code>as</code>, <code>asyncAs</code></h4>
+<p>Like <a href="#scope-op"><code>scope</code></a>, but the <a href="?Syntax#body-rules">body</a> is preceded by the value to pass to the function, and a parameter by which to refer to the value. The following example uses <a href="?Reduce#min"><code>max</code></a>:</p>
+<pre><code>// array of objects
+dogs = 
+    @
+    | (# name 'Alex' age 3) 
+    | (# name 'Beth' age 8) 
+    | (# name 'Cody' age 2)
+
+// returns 'The oldest dog Beth is 8'
+dogs max [a :age] as oldest
+    + 'The oldest dog '(oldest :name)' is '(oldest :age)
+</code></pre>
+<p><code>asyncAs</code> is the asynchronous versions of <code>as</code>. <code>asyncAs</code> returns a promise that resolves to the returned value. <code>await</code> can be used in the body of <code>asyncAs</code>.</p>
+<blockquote>
+<p>The parameter of <code>as</code> can be <a href="#options"><code>ops</code></a>, but not <a href="#rest"><code>rest</code></a>.</p>
+</blockquote>
+<hr>
+<h4 id="generator-functions">Generator Functions</h4>
+<p>If <code>yield</code> or <code>yieldFrom</code> are used inside the body of <a href="#fun"><code>fun</code></a> (or <a href="#fun"><code>asyncFun</code></a>), a generator function (or asynchronous generator function) is created:</p>
 <pre><code>f = fun
     yield 5
     yield 10   // generator function
@@ -107,10 +147,11 @@ f = fun rest
 g = \f         // generator
 g ~next        // {value: 5, done: false}
 </code></pre>
-<p>Note that a procedure cannot be a generator function:</p>
+<p>A <a href="#writing-functions">procedure</a> cannot be a generator function:</p>
 <pre><code>proc
     yield 5   // syntax error, invalid use of yield
 </code></pre>
+<p><code>yield</code> or <code>yieldFrom</code> <em>can</em> be used inside <a href="#scope-op"><code>scope</code></a>, <a href="#scope-op"><code>asyncScope</code></a>, <a href="#as"><code>as</code></a> and <a href="#as"><code>asyncAs</code></a>, but the operator will then behave more like a <a href="#writing-functions">regular function</a> than a <a href="#writing-functions">procedure</a> — in particular, the body will have its own <code>this</code>.</p>
 
 
 <br><br><br>
