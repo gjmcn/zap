@@ -118,28 +118,6 @@ x y (x + y) fun   // syntax error, missing function body
 <li>yield</li>
 <li>stop</li>
 </ul>
-<p>!!!!!NOT CURRENTLY MENTIONED ANYWHERE: - put at top of Assignment????</p>
-<p>Variables are created through assignment using <code>=</code>, <code>&lt;-</code>, <code>#=</code> or <code>@=</code>.</p>
-<pre><code>x = 5;   // 5 (outer x is at 'file scope')
-
-\[
-  x;     // 5 (outer x)
-];
-
-// assign to x with '=' so a local x is created
-\[
-  x;        // undefined (local x, value is undefined prior to assignment)
-  x = 10;   // 10 (local x)
-  x;        // 10 (local x)
-];
-
-x;       // 5 (outer x)
-</code></pre>
-<p><code>=</code>, <code>&lt;-</code>, <code>#=</code> and <code>@=</code> <em>cannot</em> create global variables. Attach a property to the global object to create a global variable:</p>
-<pre><code>globalThis :x 5;   // works in any JavaScript environment
-window :y 6;       // works in browsers
-global :z 7;       // works in Node.js
-</code></pre>
 
 
 <br><br><br>

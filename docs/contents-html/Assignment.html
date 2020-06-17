@@ -10,6 +10,16 @@
 x       // 5
 </code></pre>
 <hr>
+<h4 id="non-local"><code>\=</code></h4>
+<p>Assign, but do not trigger the creation of a local variable (see <a href="#assignment-and-scope">Assignment and Scope</a>):</p>
+<pre><code>x = 5         // 5
+scope
+    x         // 5
+    x \= 10   // 10
+    x         // 10
+x             // 10
+</code></pre>
+<hr>
 <h4 id="update-assignment"><code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code></h4>
 <p>Update-assignment:</p>
 <pre><code>x = 5     // 5
@@ -34,35 +44,30 @@ h j z #= o   // returns o, h is 5, j is 7, z is undefined
 <p>Destructure an iterable:</p>
 <pre><code>x = @ 5 6 7
 u v @= x       // returns x, u is 5, v is 6
-u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined 
+u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 </code></pre>
 <hr>
-<h4 id="non-local"><code>\=</code></h4>
-<p>Assign, but do not trigger the creation of a local variable.</p>
-<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#open-scope">scope</a>. Here is an example that uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
-<pre><code>x = 5        // 5
+<h4 id="assignment-and-scope">Assignment and Scope</h4>
+<p>Assignment triggers the creation of a local variable. The variable is created at the start of the current <a href="?Syntax#open-scope">scope</a>, and has the value <code>undefined</code> until it is assigned to. Here is an example that uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
+<pre><code>x = 5        // 5 (outer x)
+
 scope
-    x        // undefined (local x exists before it is assigned to)
-    x = 10   // 10
-    x        // 10
-x            // 5
-</code></pre>
-<p><code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable:</p>
-<pre><code>x = 5         // 5
+    x        // 5 (outer x)
+
+// assign to x in inner scope so local x is created
 scope
-    x         // 5
-    x \= 10   // 10
-    x         // 10
-x             // 10
+    x        // undefined (local x)
+    x = 10   // 10 (local x)
+    x        // 10 (local x)
+
+x            // 5 (outer x)
 </code></pre>
-<p>Note that <a href="#conditional-assignment">conditional assignment</a> (<code>?=</code>) and <a href="#update-assignment">update-assignment</a> (<code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code>) <em>do not</em> trigger the creation of a local variable so behave like <code>\=</code> in this respect:</p>
-<pre><code>x = 5         // 5
-scope
-    x         // 5
-    x += 10   // 15
-    x         // 15
-x             // 15
+<p>Variables created at the top-level scope are <em>not</em> global — they are not visible to other files. <a href="?Set-Property">Set a property</a> of the global object to create a global variable:</p>
+<pre><code>globalThis :x = 5   // works in any JavaScript environment
+window :y = 6       // works in browsers
+global :z = 7       // works in Node.js
 </code></pre>
+<p>Only <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> and <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) trigger the creation of local variables. The other assignment operators change the value of an existing variable.</p>
 
 
 <br><br><br>

@@ -17,6 +17,21 @@ x       // 5
 
 ---
 
+#### `\=` {#non-local}
+
+Assign, but do not trigger the creation of a local variable (see [Assignment and Scope](#assignment-and-scope)):
+
+```
+x = 5         // 5
+scope
+    x         // 5
+    x \= 10   // 10
+    x         // 10
+x             // 10
+```
+
+---
+
 #### `+=`, `-=`, `*=`, `/=`, `%=`, `^=` {#update-assignment}
 
 Update-assignment:
@@ -59,46 +74,36 @@ Destructure an iterable:
 ```
 x = @ 5 6 7
 u v @= x       // returns x, u is 5, v is 6
-u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined 
+u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 ```
 
 ---
 
+#### Assignment and Scope {#assignment-and-scope}
 
-#### `\=` {#non-local}
-
-Assign, but do not trigger the creation of a local variable.
-
-Variables assigned to with [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) or  [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) are automatically created at the start of the current [scope](?Syntax#open-scope). Here is an example that uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
+Assignment triggers the creation of a local variable. The variable is created at the start of the current [scope](?Syntax#open-scope), and has the value `undefined` until it is assigned to. Here is an example that uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
 
 ```
-x = 5        // 5
+x = 5        // 5 (outer x)
+
 scope
-    x        // undefined (local x exists before it is assigned to)
-    x = 10   // 10
-    x        // 10
-x            // 5
-```
+    x        // 5 (outer x)
 
-`\=` is like `=`, except that `\=` _does not_ trigger the creation of a local variable:
-
-```
-x = 5         // 5
+// assign to x in inner scope so local x is created
 scope
-    x         // 5
-    x \= 10   // 10
-    x         // 10
-x             // 10
+    x        // undefined (local x)
+    x = 10   // 10 (local x)
+    x        // 10 (local x)
+
+x            // 5 (outer x)
 ```
 
-Note that [conditional assignment](#conditional-assignment) (`?=`) and [update-assignment](#update-assignment) (`+=`, `-=`, `*=`, `/=`, `%=`, `^=`) _do not_ trigger the creation of a local variable so behave like `\=` in this respect:
-
+Variables created at the top-level scope are _not_ global &mdash; they are not visible to other files. [Set a property](?Set-Property) of the global object to create a global variable:
 
 ```
-x = 5         // 5
-scope
-    x         // 5
-    x += 10   // 15
-    x         // 15
-x             // 15
+globalThis :x = 5   // works in any JavaScript environment
+window :y = 6       // works in browsers
+global :z = 7       // works in Node.js
 ```
+
+Only [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) and [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) trigger the creation of local variables. The other assignment operators change the value of an existing variable.
