@@ -67,7 +67,9 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 
 #### `\=` {#non-local}
 
-Variables assigned to with [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) or  [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) are automatically created at the start of the current [scope](?Syntax#body-rules):
+Assign, but do not trigger the creation of a local variable.
+
+Variables assigned to with [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) or  [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) are automatically created at the start of the current [scope](?Syntax#open-scope). Here is an example that uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
 
 ```
 x = 5        // 5
@@ -78,8 +80,7 @@ scope
 x            // 5
 ```
 
-`\=` is like `=`, except that `\=` _does not_ trigger the creation of a local variable. The following example uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
-
+`\=` is like `=`, except that `\=` _does not_ trigger the creation of a local variable:
 
 ```
 x = 5         // 5

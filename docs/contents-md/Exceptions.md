@@ -20,7 +20,7 @@ The exception need not be an `Error` object, it can be anything:
 
 #### `try`, `asyncTry` {#try}
 
-The single operand of `try` is the [body](?Syntax#body-rules). The code in the body is executed; if it throws, `try` immediately returns whatever was thrown:
+The single operand of `try` is the [body](?Syntax#open-scope). The code in the body is executed; if it throws, `try` immediately returns whatever was thrown:
 
 ```
 // prints 1, returns the Error object (2 is not printed)
@@ -42,7 +42,7 @@ If the body of `try` does not throw, `try` returns `undefined`.
 
 * an expression: typically an application of [`try`](#try)
 * a parameter: takes the value of the expression (the parameter is local to the body)
-* a [body](?Syntax#body-rules)
+* a [body](?Syntax#open-scope)
 
 The body is only executed if the `try` expression is truthy:
 

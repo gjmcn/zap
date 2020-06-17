@@ -12,7 +12,7 @@ alex = new Animal 'Alex' 8   // Animal {name: &quot;Alex&quot;, age: 8}
 <p>The <code>class</code> operator is used just like <a href="?Writing-Functions#fun"><code>fun</code></a>, but returns a class rather than a function. Furthermore, when <code>class</code> is used:</p>
 <ul>
 <li>
-<p>If the constructor's <a href="?Syntax#body-rules">body</a> is empty, the parameters are automatically added to <code>this</code>:</p>
+<p>If the constructor's <a href="?Syntax#open-scope">body</a> is empty, the parameters are automatically added to <code>this</code>:</p>
 <pre><code>Animal = class name age ()
 
 // is equivalent to:
@@ -60,7 +60,7 @@ alex ~speak   // 'Alex makes a noise'
 <p>The first operand of <code>extends</code> is the parent class.</p>
 </li>
 <li>
-<p>If the constructor <a href="?Syntax#body-rules">body</a> is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.</p>
+<p>If the constructor <a href="?Syntax#open-scope">body</a> is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.</p>
 </li>
 </ul>
 <pre><code>Animal = class name ()

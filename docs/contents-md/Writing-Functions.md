@@ -13,7 +13,7 @@ A function returns the value of the last expression evaluated.
 
 Create a regular function.
 
-The operands of `fun` are the parameter names and the function [body](?Syntax#body-rules):
+The operands of `fun` are the parameter names and the function [body](?Syntax#open-scope):
 
 ```
 // no parameters, body in parentheses
@@ -138,7 +138,7 @@ f = fun x ops rest
 
 #### `scope`, `asyncScope` {#scope-op}
 
-Using `scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all [body](?Syntax#body-rules) operands, variables created inside the body of `scope` are local:
+Using `scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all [body](?Syntax#open-scope) operands, variables created inside the body of `scope` are local:
 
 ```
 x = 5
@@ -162,7 +162,7 @@ asyncScope
 
 #### `as`, `asyncAs` {#as}
 
-Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](?Syntax#body-rules) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](?Reduce#min) operator:
+Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](?Syntax#open-scope) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](?Reduce#min) operator:
 
 ```
 // array of objects

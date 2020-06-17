@@ -148,9 +148,17 @@ x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
 ```
 
-##### Body {#body-rules}
+##### Open a New Scope {#open-scope}
 
-Operators that open a new [scope](?Scope) take a _body_ as their final operand. The body must be in parentheses or be an indented block. Also, the body cannot be before the operator:
+The following operators take a __body__ operand that opens a new scope:
+
+[`fun`](?Writing-Functions#fun) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`as`](?Writing-Functions#as) [`class`](?Classes#class) [`extends`](?Classes#extends) [`each`](?Loops#each) [`map`](?Loops#map) [`do`](?Loops#do) [`try`](?Exceptions#try) [`catch`](?Exceptions#catch) 
+
+and the asynchronous versions:
+
+[`asyncFun`](?Writing-Functions#fun) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncAs`](?Writing-Functions#as) [`asyncEach`](?Loops#async-loops) [`asyncMap`](?Loops#async-loops) [`asyncDo`](?Loops#async-loops) [`asyncTry`](?Exceptions#try) [`asyncCatch`](?Exceptions#catch) 
+
+The body is always the final operand and must be in parentheses or be an indented block. Also, the body cannot be before the operator:
 
 ```
 fun x y
@@ -161,4 +169,41 @@ fun x y (x + y)   // function
 x y fun (x + y)   // function
 
 x y (x + y) fun   // syntax error, missing function body
+```
+
+------------
+!!!!!!!!!!SAY THAT SCOPE AFFECTS FOLLOWING, giveing detaild on each
+- variables
+- async
+- yield
+- stop
+
+
+!!!!!NOT CURRENTLY MENTIONED ANYWHERE: - put at top of Assignment????
+
+Variables are created through assignment using `=`, `<-`, `#=` or `@=`.
+
+```
+x = 5;   // 5 (outer x is at 'file scope')
+
+\[
+  x;     // 5 (outer x)
+];
+
+// assign to x with '=' so a local x is created
+\[
+  x;        // undefined (local x, value is undefined prior to assignment)
+  x = 10;   // 10 (local x)
+  x;        // 10 (local x)
+];
+
+x;       // 5 (outer x)
+```
+
+`=`, `<-`, `#=` and `@=` _cannot_ create global variables. Attach a property to the global object to create a global variable:
+
+```
+globalThis :x 5;   // works in any JavaScript environment
+window :y 6;       // works in browsers
+global :z 7;       // works in Node.js
 ```

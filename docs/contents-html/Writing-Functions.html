@@ -5,7 +5,7 @@
 <hr>
 <h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
 <p>Create a regular function.</p>
-<p>The operands of <code>fun</code> are the parameter names and the function <a href="?Syntax#body-rules">body</a>:</p>
+<p>The operands of <code>fun</code> are the parameter names and the function <a href="?Syntax#open-scope">body</a>:</p>
 <pre><code>// no parameters, body in parentheses
 f = fun (5)
 \f   // 5
@@ -100,7 +100,7 @@ f = fun rest
 </blockquote>
 <hr>
 <h4 id="scope-op"><code>scope</code>, <code>asyncScope</code></h4>
-<p>Using <code>scope</code> is equivalent to writing a <a href="#writing-functions">procedure</a> with no parameters and immediately calling it. Like all <a href="?Syntax#body-rules">body</a> operands, variables created inside the body of <code>scope</code> are local:</p>
+<p>Using <code>scope</code> is equivalent to writing a <a href="#writing-functions">procedure</a> with no parameters and immediately calling it. Like all <a href="?Syntax#open-scope">body</a> operands, variables created inside the body of <code>scope</code> are local:</p>
 <pre><code>x = 5
 y = scope
     x = 10
@@ -116,7 +116,7 @@ asyncScope
 </code></pre>
 <hr>
 <h4 id="as"><code>as</code>, <code>asyncAs</code></h4>
-<p>Like <a href="#scope-op"><code>scope</code></a> and <a href="#scope-op"><code>asyncScope</code></a>, but the <a href="?Syntax#body-rules">body</a> is preceded by an expression and a parameter that represents the value of the expression. The following example uses the <a href="?Reduce#min"><code>max</code></a> operator:</p>
+<p>Like <a href="#scope-op"><code>scope</code></a> and <a href="#scope-op"><code>asyncScope</code></a>, but the <a href="?Syntax#open-scope">body</a> is preceded by an expression and a parameter that represents the value of the expression. The following example uses the <a href="?Reduce#min"><code>max</code></a> operator:</p>
 <pre><code>// array of objects
 dogs = 
     @

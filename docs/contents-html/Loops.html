@@ -6,7 +6,7 @@
 <hr>
 <h4 id="each"><code>each</code></h4>
 <p>Loop over an iterable.</p>
-<p>The first operand of <code>each</code> is the iterable; the final operand is the loop <a href="?Syntax#body-rules">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
+<p>The first operand of <code>each</code> is the iterable; the final operand is the loop <a href="?Syntax#open-scope">body</a>. Between these, we can provide optional <em>loop parameters</em> for the current value, current index and the iterable:</p>
 <pre><code>// body in parentheses, prints: 4 5 6
 @ 4 5 6 each x (print x)
 
@@ -42,7 +42,7 @@
 <hr>
 <h4 id="do"><code>do</code></h4>
 <p>Basic loop.</p>
-<p>The final operand of <code>do</code> is the loop <a href="?Syntax#body-rules">body</a>. The optional operands are the maximum number of steps and the current index:</p>
+<p>The final operand of <code>do</code> is the loop <a href="?Syntax#open-scope">body</a>. The optional operands are the maximum number of steps and the current index:</p>
 <pre><code>// prints 0 1 2 3 4
 5 do i
     print i

@@ -95,8 +95,12 @@ y = x = 8     // syntax error, multiple assignments are not allowed
 <pre><code>x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
 </code></pre>
-<h5 id="body-rules">Body</h5>
-<p>Operators that open a new <a href="?Scope">scope</a> take a <em>body</em> as their final operand. The body must be in parentheses or be an indented block. Also, the body cannot be before the operator:</p>
+<h5 id="open-scope">Open a New Scope</h5>
+<p>The following operators take a <strong>body</strong> operand that opens a new scope:</p>
+<p><a href="?Writing-Functions#fun"><code>fun</code></a> <a href="?Writing-Functions#proc"><code>proc</code></a> <a href="?Writing-Functions#scope-op"><code>scope</code></a> <a href="?Writing-Functions#as"><code>as</code></a> <a href="?Classes#class"><code>class</code></a> <a href="?Classes#extends"><code>extends</code></a> <a href="?Loops#each"><code>each</code></a> <a href="?Loops#map"><code>map</code></a> <a href="?Loops#do"><code>do</code></a> <a href="?Exceptions#try"><code>try</code></a> <a href="?Exceptions#catch"><code>catch</code></a></p>
+<p>and the asynchronous versions:</p>
+<p><a href="?Writing-Functions#fun"><code>asyncFun</code></a> <a href="?Writing-Functions#proc"><code>asyncProc</code></a> <a href="?Writing-Functions#scope-op"><code>asyncScope</code></a> <a href="?Writing-Functions#as"><code>asyncAs</code></a> <a href="?Loops#async-loops"><code>asyncEach</code></a> <a href="?Loops#async-loops"><code>asyncMap</code></a> <a href="?Loops#async-loops"><code>asyncDo</code></a> <a href="?Exceptions#try"><code>asyncTry</code></a> <a href="?Exceptions#catch"><code>asyncCatch</code></a></p>
+<p>The body is always the final operand and must be in parentheses or be an indented block. Also, the body cannot be before the operator:</p>
 <pre><code>fun x y
     x + y         // function
 
@@ -105,6 +109,36 @@ fun x y (x + y)   // function
 x y fun (x + y)   // function
 
 x y (x + y) fun   // syntax error, missing function body
+</code></pre>
+<hr>
+<p>!!!!!!!!!!SAY THAT SCOPE AFFECTS FOLLOWING, giveing detaild on each</p>
+<ul>
+<li>variables</li>
+<li>async</li>
+<li>yield</li>
+<li>stop</li>
+</ul>
+<p>!!!!!NOT CURRENTLY MENTIONED ANYWHERE: - put at top of Assignment????</p>
+<p>Variables are created through assignment using <code>=</code>, <code>&lt;-</code>, <code>#=</code> or <code>@=</code>.</p>
+<pre><code>x = 5;   // 5 (outer x is at 'file scope')
+
+\[
+  x;     // 5 (outer x)
+];
+
+// assign to x with '=' so a local x is created
+\[
+  x;        // undefined (local x, value is undefined prior to assignment)
+  x = 10;   // 10 (local x)
+  x;        // 10 (local x)
+];
+
+x;       // 5 (outer x)
+</code></pre>
+<p><code>=</code>, <code>&lt;-</code>, <code>#=</code> and <code>@=</code> <em>cannot</em> create global variables. Attach a property to the global object to create a global variable:</p>
+<pre><code>globalThis :x 5;   // works in any JavaScript environment
+window :y 6;       // works in browsers
+global :z 7;       // works in Node.js
 </code></pre>
 
 

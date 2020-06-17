@@ -38,7 +38,8 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 </code></pre>
 <hr>
 <h4 id="non-local"><code>\=</code></h4>
-<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#body-rules">scope</a>:</p>
+<p>Assign, but do not trigger the creation of a local variable.</p>
+<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#open-scope">scope</a>. Here is an example that uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
 <pre><code>x = 5        // 5
 scope
     x        // undefined (local x exists before it is assigned to)
@@ -46,7 +47,7 @@ scope
     x        // 10
 x            // 5
 </code></pre>
-<p><code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
+<p><code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable:</p>
 <pre><code>x = 5         // 5
 scope
     x         // 5

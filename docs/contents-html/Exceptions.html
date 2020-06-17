@@ -9,7 +9,7 @@
 </code></pre>
 <hr>
 <h4 id="try"><code>try</code>, <code>asyncTry</code></h4>
-<p>The single operand of <code>try</code> is the <a href="?Syntax#body-rules">body</a>. The code in the body is executed; if it throws, <code>try</code> immediately returns whatever was thrown:</p>
+<p>The single operand of <code>try</code> is the <a href="?Syntax#open-scope">body</a>. The code in the body is executed; if it throws, <code>try</code> immediately returns whatever was thrown:</p>
 <pre><code>// prints 1, returns the Error object (2 is not printed)
 try
     print 1
@@ -24,7 +24,7 @@ try
 <ul>
 <li>an expression: typically an application of <a href="#try"><code>try</code></a></li>
 <li>a parameter: takes the value of the expression (the parameter is local to the body)</li>
-<li>a <a href="?Syntax#body-rules">body</a></li>
+<li>a <a href="?Syntax#open-scope">body</a></li>
 </ul>
 <p>The body is only executed if the <code>try</code> expression is truthy:</p>
 <pre><code>// prints 'something went wrong!'
