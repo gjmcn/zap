@@ -19,7 +19,7 @@ x       // 5
 
 #### `\=` {#non-local}
 
-Assign, but do not trigger the creation of a local variable (see [Assignment and Scope](#assignment-and-scope)):
+Assign, but do not trigger the creation of a local variable (see [Local Variables](#local-variables)):
 
 ```
 x = 5         // 5
@@ -79,9 +79,9 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 
 ---
 
-#### Assignment and Scope {#assignment-and-scope}
+#### Local Variables {#local-variables}
 
-Assignment triggers the creation of a local variable. The variable is created at the start of the current [scope](?Syntax#open-scope), and has the value `undefined` until it is assigned to. Here is an example that uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
+Assignment triggers the creation of a local variable. The variable is created at the start of the current [body](?Syntax#body-operands) (or start of the file if not inside a body), and has the value `undefined` until it is assigned to. The following example uses the [`scope`](?Writing-Functions#scope-op) operator:
 
 ```
 x = 5        // 5 (outer x)
@@ -89,7 +89,7 @@ x = 5        // 5 (outer x)
 scope
     x        // 5 (outer x)
 
-// assign to x in inner scope so local x is created
+// assign to x in the body of scope so a local x is created
 scope
     x        // undefined (local x)
     x = 10   // 10 (local x)
@@ -98,7 +98,7 @@ scope
 x            // 5 (outer x)
 ```
 
-Variables created at the top-level scope are _not_ global &mdash; they are not visible to other files. [Set a property](?Set-Property) of the global object to create a global variable:
+Variables created outside of a body are _not_ global &mdash; they are not visible to other files. [Set a property](?Set-Property) of the global object to create a global variable:
 
 ```
 globalThis :x = 5   // works in any JavaScript environment

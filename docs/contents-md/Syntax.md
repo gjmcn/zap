@@ -148,13 +148,11 @@ x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
 ```
 
-##### Open a New Scope {#open-scope}
+##### Body Operands {#body-operands}
 
-The following operators take a __body__ operand that opens a new scope:
+The following operators take a __body__ operand:
 
 [`fun`](?Writing-Functions#fun) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`as`](?Writing-Functions#as) [`class`](?Classes#class) [`extends`](?Classes#extends) [`each`](?Loops#each) [`map`](?Loops#map) [`do`](?Loops#do) [`try`](?Exceptions#try) [`catch`](?Exceptions#catch) 
-
-and the asynchronous versions:
 
 [`asyncFun`](?Writing-Functions#fun) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncAs`](?Writing-Functions#as) [`asyncEach`](?Loops#async-loops) [`asyncMap`](?Loops#async-loops) [`asyncDo`](?Loops#async-loops) [`asyncTry`](?Exceptions#try) [`asyncCatch`](?Exceptions#catch) 
 
@@ -168,12 +166,15 @@ fun x y (x + y)   // function
 
 x y fun (x + y)   // function
 
-x y (x + y) fun   // syntax error, missing function body
+x y (x + y) fun   // syntax error, missing body
 ```
 
-------------
-!!!!!!!!!!SAY THAT SCOPE AFFECTS FOLLOWING, giveing detaild on each
-- variables
-- async
-- yield
-- stop
+Body operands are important for the following reasons:
+
+* They dictate the visibility of variables &mdash; see [Local Variables](?Assignment#local-variables).
+
+* `await` can only be used in the body of one of the asynchronous operators listed above.
+
+* `yield` and `yieldFrom` can only be used in the body of `fun`, `scope`, `as`, `each` and `do` (and their asynchronous counterparts).
+
+* `stop` (exit a loop) can only be used in the body of `each`, `map` and `do` loops (and their asynchronous counterparts).

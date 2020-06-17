@@ -95,10 +95,9 @@ y = x = 8     // syntax error, multiple assignments are not allowed
 <pre><code>x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
 </code></pre>
-<h5 id="open-scope">Open a New Scope</h5>
-<p>The following operators take a <strong>body</strong> operand that opens a new scope:</p>
+<h5 id="body-operands">Body Operands</h5>
+<p>The following operators take a <strong>body</strong> operand:</p>
 <p><a href="?Writing-Functions#fun"><code>fun</code></a> <a href="?Writing-Functions#proc"><code>proc</code></a> <a href="?Writing-Functions#scope-op"><code>scope</code></a> <a href="?Writing-Functions#as"><code>as</code></a> <a href="?Classes#class"><code>class</code></a> <a href="?Classes#extends"><code>extends</code></a> <a href="?Loops#each"><code>each</code></a> <a href="?Loops#map"><code>map</code></a> <a href="?Loops#do"><code>do</code></a> <a href="?Exceptions#try"><code>try</code></a> <a href="?Exceptions#catch"><code>catch</code></a></p>
-<p>and the asynchronous versions:</p>
 <p><a href="?Writing-Functions#fun"><code>asyncFun</code></a> <a href="?Writing-Functions#proc"><code>asyncProc</code></a> <a href="?Writing-Functions#scope-op"><code>asyncScope</code></a> <a href="?Writing-Functions#as"><code>asyncAs</code></a> <a href="?Loops#async-loops"><code>asyncEach</code></a> <a href="?Loops#async-loops"><code>asyncMap</code></a> <a href="?Loops#async-loops"><code>asyncDo</code></a> <a href="?Exceptions#try"><code>asyncTry</code></a> <a href="?Exceptions#catch"><code>asyncCatch</code></a></p>
 <p>The body is always the final operand and must be in parentheses or be an indented block. Also, the body cannot be before the operator:</p>
 <pre><code>fun x y
@@ -108,15 +107,22 @@ fun x y (x + y)   // function
 
 x y fun (x + y)   // function
 
-x y (x + y) fun   // syntax error, missing function body
+x y (x + y) fun   // syntax error, missing body
 </code></pre>
-<hr>
-<p>!!!!!!!!!!SAY THAT SCOPE AFFECTS FOLLOWING, giveing detaild on each</p>
+<p>Body operands are important for the following reasons:</p>
 <ul>
-<li>variables</li>
-<li>async</li>
-<li>yield</li>
-<li>stop</li>
+<li>
+<p>They dictate the visibility of variables — see <a href="?Assignment#local-variables">Local Variables</a>.</p>
+</li>
+<li>
+<p><code>await</code> can only be used in the body of one of the asynchronous operators listed above.</p>
+</li>
+<li>
+<p><code>yield</code> and <code>yieldFrom</code> can only be used in the body of <code>fun</code>, <code>scope</code>, <code>as</code>, <code>each</code> and <code>do</code> (and their asynchronous counterparts).</p>
+</li>
+<li>
+<p><code>stop</code> (exit a loop) can only be used in the body of <code>each</code>, <code>map</code> and <code>do</code> loops (and their asynchronous counterparts).</p>
+</li>
 </ul>
 
 

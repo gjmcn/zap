@@ -10,7 +10,7 @@
 
 Loop over an iterable.
 
-The first operand of `each` is the iterable; the final operand is the loop [body](?Syntax#open-scope). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
+The first operand of `each` is the iterable; the final operand is the loop [body](?Syntax#body-operands). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
 
 ```
 // body in parentheses, prints: 4 5 6
@@ -61,7 +61,7 @@ As [`each`](#each), but `map` collects the value of the body (the last expressio
 
 Basic loop.
 
-The final operand of `do` is the loop [body](?Syntax#open-scope). The optional operands are the maximum number of steps and the current index:
+The final operand of `do` is the loop [body](?Syntax#body-operands). The optional operands are the maximum number of steps and the current index:
 
 ```
 // prints 0 1 2 3 4

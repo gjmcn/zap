@@ -18,7 +18,7 @@ alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
 
 The `class` operator is used just like [`fun`](?Writing-Functions#fun), but returns a class rather than a function. Furthermore, when `class` is used:
 
-* If the constructor's [body](?Syntax#open-scope) is empty, the parameters are automatically added to `this`:
+* If the constructor's [body](?Syntax#body-operands) is empty, the parameters are automatically added to `this`:
 
     ```
     Animal = class name age ()
@@ -73,7 +73,7 @@ Create a subclass.
 
 * The first operand of `extends` is the parent class.
 
-* If the constructor [body](?Syntax#open-scope) is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.
+* If the constructor [body](?Syntax#body-operands) is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.
 
 ```
 Animal = class name ()

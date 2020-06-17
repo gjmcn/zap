@@ -11,7 +11,7 @@ x       // 5
 </code></pre>
 <hr>
 <h4 id="non-local"><code>\=</code></h4>
-<p>Assign, but do not trigger the creation of a local variable (see <a href="#assignment-and-scope">Assignment and Scope</a>):</p>
+<p>Assign, but do not trigger the creation of a local variable (see <a href="#local-variables">Local Variables</a>):</p>
 <pre><code>x = 5         // 5
 scope
     x         // 5
@@ -47,14 +47,14 @@ u v @= x       // returns x, u is 5, v is 6
 u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 </code></pre>
 <hr>
-<h4 id="assignment-and-scope">Assignment and Scope</h4>
-<p>Assignment triggers the creation of a local variable. The variable is created at the start of the current <a href="?Syntax#open-scope">scope</a>, and has the value <code>undefined</code> until it is assigned to. Here is an example that uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
+<h4 id="local-variables">Local Variables</h4>
+<p>Assignment triggers the creation of a local variable. The variable is created at the start of the current <a href="?Syntax#body-operands">body</a> (or start of the file if not inside a body), and has the value <code>undefined</code> until it is assigned to. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator:</p>
 <pre><code>x = 5        // 5 (outer x)
 
 scope
     x        // 5 (outer x)
 
-// assign to x in inner scope so local x is created
+// assign to x in the body of scope so a local x is created
 scope
     x        // undefined (local x)
     x = 10   // 10 (local x)
@@ -62,7 +62,7 @@ scope
 
 x            // 5 (outer x)
 </code></pre>
-<p>Variables created at the top-level scope are <em>not</em> global — they are not visible to other files. <a href="?Set-Property">Set a property</a> of the global object to create a global variable:</p>
+<p>Variables created outside of a body are <em>not</em> global — they are not visible to other files. <a href="?Set-Property">Set a property</a> of the global object to create a global variable:</p>
 <pre><code>globalThis :x = 5   // works in any JavaScript environment
 window :y = 6       // works in browsers
 global :z = 7       // works in Node.js
