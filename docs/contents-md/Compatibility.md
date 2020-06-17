@@ -6,7 +6,7 @@ The compiled JavaScript is automatically wrapped in an IIFE and runs in strict m
 
 Almost all JavaScript features used by Zap are supported by recent versions of browsers and Node.js. Features most likely to be unsupported are:
 
-* Rest syntax in [destructuring assignments](?Assignment#destructuring) (`#=`, `@=`) &mdash; [JavaScript docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
+* Rest syntax in [destructuring assignments](?Assignment#destructure-object) (`#=`, `@=`) &mdash; [JavaScript docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
 
 * Nullish coalescing (`??`), conditional assignment (`?=`) and assignment from option (`=:`) use [JavaScript's nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator).
 

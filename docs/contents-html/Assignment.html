@@ -3,45 +3,57 @@
 <blockquote>
 <p>Assignment operators <a href="?Syntax#assignment-precedence">do not follow the normal position and precedence rules</a>.</p>
 </blockquote>
-<p>Use <code>=</code> for assignment:</p>
+<hr>
+<h4 id="standard-assignment"><code>=</code></h4>
+<p>Standard assignment:</p>
 <pre><code>x = 5   // 5
 x       // 5
 </code></pre>
 <hr>
-<h4>Update-Assignment</h4>
-<p>Use <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> for update-assignments:</p>
+<h4 id="update-assignment"><code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code></h4>
+<p>Update-assignments:</p>
 <pre><code>x = 5     // 5
 x += 10   // 15
 x         // 15
 </code></pre>
 <hr>
-<h4 id="conditional-assignment">Conditional Assignment</h4>
+<h4 id="conditional-assignment"><code>?=</code></h4>
 <p>Use <code>?=</code> for <em>conditional assignment</em>: if the variable (the first operand) is currently <code>undefined</code> or <code>null</code>, the second operand is evaluated and the result is assigned to the variable. If the variable <em>is not</em> currently <code>undefined</code> or <code>null</code>, the variable is assigned its current value and the second operand is not evaluated (short-circuit evaluation):</p>
 <pre><code>x = null
 x ?= 5    // 5 (x is 5)
 x ?= 10   // 5 (x is 5)
 </code></pre>
 <hr>
-<h4 id="destructuring">Destructuring Assignment</h4>
-<p>Use <code>#=</code> to destructure an object:</p>
+<h4 id="destructure-object"><code>#=</code></h4>
+<p>Destructure an object:</p>
 <pre><code>o = # h 5 i 6 j 7
 h j z #= o   // returns o, h is 5, j is 7, z is undefined
 </code></pre>
-<p>Use <code>@=</code> to destructure an iterable:</p>
+<hr>
+<h4 id="destructure-iterable"><code>@=</code></h4>
+<p>Destructure an iterable:</p>
 <pre><code>x = @ 5 6 7
 u v @= x       // returns x, u is 5, v is 6
 u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined 
 </code></pre>
 <hr>
-<h4>Other Assignment Operators</h4>
-<ul>
-<li>
-<p><a href="?Writing-Functions#options"><code>&lt;-</code></a> is discussed in <a href="?Writing-Functions">Writing Functions</a></p>
-</li>
-<li>
-<p><a href="?Variables-and-Scope"><code>\=</code></a> is discussed in <a href="?Variables-and-Scope">Variables and Scope</a></p>
-</li>
-</ul>
+<h4 id="non-local"><code>\=</code></h4>
+<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#body">scope</a> — with initial value <code>undefined</code>. <code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
+<pre><code>x = 5         // 5
+scope
+    x         // 5
+    x \= 10   // 10
+    x         // 10
+x             // 10
+</code></pre>
+<p>Note that <a href="#conditional-assignment">conditional assignment</a> (<code>?=</code>) and <a href="#update-assignment">update-assignment</a> (<code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code>) <em>does not</em> trigger the creation of a local variable so behave like <code>\=</code> in this respect:</p>
+<pre><code>x = 5         // 5
+scope
+    x         // 5
+    x += 10   // 15
+    x         // 15
+x             // 15
+</code></pre>
 
 
 <br><br><br>

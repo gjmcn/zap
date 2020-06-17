@@ -1,7 +1,7 @@
 <h2>Generators</h2>
 <hr>
 <p>We can use a <a href="?Writing-Functions#generator-functions">generator function</a> to create a generator, but the operators described in this section are more convenient for many common tasks.</p>
-<p>Since generators are iterables, they can be used with <a href="?Spread">spread syntax</a> and with many operators — see e.g. <a href="?Loops">Loops</a>, <a href="?Reduce">Reduce</a>, <a href="?Filter-and-Group">Filter and Group</a>, <a href="?Order-and-Bin">Order and Bin</a>, <a href="?Backticks">Backticks</a> and  <a href="?Assignment#Destructuring">Destructuring</a>. Here are some examples that use the <a href="#range"><code>&gt;&gt;</code></a> operator described below:</p>
+<p>Since generators are iterables, they can be used with <a href="?Spread">spread syntax</a> and with many operators — see e.g. <a href="?Loops">Loops</a>, <a href="?Reduce">Reduce</a>, <a href="?Filter-and-Group">Filter and Group</a>, <a href="?Order-and-Bin">Order and Bin</a>, <a href="?Backticks">Backticks</a> and <a href="?Assignment#destructure-iterable">Destructuring</a>. Here are some examples that use the <a href="#range"><code>&gt;&gt;</code></a> operator described below:</p>
 <pre><code>r = 5 &gt;&gt; 7;   // generator (5 6 7)
 r |next;      // {value: 5, done: false}
 r |next;      // {value: 6, done: false}

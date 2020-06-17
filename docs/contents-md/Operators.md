@@ -1,8 +1,51 @@
-## Operators: Words
+## Operators
 
 ---
 
-#### JavaScript Operators
+#### Symbols
+
+| Operator | Arity | Description |
+| ---------|----------|----------|
+| `+` `-` | 1+ | unary plus/minus, add, subtract |
+| `*` `/` `%` `^` | 2+ | multiply, divide, remainder, exponentiate |
+| `<>` `><`  | 2+ | least, greatest |
+| `&&` `||` `??` | 2+ | logical and, or, nullish coalescing |
+| [`?`](?Conditional) | 2-3 | conditional |
+| `!` | 1 | logical not |
+| `<` `<=` `>` `>=` | 2 | compare |
+| `==` `!=` | 2 | strict equality, strict inequality |
+| [`=`](?Assignment#standard-assignment)  | 2  | assign |
+| [`\=`](?Assignment#non-local) | 2  | assign, do not trigger creation of local variable |
+| [`<-`](?Writing-Functions#options) | 2  | assign, use option of same name or default |
+| [`?=`](?Assignment#conditional-assignment) | 2  | conditional assign |
+| [`+=`](?Assignment#update-assignment) [`-=`](?Assignment#update-assignment) [`*=`](?Assignment#update-assignment) [`/=`](?Assignment#update-assignment) [`%=`](?Assignment#update-assignment) [`^=`](?Assignment#update-assignment) | 2 | update-assign |
+| [`#=`](?Assignment#destructure-object) | 2+ | destructure object |
+| [`@=`](?Assignment#destructure-iterable) | 2+ | destructure array |
+| [`,`](?Get-Property#comma-getter) | 2 | get property |
+| [`:`](?Get-Property#colon-getter)  | 2 | get property |
+| [`::`](?Get-Property#colon-proto-getter) | 2 | get property of prototype |
+| [`?:`](?Get-Property#conditional-get) | 2 | conditional get property |
+| [`\`](?Calling-Functions) | 1+ | call function |
+| [`<\`](?Calling-Functions#return-first) | 2+ | call function, return first argument |
+| [`~`](?Calling-Functions#calling-methods) | 2+ | call method |
+| [`<~`](?Calling-Functions#return-first) | 2+ | call method, return calling object |
+| [`#`](?Literals#objects-and-maps) | 0+ | object literal |
+| [`##`](?Literals#objects-and-maps) | 0+ | map literal |
+| [`@`](?Literals#arrays)  | 0+ | array literal |
+| [`@@`](?Literals#sets) | 0+ | set literal {.table .table-sm .w600} |
+
+The operators `+`, `-`, `*`, `/`, `%`, `^`, `&&`, `||`, `??`, `<>` and `><` can take more than two operands:
+
+```
++ 1 2 3            // 6
++ 'a' 'bc' 'def'   // 'abcdef'
+```
+
+The operators `&&`, `||`, `??`, `?`, `<-`, `?=` and `?:` use short-circuit evaluation.
+
+---
+
+#### JavaScript Operators 
 
 [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) [`delete`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/delete) [`in`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in) [`instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) [`new`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new) [`typeof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof) [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield) [`yieldFrom`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*) [`void`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/void)   
 
@@ -32,35 +75,50 @@ These operators behave the same as their JavaScript counterparts except that:
 
 [`abs`](?Elementwise) [`acos`](?Elementwise) [`acosh`](?Elementwise) [`asin`](?Elementwise) [`asinh`](?Elementwise) [`atan`](?Elementwise) [`atanh`](?Elementwise) [`cbrt`](?Elementwise) [`ceil`](?Elementwise) [`clz32`](?Elementwise) [`cos`](?Elementwise) [`cosh`](?Elementwise) [`exp`](?Elementwise) [`expm1`](?Elementwise) [`floor`](?Elementwise) [`fround`](?Elementwise) [`log`](?Elementwise) [`log10`](?Elementwise) [`log1p`](?Elementwise)  [`log2`](?Elementwise) [`round`](?Elementwise) [`sign`](?Elementwise) [`sin`](?Elementwise) [`sinh`](?Elementwise) [`sqrt`](?Elementwise) [`tan`](?Elementwise) [`tanh`](?Elementwise) [`trunc`](?Elementwise)
 
+---
+
 #### Elementwise Other
 
 [`boolean`](?Elementwise) [`date`](?Elementwise) [`isFinite`](?Elementwise) [`isInteger`](?Elementwise) [`isNaN`](?Elementwise) [`neg`](?Elementwise) [`not`](?Elementwise) [`number`](?Elementwise) [`string`](?Elementwise) [`toLowerCase`](?Elementwise) [`toUpperCase`](?Elementwise) [`trim`](?Elementwise) [`trimEnd`](?Elementwise) [`trimStart`](?Elementwise)
+
+---
 
 #### Filter, Group, Reduce, Sort
 
 [`bin`](?Order-and-Bin#bin)  [`binCount`](?Order-and-Bin#bin) [`count`](?Reduce#count) [`deviation`](?Reduce#sum) [`every`](?Reduce#every) [`filter`](?Filter-and-Group#filter)  [`find`](?Reduce#find) [`findIndex`](?Reduce#find) [`group`](?Filter-and-Group#group) [`groupCount`](?Filter-and-Group#group) [`max`](?Reduce#min) [`maxIndex`](?Reduce#min) [`mean`](?Reduce#sum) [`min`](?Reduce#min) [`minIndex`](?Reduce#min) [`order`](?Order-and-Bin#order) [`orderIndex`](?Order-and-Bin#order) [`reduce`](?Reduce) [`some`](?Reduce#every) [`sum`](?Reduce#sum) [`sumCumu`](?Reduce#sum-cumu) [`variance`](?Reduce#sum)
 
+---
+
 #### Get/Set Property
 
 [`assign`](?Set-Property#copy-properties) [`at`](?Get-Property#at) [`attach`](?Set-Property#attach) [`chg`](?Set-Property#chg) [`getter`](?Get-Property#getter) [`setter`](?Set-Property#setter)
 
+---
+
 #### Import and Export
 [`export`](?Import-and-Export#export) [`import`](?Import-and-Export#import) [`importAll`](?Import-and-Export#import-all) [`importAs`](?Import-and-Export#import-as) [`importDefault`](?Import-and-Export#import-default) [`load`](?Import-and-Export#load)
+
+---
 
 #### Other
 
 [`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Exceptions#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
 
+---
+
 #### Random and Shuffle
+
 [`binomial`](?Random-and-Shuffle#binomial) [`categorical`](?Random-and-Shuffle#categorical) [`exponential`](?Random-and-Shuffle#exponential) [`geometric`](?Random-and-Shuffle#geometric) [`logNormal`](?Random-and-Shuffle#log-normal) [`normal`](?Random-and-Shuffle#normal) [`random`](?Random-and-Shuffle#random) [`randomInt`](?Random-and-Shuffle#random-int) [`shuffle`](?Random-and-Shuffle#shuffle)
 
-#### Scope
+---
+
+#### Body
 
 [`as`](?Writing-Functions#as) [`asyncAs`](?Writing-Functions#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](?Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncTry`](?Exceptions#try) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](?Writing-Functions#fun) [`map`](?Loops#map) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`try`](?Exceptions#try) 
 
 ---
 
-#### DOM
+#### DOM Operators
 
 [`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`pick`](?DOM#pick) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html)
 

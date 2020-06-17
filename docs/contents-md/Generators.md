@@ -4,7 +4,7 @@
 
 We can use a [generator function](?Writing-Functions#generator-functions) to create a generator, but the operators described in this section are more convenient for many common tasks.
 
-Since generators are iterables, they can be used with [spread syntax](?Spread) and with many operators &mdash; see e.g. [Loops](?Loops), [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and  [Destructuring](?Assignment#Destructuring). Here are some examples that use the [`>>`](#range) operator described below:
+Since generators are iterables, they can be used with [spread syntax](?Spread) and with many operators &mdash; see e.g. [Loops](?Loops), [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and [Destructuring](?Assignment#destructure-iterable). Here are some examples that use the [`>>`](#range) operator described below:
 
 ```
 r = 5 >> 7;   // generator (5 6 7)

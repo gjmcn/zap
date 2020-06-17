@@ -141,7 +141,7 @@ x += 3 + 4    // 10
 y = x = 8     // syntax error, multiple assignments are not allowed 
 ```
 
-[Destructuring assignment operators](?Assignment#destructuring) must be placed after the last variable being assigned to:
+[Destructuring assignment operators](?Assignment#destructure-object) must be placed after the last variable being assigned to:
 
 ```
 x = @ 5 6
