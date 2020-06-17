@@ -19,7 +19,7 @@ x       // 5
 
 #### `+=`, `-=`, `*=`, `/=`, `%=`, `^=` {#update-assignment}
 
-Update-assignments:
+Update-assignment:
 
 ```
 x = 5     // 5
@@ -67,7 +67,18 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 
 #### `\=` {#non-local}
 
-Variables assigned to with [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) or  [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) are automatically created at the start of the current [scope](?Syntax#body) &mdash; with initial value `undefined`. `\=` is like `=`, except that `\=` _does not_ trigger the creation of a local variable. The following example uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
+Variables assigned to with [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) or  [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) are automatically created at the start of the current [scope](?Syntax#body-rules):
+
+```
+x = 5        // 5
+scope
+    x        // undefined (local x exists before it is assigned to)
+    x = 10   // 10
+    x        // 10
+x            // 5
+```
+
+`\=` is like `=`, except that `\=` _does not_ trigger the creation of a local variable. The following example uses the [`scope`](?Writing-Functions#scope-op) operator to open a new scope:
 
 
 ```
@@ -79,7 +90,7 @@ scope
 x             // 10
 ```
 
-Note that [conditional assignment](#conditional-assignment) (`?=`) and [update-assignment](#update-assignment) (`+=`, `-=`, `*=`, `/=`, `%=`, `^=`) _does not_ trigger the creation of a local variable so behave like `\=` in this respect:
+Note that [conditional assignment](#conditional-assignment) (`?=`) and [update-assignment](#update-assignment) (`+=`, `-=`, `*=`, `/=`, `%=`, `^=`) _do not_ trigger the creation of a local variable so behave like `\=` in this respect:
 
 
 ```

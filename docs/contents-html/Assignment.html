@@ -11,7 +11,7 @@ x       // 5
 </code></pre>
 <hr>
 <h4 id="update-assignment"><code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code></h4>
-<p>Update-assignments:</p>
+<p>Update-assignment:</p>
 <pre><code>x = 5     // 5
 x += 10   // 15
 x         // 15
@@ -38,7 +38,15 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 </code></pre>
 <hr>
 <h4 id="non-local"><code>\=</code></h4>
-<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#body">scope</a> — with initial value <code>undefined</code>. <code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
+<p>Variables assigned to with <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> or  <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) are automatically created at the start of the current <a href="?Syntax#body-rules">scope</a>:</p>
+<pre><code>x = 5        // 5
+scope
+    x        // undefined (local x exists before it is assigned to)
+    x = 10   // 10
+    x        // 10
+x            // 5
+</code></pre>
+<p><code>\=</code> is like <code>=</code>, except that <code>\=</code> <em>does not</em> trigger the creation of a local variable. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator to open a new scope:</p>
 <pre><code>x = 5         // 5
 scope
     x         // 5
@@ -46,7 +54,7 @@ scope
     x         // 10
 x             // 10
 </code></pre>
-<p>Note that <a href="#conditional-assignment">conditional assignment</a> (<code>?=</code>) and <a href="#update-assignment">update-assignment</a> (<code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code>) <em>does not</em> trigger the creation of a local variable so behave like <code>\=</code> in this respect:</p>
+<p>Note that <a href="#conditional-assignment">conditional assignment</a> (<code>?=</code>) and <a href="#update-assignment">update-assignment</a> (<code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code>) <em>do not</em> trigger the creation of a local variable so behave like <code>\=</code> in this respect:</p>
 <pre><code>x = 5         // 5
 scope
     x         // 5
