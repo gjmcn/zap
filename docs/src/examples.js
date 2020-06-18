@@ -4,8 +4,7 @@ module.exports = new Map([
 ''
 ], [
 'data analysis',
-`iris = 'data/iris.json'
-| \\fetch await ~json await
+`iris = 'data/iris.json' \\fetch await ~json await
 
 // petal length > 6
 iris filter [a :petalLength > 6]
