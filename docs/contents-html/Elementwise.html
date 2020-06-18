@@ -1,15 +1,15 @@
 <h2>Elementwise</h2>
 <hr>
 <p>Elementwise operators take a single operand. If the operand is a non-string iterable, the operator acts on each element independently and returns the results as an array. Otherwise, the operator acts on the operand directly and returns the result:</p>
-<pre><code>4 $sqrt;        // 2
-@ 9 16 $sqrt;   // [3, 4]
+<pre><code>4 sqrt        // 2
+@ 9 16 sqrt   // [3, 4]
 
-'ab' $toUpperCase;          // 'AB'
-@ 'cd' 'ef' $toUpperCase;   // ['CD', 'EF']
+'ab' toUpperCase          // 'AB'
+@ 'cd' 'ef' toUpperCase   // ['CD', 'EF']
 </code></pre>
 <h4 id="ew-math">Math</h4>
 <p>Elementwise math operators use the corresponding methods of the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math"><code>Math</code></a> object. The elementwise math operators are:</p>
-<p><code>$abs</code> <code>$acos</code> <code>$acosh</code> <code>$asin</code> <code>$asinh</code> <code>$atan</code> <code>$atanh</code> <code>$cbrt</code> <code>$ceil</code> <code>$clz32</code> <code>$cos</code> <code>$cosh</code> <code>$exp</code> <code>$expm1</code> <code>$floor</code> <code>$fround</code> <code>$log</code> <code>$log10</code> <code>$log1p</code> <code>$log2</code> <code>$round</code> <code>$sign</code> <code>$sin</code> <code>$sinh</code> <code>$sqrt</code> <code>$tan</code> <code>$tanh</code> <code>$trunc</code></p>
+<p><code>abs</code> <code>acos</code> <code>acosh</code> <code>asin</code> <code>asinh</code> <code>atan</code> <code>atanh</code> <code>cbrt</code> <code>ceil</code> <code>clz32</code> <code>cos</code> <code>cosh</code> <code>exp</code> <code>expm1</code> <code>floor</code> <code>fround</code> <code>log</code> <code>log10</code> <code>log1p</code> <code>log2</code> <code>round</code> <code>sign</code> <code>sin</code> <code>sinh</code> <code>sqrt</code> <code>tan</code> <code>tanh</code> <code>trunc</code></p>
 <h4 id="ew-other">Other</h4>
 <p>The other elementwise operators are:</p>
 <table class="table table-sm w500">
@@ -21,65 +21,65 @@
 </thead>
 <tbody>
 <tr>
-<td><code>$boolean</code></td>
+<td><code>boolean</code></td>
 <td>convert to boolean</td>
 </tr>
 <tr>
-<td><code>$date</code></td>
+<td><code>date</code></td>
 <td>convert to date</td>
 </tr>
 <tr>
-<td><code>$isFinite</code></td>
+<td><code>isFinite</code></td>
 <td>is finite? (always <code>false</code> for non-number)</td>
 </tr>
 <tr>
-<td><code>$isInteger</code></td>
+<td><code>isInteger</code></td>
 <td>is integer? (always <code>false</code> for non-number)</td>
 </tr>
 <tr>
-<td><code>$isNaN</code></td>
+<td><code>isNaN</code></td>
 <td>is <code>NaN</code>? (always <code>false</code> for non-number)</td>
 </tr>
 <tr>
-<td><code>$neg</code></td>
+<td><code>neg</code></td>
 <td>unary minus</td>
 </tr>
 <tr>
-<td><code>$not</code></td>
+<td><code>not</code></td>
 <td>logical not</td>
 </tr>
 <tr>
-<td><code>$number</code></td>
+<td><code>number</code></td>
 <td>convert to number</td>
 </tr>
 <tr>
-<td><code>$string</code></td>
+<td><code>string</code></td>
 <td>convert to string</td>
 </tr>
 <tr>
-<td><code>$toLowerCase</code></td>
+<td><code>toLowerCase</code></td>
 <td>convert to lowercase string</td>
 </tr>
 <tr>
-<td><code>$toUpperCase</code></td>
+<td><code>toUpperCase</code></td>
 <td>convert to uppercase string</td>
 </tr>
 <tr>
-<td><code>$trim</code></td>
+<td><code>trim</code></td>
 <td>remove whitespace from both ends of string</td>
 </tr>
 <tr>
-<td><code>$trimEnd</code></td>
+<td><code>trimEnd</code></td>
 <td>remove whitespace from end of string</td>
 </tr>
 <tr>
-<td><code>$trimStart</code></td>
+<td><code>trimStart</code></td>
 <td>remove whitespace from start of string</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><code>$toLowerCase</code>, <code>$toUpperCase</code>, <code>$trim</code>, <code>$trimEnd</code> and <code>$trimStart</code> convert values to strings, but throw an error if a value is <code>null</code> or <code>undefined</code>.</p>
+<p><code>toLowerCase</code>, <code>toUpperCase</code>, <code>trim</code>, <code>trimEnd</code> and <code>trimStart</code> convert values to strings.</p>
 </blockquote>
 
 
