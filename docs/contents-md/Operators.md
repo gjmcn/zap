@@ -85,7 +85,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Filter, Group, Reduce, Sort
 
-[`bin`](?Order-and-Bin#bin)  [`binCount`](?Order-and-Bin#bin) [`count`](?Reduce#count) [`deviation`](?Reduce#sum) [`every`](?Reduce#every) [`filter`](?Filter-and-Group#filter)  [`find`](?Reduce#find) [`findIndex`](?Reduce#find) [`group`](?Filter-and-Group#group) [`groupCount`](?Filter-and-Group#group) [`max`](?Reduce#min) [`maxIndex`](?Reduce#min) [`mean`](?Reduce#sum) [`min`](?Reduce#min) [`minIndex`](?Reduce#min) [`order`](?Order-and-Bin#order) [`orderIndex`](?Order-and-Bin#order) [`reduce`](?Reduce) [`some`](?Reduce#every) [`sum`](?Reduce#sum) [`sumCumu`](?Reduce#sum-cumu) [`variance`](?Reduce#sum)
+[`bin`](?Order-and-Bin#bin)  [`binCount`](?Order-and-Bin#bin) [`count`](?Reduce#count) [`deviation`](?Reduce#sum) [`every`](?Reduce#every) [`filter`](?Filter-and-Group#filter)  [`find`](?Reduce#find) [`findIndex`](?Reduce#find) [`group`](?Filter-and-Group#group) [`groupCount`](?Filter-and-Group#group) [`max`](?Reduce#min) [`maxIndex`](?Reduce#min) [`mean`](?Reduce#sum) [`min`](?Reduce#min) [`minIndex`](?Reduce#min) [`order`](?Order-and-Bin#order) [`orderIndex`](?Order-and-Bin#order) [`reduce`](?Reduce#reduce-op) [`some`](?Reduce#every) [`sum`](?Reduce#sum) [`sumCumu`](?Reduce#sum-cumu) [`variance`](?Reduce#sum)
 
 ---
 

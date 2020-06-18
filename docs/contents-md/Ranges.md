@@ -8,7 +8,7 @@
 
 ```
 5 to 7           // generator (5 6 7)
-1.5 to 10 3      // generator (1.5 4.5 7.5 9)
+1.5 to 10 3      // generator (1.5 4.5 7.5)
 1 to (-2) (-1)   // generator (1 0 -1 -2)
 
 r = 5 to 7   // generator (5 6 7)
@@ -26,15 +26,14 @@ Generators are iterables, so can be used with many operators &mdash; see e.g. [L
 5 to 7 mean               // 6
 5 to 7 `+ 10              // [15, 16, 17]
 u v w @= 5 to 7           // u is 5, v is 6, w is 7
+'abcdefg' at (0 to 6 2)   // 'aceg'
 ```
-
-> For an increasing range, the test <code><i>value</i> &lt; (<i>end</i> + 1e-15)</code> is used to decide if <code><i>value</i></code> is in the range.
 
 ---
 
 ##### `linSpace` {#lin-space}
 
-`linSpace` is like [`to`](#to) except that the third operand (which should be a non-negative integer) is the number of steps:
+As [`to`](#to), but the third operand of `linSpace` (which should be a non-negative integer) is the number of steps:
 
 ```
 2 8 linSpace 4      // generator (2 4 6 8)
@@ -42,4 +41,4 @@ u v w @= 5 to 7           // u is 5, v is 6, w is 7
 2 (-7) linSpace 4   // generator (2 -1 -4 -7) 
 ```
 
-> Due to floating-point arithmetic, the final element of a range created with `linSpace` may not be identical to _end_.
+> Due to floating-point arithmetic, the final element of a range created with `linSpace` may not be identical to the _end_ operand.
