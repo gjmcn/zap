@@ -1,100 +1,102 @@
 <h2>Import and Export</h2>
 <hr>
-<h4>ES Modules</h4>
 <p>The following rules apply to import and export operators:</p>
 <ul>
 <li>
-<p>Cannot be used inside functions or parentheses.</p>
+<p>Can only be used at the 'top-level' — not inside parentheses, indented blocks or bracket functions.</p>
 </li>
 <li>
-<p>The first operand of import operators is the module path/url which must be a string literal. All other operands of import and export operators must be <a href="?Expressions#identifiers">identifiers</a>.</p>
+<p>The first operand of import operators is the module path/url which must be a string literal. All other operands of import and export operators must be <a href="?Syntax#identifiers">identifiers</a>.</p>
 </li>
 <li>
 <p>Return <code>undefined</code>.</p>
 </li>
 </ul>
-<p>While not necessary, we typically use import and export operators at the start of a file. For example (assuming we have written the modules <code>arithmetic</code> and <code>classify</code>):</p>
-<pre><code>$import '/modules/arithmetic.js' add subtract;
-$import '/modules/classify.js' isSmall;
-$export smaller isVerySmall;
+<p>While not necessary, we typically use import and export operators at the start of a file:</p>
+<pre><code>import '/modules/a.js' f1 f2
+import '/modules/b.js' g
+export h1 h2
 
-smaller = [a \subtract 10];
-isVerySmall = [a \add 100 \isSmall];
+h1 = [a \f1 \g]
+h2 = [a \f2 \g]
 </code></pre>
 <blockquote>
-<p>Do not assign to imports. In the compiled JavaScript, all code except import and export statements is wrapped in an IIFE. For an imported value <code>x</code>, <code>x += 5</code> will produce an error since imports are constants. In contrast, <code>x = x + 5</code> will create a local <code>x</code> inside the IIFE with value <code>NaN</code> (the result of <code>undefined + 5</code>).</p>
+<p>Do not assign to imports. Assignment operators that create <a href="?Assignment#local-variables">local variables</a> will create a new variable that masks the import. Assignment operators that update variables (e.g. <a href="?Assignment#update-assignment"><code>+=</code></a>) will throw an error since imports are constants.</p>
 </blockquote>
 <hr>
-<h5 id="export"><code>$export</code></h5>
+<h4 id="export"><code>export</code></h4>
 <p>Export variables:</p>
-<pre><code>$export add subtract;
+<pre><code>export add subtract
 
-add = [a + b];
-subtract = [a - b];
+add = [a + b]
+subtract = [a - b]
 </code></pre>
-<p><code>$export</code> can only be used once per file.</p>
+<p><code>export</code> can only be used once per file.</p>
 <hr>
-<h5 id="import"><code>$import</code></h5>
-<p>Use <code>$import</code> with one operand to import a module for side effects only:</p>
-<pre><code>$import '/modules/do-something.js';
+<h4 id="import"><code>import</code></h4>
+<p>Use <code>import</code> with one operand to import a module for side effects only:</p>
+<pre><code>import '/modules/do-something.js'
 </code></pre>
 <p>Use additional operands for named imports:</p>
-<pre><code>$import '/modules/arithmetic.js' add subtract;
+<pre><code>import '/modules/arithmetic.js' add subtract
 // use add and subtract here
 </code></pre>
 <hr>
-<h5 id="import-as"><code>$importAs</code></h5>
+<h4 id="import-as"><code>importAs</code></h4>
 <p>Rename imports. Operands are passed as <em>importName</em> <em>newName</em> pairs:</p>
-<pre><code>$importAs '/modules/arithmetic.js'
-  add plus
-  subtract takeaway;
+<pre><code>importAs '/modules/arithmetic.js'
+| add plus
+| subtract takeaway
 // use plus and takeaway here
 </code></pre>
 <hr>
-<h5 id="import-all"><code>$importAll</code></h5>
-<p>Import entire contents of module as an object:</p>
-<pre><code>$importAll '/modules/arithmetic.js' ar;
-// use  ar :add  and  ar :subtract  here
+<h4 id="import-all"><code>importAll</code></h4>
+<p>Import all of a module's exports as an object:</p>
+<pre><code>importAll '/modules/arithmetic.js' arith
+// use  arith :add  and  arith :subtract  here
 </code></pre>
 <hr>
-<h5 id="import-default"><code>$importDefault</code></h5>
-<p>Import default export. Zap does not use default exports, but many JavaScript modules do:</p>
-<pre><code>$importDefault '/modules/my-js-module.js' theDefault;
+<h4 id="import-default"><code>importDefault</code></h4>
+<p>Import default export.</p>
+<p>Zap does not use default exports, but many JavaScript modules do:</p>
+<pre><code>importDefault '/modules/my-js-module.js' theDefault
 // use theDefault here
 </code></pre>
 <hr>
-<h5>Dynamic Imports</h5>
-<p>Call <code>import</code> as a function to dynamically import a module. Dynamically imported modules are not subject to the restrictions that apply to import operators: dynamic imports can be used anywhere and the module path/url can be any expression. When called as a function, <code>import</code> returns a promise that resolves to an object:</p>
-<pre><code>\import '/modules/arithmetic.js' |then [ar -&gt;
-  // use  ar :add  and  ar :subtract  here
-  ];
+<h4 id="load"><code>load</code></h4>
+<p>Dynamically import a module.</p>
+<p><code>load</code> is not subject to the restrictions that apply to other import operators: <code>load</code> can be used anywhere and the module path/url can be any expression. <code>import</code> returns a promise that resolves to an object:</p>
+<pre><code>load '/modules/arithmetic.js' ~then 
+    fun arith
+        // use  arith :add  and  arith :subtract  here
 </code></pre>
-<p>Or (assuming the code is inside an asynchronous function) using <code>$await</code>:</p>
-<pre><code>add subtract #= '/modules/arithmetic.js' \import $await;
-// use add and subtract here
+<p>Or using <code>await</code>:</p>
+<pre><code>asyncScope
+    add subtract #= '/modules/arithmetic.js' load await
+    // use add and subtract here
 </code></pre>
 <hr>
 <h4>CommonJS Modules</h4>
 <p>CommonJS modules do not require dedicated operators or rules.</p>
 <p>The following export examples are equivalent:</p>
+<pre><code>module :exports = #
+| add [a + b]
+| subtract [a - b]
+</code></pre>
+<pre><code>add = [a + b]
+subtract = [a - b]
+exports attach add subtract
+</code></pre>
 <pre><code>exports
-  :add [a + b]
-  :subtract [a - b];
-</code></pre>
-<pre><code>add = [a + b];
-subtract = [a - b];
-exports ::add ::subtract;
-</code></pre>
-<pre><code>module :exports (#
-  add [a + b]
-  subtract [a - b]);
+| chg 'add' [a + b]
+| chg 'subtract' [a - b]
 </code></pre>
 <p>Use the <code>require</code> function to load a module:</p>
-<pre><code>ar = 'arithmetic.js' \require;
-// use  ar :add  and  ar :subtract  here
+<pre><code>arith = 'arithmetic.js' \require
+// use  arith :add  and  arith :subtract  here
 </code></pre>
 <p>Or with destructuring:</p>
-<pre><code>add subtract #= 'arithmetic.js' \require;
+<pre><code>add subtract #= 'arithmetic.js' \require
 // use add and subtract here
 </code></pre>
 
