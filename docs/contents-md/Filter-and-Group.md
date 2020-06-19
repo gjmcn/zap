@@ -34,7 +34,7 @@ x group [a :u]   // Map {
                  //   6 => [{u: 6, v: 20}]
                  // }
 
-// pass a second callback (see below)
+// second callback
 x group [a :u] [a mean [a :v]]   // Map {5 => 20, 6 => 20}
 
 // groupCount
