@@ -6,7 +6,7 @@ Except for [`reduce`](#reduce-op) itself, the operators in this section take an 
 
 ---
  
-##### `count` <span class="small">(callback required)</span> {#count}
+#### `count` <span class="small">(callback required)</span> {#count}
 
 Counts the number of times that the callback returns a truthy value:
 
@@ -17,7 +17,7 @@ s count [typeof a == 'number']   // 2
 
 ---
 
-##### `every`, `some` <span class="small">(callback required)</span> {#every}
+#### `every`, `some` <span class="small">(callback required)</span> {#every}
 
 `every` returns `true` if the callback returns a truthy value for every element and `false` otherwise. `some` returns `true` if the callback returns a truthy value for any element and `false` otherwise.
 
@@ -40,7 +40,7 @@ If the iterable is empty, `every` returns `true`, `some` returns `false`.
 
 ---
 
-##### `find`, `findIndex` <span class="small">(callback required)</span> {#find}
+#### `find`, `findIndex` <span class="small">(callback required)</span> {#find}
 
 `find` returns the element corresponding to the first truthy result of the callback. `findIndex` is like `find`, but returns the index of the corresponding element:
 
@@ -58,7 +58,7 @@ If the callback does not return a truthy value for any element, `find` returns `
 
 ---
 
-##### `min`, `max`, `minIndex`, `maxIndex` <span class="small">(callback optional)</span> {#min}
+#### `min`, `max`, `minIndex`, `maxIndex` <span class="small">(callback optional)</span> {#min}
 
 `min`/`max` returns the element of the iterable corresponding to the minimum/maximum:
 
@@ -81,7 +81,7 @@ The elements of the iterable (or results of the callback if used) are treated as
 
 ---
 
-##### `sum`, `mean`, `variance`, `deviation` <span class="small">(callback optional)</span> {#sum}
+#### `sum`, `mean`, `variance`, `deviation` <span class="small">(callback optional)</span> {#sum}
 
 Sum, mean, variance and standard deviation:
 
@@ -107,7 +107,7 @@ The elements of the iterable (or results of the callback if used) are treated as
 
 ---
 
-##### `sumCumu` <span class="small">(callback optional)</span> {#sum-cumu} 
+#### `sumCumu` <span class="small">(callback optional)</span> {#sum-cumu} 
 
 `sumCumu` is like [`sum`](#sum), but returns an array of cumulative sums rather than just the result:
 

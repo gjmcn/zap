@@ -2,6 +2,8 @@
 
 ---
 
+#### `?` {#ternary}
+
 The `?` operator evaluates a _test_; if the test is truthy, the second operand is evaluated and returned, otherwise the third operand is evaluated and returned. If the third operand is omitted and the test is falsy, no code is evaluated (except for the test) and `?` returns `undefined`.
 
 ```
@@ -18,6 +20,10 @@ false ? 5 10   // 10
     7
     8
 ```
+
+---
+
+#### `if` {#if}
 
 The `if` operator has operands *test*, *action*, *test*, *action*, ... The tests are evaluated in sequence; when a test returns truthy, the corresponding action is evaluated and `if` returns the result. If no test is truthy, no action is evaluated and `if` returns `undefined`.
 

@@ -12,11 +12,15 @@ Elementwise operators take a single operand. If the operand is a non-string iter
 @ 'cd' 'ef' toUpperCase   // ['CD', 'EF']
 ```
 
+---
+
 #### Math {#ew-math}
 
 Elementwise math operators use the corresponding methods of the [`Math`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) object. The elementwise math operators are: 
 
 `abs` `acos` `acosh` `asin` `asinh` `atan` `atanh` `cbrt` `ceil` `clz32` `cos` `cosh` `exp` `expm1` `floor` `fround` `log` `log10` `log1p` `log2` `round` `sign` `sin` `sinh` `sqrt` `tan` `tanh` `trunc`
+
+---
 
 #### Other {#ew-other}
 

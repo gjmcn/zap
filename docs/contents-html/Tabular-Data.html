@@ -4,90 +4,95 @@
 <blockquote>
 <p>Empty array elements in the original table become normal elements/properties (with value <code>undefined</code>) in the returned table.</p>
 </blockquote>
-<h4 id="transpose">Transpose</h4>
-<p><code>$transpose</code> takes an iterable-of-iterables (typically an array-of-arrays) and returns an array-of-arrays:</p>
+<hr>
+<h4 id="transpose"><code>transpose</code></h4>
+<p><code>transpose</code> takes an iterable-of-iterables (typically an array-of-arrays) and returns an array-of-arrays:</p>
 <pre><code>x = @ 
-  (@ 5 6 7)
-  (@ 10 20 30);   // [[5, 6, 7], [10, 20, 30]] 
+| (@ 5 6 7)
+| (@ 10 20 30)   // [[5, 6, 7], [10, 20, 30]] 
 
-x $transpose;     // [[5, 10], [6, 20], [7, 30]] 
+x transpose      // [[5, 10], [6, 20], [7, 30]] 
 </code></pre>
-<p>The result of <code>$transpose</code> can have empty elements and inner arrays of different lengths:</p>
-<pre><code>@ (@ 1 2) 
-  (@ 3 4 5)
-  (@ 6)
-    $transpose;   // [[1, 3, 6], [2 4], [empty, 5]] 
+<p>The result of <code>transpose</code> can have empty elements and inner arrays of different lengths:</p>
+<pre><code>@ 
+| (@ 1 2) 
+| (@ 3 4 5)
+| (@ 6)
+| transpose   // [[1, 3, 6], [2 4], [empty, 5]] 
 </code></pre>
-<h4 id="array-of-objects">Array-of-Objects</h4>
-<p><code>$arrObj</code> takes an object-of-iterables (typically an object-of-arrays) and returns an array-of-objects:</p>
+<hr>
+<h4 id="array-of-objects"><code>arrObj</code></h4>
+<p><code>arrObj</code> takes an object-of-iterables (typically an object-of-arrays) and returns an array-of-objects:</p>
 <pre><code>// object-of-arrays
 data = #
-  Name       (@ 'vw pickup' 'dodge rampage' 'ford ranger')
-  Horsepower (@ 52 84 79)
-  Origin     (@ 'Europe' 'USA' 'USA');
+| Name       (@ 'vw pickup' 'dodge rampage' 'ford ranger')
+| Horsepower (@ 52 84 79)
+| Origin     (@ 'Europe' 'USA' 'USA')
 
-data $arrObj;
+data arrObj
   // [
   //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
   //   {Name: 'dodge rampage', Horsepower: 84, Origin: 'USA'}
   //   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}
   // ]
   
-data $arrObj (@ 'Horsepower' 'Origin');
+data arrObj (@ 'Horsepower' 'Origin')
   // [
   //   {Horsepower: 52, Origin: 'Europe'}
   //   {Horsepower: 84, Origin: 'USA'}
   //   {Horsepower: 79, Origin: 'USA'}
   // ]
 </code></pre>
-<p>As shown in the final example, <code>$arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the returned table. When this argument is omitted (or falsy), all properties are included.</p>
+<p>As shown in the final example, <code>arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the returned table. When this argument is omitted (or falsy), all properties are included.</p>
 <p>The iterables in the original table can have different lengths:</p>
-<pre><code># u (@ 5 6 7)
-  v (@ 8 9)
-    $arrObj;   // [
-               //   {u: 5, v: 8},
-               //   {u: 6, v: 9},
-               //   {u: 7}
-               // ]
+<pre><code>#
+| u (@ 5 6 7)
+| v (@ 8 9)
+| arrObj   // [
+           //   {u: 5, v: 8},
+           //   {u: 6, v: 9},
+           //   {u: 7}
+           // ]
 </code></pre>
-<h4 id="object-of-arrays">Object-of-Arrays</h4>
-<p><code>$objArr</code> takes an iterable-of-objects (typically an array-of-objects) and returns an object-of-arrays:</p>
+<hr>
+<h4 id="object-of-arrays"><code>objArr</code></h4>
+<p><code>objArr</code> takes an iterable-of-objects (typically an array-of-objects) and returns an object-of-arrays:</p>
 <pre><code>// array-of-objects
 data = @
-  (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
-  (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
-  (# Name 'ford ranger'   Horsepower 79 Origin 'USA');
+| (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
+| (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
+| (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
 
-data $objArr;
+data objArr
   // {
   //   Name: ['vw pickup', 'dodge rampage', 'ford ranger'],
   //   Horsepower: [52, 84, 79],
   //   Origin: ['Europe', 'USA', 'USA']
   // }
 
-data $objArr (@ 'Horsepower' 'Origin');
+data objArr (@ 'Horsepower' 'Origin')
   // {
   //   Horsepower: [52, 84, 79],
   //   Origin: ['Europe', 'USA', 'USA']
   // }
 </code></pre>
-<p>As shown in the final example, <code>$objArr</code> can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), the returned object has an array for each unique property name in the original table.</p>
+<p>As shown in the final example, <code>objArr</code> can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), the returned object has an array for each unique property name in the original table.</p>
 <p>When a second operand is used, the arrays in the result have no empty elements and have the same length as the orginal table. When a second operand is not used, the arrays of the result can have empty elements and different lengths:</p>
 <pre><code>data = @
-  (# u 1 v 2)
-  (# u 3 v 4 w 5)
-  (# u 6);
+| (# u 1 v 2)
+| (# u 3 v 4 w 5)
+| (# u 6)
 
-data $objArr (@ 'v' 'w');   // {
-                            //   v: [2, 4, undefined],
-                            //   w : [undefined, 5, undefined]
-                            // }
+data objArr (@ 'v' 'w')   // {
+                          //   v: [2, 4, undefined],
+                          //   w : [undefined, 5, undefined]
+                          // }
 
-data $objArr;   // {
-                //   u: [1, 3, 6],
-                //   v: [2, 4],
-                //   w: [empty, 5]
-                // }
+data objArr   // {
+              //   u: [1, 3, 6],
+              //   v: [2, 4],
+              //   w: [empty, 5]
+              // }
 </code></pre>
 
 

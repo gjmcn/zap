@@ -10,7 +10,7 @@
 | `*` `/` `%` `^` | 2+ | multiply, divide, remainder, exponentiate |
 | `<>` `><`  | 2+ | least, greatest |
 | `&&` `||` `??` | 2+ | logical and, or, nullish coalescing |
-| [`?`](?Conditional) | 2-3 | conditional |
+| [`?`](?Conditional#ternary) | 2-3 | conditional |
 | `!` | 1 | logical not |
 | `<` `<=` `>` `>=` | 2 | compare |
 | `==` `!=` | 2 | strict equality, strict inequality |
@@ -102,7 +102,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### Other
 
-[`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Exceptions#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
+[`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional#if) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Exceptions#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
 
 ---
 

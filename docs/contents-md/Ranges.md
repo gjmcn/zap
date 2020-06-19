@@ -2,7 +2,7 @@
 
 ---
 
-##### `to` {#to}
+#### `to` {#to}
 
 `to` returns a generator that represents a sequence of equally spaced numbers. `to` takes three operands: _start_, _end_ and _step_. _step_ is 1 by default:
 
@@ -31,7 +31,7 @@ u v w @= 5 to 7           // u is 5, v is 6, w is 7
 
 ---
 
-##### `linSpace` {#lin-space}
+#### `linSpace` {#lin-space}
 
 As [`to`](#to), but the third operand of `linSpace` (which should be a non-negative integer) is the number of steps:
 

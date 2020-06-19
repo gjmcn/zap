@@ -1,5 +1,6 @@
 <h2>Conditional</h2>
 <hr>
+<h4 id="ternary"><code>?</code></h4>
 <p>The <code>?</code> operator evaluates a <em>test</em>; if the test is truthy, the second operand is evaluated and returned, otherwise the third operand is evaluated and returned. If the third operand is omitted and the test is falsy, no code is evaluated (except for the test) and <code>?</code> returns <code>undefined</code>.</p>
 <pre><code>true ? 5 10    // 5
 false ? 5 10   // 10
@@ -14,6 +15,8 @@ false ? 5 10   // 10
     7
     8
 </code></pre>
+<hr>
+<h4 id="if"><code>if</code></h4>
 <p>The <code>if</code> operator has operands <em>test</em>, <em>action</em>, <em>test</em>, <em>action</em>, ... The tests are evaluated in sequence; when a test returns truthy, the corresponding action is evaluated and <code>if</code> returns the result. If no test is truthy, no action is evaluated and <code>if</code> returns <code>undefined</code>.</p>
 <p>Often, we want the final test of an <code>if</code> to be truthy to ensure that some action is taken. In this case, we use the special constant <code>else</code> as the final test. This is equivalent to using <code>true</code>, but the code is easier to read:</p>
 <pre><code>exam = 60

@@ -1,6 +1,6 @@
 <h2>Ranges</h2>
 <hr>
-<h5 id="to"><code>to</code></h5>
+<h4 id="to"><code>to</code></h4>
 <p><code>to</code> returns a generator that represents a sequence of equally spaced numbers. <code>to</code> takes three operands: <em>start</em>, <em>end</em> and <em>step</em>. <em>step</em> is 1 by default:</p>
 <pre><code>5 to 7           // generator (5 6 7)
 1.5 to 10 3      // generator (1.5 4.5 7.5)
@@ -21,7 +21,7 @@ u v w @= 5 to 7           // u is 5, v is 6, w is 7
 'abcdefg' at (0 to 6 2)   // 'aceg'
 </code></pre>
 <hr>
-<h5 id="lin-space"><code>linSpace</code></h5>
+<h4 id="lin-space"><code>linSpace</code></h4>
 <p>As <a href="#to"><code>to</code></a>, but the third operand of <code>linSpace</code> (which should be a non-negative integer) is the number of steps:</p>
 <pre><code>2 8 linSpace 4      // generator (2 4 6 8)
 3 6 linSpace 3      // generator (3 4.5 6)
