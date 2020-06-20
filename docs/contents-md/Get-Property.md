@@ -7,11 +7,10 @@
 `:` gets an object/array property or a character from a string. `:` uses the [right operand rule](?Syntax#right-operand-rule) and the [identifier-name rule](?Syntax#identifier-name-rule):
 
 ```
-circle = 
-    #
-    | radius 50
-    | center (@ 100 200)
-    | color 'red'
+circle = #
+| radius 50
+| center (@ 100 200)
+| color 'red'
 
 r = 'radius'
 
@@ -55,11 +54,10 @@ o :q ?:y   // undefined
 As [`:`](#colon-getter), but `,` does not use the [right operand rule](?Syntax#right-operand-rule) or the [identifier-name rule](?Syntax#identifier-name-rule):
 
 ```
-circle = 
-    #
-    | radius 50
-    | center (@ 100 200)
-    | color 'red'
+circle = #
+| radius 50
+| center (@ 100 200)
+| color 'red'
 
 r = 'radius'
 
@@ -80,11 +78,10 @@ circle , 'color' , 2       // 'd'
 
 ```
 // array of objects
-data =
-    @
-    | (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
-    | (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
-    | (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
+data = @
+| (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
+| (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
+| (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
 
 data at (@ 2 0)
     // [

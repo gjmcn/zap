@@ -20,145 +20,142 @@ The following terms are used in this section to describe the elements associated
 
   * element &#8594; element; where relevant, the element is returned.
 
-> The DOM operators are loosely based on [d3-selection](https://github.com/d3/d3-selection). In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the [`$encode`](#encode) operator to map data to elements rather than D3's _enter-update-exit_ approach. Currently, `$encode` cannot map data to existing elements; this functionality will be added in a future version. 
+> The DOM operators are loosely based on [d3-selection](https://github.com/d3/d3-selection). In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the [`encode`](#encode) operator to map data to elements rather than D3's _enter-update-exit_ approach. Currently, `encode` cannot map data to existing elements; this functionality will be added in a future version. 
 
 ---
 
-##### `$pick` {#pick}
+#### `pick` {#pick}
 
-`$pick` takes a CSS selector string and returns the matching elements as an array. By default, `$pick` searches the document. If two operands are used, `$pick` searches the descendants of the [first element](#first-element) of the first operand:
-
-```
-$pick 'p';               // all <p> in document
-$pick '.news p';         // all <p> inside elements with class 'news' 
-elmA $pick 'p';          // all <p> in element elmA
-@ elmA elmB $pick 'p';   // all <p> in element elmA 
-'.news' $pick 'p';       // all <p> in first element with class 'news'
-```
-
-Since other DOM operators can take a CSS selector string where appropriate, `$pick` can often be omitted:
+`pick` takes a CSS selector string and returns the matching elements as an array. By default, `pick` searches the document. If two operands are used, `pick` searches the descendants of the [first element](#first-element) of the first operand:
 
 ```
-$pick 'p' $style 'color' 'red';   // set color of all <p> elements to red
-'p' $style 'color' 'red';         // equivalent
+pick 'p'               // all <p> in document
+pick '.news p'         // all <p> inside elements with class 'news' 
+elmA pick 'p'          // all <p> in element elmA
+@ elmA elmB pick 'p'   // all <p> in element elmA 
+'.news' pick 'p'       // all <p> in first element with class 'news'
+```
+
+Since other DOM operators can take a CSS selector string where appropriate, `pick` can often be omitted:
+
+```
+pick 'p' style 'color' 'red'   // set color of all <p> elements to red
+'p' style 'color' 'red'        // equivalent
 ```
 
 ---
 
-##### `$create`, `$createSVG` {#create}
+#### `create`, `createSVG` {#create}
 
 Create HTML/SVG elements. The first operand is a tag name:
 
 ```
-$create 'p';         // <p>
-$createSVG 'rect';   // <rect>
+create 'p'         // <p>
+createSVG 'rect'   // <rect>
 ```
 
 The second operand specifies the number of elements to create. When a second operand is used, an array is returned:
 
 ```
-$create 'p' 2;         // [<p>, <p>]
-$createSVG 'rect' 2;   // [<rect>, <rect>]
+create 'p' 2         // [<p>, <p>]
+createSVG 'rect' 2   // [<rect>, <rect>]
 ```
 
-Typically, we use [convenience operators](#create-convenience) instead of `$create`/`$createSVG`. For example:
+Typically, we use [convenience operators](#create-convenience) instead of `create`/`createSVG`. For example:
 
 ```
-$p;        // <p>
-$rect 2;   // [<rect>, <rect>]
-```
-
----
-
-##### `$fragment` {#fragment}
-
-`$fragment` takes no operands and returns a new document fragment.
-
----
-
-##### `$encode`, `$encodeSVG` {#encode}
-
-`$encode` takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's `__data__` property is set to the datum. The new elements are returned as an array:
-
-```
-p = @ 5 6 7 $encode 'p';   // [<p>, <p>, <p>]
-p :1 :__data__;            // 6
-```
-
-Various DOM operators such as [`$insert`](#insert), [`$into`](#into), [`$insertEach`](#insert-each), [`$attr`](#attr), [`$prop`](#attr), [`$style`](#attr), [`$html`](#html), [`$text`](#html), [`#on`](#on) and [`#off`](#on) use the `__data__` property of elements &mdash; it is rare to use the `__data__` property explicitly.
-
-The optional third operand of `$encode` specifies whether to set the `__data__` property of the new elements. This operand defaults to `true`.
-
-Use `$encodeSVG` to encode data as SVG elements rather than HTML:
-
-```
-o = @ (# u 5 v 6) (# u 7 v 8);
-r = $encodeSVG o 'rect';   // [<rect>, <rect>]
-r :1 :__data__;            // {u: 7, v: 8}
+$p        // <p>
+$rect 2   // [<rect>, <rect>]
 ```
 
 ---
 
-##### `$insert` {#insert}
+#### `fragment` {#fragment}
 
-Insert [all elements](#all-elements) of the second operand into the 'target': the [first element](#first-element) of the first operand. Alternatively, the second operand can be a callback function that returns an element or an iterable of elements. The callback is passed the target's data (see [`$encode`](#encode)) and the callback's `this` is set to the target.
+`fragment` takes no operands and returns a new document fragment.
 
-`$insert` returns the inserted element(s):
+---
+
+#### `encode`, `encodeSVG` {#encode}
+
+`encode` takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's `__data__` property is set to the datum. The new elements are returned as an array:
+
+```
+p = @ 5 6 7 encode 'p'   // [<p>, <p>, <p>]
+p :1 :__data__           // 6
+```
+
+Various DOM operators such as [`insert`](#insert), [`into`](#into), [`insertEach`](#insert-each), [`attr`](#attr), [`prop`](#attr), [`style`](#attr), [`html`](#html), [`text`](#html), [`#on`](#on) and [`#off`](#on) use the `__data__` property of elements &mdash; it is rare to use the `__data__` property explicitly.
+
+The optional third operand of `encode` specifies whether to set the `__data__` property of the new elements. This operand defaults to `true`.
+
+Use `encodeSVG` to encode data as SVG elements rather than HTML:
+
+```
+o = @ (# u 5 v 6) (# u 7 v 8)
+r = encodeSVG o 'rect'   // [<rect>, <rect>]
+r :1 :__data__           // {u: 7, v: 8}
+```
+
+---
+
+#### `insert` {#insert}
+
+Insert [all elements](#all-elements) of the second operand into the 'target': the [first element](#first-element) of the first operand. Alternatively, the second operand can be a callback function that returns an element or an iterable of elements. The callback is passed the target's data (see [`encode`](#encode)) and the callback's `this` is set to the target.
+
+`insert` returns the inserted element(s):
 
 ```
 // insert 3 <p> into elm, returns [<p>, <p>, <p>]
-elm $insert (3 $p);
+elm insert (3 $p)
 
 // insert 1 <p> into elm, returns [<p>]
-elm $insert (1 $p);
+elm insert (1 $p)
 
 // insert 1 <p> into elm, returns <p>
-elm $insert ($p);
+elm insert ($p)
 
 // insert all <p> in document into elm, returns all <p> as an array
-elm $insert 'p';
+elm insert 'p'
 ```
 
-As shown in the final example, `$insert` can be used to move elements that are already in the document.
+As shown in the final example, `insert` can be used to move elements that are already in the document.
 
-The optional third operand of `$insert` specifies where to insert elements into the target. The third operand must be a callback function; it is passed the target's data and the callback's `this` is set to the target. Elements are inserted before the [first element](#first-element) returned by the callback. If the callback returns `null` or is omitted, elements are inserted at the end of the target.
+The optional third operand of `insert` specifies where to insert elements into the target. The third operand must be a callback function; it is passed the target's data and the callback's `this` is set to the target. Elements are inserted before the [first element](#first-element) returned by the callback. If the callback returns `null` or is omitted, elements are inserted at the end of the target.
 
 ---
 
-##### `$into` {#into}
+#### `into` {#into}
 
-`$into` is the same as [`$insert`](#insert), but with the first two operands swapped. The only other difference is that `$into` returns the target element rather than the inserted elements:
-
-```
-2 $p $into ($div);   // <div><p></p><p></p></div>
-```
-
----
-
-##### `$insertEach` {#insert-each}
-
-`$insertEach` is similar to calling [`$insert`](#insert) for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of `$insertEach` _must_ be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):
+`into` is the same as [`insert`](#insert), but with the first two operands swapped. The only other difference is that `into` returns the target element rather than the inserted elements:
 
 ```
-3 $div
-  $insertEach [div index -> index $p];   // [[], [<p>], [<p>, <p>]]
-```
-
-The following example uses `$insert` and `$insertEach` to represent an array-of-arrays as an HTML table:
-
-```
-x = @ (@ 4 5 6) (@ 7 8 9);   // [[4, 5, 6], [7, 8, 9]]
-
-body $insert ($table)
-  $insert [$encode x 'tr']
-    $insertEach [xRow ->
-      $encode xRow 'td'
-      $text [a]];
+2 $p into ($div)   // <div><p></p><p></p></div>
 ```
 
 ---
 
-##### `$attr`, `$prop`, `$style` {#attr}
+#### `insertEach` {#insert-each}
+
+`insertEach` is similar to calling [`insert`](#insert) for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of `insertEach` _must_ be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):
+
+```
+3 $div insertEach [div index -> index $p]   // [[], [<p>], [<p>, <p>]]
+```
+
+The following example uses `insert` and `insertEach` to represent an array-of-arrays as an HTML table:
+
+```
+x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
+
+body insert ($table)
+| insert [encode x 'tr']
+| insertEach [a encode 'td' text [a]]
+```
+
+---
+
+#### `attr`, `prop`, `style` {#attr}
 
 Get or set an attribute/property/style of [all elements](#all-elements) of the first operand.
 
@@ -166,64 +163,63 @@ The second operand is the attribute/property/style name.
 
 When used with two operands, these operators are getters. If the first operand is an iterable, the values are returned as an array.
 
-When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's `__data__` property (see [`$encode`](#encode)) and the current index; the function's `this` is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).
+When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's `__data__` property (see [`encode`](#encode)) and the current index; the function's `this` is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).
 
 ```
-x = @ 'red' 'blue';
+x = @ 'red' 'blue'
 
-divs = x $encode 'div'
-  $style 'background-color' [a]
-  $style 'height' '20px';   // [<div>, <div>]
+divs = x encode 'div'
+| style 'background-color' [a]
+| style 'height' '20px'   // [<div>, <div>]
 
-// $style gets computed style - elements must be in the document
-divs $into 'body';
+// style gets computed style - elements must be in the document
+divs into 'body'
 
-divs $style 'background-color';   // ["rgb(255, 0, 0)", "rgb(0, 0, 255)"]
-divs $style 'height';             // ['20px', '20px']
-divs :0 $style 'height';          // '20px'
+divs style 'background-color'   // ["rgb(255, 0, 0)", "rgb(0, 0, 255)"]
+divs style 'height'             // ['20px', '20px']
+divs :0 style 'height'          // '20px'
 
-'div' $style 'width' '40px';   // set width of all divs in document
-'div' $style 'width';          // ['40px', '40px'] (if no preexisting divs)
+'div' style 'width' '40px'   // set width of all divs in document
+'div' style 'width'          // ['40px', '40px'] (if no preexisting divs)
 ```
 
 A callback function can be used with any elements; they need not have their own data:
 
 ```
-colors = @ 'red' 'green' 'blue';
+colors = @ 'red' 'green' 'blue'
 
 // create 3 <p>, give each a different color
-3 $p
-  $style 'color' [colors $at b];
+3 $p style 'color' [colors at b]
 ```
 
-`$style` can be used to get/set [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties):
+`style` can be used to get/set [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties):
 
 ```
 // use 'html' or document :documentElement to set globals
 // (i.e. variables that would be set under :root in CSS)
-'html' $style '--size' '24px';
+'html' style '--size' '24px'
 
 // scope --color variable to element with id 'apple'
-'#apple' $style '--color' 'green';
+'#apple' style '--color' 'green'
 ```
 
 ---
 
-##### `$html`, `$text` {#html}
+#### `html`, `text` {#html}
 
-`$html` and `$text` are shorthand getters/setters for the `innerHTML` and `textContent` properties respectively. Specifically, they are equivalent to using [`$prop`](#attr):
+`html` and `text` are shorthand getters/setters for the `innerHTML` and `textContent` properties respectively. Specifically, they are equivalent to using [`prop`](#attr):
 
-* `e $html` is equivalent to `e $prop 'innerHTML'`
+* `e html` is equivalent to `e prop 'innerHTML'`
 
-* `e $html h` is equivalent to `e $prop 'innerHTML' h`
+* `e html h` is equivalent to `e prop 'innerHTML' h`
 
-* `e $text` is equivalent to `e $prop 'textContent'`
+* `e text` is equivalent to `e prop 'textContent'`
 
-* `e $text t` is equivalent to `e $prop 'textContent' t`
+* `e text t` is equivalent to `e prop 'textContent' t`
 
 ---
 
-##### `$remove` {#remove}
+#### `remove` {#remove}
 
 Remove [all elements](#all-elements) of the operand from the document.
 
@@ -231,15 +227,15 @@ Returns the element(s).
 
 ---
 
-##### `$lower`, `$raise`, {#lower}
+#### `lower`, `raise`, {#lower}
 
-Move [all elements](#all-elements) of the operand (in order) to be the first child (`$lower`) or the last child (`$raise`) of their parents.
+Move [all elements](#all-elements) of the operand (in order) to be the first child (`lower`) or the last child (`raise`) of their parents.
 
 Returns the element(s).
 
 ---
 
-##### `$addClass`, `$removeClass` {#add-class}
+#### `addClass`, `removeClass` {#add-class}
 
 Add/remove classes from [all elements](#all-elements) of the first operand. The second operand is a string of space-separated class names. 
 
@@ -247,7 +243,7 @@ Returns the element(s).
 
 ---
 
-##### `$removeAttr`, `$removeStyle` {#remove-attr}
+#### `removeAttr`, `removeStyle` {#remove-attr}
 
 Remove an attribute/style from [all elements](#all-elements) of the first operand. The second operand is the name of the attribute/style to remove. 
 
@@ -256,7 +252,7 @@ Returns the element(s).
 ---
 
 
-##### `$hasAttr`, `$hasClass` {#has-attr}
+#### `hasAttr`, `hasClass` {#has-attr}
 
 For [all elements](#all-elements) of the first operand, indicate if each element has the attribute/class specified by the second operand. 
 
@@ -264,31 +260,31 @@ If the first operand is an iterable, these operators return an array of booleans
 
 ---
 
-##### `$on`, `$off` {#on}
+#### `on`, `off` {#on}
 
-Add/remove event listeners from [all elements](#all-elements) of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler &mdash; a function. The handler is passed the 'firing' element's `__data__` property (see [`$encode`](#encode)) and the event. The handler's `this` is set to the firing element.
+Add/remove event listeners from [all elements](#all-elements) of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler &mdash; a function. The handler is passed the 'firing' element's `__data__` property (see [`encode`](#encode)) and the event. The handler's `this` is set to the firing element.
 
 ```
-@ 5 6 7 $encode 'p'
-  $text 'show data'
-  $on 'click' [this $text a];    // [<p>, <p>, <p>] 
+@ 5 6 7 encode 'p'
+| text 'show data'
+| on 'click' [this text a]    // [<p>, <p>, <p>] 
 ```
 
 The optional fourth operand is an options object or a boolean indicating whether to use capture &mdash; see [EventTarget :addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) for details. The fourth operand defaults to `false`.
 
-The behavior of `$on` and `$off` differs slightly from that of the native methods [EventTarget :addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) and [EventTarget :removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener):
+The behavior of `on` and `off` differs slightly from that of the native methods [EventTarget :addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) and [EventTarget :removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener):
 
-* The event handler _must_ be a function when using `$on` and `$off`.
+* The event handler _must_ be a function when using `on` and `off`.
 
-* `$on` does nothing if the event handler is already registered with an element for the given event type &mdash; even if the fourth operand of `$on` is different to when the handler was originally registered.
+* `on` does nothing if the event handler is already registered with an element for the given event type &mdash; even if the fourth operand of `on` is different to when the handler was originally registered.
 
-`$on` and `$off` return the element(s).
+`on` and `off` return the element(s).
 
 ---
 
-##### `$sketch` {#sketch}
+#### `sketch` {#sketch}
 
-`$sketch` creates a `<canvas>` element and a drawing context. `$sketch` can be used with no operands or with an options object. The options are:
+`sketch` creates a `<canvas>` element and a drawing context. `sketch` can be used with no operands or with an options object. The options are:
 
 * `width`: canvas width in pixels (default: `300`).
 
@@ -300,16 +296,15 @@ The behavior of `$on` and `$off` differs slightly from that of the native method
 
 The `scale` option is ignored if `context` is not `'2d'`.
 
-Any additional options passed to `$sketch` are passed on to [`getContext`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext) when creating the context.
+Any additional options passed to `sketch` are passed on to [`getContext`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext) when creating the context.
 
 The canvas and context are returned as an array:
 
 ```
-canvas ctx @= $sketch;
+canvas ctx @= sketch
 
-ctx 
-  :fillStyle 'green'
-  |fillRect 50 20 200 100;
+ctx :fillStyle = 'green'
+ctx ~fillRect 50 20 200 100
 ```
 
 ---
@@ -326,7 +321,7 @@ __SVG:__
 
 `$animate` `$animateMotion` `$animateTransform` `$circle` `$clipPath` `$defs` `$desc` `$discard` `$ellipse` `$feBlend` `$feColorMatrix` `$feComponentTransfer` `$feComposite` `$feConvolveMatrix` `$feDiffuseLighting` `$feDisplacementMap` `$feDistantLight` `$feDropShadow` `$feFlood` `$feFuncA` `$feFuncB` `$feFuncG` `$feFuncR` `$feGaussianBlur` `$feImage` `$feMerge` `$feMergeNode` `$feMorphology` `$feOffset` `$fePointLight` `$feSpecularLighting` `$feSpotLight` `$feTile` `$feTurbulence` `$foreignObject` `$g` `$hatch` `$hatchpath` `$image` `$line` `$linearGradient` `$marker` `$mask` `$metadata` `$mpath` `$path` `$pattern` `$polygon` `$polyline` `$radialGradient` `$rect` `$solidcolor` `$stop` `$svg` `$symbol` `$textPath` `$tspan` `$use` `$view`
 
-Using these operators is equivalent to using [`$create`](#create)/[`$createSVG`](#create). For example:
+Using these operators is equivalent to using [`create`](#create)/[`createSVG`](#create). For example:
 
 * `$div` is equivalent to `$create 'div'`
 

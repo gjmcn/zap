@@ -2,11 +2,10 @@
 <hr>
 <h4 id="colon-getter"><code>:</code></h4>
 <p><code>:</code> gets an object/array property or a character from a string. <code>:</code> uses the <a href="?Syntax#right-operand-rule">right operand rule</a> and the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
-<pre><code>circle = 
-    #
-    | radius 50
-    | center (@ 100 200)
-    | color 'red'
+<pre><code>circle = #
+| radius 50
+| center (@ 100 200)
+| color 'red'
 
 r = 'radius'
 
@@ -35,11 +34,10 @@ o :q ?:y   // undefined
 <hr>
 <h4 id="comma-getter"><code>,</code></h4>
 <p>As <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
-<pre><code>circle = 
-    #
-    | radius 50
-    | center (@ 100 200)
-    | color 'red'
+<pre><code>circle = #
+| radius 50
+| center (@ 100 200)
+| color 'red'
 
 r = 'radius'
 
@@ -54,11 +52,10 @@ circle , 'color' , 2       // 'd'
 <p><code>at</code> can get multiple properties or characters — the second operand of <code>at</code> must be an iterable.</p>
 <p><code>at</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>at</code> returns an array.</p>
 <pre><code>// array of objects
-data =
-    @
-    | (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
-    | (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
-    | (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
+data = @
+| (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
+| (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
+| (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
 
 data at (@ 2 0)
     // [

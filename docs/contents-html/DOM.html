@@ -26,184 +26,180 @@
 </li>
 </ul>
 <blockquote>
-<p>The DOM operators are loosely based on <a href="https://github.com/d3/d3-selection">d3-selection</a>. In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the <a href="#encode"><code>$encode</code></a> operator to map data to elements rather than D3's <em>enter-update-exit</em> approach. Currently, <code>$encode</code> cannot map data to existing elements; this functionality will be added in a future version.</p>
+<p>The DOM operators are loosely based on <a href="https://github.com/d3/d3-selection">d3-selection</a>. In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the <a href="#encode"><code>encode</code></a> operator to map data to elements rather than D3's <em>enter-update-exit</em> approach. Currently, <code>encode</code> cannot map data to existing elements; this functionality will be added in a future version.</p>
 </blockquote>
 <hr>
-<h5 id="pick"><code>$pick</code></h5>
-<p><code>$pick</code> takes a CSS selector string and returns the matching elements as an array. By default, <code>$pick</code> searches the document. If two operands are used, <code>$pick</code> searches the descendants of the <a href="#first-element">first element</a> of the first operand:</p>
-<pre><code>$pick 'p';               // all &lt;p&gt; in document
-$pick '.news p';         // all &lt;p&gt; inside elements with class 'news' 
-elmA $pick 'p';          // all &lt;p&gt; in element elmA
-@ elmA elmB $pick 'p';   // all &lt;p&gt; in element elmA 
-'.news' $pick 'p';       // all &lt;p&gt; in first element with class 'news'
+<h4 id="pick"><code>pick</code></h4>
+<p><code>pick</code> takes a CSS selector string and returns the matching elements as an array. By default, <code>pick</code> searches the document. If two operands are used, <code>pick</code> searches the descendants of the <a href="#first-element">first element</a> of the first operand:</p>
+<pre><code>pick 'p'               // all &lt;p&gt; in document
+pick '.news p'         // all &lt;p&gt; inside elements with class 'news' 
+elmA pick 'p'          // all &lt;p&gt; in element elmA
+@ elmA elmB pick 'p'   // all &lt;p&gt; in element elmA 
+'.news' pick 'p'       // all &lt;p&gt; in first element with class 'news'
 </code></pre>
-<p>Since other DOM operators can take a CSS selector string where appropriate, <code>$pick</code> can often be omitted:</p>
-<pre><code>$pick 'p' $style 'color' 'red';   // set color of all &lt;p&gt; elements to red
-'p' $style 'color' 'red';         // equivalent
+<p>Since other DOM operators can take a CSS selector string where appropriate, <code>pick</code> can often be omitted:</p>
+<pre><code>pick 'p' style 'color' 'red'   // set color of all &lt;p&gt; elements to red
+'p' style 'color' 'red'        // equivalent
 </code></pre>
 <hr>
-<h5 id="create"><code>$create</code>, <code>$createSVG</code></h5>
+<h4 id="create"><code>create</code>, <code>createSVG</code></h4>
 <p>Create HTML/SVG elements. The first operand is a tag name:</p>
-<pre><code>$create 'p';         // &lt;p&gt;
-$createSVG 'rect';   // &lt;rect&gt;
+<pre><code>create 'p'         // &lt;p&gt;
+createSVG 'rect'   // &lt;rect&gt;
 </code></pre>
 <p>The second operand specifies the number of elements to create. When a second operand is used, an array is returned:</p>
-<pre><code>$create 'p' 2;         // [&lt;p&gt;, &lt;p&gt;]
-$createSVG 'rect' 2;   // [&lt;rect&gt;, &lt;rect&gt;]
+<pre><code>create 'p' 2         // [&lt;p&gt;, &lt;p&gt;]
+createSVG 'rect' 2   // [&lt;rect&gt;, &lt;rect&gt;]
 </code></pre>
-<p>Typically, we use <a href="#create-convenience">convenience operators</a> instead of <code>$create</code>/<code>$createSVG</code>. For example:</p>
-<pre><code>$p;        // &lt;p&gt;
-$rect 2;   // [&lt;rect&gt;, &lt;rect&gt;]
-</code></pre>
-<hr>
-<h5 id="fragment"><code>$fragment</code></h5>
-<p><code>$fragment</code> takes no operands and returns a new document fragment.</p>
-<hr>
-<h5 id="encode"><code>$encode</code>, <code>$encodeSVG</code></h5>
-<p><code>$encode</code> takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's <code>__data__</code> property is set to the datum. The new elements are returned as an array:</p>
-<pre><code>p = @ 5 6 7 $encode 'p';   // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
-p :1 :__data__;            // 6
-</code></pre>
-<p>Various DOM operators such as <a href="#insert"><code>$insert</code></a>, <a href="#into"><code>$into</code></a>, <a href="#insert-each"><code>$insertEach</code></a>, <a href="#attr"><code>$attr</code></a>, <a href="#attr"><code>$prop</code></a>, <a href="#attr"><code>$style</code></a>, <a href="#html"><code>$html</code></a>, <a href="#html"><code>$text</code></a>, <a href="#on"><code>#on</code></a> and <a href="#on"><code>#off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
-<p>The optional third operand of <code>$encode</code> specifies whether to set the <code>__data__</code> property of the new elements. This operand defaults to <code>true</code>.</p>
-<p>Use <code>$encodeSVG</code> to encode data as SVG elements rather than HTML:</p>
-<pre><code>o = @ (# u 5 v 6) (# u 7 v 8);
-r = $encodeSVG o 'rect';   // [&lt;rect&gt;, &lt;rect&gt;]
-r :1 :__data__;            // {u: 7, v: 8}
+<p>Typically, we use <a href="#create-convenience">convenience operators</a> instead of <code>create</code>/<code>createSVG</code>. For example:</p>
+<pre><code>$p        // &lt;p&gt;
+$rect 2   // [&lt;rect&gt;, &lt;rect&gt;]
 </code></pre>
 <hr>
-<h5 id="insert"><code>$insert</code></h5>
-<p>Insert <a href="#all-elements">all elements</a> of the second operand into the 'target': the <a href="#first-element">first element</a> of the first operand. Alternatively, the second operand can be a callback function that returns an element or an iterable of elements. The callback is passed the target's data (see <a href="#encode"><code>$encode</code></a>) and the callback's <code>this</code> is set to the target.</p>
-<p><code>$insert</code> returns the inserted element(s):</p>
+<h4 id="fragment"><code>fragment</code></h4>
+<p><code>fragment</code> takes no operands and returns a new document fragment.</p>
+<hr>
+<h4 id="encode"><code>encode</code>, <code>encodeSVG</code></h4>
+<p><code>encode</code> takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's <code>__data__</code> property is set to the datum. The new elements are returned as an array:</p>
+<pre><code>p = @ 5 6 7 encode 'p'   // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
+p :1 :__data__           // 6
+</code></pre>
+<p>Various DOM operators such as <a href="#insert"><code>insert</code></a>, <a href="#into"><code>into</code></a>, <a href="#insert-each"><code>insertEach</code></a>, <a href="#attr"><code>attr</code></a>, <a href="#attr"><code>prop</code></a>, <a href="#attr"><code>style</code></a>, <a href="#html"><code>html</code></a>, <a href="#html"><code>text</code></a>, <a href="#on"><code>#on</code></a> and <a href="#on"><code>#off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
+<p>The optional third operand of <code>encode</code> specifies whether to set the <code>__data__</code> property of the new elements. This operand defaults to <code>true</code>.</p>
+<p>Use <code>encodeSVG</code> to encode data as SVG elements rather than HTML:</p>
+<pre><code>o = @ (# u 5 v 6) (# u 7 v 8)
+r = encodeSVG o 'rect'   // [&lt;rect&gt;, &lt;rect&gt;]
+r :1 :__data__           // {u: 7, v: 8}
+</code></pre>
+<hr>
+<h4 id="insert"><code>insert</code></h4>
+<p>Insert <a href="#all-elements">all elements</a> of the second operand into the 'target': the <a href="#first-element">first element</a> of the first operand. Alternatively, the second operand can be a callback function that returns an element or an iterable of elements. The callback is passed the target's data (see <a href="#encode"><code>encode</code></a>) and the callback's <code>this</code> is set to the target.</p>
+<p><code>insert</code> returns the inserted element(s):</p>
 <pre><code>// insert 3 &lt;p&gt; into elm, returns [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
-elm $insert (3 $p);
+elm insert (3 $p)
 
 // insert 1 &lt;p&gt; into elm, returns [&lt;p&gt;]
-elm $insert (1 $p);
+elm insert (1 $p)
 
 // insert 1 &lt;p&gt; into elm, returns &lt;p&gt;
-elm $insert ($p);
+elm insert ($p)
 
 // insert all &lt;p&gt; in document into elm, returns all &lt;p&gt; as an array
-elm $insert 'p';
+elm insert 'p'
 </code></pre>
-<p>As shown in the final example, <code>$insert</code> can be used to move elements that are already in the document.</p>
-<p>The optional third operand of <code>$insert</code> specifies where to insert elements into the target. The third operand must be a callback function; it is passed the target's data and the callback's <code>this</code> is set to the target. Elements are inserted before the <a href="#first-element">first element</a> returned by the callback. If the callback returns <code>null</code> or is omitted, elements are inserted at the end of the target.</p>
+<p>As shown in the final example, <code>insert</code> can be used to move elements that are already in the document.</p>
+<p>The optional third operand of <code>insert</code> specifies where to insert elements into the target. The third operand must be a callback function; it is passed the target's data and the callback's <code>this</code> is set to the target. Elements are inserted before the <a href="#first-element">first element</a> returned by the callback. If the callback returns <code>null</code> or is omitted, elements are inserted at the end of the target.</p>
 <hr>
-<h5 id="into"><code>$into</code></h5>
-<p><code>$into</code> is the same as <a href="#insert"><code>$insert</code></a>, but with the first two operands swapped. The only other difference is that <code>$into</code> returns the target element rather than the inserted elements:</p>
-<pre><code>2 $p $into ($div);   // &lt;div&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;/div&gt;
+<h4 id="into"><code>into</code></h4>
+<p><code>into</code> is the same as <a href="#insert"><code>insert</code></a>, but with the first two operands swapped. The only other difference is that <code>into</code> returns the target element rather than the inserted elements:</p>
+<pre><code>2 $p into ($div)   // &lt;div&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;/div&gt;
 </code></pre>
 <hr>
-<h5 id="insert-each"><code>$insertEach</code></h5>
-<p><code>$insertEach</code> is similar to calling <a href="#insert"><code>$insert</code></a> for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>$insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
-<pre><code>3 $div
-  $insertEach [div index -&gt; index $p];   // [[], [&lt;p&gt;], [&lt;p&gt;, &lt;p&gt;]]
+<h4 id="insert-each"><code>insertEach</code></h4>
+<p><code>insertEach</code> is similar to calling <a href="#insert"><code>insert</code></a> for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
+<pre><code>3 $div insertEach [div index -&gt; index $p]   // [[], [&lt;p&gt;], [&lt;p&gt;, &lt;p&gt;]]
 </code></pre>
-<p>The following example uses <code>$insert</code> and <code>$insertEach</code> to represent an array-of-arrays as an HTML table:</p>
-<pre><code>x = @ (@ 4 5 6) (@ 7 8 9);   // [[4, 5, 6], [7, 8, 9]]
+<p>The following example uses <code>insert</code> and <code>insertEach</code> to represent an array-of-arrays as an HTML table:</p>
+<pre><code>x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
 
-body $insert ($table)
-  $insert [$encode x 'tr']
-    $insertEach [xRow -&gt;
-      $encode xRow 'td'
-      $text [a]];
+body insert ($table)
+| insert [encode x 'tr']
+| insertEach [a encode 'td' text [a]]
 </code></pre>
 <hr>
-<h5 id="attr"><code>$attr</code>, <code>$prop</code>, <code>$style</code></h5>
+<h4 id="attr"><code>attr</code>, <code>prop</code>, <code>style</code></h4>
 <p>Get or set an attribute/property/style of <a href="#all-elements">all elements</a> of the first operand.</p>
 <p>The second operand is the attribute/property/style name.</p>
 <p>When used with two operands, these operators are getters. If the first operand is an iterable, the values are returned as an array.</p>
-<p>When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's <code>__data__</code> property (see <a href="#encode"><code>$encode</code></a>) and the current index; the function's <code>this</code> is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).</p>
-<pre><code>x = @ 'red' 'blue';
+<p>When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's <code>__data__</code> property (see <a href="#encode"><code>encode</code></a>) and the current index; the function's <code>this</code> is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).</p>
+<pre><code>x = @ 'red' 'blue'
 
-divs = x $encode 'div'
-  $style 'background-color' [a]
-  $style 'height' '20px';   // [&lt;div&gt;, &lt;div&gt;]
+divs = x encode 'div'
+| style 'background-color' [a]
+| style 'height' '20px'   // [&lt;div&gt;, &lt;div&gt;]
 
-// $style gets computed style - elements must be in the document
-divs $into 'body';
+// style gets computed style - elements must be in the document
+divs into 'body'
 
-divs $style 'background-color';   // [&quot;rgb(255, 0, 0)&quot;, &quot;rgb(0, 0, 255)&quot;]
-divs $style 'height';             // ['20px', '20px']
-divs :0 $style 'height';          // '20px'
+divs style 'background-color'   // [&quot;rgb(255, 0, 0)&quot;, &quot;rgb(0, 0, 255)&quot;]
+divs style 'height'             // ['20px', '20px']
+divs :0 style 'height'          // '20px'
 
-'div' $style 'width' '40px';   // set width of all divs in document
-'div' $style 'width';          // ['40px', '40px'] (if no preexisting divs)
+'div' style 'width' '40px'   // set width of all divs in document
+'div' style 'width'          // ['40px', '40px'] (if no preexisting divs)
 </code></pre>
 <p>A callback function can be used with any elements; they need not have their own data:</p>
-<pre><code>colors = @ 'red' 'green' 'blue';
+<pre><code>colors = @ 'red' 'green' 'blue'
 
 // create 3 &lt;p&gt;, give each a different color
-3 $p
-  $style 'color' [colors $at b];
+3 $p style 'color' [colors at b]
 </code></pre>
-<p><code>$style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
+<p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
 <pre><code>// use 'html' or document :documentElement to set globals
 // (i.e. variables that would be set under :root in CSS)
-'html' $style '--size' '24px';
+'html' style '--size' '24px'
 
 // scope --color variable to element with id 'apple'
-'#apple' $style '--color' 'green';
+'#apple' style '--color' 'green'
 </code></pre>
 <hr>
-<h5 id="html"><code>$html</code>, <code>$text</code></h5>
-<p><code>$html</code> and <code>$text</code> are shorthand getters/setters for the <code>innerHTML</code> and <code>textContent</code> properties respectively. Specifically, they are equivalent to using <a href="#attr"><code>$prop</code></a>:</p>
+<h4 id="html"><code>html</code>, <code>text</code></h4>
+<p><code>html</code> and <code>text</code> are shorthand getters/setters for the <code>innerHTML</code> and <code>textContent</code> properties respectively. Specifically, they are equivalent to using <a href="#attr"><code>prop</code></a>:</p>
 <ul>
 <li>
-<p><code>e $html</code> is equivalent to <code>e $prop 'innerHTML'</code></p>
+<p><code>e html</code> is equivalent to <code>e prop 'innerHTML'</code></p>
 </li>
 <li>
-<p><code>e $html h</code> is equivalent to <code>e $prop 'innerHTML' h</code></p>
+<p><code>e html h</code> is equivalent to <code>e prop 'innerHTML' h</code></p>
 </li>
 <li>
-<p><code>e $text</code> is equivalent to <code>e $prop 'textContent'</code></p>
+<p><code>e text</code> is equivalent to <code>e prop 'textContent'</code></p>
 </li>
 <li>
-<p><code>e $text t</code> is equivalent to <code>e $prop 'textContent' t</code></p>
+<p><code>e text t</code> is equivalent to <code>e prop 'textContent' t</code></p>
 </li>
 </ul>
 <hr>
-<h5 id="remove"><code>$remove</code></h5>
+<h4 id="remove"><code>remove</code></h4>
 <p>Remove <a href="#all-elements">all elements</a> of the operand from the document.</p>
 <p>Returns the element(s).</p>
 <hr>
-<h5 id="lower"><code>$lower</code>, <code>$raise</code>,</h5>
-<p>Move <a href="#all-elements">all elements</a> of the operand (in order) to be the first child (<code>$lower</code>) or the last child (<code>$raise</code>) of their parents.</p>
+<h4 id="lower"><code>lower</code>, <code>raise</code>,</h4>
+<p>Move <a href="#all-elements">all elements</a> of the operand (in order) to be the first child (<code>lower</code>) or the last child (<code>raise</code>) of their parents.</p>
 <p>Returns the element(s).</p>
 <hr>
-<h5 id="add-class"><code>$addClass</code>, <code>$removeClass</code></h5>
+<h4 id="add-class"><code>addClass</code>, <code>removeClass</code></h4>
 <p>Add/remove classes from <a href="#all-elements">all elements</a> of the first operand. The second operand is a string of space-separated class names.</p>
 <p>Returns the element(s).</p>
 <hr>
-<h5 id="remove-attr"><code>$removeAttr</code>, <code>$removeStyle</code></h5>
+<h4 id="remove-attr"><code>removeAttr</code>, <code>removeStyle</code></h4>
 <p>Remove an attribute/style from <a href="#all-elements">all elements</a> of the first operand. The second operand is the name of the attribute/style to remove.</p>
 <p>Returns the element(s).</p>
 <hr>
-<h5 id="has-attr"><code>$hasAttr</code>, <code>$hasClass</code></h5>
+<h4 id="has-attr"><code>hasAttr</code>, <code>hasClass</code></h4>
 <p>For <a href="#all-elements">all elements</a> of the first operand, indicate if each element has the attribute/class specified by the second operand.</p>
 <p>If the first operand is an iterable, these operators return an array of booleans. Otherwise, they return a boolean.</p>
 <hr>
-<h5 id="on"><code>$on</code>, <code>$off</code></h5>
-<p>Add/remove event listeners from <a href="#all-elements">all elements</a> of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler — a function. The handler is passed the 'firing' element's <code>__data__</code> property (see <a href="#encode"><code>$encode</code></a>) and the event. The handler's <code>this</code> is set to the firing element.</p>
-<pre><code>@ 5 6 7 $encode 'p'
-  $text 'show data'
-  $on 'click' [this $text a];    // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] 
+<h4 id="on"><code>on</code>, <code>off</code></h4>
+<p>Add/remove event listeners from <a href="#all-elements">all elements</a> of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler — a function. The handler is passed the 'firing' element's <code>__data__</code> property (see <a href="#encode"><code>encode</code></a>) and the event. The handler's <code>this</code> is set to the firing element.</p>
+<pre><code>@ 5 6 7 encode 'p'
+| text 'show data'
+| on 'click' [this text a]    // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] 
 </code></pre>
 <p>The optional fourth operand is an options object or a boolean indicating whether to use capture — see <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> for details. The fourth operand defaults to <code>false</code>.</p>
-<p>The behavior of <code>$on</code> and <code>$off</code> differs slightly from that of the native methods <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">EventTarget :removeEventListener</a>:</p>
+<p>The behavior of <code>on</code> and <code>off</code> differs slightly from that of the native methods <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">EventTarget :removeEventListener</a>:</p>
 <ul>
 <li>
-<p>The event handler <em>must</em> be a function when using <code>$on</code> and <code>$off</code>.</p>
+<p>The event handler <em>must</em> be a function when using <code>on</code> and <code>off</code>.</p>
 </li>
 <li>
-<p><code>$on</code> does nothing if the event handler is already registered with an element for the given event type — even if the fourth operand of <code>$on</code> is different to when the handler was originally registered.</p>
+<p><code>on</code> does nothing if the event handler is already registered with an element for the given event type — even if the fourth operand of <code>on</code> is different to when the handler was originally registered.</p>
 </li>
 </ul>
-<p><code>$on</code> and <code>$off</code> return the element(s).</p>
+<p><code>on</code> and <code>off</code> return the element(s).</p>
 <hr>
-<h5 id="sketch"><code>$sketch</code></h5>
-<p><code>$sketch</code> creates a <code>&lt;canvas&gt;</code> element and a drawing context. <code>$sketch</code> can be used with no operands or with an options object. The options are:</p>
+<h4 id="sketch"><code>sketch</code></h4>
+<p><code>sketch</code> creates a <code>&lt;canvas&gt;</code> element and a drawing context. <code>sketch</code> can be used with no operands or with an options object. The options are:</p>
 <ul>
 <li>
 <p><code>width</code>: canvas width in pixels (default: <code>300</code>).</p>
@@ -219,13 +215,12 @@ divs :0 $style 'height';          // '20px'
 </li>
 </ul>
 <p>The <code>scale</code> option is ignored if <code>context</code> is not <code>'2d'</code>.</p>
-<p>Any additional options passed to <code>$sketch</code> are passed on to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext"><code>getContext</code></a> when creating the context.</p>
+<p>Any additional options passed to <code>sketch</code> are passed on to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext"><code>getContext</code></a> when creating the context.</p>
 <p>The canvas and context are returned as an array:</p>
-<pre><code>canvas ctx @= $sketch;
+<pre><code>canvas ctx @= sketch
 
-ctx 
-  :fillStyle 'green'
-  |fillRect 50 20 200 100;
+ctx :fillStyle = 'green'
+ctx ~fillRect 50 20 200 100
 </code></pre>
 <hr>
 <h4 id="create-convenience">Convenience Operators for Creating Elements</h4>
@@ -234,7 +229,7 @@ ctx
 <p><code>$a</code> <code>$abbr</code> <code>$address</code> <code>$area</code> <code>$article</code> <code>$aside</code> <code>$audio</code> <code>$b</code> <code>$bdi</code> <code>$bdo</code> <code>$blockquote</code> <code>$br</code> <code>$button</code> <code>$canvas</code> <code>$caption</code> <code>$cite</code> <code>$code</code> <code>$col</code> <code>$colgroup</code> <code>$datalist</code> <code>$dd</code> <code>$del</code> <code>$details</code> <code>$dfn</code> <code>$dialog</code> <code>$div</code> <code>$dl</code> <code>$dt</code> <code>$em</code> <code>$embed</code> <code>$fieldset</code> <code>$figcaption</code> <code>$figure</code> <code>$footer</code> <code>$form</code> <code>$h1</code> <code>$h2</code> <code>$h3</code> <code>$h4</code> <code>$h5</code> <code>$h6</code> <code>$header</code> <code>$hgroup</code> <code>$hr</code> <code>$i</code> <code>$iframe</code> <code>$img</code> <code>$input</code> <code>$ins</code> <code>$kbd</code> <code>$label</code> <code>$legend</code> <code>$li</code> <code>$link</code> <code>$main</code> <code>$mark</code> <code>$menu</code> <code>$meta</code> <code>$meter</code> <code>$nav</code> <code>$noscript</code> <code>$ol</code> <code>$optgroup</code> <code>$option</code> <code>$output</code> <code>$p</code> <code>$picture</code> <code>$pre</code> <code>$progress</code> <code>$q</code> <code>$rb</code> <code>$rp</code> <code>$rt</code> <code>$rtc</code> <code>$ruby</code> <code>$s</code> <code>$samp</code> <code>$script</code> <code>$section</code> <code>$select</code> <code>$slot</code> <code>$small</code> <code>$source</code> <code>$span</code> <code>$strong</code> <code>$sub</code> <code>$summary</code> <code>$sup</code> <code>$table</code> <code>$tbody</code> <code>$td</code> <code>$template</code> <code>$textarea</code> <code>$tfoot</code> <code>$th</code> <code>$thead</code> <code>$time</code> <code>$title</code> <code>$tr</code> <code>$track</code> <code>$u</code> <code>$ul</code> <code>$var</code> <code>$video</code> <code>$wbr</code></p>
 <p><strong>SVG:</strong></p>
 <p><code>$animate</code> <code>$animateMotion</code> <code>$animateTransform</code> <code>$circle</code> <code>$clipPath</code> <code>$defs</code> <code>$desc</code> <code>$discard</code> <code>$ellipse</code> <code>$feBlend</code> <code>$feColorMatrix</code> <code>$feComponentTransfer</code> <code>$feComposite</code> <code>$feConvolveMatrix</code> <code>$feDiffuseLighting</code> <code>$feDisplacementMap</code> <code>$feDistantLight</code> <code>$feDropShadow</code> <code>$feFlood</code> <code>$feFuncA</code> <code>$feFuncB</code> <code>$feFuncG</code> <code>$feFuncR</code> <code>$feGaussianBlur</code> <code>$feImage</code> <code>$feMerge</code> <code>$feMergeNode</code> <code>$feMorphology</code> <code>$feOffset</code> <code>$fePointLight</code> <code>$feSpecularLighting</code> <code>$feSpotLight</code> <code>$feTile</code> <code>$feTurbulence</code> <code>$foreignObject</code> <code>$g</code> <code>$hatch</code> <code>$hatchpath</code> <code>$image</code> <code>$line</code> <code>$linearGradient</code> <code>$marker</code> <code>$mask</code> <code>$metadata</code> <code>$mpath</code> <code>$path</code> <code>$pattern</code> <code>$polygon</code> <code>$polyline</code> <code>$radialGradient</code> <code>$rect</code> <code>$solidcolor</code> <code>$stop</code> <code>$svg</code> <code>$symbol</code> <code>$textPath</code> <code>$tspan</code> <code>$use</code> <code>$view</code></p>
-<p>Using these operators is equivalent to using <a href="#create"><code>$create</code></a>/<a href="#create"><code>$createSVG</code></a>. For example:</p>
+<p>Using these operators is equivalent to using <a href="#create"><code>create</code></a>/<a href="#create"><code>createSVG</code></a>. For example:</p>
 <ul>
 <li>
 <p><code>$div</code> is equivalent to <code>$create 'div'</code></p>
