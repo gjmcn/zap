@@ -14,11 +14,11 @@ The following terms are used in this section to describe the elements associated
 
 <b><i>all elements</i></b>: {#all-elements}
 
-  * CSS selector string &#8594; all matching elements in the document; where relevant, the elements are returned as an array.
+  * CSS selector string &#8594; all matching elements in the document; where relevant, the operator returns the elements as an array.
 
-  * non-string iterable &#8594; all elements of the iterable; where relevant, the iterable is returned.
+  * non-string iterable &#8594; all elements of the iterable; where relevant, the operator returns the iterable.
 
-  * element &#8594; element; where relevant, the element is returned.
+  * element &#8594; element; where relevant, the operator returns the element.
 
 > The DOM operators are loosely based on [d3-selection](https://github.com/d3/d3-selection). In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the [`encode`](#encode) operator to map data to elements rather than D3's _enter-update-exit_ approach. Currently, `encode` cannot map data to existing elements; this functionality will be added in a future version. 
 
@@ -85,7 +85,7 @@ p = @ 5 6 7 encode 'p'   // [<p>, <p>, <p>]
 p :1 :__data__           // 6
 ```
 
-Various DOM operators such as [`insert`](#insert), [`into`](#into), [`insertEach`](#insert-each), [`attr`](#attr), [`prop`](#attr), [`style`](#attr), [`html`](#html), [`text`](#html), [`#on`](#on) and [`#off`](#on) use the `__data__` property of elements &mdash; it is rare to use the `__data__` property explicitly.
+Various DOM operators such as [`insert`](#insert), [`into`](#into), [`insertEach`](#insert-each), [`attr`](#attr), [`prop`](#attr), [`style`](#attr), [`html`](#html), [`text`](#html), [`on`](#on) and [`off`](#on) use the `__data__` property of elements &mdash; it is rare to use the `__data__` property explicitly.
 
 The optional third operand of `encode` specifies whether to set the `__data__` property of the new elements. This operand defaults to `true`.
 
@@ -137,10 +137,13 @@ The optional third operand of `insert` specifies where to insert elements into t
 
 #### `insertEach` {#insert-each}
 
-`insertEach` is similar to calling [`insert`](#insert) for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of `insertEach` _must_ be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):
+`insertEach` is similar to using [`insert`](#insert) on each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of `insertEach` _must_ be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):
 
 ```
-3 $div insertEach [div index -> index $p]   // [[], [<p>], [<p>, <p>]]
+// returns [[], [<p>], [<p>, <p>]]
+3 $div insertEach
+    fun div index
+        index $p
 ```
 
 The following example uses `insert` and `insertEach` to represent an array-of-arrays as an HTML table:

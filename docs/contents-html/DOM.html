@@ -16,13 +16,13 @@
 <p id="all-elements"><b><i>all elements</i></b>:</p>
 <ul>
 <li>
-<p>CSS selector string → all matching elements in the document; where relevant, the elements are returned as an array.</p>
+<p>CSS selector string → all matching elements in the document; where relevant, the operator returns the elements as an array.</p>
 </li>
 <li>
-<p>non-string iterable → all elements of the iterable; where relevant, the iterable is returned.</p>
+<p>non-string iterable → all elements of the iterable; where relevant, the operator returns the iterable.</p>
 </li>
 <li>
-<p>element → element; where relevant, the element is returned.</p>
+<p>element → element; where relevant, the operator returns the element.</p>
 </li>
 </ul>
 <blockquote>
@@ -64,7 +64,7 @@ $rect 2   // [&lt;rect&gt;, &lt;rect&gt;]
 <pre><code>p = @ 5 6 7 encode 'p'   // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
 p :1 :__data__           // 6
 </code></pre>
-<p>Various DOM operators such as <a href="#insert"><code>insert</code></a>, <a href="#into"><code>into</code></a>, <a href="#insert-each"><code>insertEach</code></a>, <a href="#attr"><code>attr</code></a>, <a href="#attr"><code>prop</code></a>, <a href="#attr"><code>style</code></a>, <a href="#html"><code>html</code></a>, <a href="#html"><code>text</code></a>, <a href="#on"><code>#on</code></a> and <a href="#on"><code>#off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
+<p>Various DOM operators such as <a href="#insert"><code>insert</code></a>, <a href="#into"><code>into</code></a>, <a href="#insert-each"><code>insertEach</code></a>, <a href="#attr"><code>attr</code></a>, <a href="#attr"><code>prop</code></a>, <a href="#attr"><code>style</code></a>, <a href="#html"><code>html</code></a>, <a href="#html"><code>text</code></a>, <a href="#on"><code>on</code></a> and <a href="#on"><code>off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
 <p>The optional third operand of <code>encode</code> specifies whether to set the <code>__data__</code> property of the new elements. This operand defaults to <code>true</code>.</p>
 <p>Use <code>encodeSVG</code> to encode data as SVG elements rather than HTML:</p>
 <pre><code>o = @ (# u 5 v 6) (# u 7 v 8)
@@ -96,8 +96,11 @@ elm insert 'p'
 </code></pre>
 <hr>
 <h4 id="insert-each"><code>insertEach</code></h4>
-<p><code>insertEach</code> is similar to calling <a href="#insert"><code>insert</code></a> for each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
-<pre><code>3 $div insertEach [div index -&gt; index $p]   // [[], [&lt;p&gt;], [&lt;p&gt;, &lt;p&gt;]]
+<p><code>insertEach</code> is similar to using <a href="#insert"><code>insert</code></a> on each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
+<pre><code>// returns [[], [&lt;p&gt;], [&lt;p&gt;, &lt;p&gt;]]
+3 $div insertEach
+    fun div index
+        index $p
 </code></pre>
 <p>The following example uses <code>insert</code> and <code>insertEach</code> to represent an array-of-arrays as an HTML table:</p>
 <pre><code>x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
