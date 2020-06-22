@@ -460,10 +460,6 @@ export default {
     return r;
   },
 
-  pickDoc(s) {
-    return [...document.querySelectorAll(s)];
-  },
-
   random(j = 0, k = 1, n) {
     return this._sample(this._random, n, +j, +k);
   },
@@ -543,10 +539,19 @@ export default {
     return r;
   },
 
-  pickIn(p, s) {
-    return [...this._first(p).querySelectorAll(s)];
+  select(...a) {
+    return (a.length === 1)
+      ? document.querySelector(a[0])
+      : this._first(a[0]).querySelector(a[1]);
   },
-  pickInUse: ['_first'],
+  selectUse: ['_first'],
+
+  selectAll(...a) {
+    return (a.length === 1)
+      ? [...document.querySelectorAll(a[0])]
+      : [...this._first(a[0]).querySelectorAll(a[1])];
+  },
+  selectAllUse: ['_first'],
 
   insert(t, e, p = () => null) {
     t = this._first(t);

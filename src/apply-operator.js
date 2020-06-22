@@ -424,14 +424,6 @@ export default (block, _z_used) => {
       return addToResult(x, res, 'close');
     }
 
-    else if (op === 'pick') {
-      let res;
-      if      (nx === 1) res = call_z_method('pickDoc');
-      else if (nx === 2) res = call_z_method('pickIn');
-      else throw arityError(operator);
-      return res;
-    }
-
     else if (op === 'fragment') {
       if (nx) throw arityError(operator);
       return [ opPosn('document.createDocumentFragment()') ];

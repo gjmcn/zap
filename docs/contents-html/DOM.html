@@ -26,21 +26,24 @@
 </li>
 </ul>
 <blockquote>
+<p>Since many DOM operators can take a CSS selector string, the <a href="#select"><code>select</code></a> and <a href="#select-all"><code>selectAll</code></a> operators are not used as frequently as might be expected.</p>
+</blockquote>
+<blockquote>
 <p>The DOM operators are loosely based on <a href="https://github.com/d3/d3-selection">d3-selection</a>. In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the <a href="#encode"><code>encode</code></a> operator to map data to elements rather than D3's <em>enter-update-exit</em> approach. Currently, <code>encode</code> cannot map data to existing elements; this functionality will be added in a future version.</p>
 </blockquote>
 <hr>
-<h4 id="pick"><code>pick</code></h4>
-<p><code>pick</code> takes a CSS selector string and returns the matching elements as an array. By default, <code>pick</code> searches the document. If two operands are used, <code>pick</code> searches the descendants of the <a href="#first-element">first element</a> of the first operand:</p>
-<pre><code>pick 'p'               // all &lt;p&gt; in document
-pick '.news p'         // all &lt;p&gt; inside elements with class 'news' 
-elmA pick 'p'          // all &lt;p&gt; in element elmA
-@ elmA elmB pick 'p'   // all &lt;p&gt; in element elmA 
-'.news' pick 'p'       // all &lt;p&gt; in first element with class 'news'
+<h4 id="select"><code>select</code></h4>
+<p><code>select</code> takes a CSS selector string and returns the first matching element — or <code>null</code> if there are no matching elements.
+When used with one operand, <code>select</code> searches the document. If two operands are used, <code>select</code> searches the descendants of the <a href="#first-element">first element</a> of the first operand:</p>
+<pre><code>select 'p'               // first &lt;p&gt; in the document
+select '.news p'         // first &lt;p&gt; in an element with class 'news' 
+elmA select 'p'          // first &lt;p&gt; in element elmA
+@ elmA elmB select 'p'   // first &lt;p&gt; in element elmA 
+'.news' select 'p'       // first &lt;p&gt; in first element with class 'news'
 </code></pre>
-<p>Since other DOM operators can take a CSS selector string where appropriate, <code>pick</code> can often be omitted:</p>
-<pre><code>pick 'p' style 'color' 'red'   // set color of all &lt;p&gt; elements to red
-'p' style 'color' 'red'        // equivalent
-</code></pre>
+<hr>
+<h4 id="select-all"><code>selectAll</code></h4>
+<p>As <a href="#select"><code>select</code></a>, but <code>selectAll</code> returns all of the matching elements as an array — an empty array if there are no matching elements.</p>
 <hr>
 <h4 id="create"><code>create</code>, <code>createSVG</code></h4>
 <p>Create HTML/SVG elements. The first operand is a tag name:</p>

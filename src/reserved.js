@@ -11,7 +11,7 @@ const reserved = {
     'yieldFrom',
     
     // HTML/SVG
-    'pick', 'insert', 'insertEach', 'into', 'encode', 'encodeSVG', 'create',
+    'select', 'selectAll', 'insert', 'insertEach', 'into', 'encode', 'encodeSVG', 'create',
     'createSVG', 'fragment', 'attr', 'prop', 'style', 'text', 'html', 'remove',
     'lower', 'raise', 'addClass', 'removeClass', 'hasClass', 'hasAttr',
     'removeAttr', 'removeStyle', 'on', 'off', 'sketch',

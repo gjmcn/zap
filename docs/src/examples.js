@@ -205,7 +205,7 @@ addPlayer = $button
         list insert ($div)
         | html
             + "<span style='font: 34px/60px serif; padding: 10px'>😐</span>
-                <input type='text' style='width: 200px; font-size: 24px'
+               <input type='text' style='width: 200px; font-size: 24px'
                         placeholder='"(list :children :length)"'>"
             
 removePlayer = $button
@@ -221,7 +221,7 @@ start = $button
 | on 'click'
     asyncFun
         buttons attr 'disabled' true
-        players = list pick 'span'
+        players = list selectAll 'span'
         n = players :length
         shift = randomInt 0 n
         26 asyncDo i

@@ -122,7 +122,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 #### DOM
 
-[`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`pick`](?DOM#pick) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html)
+[`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`select`](?DOM#select) [`selectAll`](?DOM#select-all) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html)
 
 ##### HTML Elements
 

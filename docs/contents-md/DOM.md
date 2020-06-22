@@ -20,28 +20,30 @@ The following terms are used in this section to describe the elements associated
 
   * element &#8594; element; where relevant, the operator returns the element.
 
+> Since many DOM operators can take a CSS selector string, the [`select`](#select) and [`selectAll`](#select-all) operators are not used as frequently as might be expected.
+
 > The DOM operators are loosely based on [d3-selection](https://github.com/d3/d3-selection). In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the [`encode`](#encode) operator to map data to elements rather than D3's _enter-update-exit_ approach. Currently, `encode` cannot map data to existing elements; this functionality will be added in a future version. 
 
 ---
 
-#### `pick` {#pick}
+#### `select` {#select}
 
-`pick` takes a CSS selector string and returns the matching elements as an array. By default, `pick` searches the document. If two operands are used, `pick` searches the descendants of the [first element](#first-element) of the first operand:
-
-```
-pick 'p'               // all <p> in document
-pick '.news p'         // all <p> inside elements with class 'news' 
-elmA pick 'p'          // all <p> in element elmA
-@ elmA elmB pick 'p'   // all <p> in element elmA 
-'.news' pick 'p'       // all <p> in first element with class 'news'
-```
-
-Since other DOM operators can take a CSS selector string where appropriate, `pick` can often be omitted:
+`select` takes a CSS selector string and returns the first matching element &mdash; or `null` if there are no matching elements.
+When used with one operand, `select` searches the document. If two operands are used, `select` searches the descendants of the [first element](#first-element) of the first operand:
 
 ```
-pick 'p' style 'color' 'red'   // set color of all <p> elements to red
-'p' style 'color' 'red'        // equivalent
+select 'p'               // first <p> in the document
+select '.news p'         // first <p> in an element with class 'news' 
+elmA select 'p'          // first <p> in element elmA
+@ elmA elmB select 'p'   // first <p> in element elmA 
+'.news' select 'p'       // first <p> in first element with class 'news'
 ```
+
+---
+
+#### `selectAll` {#select-all}
+
+As [`select`](#select), but `selectAll` returns all of the matching elements as an array &mdash; an empty array if there are no matching elements.
 
 ---
 
