@@ -166,11 +166,10 @@ Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](?Syntax#
 
 ```
 // array of objects
-dogs = 
-    @
-    | (# name 'Alex' age 3) 
-    | (# name 'Beth' age 8) 
-    | (# name 'Cody' age 2)
+dogs = @
+| (# name 'Alex' age 3) 
+| (# name 'Beth' age 8) 
+| (# name 'Cody' age 2)
 
 // returns 'The oldest dog Beth is 8'
 dogs max [a :age] as oldest

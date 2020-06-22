@@ -118,11 +118,10 @@ asyncScope
 <h4 id="as"><code>as</code>, <code>asyncAs</code></h4>
 <p>Like <a href="#scope-op"><code>scope</code></a> and <a href="#scope-op"><code>asyncScope</code></a>, but the <a href="?Syntax#body-operands">body</a> is preceded by an expression and a parameter that represents the value of the expression. The following example uses the <a href="?Reduce#min"><code>max</code></a> operator:</p>
 <pre><code>// array of objects
-dogs = 
-    @
-    | (# name 'Alex' age 3) 
-    | (# name 'Beth' age 8) 
-    | (# name 'Cody' age 2)
+dogs = @
+| (# name 'Alex' age 3) 
+| (# name 'Beth' age 8) 
+| (# name 'Cody' age 2)
 
 // returns 'The oldest dog Beth is 8'
 dogs max [a :age] as oldest
