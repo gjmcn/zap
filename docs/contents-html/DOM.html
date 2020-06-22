@@ -97,15 +97,21 @@ elm insert 'p'
 <hr>
 <h4 id="insert-each"><code>insertEach</code></h4>
 <p><code>insertEach</code> is similar to using <a href="#insert"><code>insert</code></a> on each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
-<pre><code>// returns [[], [&lt;p&gt;], [&lt;p&gt;, &lt;p&gt;]]
-3 $div insertEach
-    fun div index
-        index $p
+<pre><code>divs = @ 5 6 7 encode 'div'   // [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;]
+
+// insert a &lt;p&gt; into each &lt;div&gt;
+ps = divs insertEach
+    fun data index
+        $p text 
+            + (this :tagName)' 'data' 'index
+            
+ps        // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
+ps text   // ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']
 </code></pre>
 <p>The following example uses <code>insert</code> and <code>insertEach</code> to represent an array-of-arrays as an HTML table:</p>
 <pre><code>x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
 
-body insert ($table)
+'body' insert ($table)
 | insert [encode x 'tr']
 | insertEach [a encode 'td' text [a]]
 </code></pre>
@@ -115,9 +121,7 @@ body insert ($table)
 <p>The second operand is the attribute/property/style name.</p>
 <p>When used with two operands, these operators are getters. If the first operand is an iterable, the values are returned as an array.</p>
 <p>When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's <code>__data__</code> property (see <a href="#encode"><code>encode</code></a>) and the current index; the function's <code>this</code> is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).</p>
-<pre><code>x = @ 'red' 'blue'
-
-divs = x encode 'div'
+<pre><code>divs = @ 'red' 'blue' encode 'div'
 | style 'background-color' [a]
 | style 'height' '20px'   // [&lt;div&gt;, &lt;div&gt;]
 
@@ -135,7 +139,7 @@ divs :0 style 'height'          // '20px'
 <pre><code>colors = @ 'red' 'green' 'blue'
 
 // create 3 &lt;p&gt;, give each a different color
-3 $p style 'color' [colors at b]
+3 $p style 'color' [colors , b]
 </code></pre>
 <p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
 <pre><code>// use 'html' or document :documentElement to set globals
@@ -167,7 +171,7 @@ divs :0 style 'height'          // '20px'
 <p>Remove <a href="#all-elements">all elements</a> of the operand from the document.</p>
 <p>Returns the element(s).</p>
 <hr>
-<h4 id="lower"><code>lower</code>, <code>raise</code>,</h4>
+<h4 id="lower"><code>lower</code>, <code>raise</code></h4>
 <p>Move <a href="#all-elements">all elements</a> of the operand (in order) to be the first child (<code>lower</code>) or the last child (<code>raise</code>) of their parents.</p>
 <p>Returns the element(s).</p>
 <hr>
@@ -196,7 +200,10 @@ divs :0 style 'height'          // '20px'
 <p>The event handler <em>must</em> be a function when using <code>on</code> and <code>off</code>.</p>
 </li>
 <li>
-<p><code>on</code> does nothing if the event handler is already registered with an element for the given event type — even if the fourth operand of <code>on</code> is different to when the handler was originally registered.</p>
+<p>The event is the <em>second</em> argument passed to the event handler when using <code>on</code> and <code>off</code> — the event is the only argument when using the native methods.</p>
+</li>
+<li>
+<p><code>on</code> skips elements where the event handler is already registered for the given event type — even if the fourth operand of <code>on</code> is different to when the handler was originally registered.</p>
 </li>
 </ul>
 <p><code>on</code> and <code>off</code> return the element(s).</p>
@@ -229,28 +236,27 @@ ctx ~fillRect 50 20 200 100
 <h4 id="create-convenience">Convenience Operators for Creating Elements</h4>
 <p>The following are convenience operators for creating elements:</p>
 <p><strong>HTML:</strong></p>
-<p><code>$a</code> <code>$abbr</code> <code>$address</code> <code>$area</code> <code>$article</code> <code>$aside</code> <code>$audio</code> <code>$b</code> <code>$bdi</code> <code>$bdo</code> <code>$blockquote</code> <code>$br</code> <code>$button</code> <code>$canvas</code> <code>$caption</code> <code>$cite</code> <code>$code</code> <code>$col</code> <code>$colgroup</code> <code>$datalist</code> <code>$dd</code> <code>$del</code> <code>$details</code> <code>$dfn</code> <code>$dialog</code> <code>$div</code> <code>$dl</code> <code>$dt</code> <code>$em</code> <code>$embed</code> <code>$fieldset</code> <code>$figcaption</code> <code>$figure</code> <code>$footer</code> <code>$form</code> <code>$h1</code> <code>$h2</code> <code>$h3</code> <code>$h4</code> <code>$h5</code> <code>$h6</code> <code>$header</code> <code>$hgroup</code> <code>$hr</code> <code>$i</code> <code>$iframe</code> <code>$img</code> <code>$input</code> <code>$ins</code> <code>$kbd</code> <code>$label</code> <code>$legend</code> <code>$li</code> <code>$link</code> <code>$main</code> <code>$mark</code> <code>$menu</code> <code>$meta</code> <code>$meter</code> <code>$nav</code> <code>$noscript</code> <code>$ol</code> <code>$optgroup</code> <code>$option</code> <code>$output</code> <code>$p</code> <code>$picture</code> <code>$pre</code> <code>$progress</code> <code>$q</code> <code>$rb</code> <code>$rp</code> <code>$rt</code> <code>$rtc</code> <code>$ruby</code> <code>$s</code> <code>$samp</code> <code>$script</code> <code>$section</code> <code>$select</code> <code>$slot</code> <code>$small</code> <code>$source</code> <code>$span</code> <code>$strong</code> <code>$sub</code> <code>$summary</code> <code>$sup</code> <code>$table</code> <code>$tbody</code> <code>$td</code> <code>$template</code> <code>$textarea</code> <code>$tfoot</code> <code>$th</code> <code>$thead</code> <code>$time</code> <code>$title</code> <code>$tr</code> <code>$track</code> <code>$u</code> <code>$ul</code> <code>$var</code> <code>$video</code> <code>$wbr</code></p>
+<p><code>$a</code> <code>$abbr</code> <code>$address</code> <code>$area</code> <code>$article</code> <code>$aside</code> <code>$audio</code> <code>$b</code> <code>$base</code> <code>$bdi</code> <code>$bdo</code> <code>$blockquote</code> <code>$body</code> <code>$br</code> <code>$button</code> <code>$canvas</code> <code>$caption</code> <code>$cite</code> <code>$code</code> <code>$col</code> <code>$colgroup</code> <code>$data</code> <code>$datalist</code> <code>$dd</code> <code>$del</code> <code>$details</code> <code>$dfn</code> <code>$dialog</code> <code>$div</code> <code>$dl</code> <code>$dt</code> <code>$em</code> <code>$embed</code> <code>$fieldset</code> <code>$figcaption</code> <code>$figure</code> <code>$footer</code> <code>$form</code> <code>$h1</code> <code>$h2</code> <code>$h3</code> <code>$h4</code> <code>$h5</code> <code>$h6</code> <code>$head</code> <code>$header</code> <code>$hgroup</code> <code>$hr</code> <code>$i</code> <code>$iframe</code> <code>$img</code> <code>$input</code> <code>$ins</code> <code>$kbd</code> <code>$label</code> <code>$legend</code> <code>$li</code> <code>$link</code> <code>$main</code> <code>$map</code> <code>$mark</code> <code>$menu</code> <code>$meta</code> <code>$meter</code> <code>$nav</code> <code>$noscript</code> <code>$object</code> <code>$ol</code> <code>$optgroup</code> <code>$option</code> <code>$output</code> <code>$p</code> <code>$param</code> <code>$picture</code> <code>$pre</code> <code>$progress</code> <code>$q</code> <code>$rb</code> <code>$rp</code> <code>$rt</code> <code>$rtc</code> <code>$ruby</code> <code>$s</code> <code>$samp</code> <code>$script</code> <code>$section</code> <code>$select</code> <code>$slot</code> <code>$small</code> <code>$source</code> <code>$span</code> <code>$strong</code> <code>$style</code> <code>$sub</code> <code>$summary</code> <code>$sup</code> <code>$table</code> <code>$tbody</code> <code>$td</code> <code>$template</code> <code>$textarea</code> <code>$tfoot</code> <code>$th</code> <code>$thead</code> <code>$time</code> <code>$title</code> <code>$tr</code> <code>$track</code> <code>$u</code> <code>$ul</code> <code>$var</code> <code>$video</code> <code>$wbr</code></p>
 <p><strong>SVG:</strong></p>
-<p><code>$animate</code> <code>$animateMotion</code> <code>$animateTransform</code> <code>$circle</code> <code>$clipPath</code> <code>$defs</code> <code>$desc</code> <code>$discard</code> <code>$ellipse</code> <code>$feBlend</code> <code>$feColorMatrix</code> <code>$feComponentTransfer</code> <code>$feComposite</code> <code>$feConvolveMatrix</code> <code>$feDiffuseLighting</code> <code>$feDisplacementMap</code> <code>$feDistantLight</code> <code>$feDropShadow</code> <code>$feFlood</code> <code>$feFuncA</code> <code>$feFuncB</code> <code>$feFuncG</code> <code>$feFuncR</code> <code>$feGaussianBlur</code> <code>$feImage</code> <code>$feMerge</code> <code>$feMergeNode</code> <code>$feMorphology</code> <code>$feOffset</code> <code>$fePointLight</code> <code>$feSpecularLighting</code> <code>$feSpotLight</code> <code>$feTile</code> <code>$feTurbulence</code> <code>$foreignObject</code> <code>$g</code> <code>$hatch</code> <code>$hatchpath</code> <code>$image</code> <code>$line</code> <code>$linearGradient</code> <code>$marker</code> <code>$mask</code> <code>$metadata</code> <code>$mpath</code> <code>$path</code> <code>$pattern</code> <code>$polygon</code> <code>$polyline</code> <code>$radialGradient</code> <code>$rect</code> <code>$solidcolor</code> <code>$stop</code> <code>$svg</code> <code>$symbol</code> <code>$textPath</code> <code>$tspan</code> <code>$use</code> <code>$view</code></p>
+<p><code>$animate</code> <code>$animateMotion</code> <code>$animateTransform</code> <code>$circle</code> <code>$clipPath</code> <code>$defs</code> <code>$desc</code> <code>$discard</code> <code>$ellipse</code> <code>$feBlend</code> <code>$feColorMatrix</code> <code>$feComponentTransfer</code> <code>$feComposite</code> <code>$feConvolveMatrix</code> <code>$feDiffuseLighting</code> <code>$feDisplacementMap</code> <code>$feDistantLight</code> <code>$feDropShadow</code> <code>$feFlood</code> <code>$feFuncA</code> <code>$feFuncB</code> <code>$feFuncG</code> <code>$feFuncR</code> <code>$feGaussianBlur</code> <code>$feImage</code> <code>$feMerge</code> <code>$feMergeNode</code> <code>$feMorphology</code> <code>$feOffset</code> <code>$fePointLight</code> <code>$feSpecularLighting</code> <code>$feSpotLight</code> <code>$feTile</code> <code>$feTurbulence</code> <code>$filter</code> <code>$foreignObject</code> <code>$g</code> <code>$hatch</code> <code>$hatchpath</code> <code>$image</code> <code>$line</code> <code>$linearGradient</code> <code>$marker</code> <code>$mask</code> <code>$metadata</code> <code>$mpath</code> <code>$path</code> <code>$pattern</code> <code>$polygon</code> <code>$polyline</code> <code>$radialGradient</code> <code>$rect</code> <code>$set</code> <code>$solidcolor</code> <code>$stop</code> <code>$svg</code> <code>$switch</code> <code>$symbol</code> <code>$text</code> <code>$textPath</code> <code>$tspan</code> <code>$use</code> <code>$view</code></p>
 <p>Using these operators is equivalent to using <a href="#create"><code>create</code></a>/<a href="#create"><code>createSVG</code></a>. For example:</p>
 <ul>
 <li>
-<p><code>$div</code> is equivalent to <code>$create 'div'</code></p>
+<p><code>$div</code> is equivalent to <code>create 'div'</code></p>
 </li>
 <li>
-<p><code>$div 5</code> is equivalent to <code>$create 'div' 5</code></p>
+<p><code>$div 5</code> is equivalent to <code>create 'div' 5</code></p>
 </li>
 <li>
-<p><code>$circle</code> is equivalent to <code>$createSVG 'circle'</code></p>
+<p><code>$circle</code> is equivalent to <code>createSVG 'circle'</code></p>
 </li>
 <li>
-<p><code>$circle 5</code> is equivalent to <code>$createSVG 'circle' 5</code></p>
+<p><code>$circle 5</code> is equivalent to <code>createSVG 'circle' 5</code></p>
 </li>
 </ul>
-<p>There are some elements that do not have a convenience operator. These include the HTML elements:</p>
-<p><code>&lt;body&gt;</code> <code>&lt;base&gt;</code> <code>&lt;data&gt;</code> <code>&lt;head&gt;</code> <code>&lt;map&gt;</code> <code>&lt;object&gt;</code> <code>&lt;param&gt;</code> <code>&lt;style&gt;</code></p>
-<p>And the SVG elements:</p>
-<p><code>&lt;a&gt;</code> <code>&lt;filter&gt;</code> <code>&lt;script&gt;</code> <code>&lt;set&gt;</code> <code>&lt;style&gt;</code> <code>&lt;switch&gt;</code> <code>&lt;text&gt;</code> <code>&lt;title&gt;</code></p>
+<blockquote>
+<p>Where HTML and SVG elements have the same name (e.g. <code>a</code>, <code>script</code>, <code>style</code> and <code>title</code>), there are convenience operators for the HTML elements, but not for the SVG elements.</p>
+</blockquote>
 
 
 <br><br><br>

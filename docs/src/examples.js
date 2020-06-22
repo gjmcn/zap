@@ -162,11 +162,13 @@ $div <\\vegaEmbed
 
 question isCorrect @= 2 $h1
 | style 'display' 'inline-block'
-| style 'margin-left' '30px'
+question
+| style 'text-align' 'center'
+| style 'width' '150px'
 
 grid = $div
 grid
-| insert (1 to 41 10 encode 'div')
+| insert (1 to 91 10 encode 'div')
 | style 'display' 'flex'
 | insertEach
     fun rowStart
@@ -181,7 +183,7 @@ newQuestion = $div
 | \\buttonStyle
 | on 'click'
     fun
-        x y @= 1 8 randomInt 2
+        x y @= 1 11 randomInt 2
         question text (+ x' × 'y)
         answer \\= x * y
         isCorrect text '😕'

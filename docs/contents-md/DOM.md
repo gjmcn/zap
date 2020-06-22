@@ -140,10 +140,16 @@ The optional third operand of `insert` specifies where to insert elements into t
 `insertEach` is similar to using [`insert`](#insert) on each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of `insertEach` _must_ be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):
 
 ```
-// returns [[], [<p>], [<p>, <p>]]
-3 $div insertEach
-    fun div index
-        index $p
+divs = @ 5 6 7 encode 'div'   // [<div>, <div>, <div>]
+
+// insert a <p> into each <div>
+ps = divs insertEach
+    fun data index
+        $p text 
+            + (this :tagName)' 'data' 'index
+            
+ps        // [<p>, <p>, <p>]
+ps text   // ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']
 ```
 
 The following example uses `insert` and `insertEach` to represent an array-of-arrays as an HTML table:
@@ -151,7 +157,7 @@ The following example uses `insert` and `insertEach` to represent an array-of-ar
 ```
 x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
 
-body insert ($table)
+'body' insert ($table)
 | insert [encode x 'tr']
 | insertEach [a encode 'td' text [a]]
 ```
@@ -169,9 +175,7 @@ When used with two operands, these operators are getters. If the first operand i
 When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's `__data__` property (see [`encode`](#encode)) and the current index; the function's `this` is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).
 
 ```
-x = @ 'red' 'blue'
-
-divs = x encode 'div'
+divs = @ 'red' 'blue' encode 'div'
 | style 'background-color' [a]
 | style 'height' '20px'   // [<div>, <div>]
 
@@ -192,7 +196,7 @@ A callback function can be used with any elements; they need not have their own 
 colors = @ 'red' 'green' 'blue'
 
 // create 3 <p>, give each a different color
-3 $p style 'color' [colors at b]
+3 $p style 'color' [colors , b]
 ```
 
 `style` can be used to get/set [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties):
@@ -230,7 +234,7 @@ Returns the element(s).
 
 ---
 
-#### `lower`, `raise`, {#lower}
+#### `lower`, `raise` {#lower}
 
 Move [all elements](#all-elements) of the operand (in order) to be the first child (`lower`) or the last child (`raise`) of their parents.
 
@@ -279,7 +283,9 @@ The behavior of `on` and `off` differs slightly from that of the native methods 
 
 * The event handler _must_ be a function when using `on` and `off`.
 
-* `on` does nothing if the event handler is already registered with an element for the given event type &mdash; even if the fourth operand of `on` is different to when the handler was originally registered.
+* The event is the _second_ argument passed to the event handler when using `on` and `off` &mdash; the event is the only argument when using the native methods.
+
+* `on` skips elements where the event handler is already registered for the given event type &mdash; even if the fourth operand of `on` is different to when the handler was originally registered.
 
 `on` and `off` return the element(s).
 
@@ -318,26 +324,20 @@ The following are convenience operators for creating elements:
 
 __HTML:__
 
-`$a` `$abbr` `$address` `$area` `$article` `$aside` `$audio` `$b` `$bdi` `$bdo` `$blockquote` `$br` `$button` `$canvas` `$caption` `$cite` `$code` `$col` `$colgroup` `$datalist` `$dd` `$del` `$details` `$dfn` `$dialog` `$div` `$dl` `$dt` `$em` `$embed` `$fieldset` `$figcaption` `$figure` `$footer` `$form` `$h1` `$h2` `$h3` `$h4` `$h5` `$h6` `$header` `$hgroup` `$hr` `$i` `$iframe` `$img` `$input` `$ins` `$kbd` `$label` `$legend` `$li` `$link` `$main` `$mark` `$menu` `$meta` `$meter` `$nav` `$noscript` `$ol` `$optgroup` `$option` `$output` `$p` `$picture` `$pre` `$progress` `$q` `$rb` `$rp` `$rt` `$rtc` `$ruby` `$s` `$samp` `$script` `$section` `$select` `$slot` `$small` `$source` `$span` `$strong` `$sub` `$summary` `$sup` `$table` `$tbody` `$td` `$template` `$textarea` `$tfoot` `$th` `$thead` `$time` `$title` `$tr` `$track` `$u` `$ul` `$var` `$video` `$wbr`
+`$a` `$abbr` `$address` `$area` `$article` `$aside` `$audio` `$b` `$base` `$bdi` `$bdo` `$blockquote` `$body` `$br` `$button` `$canvas` `$caption` `$cite` `$code` `$col` `$colgroup` `$data` `$datalist` `$dd` `$del` `$details` `$dfn` `$dialog` `$div` `$dl` `$dt` `$em` `$embed` `$fieldset` `$figcaption` `$figure` `$footer` `$form` `$h1` `$h2` `$h3` `$h4` `$h5` `$h6` `$head` `$header` `$hgroup` `$hr` `$i` `$iframe` `$img` `$input` `$ins` `$kbd` `$label` `$legend` `$li` `$link` `$main` `$map` `$mark` `$menu` `$meta` `$meter` `$nav` `$noscript` `$object` `$ol` `$optgroup` `$option` `$output` `$p` `$param` `$picture` `$pre` `$progress` `$q` `$rb` `$rp` `$rt` `$rtc` `$ruby` `$s` `$samp` `$script` `$section` `$select` `$slot` `$small` `$source` `$span` `$strong` `$style` `$sub` `$summary` `$sup` `$table` `$tbody` `$td` `$template` `$textarea` `$tfoot` `$th` `$thead` `$time` `$title` `$tr` `$track` `$u` `$ul` `$var` `$video` `$wbr`
 
 __SVG:__
 
-`$animate` `$animateMotion` `$animateTransform` `$circle` `$clipPath` `$defs` `$desc` `$discard` `$ellipse` `$feBlend` `$feColorMatrix` `$feComponentTransfer` `$feComposite` `$feConvolveMatrix` `$feDiffuseLighting` `$feDisplacementMap` `$feDistantLight` `$feDropShadow` `$feFlood` `$feFuncA` `$feFuncB` `$feFuncG` `$feFuncR` `$feGaussianBlur` `$feImage` `$feMerge` `$feMergeNode` `$feMorphology` `$feOffset` `$fePointLight` `$feSpecularLighting` `$feSpotLight` `$feTile` `$feTurbulence` `$foreignObject` `$g` `$hatch` `$hatchpath` `$image` `$line` `$linearGradient` `$marker` `$mask` `$metadata` `$mpath` `$path` `$pattern` `$polygon` `$polyline` `$radialGradient` `$rect` `$solidcolor` `$stop` `$svg` `$symbol` `$textPath` `$tspan` `$use` `$view`
+`$animate` `$animateMotion` `$animateTransform` `$circle` `$clipPath` `$defs` `$desc` `$discard` `$ellipse` `$feBlend` `$feColorMatrix` `$feComponentTransfer` `$feComposite` `$feConvolveMatrix` `$feDiffuseLighting` `$feDisplacementMap` `$feDistantLight` `$feDropShadow` `$feFlood` `$feFuncA` `$feFuncB` `$feFuncG` `$feFuncR` `$feGaussianBlur` `$feImage` `$feMerge` `$feMergeNode` `$feMorphology` `$feOffset` `$fePointLight` `$feSpecularLighting` `$feSpotLight` `$feTile` `$feTurbulence` `$filter` `$foreignObject` `$g` `$hatch` `$hatchpath` `$image` `$line` `$linearGradient` `$marker` `$mask` `$metadata` `$mpath` `$path` `$pattern` `$polygon` `$polyline` `$radialGradient` `$rect` `$set` `$solidcolor` `$stop` `$svg` `$switch` `$symbol` `$text` `$textPath` `$tspan` `$use` `$view`
 
 Using these operators is equivalent to using [`create`](#create)/[`createSVG`](#create). For example:
 
-* `$div` is equivalent to `$create 'div'`
+* `$div` is equivalent to `create 'div'`
 
-* `$div 5` is equivalent to `$create 'div' 5`
+* `$div 5` is equivalent to `create 'div' 5`
 
-* `$circle` is equivalent to `$createSVG 'circle'`
+* `$circle` is equivalent to `createSVG 'circle'`
 
-* `$circle 5` is equivalent to `$createSVG 'circle' 5`
+* `$circle 5` is equivalent to `createSVG 'circle' 5`
 
-There are some elements that do not have a convenience operator. These include the HTML elements:
-
-`<body>` `<base>` `<data>` `<head>` `<map>` `<object>` `<param>` `<style>`
-
-And the SVG elements:
-
-`<a>` `<filter>` `<script>` `<set>` `<style>` `<switch>` `<text>` `<title>`
+> Where HTML and SVG elements have the same name (e.g. `a`, `script`, `style` and `title`), there are convenience operators for the HTML elements, but not for the SVG elements.
