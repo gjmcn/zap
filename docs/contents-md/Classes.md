@@ -16,7 +16,7 @@ Animal = fun name age
 alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
 ```
 
-The `class` operator is used just like [`fun`](?Writing-Functions#fun), but returns a class rather than a function. Furthermore, when `class` is used:
+The `class` operator is used like [`fun`](?Writing-Functions#fun), but returns a class rather than a function. Furthermore, when `class` is used:
 
 * If the constructor's [body](?Syntax#body-operands) is empty, the parameters are automatically added to `this`:
 

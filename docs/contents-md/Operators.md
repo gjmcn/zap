@@ -71,6 +71,14 @@ These operators behave the same as their JavaScript counterparts except that:
 
 ---
 
+#### Body
+
+[`as`](?Writing-Functions#as) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](?Writing-Functions#fun) [`map`](?Loops#map) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`try`](?Exceptions#try) 
+
+[`asyncAs`](?Writing-Functions#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](?Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncTry`](?Exceptions#try) 
+
+---
+
 #### Elementwise Math
 
 [`abs`](?Elementwise) [`acos`](?Elementwise) [`acosh`](?Elementwise) [`asin`](?Elementwise) [`asinh`](?Elementwise) [`atan`](?Elementwise) [`atanh`](?Elementwise) [`cbrt`](?Elementwise) [`ceil`](?Elementwise) [`clz32`](?Elementwise) [`cos`](?Elementwise) [`cosh`](?Elementwise) [`exp`](?Elementwise) [`expm1`](?Elementwise) [`floor`](?Elementwise) [`fround`](?Elementwise) [`log`](?Elementwise) [`log10`](?Elementwise) [`log1p`](?Elementwise)  [`log2`](?Elementwise) [`round`](?Elementwise) [`sign`](?Elementwise) [`sin`](?Elementwise) [`sinh`](?Elementwise) [`sqrt`](?Elementwise) [`tan`](?Elementwise) [`tanh`](?Elementwise) [`trunc`](?Elementwise)
@@ -112,13 +120,7 @@ These operators behave the same as their JavaScript counterparts except that:
 
 ---
 
-#### Body
-
-[`as`](?Writing-Functions#as) [`asyncAs`](?Writing-Functions#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](?Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncTry`](?Exceptions#try) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](?Writing-Functions#fun) [`map`](?Loops#map) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`try`](?Exceptions#try) 
-
----
-
-#### DOM Operators
+#### DOM
 
 [`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`pick`](?DOM#pick) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html)
 

@@ -770,10 +770,11 @@ export default {
 
   on(e, t, f, c = false) {
     e = this._autoSelect(e);
+    t = t.trim().split(/^|\s+/);
     for (let q of (e && e[Symbol.iterator] ? e : [e])) {
       let g = k => f.call(q, q.__data__, k);
       if (!q.__on__) q.__on__ = {};
-      for (let w of t.trim().split(/^|\s+/)) {
+      for (let w of t) {
         if (!q.__on__[w]) q.__on__[w] = new Map();
         else if (q.__on__[w].has(f)) continue;
         q.addEventListener(w, g, c);
@@ -786,9 +787,10 @@ export default {
 
   off(e, t, f, c = false) {
     e = this._autoSelect(e);
+    t = t.trim().split(/^|\s+/);
     for (let q of (e && e[Symbol.iterator] ? e : [e])) {
       if (!q.__on__) continue;
-      for (let w of t.trim().split(/^|\s+/)) {
+      for (let w of t) {
         let g = q.__on__[w] ? q.__on__[w].get(f) : undefined;
         if (g) {
           q.removeEventListener(w, g, c);
@@ -832,9 +834,11 @@ export default {
   $aside(n) {return this._create(false, 'aside', n)}, $asideUse: createArray,
   $audio(n) {return this._create(false, 'audio', n)}, $audioUse: createArray,
   $b(n) {return this._create(false, 'b', n)}, $bUse: createArray,
+  $base(n) {return this._create(false, 'base', n)}, $baseUse: createArray,
   $bdi(n) {return this._create(false, 'bdi', n)}, $bdiUse: createArray,
   $bdo(n) {return this._create(false, 'bdo', n)}, $bdoUse: createArray,
   $blockquote(n) {return this._create(false, 'blockquote', n)}, $blockquoteUse: createArray,
+  $body(n) {return this._create(false, 'body', n)}, $bodyUse: createArray,
   $br(n) {return this._create(false, 'br', n)}, $brUse: createArray,
   $button(n) {return this._create(false, 'button', n)}, $buttonUse: createArray,
   $canvas(n) {return this._create(false, 'canvas', n)}, $canvasUse: createArray,
@@ -843,6 +847,7 @@ export default {
   $code(n) {return this._create(false, 'code', n)}, $codeUse: createArray,
   $col(n) {return this._create(false, 'col', n)}, $colUse: createArray,
   $colgroup(n) {return this._create(false, 'colgroup', n)}, $colgroupUse: createArray,
+  $data(n) {return this._create(false, 'data', n)}, $dataUse: createArray,
   $datalist(n) {return this._create(false, 'datalist', n)}, $datalistUse: createArray,
   $dd(n) {return this._create(false, 'dd', n)}, $ddUse: createArray,
   $del(n) {return this._create(false, 'del', n)}, $delUse: createArray,
@@ -865,6 +870,7 @@ export default {
   $h4(n) {return this._create(false, 'h4', n)}, $h4Use: createArray,
   $h5(n) {return this._create(false, 'h5', n)}, $h5Use: createArray,
   $h6(n) {return this._create(false, 'h6', n)}, $h6Use: createArray,
+  $head(n) {return this._create(false, 'head', n)}, $headUse: createArray,
   $header(n) {return this._create(false, 'header', n)}, $headerUse: createArray,
   $hgroup(n) {return this._create(false, 'hgroup', n)}, $hgroupUse: createArray,
   $hr(n) {return this._create(false, 'hr', n)}, $hrUse: createArray,
@@ -879,17 +885,20 @@ export default {
   $li(n) {return this._create(false, 'li', n)}, $liUse: createArray,
   $link(n) {return this._create(false, 'link', n)}, $linkUse: createArray,
   $main(n) {return this._create(false, 'main', n)}, $mainUse: createArray,
+  $map(n) {return this._create(false, 'map', n)}, $mapUse: createArray,
   $mark(n) {return this._create(false, 'mark', n)}, $markUse: createArray,
   $menu(n) {return this._create(false, 'menu', n)}, $menuUse: createArray,
   $meta(n) {return this._create(false, 'meta', n)}, $metaUse: createArray,
   $meter(n) {return this._create(false, 'meter', n)}, $meterUse: createArray,
   $nav(n) {return this._create(false, 'nav', n)}, $navUse: createArray,
   $noscript(n) {return this._create(false, 'noscript', n)}, $noscriptUse: createArray,
+  $object(n) {return this._create(false, 'object', n)}, $objectUse: createArray,
   $ol(n) {return this._create(false, 'ol', n)}, $olUse: createArray,
   $optgroup(n) {return this._create(false, 'optgroup', n)}, $optgroupUse: createArray,
   $option(n) {return this._create(false, 'option', n)}, $optionUse: createArray,
   $output(n) {return this._create(false, 'output', n)}, $outputUse: createArray,
   $p(n) {return this._create(false, 'p', n)}, $pUse: createArray,
+  $param(n) {return this._create(false, 'param', n)}, $paramUse: createArray,
   $picture(n) {return this._create(false, 'picture', n)}, $pictureUse: createArray,
   $pre(n) {return this._create(false, 'pre', n)}, $preUse: createArray,
   $progress(n) {return this._create(false, 'progress', n)}, $progressUse: createArray,
@@ -909,6 +918,7 @@ export default {
   $source(n) {return this._create(false, 'source', n)}, $sourceUse: createArray,
   $span(n) {return this._create(false, 'span', n)}, $spanUse: createArray,
   $strong(n) {return this._create(false, 'strong', n)}, $strongUse: createArray,
+  $style(n) {return this._create(false, 'style', n)}, $styleUse: createArray,
   $sub(n) {return this._create(false, 'sub', n)}, $subUse: createArray,
   $summary(n) {return this._create(false, 'summary', n)}, $summaryUse: createArray,
   $sup(n) {return this._create(false, 'sup', n)}, $supUse: createArray,
@@ -965,6 +975,7 @@ export default {
   $feSpotLight(n) {return this._create(true, 'feSpotLight', n)}, $feSpotLightUse: createArray,
   $feTile(n) {return this._create(true, 'feTile', n)}, $feTileUse: createArray,
   $feTurbulence(n) {return this._create(true, 'feTurbulence', n)}, $feTurbulenceUse: createArray,
+  $filter(n) {return this._create(true, 'filter', n)}, $filterUse: createArray,
   $foreignObject(n) {return this._create(true, 'foreignObject', n)}, $foreignObjectUse: createArray,
   $g(n) {return this._create(true, 'g', n)}, $gUse: createArray,
   $hatch(n) {return this._create(true, 'hatch', n)}, $hatchUse: createArray,
@@ -982,10 +993,13 @@ export default {
   $polyline(n) {return this._create(true, 'polyline', n)}, $polylineUse: createArray,
   $radialGradient(n) {return this._create(true, 'radialGradient', n)}, $radialGradientUse: createArray,
   $rect(n) {return this._create(true, 'rect', n)}, $rectUse: createArray, 
+  $set(n) {return this._create(true, 'set', n)}, $setUse: createArray,
   $solidcolor(n) {return this._create(true, 'solidcolor', n)}, $solidcolorUse: createArray,
   $stop(n) {return this._create(true, 'stop', n)}, $stopUse: createArray,
   $svg(n) {return this._create(true, 'svg', n)}, $svgUse: createArray,
+  $switch(n) {return this._create(true, 'switch', n)}, $switchUse: createArray,
   $symbol(n) {return this._create(true, 'symbol', n)}, $symbolUse: createArray,
+  $text(n) {return this._create(true, 'text', n)}, $textUse: createArray,
   $textPath(n) {return this._create(true, 'textPath', n)}, $textPathUse: createArray,
   $tspan(n) {return this._create(true, 'tspan', n)}, $tspanUse: createArray,
   $use(n) {return this._create(true, 'use', n)}, $useUse: createArray,

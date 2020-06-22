@@ -36,6 +36,9 @@ The exported `zap` function compiles a string of Zap code to JavaScript. The opt
 | `procTokens` | boolean | `false` | processed tokens |
 | `jsTree`     | boolean | `false` | JavaScript tree produced by the parser {.table .table-sm .w600}|
 
+> The compiled code runs in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+
+> Zap compiles to modern JavaScript. Where appropriate, use a transpiler such as [Babel](https://babeljs.io/) to ensure compatibility with the target environment(s).
 
 #### Command Line {#command-line}
 
