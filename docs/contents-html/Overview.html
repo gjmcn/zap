@@ -2,37 +2,69 @@
 <hr>
 <p>Zap is a simple, high-level language which is easy to read and write. Code is consise and compact, but for the right reasons: simple yet flexible syntax rules, minimal clutter and powerful operators — rather than implicit magic and special syntax.</p>
 <p>Zap compiles to JavaScript and can use JavaScript's built-in objects. JavaScript libraries can be used in Zap and vice-versa.</p>
-<h5>Literals</h5>
+<h4>Literals</h4>
 <pre><code># u 5 v 6    // Object {u: 5, v: 6}
 ## u 5 v 6   // Map {'u' =&gt; 5, 'v' =&gt; 6}
 @ 5 6        // Array [5, 6]
 @@ 5 6       // Set {5, 6}
 </code></pre>
-<h5>Expressions</h5>
+<h4>Expressions</h4>
 <p>Everything in Zap is an expression — no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or end of the expression is reached:</p>
-<pre><code>@ 5 6 7     // [5, 6, 7]
-5 @ 6 7     // [5, 6, 7]
-5 6 7 @     // [5, 6, 7]
+<pre><code>@ 3 4 5     // [3, 4, 5]
+3 @ 4 5     // [3, 4, 5]
+3 4 5 @     // [3, 4, 5]
 
-5 + 6 @ 7   // [11, 7]
-+ 5 6 @ 7   // [11, 7]
-5 6 + @ 7   // [11, 7]
-5 6 7 + @   // [18]
-+ 5 6 7 @   // [18]
+3 + 4 @ 5   // [7, 5]
++ 3 4 @ 5   // [7, 5]
+3 4 + @ 5   // [7, 5]
+</code></pre>
+<p>Basic operators such as <code>+</code> can take more the two operands:</p>
+<pre><code>3 4 5 +   // 12
++ 3 4 5   // 12
 </code></pre>
 <p>Many operators have names rather than symbols:</p>
-<pre><code>typeof 5 == 'number' print;   // prints (and returns) true
+<pre><code>typeof 5 == 'number' print   // prints (and returns) true
 </code></pre>
-<h5>Indentation</h5>
+<h4>Indentation</h4>
 <p>Indented blocks and parentheses are equivalent:</p>
-<pre><code>EXAMPLE!!!!
+<pre><code>3 * (4 + 5)   // 27
+3 * 
+    4 + 5     // 27
+
+x = @ 3 4 5
+x each v (print v)   // prints 3 4 5
+x each v             
+    print v          // prints 3 4 5
 </code></pre>
-<h5>Line Contuation</h5>
-<p>An expression ends at the end of a line unless an indentation block is opened or the expression is continued with <code>|</code>. These rules make nested structures easy to read:</p>
-<pre><code>JSON-LIKE EXAMPLE
+<p>Except that indented blocks can contain multiple expressions:</p>
+<pre><code>// prints 12 30 56
+@ 3 4 5 each value index
+    z = value + index
+    print z ^ 2 + z
 </code></pre>
-<h5>Functions</h5>
-<p>The <code>fun</code> operator creates a function. Operators for calling functions (such as <code>\</code> in the following examples) are special: the first right operand is always the function.</p>
+<h4>Line Continuation</h4>
+<p>An expression ends at the end of a line unless the following line opens an indentation block or continues the line with <code>|</code>.</p>
+<pre><code>'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
+
+'abcd'
+| ~slice 1 3
+| ~repeat 2  // 'bcbc'
+</code></pre>
+<p>These rules make nested structures easy to read:</p>
+<pre><code>dogs = 
+    @
+        #
+        | name 'Bill'
+        | species 'boxer'
+        | food (@ 'bread' 'butter')
+    | 
+        #
+        | name 'Debra'
+        | species 'doberman'
+        | food (@ 'donuts' 'dates')
+</code></pre>
+<h4>Functions</h4>
+<p>The <code>fun</code> operator creates a function. Operators for calling functions (such as <code>\</code> for functions and <code>~</code> for methods) are special: the first right operand is always the function.</p>
 <pre><code>double = fun x (2 * x)   // body in parentheses
 
 add = fun x y
@@ -41,44 +73,35 @@ add = fun x y
 \double 5 \add 20        // 30
 5 \double \add 20        // 30
 \add (\double 5) 20      // 30
-5 20 \add \double        // 50 
-5 \add 20 \double        // 50 
 </code></pre>
-<p>Bracket functions have parameters <code>a</code>, <code>b</code>, <code>c</code> and are ideal for simple 'one-liners':</p>
-<pre><code>double = [2 * a]    // function
-add = [a + b]       // function
-\double 5 \add 20   // 30
+<p>Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code> and are ideal for simple 'one-liners':</p>
+<pre><code>add = [a + b]   // function
 </code></pre>
-<h5>Methods</h5>
-<p>The <code>~</code> operator calls a method:</p>
-<pre><code>'The quick brown fox jumps over the lazy dog.'
-| ~slice ~9
-| ~replace '.' '!'
-| ~toUpperCase   // 'LAZY DOG!'
+<p><code>scope</code> and <code>as</code> are Zap's equivalent to  IIFEs (immediately-invoked function expressions) or blocks. <code>scope</code> takes no arguments, <code>as</code> takes one:</p>
+<pre><code>@ 3 4 5 ~pop as x (x ^ 2 + x)   // 30
 </code></pre>
-<p>Or use <code>&lt;~</code> to ensure that the calling object is returned:</p>
-<pre><code>@ 5 6 &lt;~push 7 &lt;~shift   // [6, 7]
+<h4>Generators</h4>
+<p><code>yield</code> and <code>yieldFrom</code> can be used in a function body (to get generator function) or in the body of <code>scope</code>, <code>as</code> or loops (to get a generator):</p>
+<pre><code>g = 5 do i (yield i)
+
+g ~next   // {value: 0, done: false}
+g ~next   // {value: 1, done: false}
 </code></pre>
-<h5>Blocks</h5>
-<p>Zap does not have blocks as such, but has the <code>scope</code> and <code>asyncScope</code> operators for readbale alternativ to IIFEs (immediately-invoked function expressions):</p>
-<pre><code>asyncScope
-    data = 'https://jsonplaceholder.typicode.com/users' 
-    | \fetch await
-    | ~json await
-    + 'The data has '(data :length)' rows' print
+<p>There are also range operators that create generators:</p>
+<pre><code>1 to 3           // generator (1 2 3)
+1 to 7 2         // generator (1 3 5 7)
+1 7 linSpace 4   // generator (1 3 5 7)
 </code></pre>
-<p><code>as</code> is like <code>scope</code> but takes an argument:</p>
-<pre><code>
-</code></pre>
-<h5>Iterables</h5>
-<p>Working with iterables (arrays, sets, generators etc.) is easy:</p>
+<h4>Iterables</h4>
+<p>There are lots of operators for working with iterables (arrays, sets, generators etc.). For example:</p>
 <pre><code>s = @@ 5 6 7              // Set {5, 6, 7}
-s each [a + 10 print]   // prints 15 16 17,
-s map [a + 10]           // [15, 16, 17]
-s max                    // 7
-s sum                    // 18
-s filter [a &gt; 5]         // [6, 7] 
-s group [a &gt; 5]          // Map {false =&gt; [5], true =&gt; [6, 7]}
+s array                   // [5, 6, 7]
+s each x (x + 10 print)   // prints 15 16 17,
+s map x (x + 10)          // [15, 16, 17]
+s max                     // 7
+s sum                     // 18
+s filter [a &gt; 5]          // [6, 7] 
+s group [a &gt; 5]           // Map {false =&gt; [5], true =&gt; [6, 7]}
 </code></pre>
 <p>Backticks tell an arithmetic, logical or comparison operator to iterate over an operand:</p>
 <pre><code>x = @ 5 6 7   // [5, 6, 7]
@@ -90,30 +113,31 @@ x  `+` x      // [10, 12, 14]
 'ab' `+  'cd'   // ['acd', bcd']
 'ab' `+` 'cd'   // ['ac', 'bd']
 </code></pre>
-<p>There are convenience operators for creating generators:</p>
-<pre><code>1 &gt;&gt; 4                    // generator (1 2 3 4)
-1 &gt;&gt; 4 1.5                // generator (1 2.5 4)
-1 &gt;&gt;&gt; 4 7                 // generator (1 1.5 2 2.5 3 3.5 4)
-seq 1 [a &lt;= 4] [a * 2]   // generator (1 2 4)
-
-1 &gt;&gt; 4 sum   // 10
-</code></pre>
 <h4>Elementwise</h4>
 <p>Elementwise operators can be used with iterables or non-iterables:</p>
 <pre><code>@ 4 9 16 sqrt   // [2, 3, 4]
 4 sqrt          // 2
 </code></pre>
-<h4>Object-Oriented Programming</h4>
-<p>Use a standard function as a constructor, <code>\:</code> to set properties on its prototype (<code>:</code> is used to set object properties) and <code>extends</code> to create a subclass:</p>
-<pre><code>Cat = [this :name a]
-  \:sleeping [random &lt; 0.8]
+<h4>Classes</h4>
+<p>Use <code>class</code> to write a constructor and <code>extends</code> for a subclass. <code>::</code> gets a property from the prototype of an object so can be used to add methods:</p>
+<pre><code>// class with empty body: params become properties
+Cat = class name ()
 
-Lion = extends Cat
-  \:speak [+ 'Roar, I am '(this :name)]
+// subclass with empty body: calls constructor of parent class
+Lion = extends Cat ()
+Lion ::speak = fun mood
+    + 'I am '(this :name)' the 'mood' lion'
 
-leo = new Lion 'Leo'
-leo |sleeping   // (0.8 probability that true)
-leo |speak      // 'Roar, I am Leo'
+leo = new Lion 'Leo'   // Lion {name: &quot;Leo&quot;}
+leo ~speak 'hungry'    // 'I am Leo the hungry lion'
+</code></pre>
+<h4>Asynchronous Operators</h4>
+<p>Except for <code>class</code> and <code>extends</code>, all operators that take a body operand have an asynchronous version:</p>
+<pre><code>// prints the string on the final line (and returns a promise
+// that resolves to the string)
+asyncScope
+    data = 'data.json' \fetch await ~json await
+    'The data has '(data :length)' rows' print
 </code></pre>
 <h4>DOM</h4>
 <p>DOM operators can work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
@@ -122,15 +146,14 @@ leo |speak      // 'Roar, I am Leo'
 
 // create 5 divs, apply various operators, add divs to body
 5 $div 
-  style 'cursor' 'pointer'
-  addClass 'btn'
-  text 'vanish'
-  on 'click' [remove this]
-  into 'body'
+| style 'cursor' 'pointer'
+| addClass 'btn'
+| text 'vanish'
+| on 'click' [remove this]
+| into 'body'
 </code></pre>
 <p>Data can be encoded as (and is automatically attached to) elements:</p>
-<pre><code>@ 5 6 7 encode 'p'
-  text [a]   // [&lt;p&gt;5&lt;/p&gt;, &lt;p&gt;6&lt;/p&gt;, &lt;p&gt;7&lt;/p&gt;] 
+<pre><code>@ 5 6 7 encode 'p' text [a]   // [&lt;p&gt;5&lt;/p&gt;, &lt;p&gt;6&lt;/p&gt;, &lt;p&gt;7&lt;/p&gt;] 
 </code></pre>
 
 
