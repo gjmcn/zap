@@ -1,6 +1,6 @@
 <h2>Overview</h2>
 <hr>
-<p>Zap is a simple, high-level language which is easy to read and write. Code is consise and compact, but for the right reasons: simple yet flexible syntax rules, minimal clutter and powerful operators — rather than implicit magic and special syntax.</p>
+<p>Zap is a high-level language with a simple, clean syntax and many powerful operators.</p>
 <p>Zap compiles to JavaScript and can use JavaScript's built-in objects. JavaScript libraries can be used in Zap and vice-versa.</p>
 <h4>Literals</h4>
 <pre><code># u 5 v 6    // Object {u: 5, v: 6}
@@ -26,7 +26,7 @@
 <pre><code>typeof 5 == 'number' print   // prints (and returns) true
 </code></pre>
 <h4>Indentation</h4>
-<p>Indented blocks and parentheses are equivalent:</p>
+<p>Indented blocks or parentheses can be used for precedence:</p>
 <pre><code>3 * (4 + 5)   // 27
 3 * 
     4 + 5     // 27
@@ -36,35 +36,34 @@ x each v (print v)   // prints 3 4 5
 x each v             
     print v          // prints 3 4 5
 </code></pre>
-<p>Except that indented blocks can contain multiple expressions:</p>
+<p>Indented blocks can contain multiple expressions:</p>
 <pre><code>// prints 12 30 56
 @ 3 4 5 each value index
     z = value + index
     print z ^ 2 + z
 </code></pre>
 <h4>Line Continuation</h4>
-<p>An expression ends at the end of a line unless the following line opens an indentation block or continues the line with <code>|</code>.</p>
-<pre><code>'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
-
-'abcd'
-| ~slice 1 3
-| ~repeat 2  // 'bcbc'
-</code></pre>
-<p>These rules make nested structures easy to read:</p>
-<pre><code>dogs = 
+<p>An expression terminates at the end of a line unless the following line opens an indentation block or continues the line with <code>|</code>.</p>
+<pre><code>// an array of objects
+dogs = 
     @
         #
         | name 'Bill'
-        | species 'boxer'
-        | food (@ 'bread' 'butter')
+        | breed 'boxer'
+        | food (@ 'bananas' 'beans' 'biscuits')
     | 
         #
         | name 'Debra'
-        | species 'doberman'
-        | food (@ 'donuts' 'dates')
+        | breed 'doberman'
+        | food (@ 'dates' 'donuts')
+
+// on fewer lines, but harder to read:
+dogs = @
+| (# name 'Bill'  breed 'boxer'    food (@ 'bananas' 'beans' 'biscuits')
+| (# name 'Debra' breed 'doberman' food (@ 'dates' 'donuts'))
 </code></pre>
 <h4>Functions</h4>
-<p>The <code>fun</code> operator creates a function. Operators for calling functions (such as <code>\</code> for functions and <code>~</code> for methods) are special: the first right operand is always the function.</p>
+<p>The <code>fun</code> operator creates a function, <code>\</code> calls a function. Operators for calling functions are special: the first right operand is always the function:</p>
 <pre><code>double = fun x (2 * x)   // body in parentheses
 
 add = fun x y
@@ -77,12 +76,22 @@ add = fun x y
 <p>Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code> and are ideal for simple 'one-liners':</p>
 <pre><code>add = [a + b]   // function
 </code></pre>
-<p><code>scope</code> and <code>as</code> are Zap's equivalent to  IIFEs (immediately-invoked function expressions) or blocks. <code>scope</code> takes no arguments, <code>as</code> takes one:</p>
-<pre><code>@ 3 4 5 ~pop as x (x ^ 2 + x)   // 30
+<p><code>scope</code> and <code>as</code> are Zap's equivalent to IIFEs (immediately-invoked function expressions) or blocks. <code>scope</code> takes no arguments, <code>as</code> takes one:</p>
+<pre><code>x = scope
+    y = 2 + 3
+    y ^ 2 + y   // 30
+x               // 30
+
+x = 2 + 3 as y
+    y ^ 2 + y   // 30
+x               // 30
+</code></pre>
+<p>The <code>~</code> operator calls a method:</p>
+<pre><code>'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
 </code></pre>
 <h4>Generators</h4>
-<p><code>yield</code> and <code>yieldFrom</code> can be used in a function body (to get generator function) or in the body of <code>scope</code>, <code>as</code> or loops (to get a generator):</p>
-<pre><code>g = 5 do i (yield i)
+<p><code>yield</code> and <code>yieldFrom</code> can be used in the body of functions, <code>scope</code>, <code>as</code> and loops:</p>
+<pre><code>g = 5 do i (yield i)   // generator
 
 g ~next   // {value: 0, done: false}
 g ~next   // {value: 1, done: false}
@@ -114,7 +123,7 @@ x  `+` x      // [10, 12, 14]
 'ab' `+` 'cd'   // ['ac', 'bd']
 </code></pre>
 <h4>Elementwise</h4>
-<p>Elementwise operators can be used with iterables or non-iterables:</p>
+<p>The many elementwise operators can be used with iterables or non-iterables:</p>
 <pre><code>@ 4 9 16 sqrt   // [2, 3, 4]
 4 sqrt          // 2
 </code></pre>
@@ -140,7 +149,7 @@ asyncScope
     'The data has '(data :length)' rows' print
 </code></pre>
 <h4>DOM</h4>
-<p>DOM operators can work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
+<p>DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
 <pre><code>// set color of each span with class danger to red
 'span.danger' style 'color' 'red'      
 

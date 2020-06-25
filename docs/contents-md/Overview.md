@@ -2,7 +2,7 @@
 
 ---
 
-Zap is a simple, high-level language which is easy to read and write. Code is consise and compact, but for the right reasons: simple yet flexible syntax rules, minimal clutter and powerful operators &mdash; rather than implicit magic and special syntax.
+Zap is a high-level language with a simple, clean syntax and many powerful operators. 
 
 Zap compiles to JavaScript and can use JavaScript's built-in objects. JavaScript libraries can be used in Zap and vice-versa.
 
@@ -45,7 +45,7 @@ typeof 5 == 'number' print   // prints (and returns) true
 
 #### Indentation
 
-Indented blocks and parentheses are equivalent:
+Indented blocks or parentheses can be used for precedence:
 
 ```
 3 * (4 + 5)   // 27
@@ -58,7 +58,7 @@ x each v
     print v          // prints 3 4 5
 ```
 
-Except that indented blocks can contain multiple expressions:
+Indented blocks can contain multiple expressions:
 
 ```
 // prints 12 30 56
@@ -69,35 +69,31 @@ Except that indented blocks can contain multiple expressions:
 
 #### Line Continuation
 
-An expression ends at the end of a line unless the following line opens an indentation block or continues the line with `|`. 
+An expression terminates at the end of a line unless the following line opens an indentation block or continues the line with `|`. 
 
 ```
-'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
-
-'abcd'
-| ~slice 1 3
-| ~repeat 2  // 'bcbc'
-```
-
-These rules make nested structures easy to read:
-
-```
+// an array of objects
 dogs = 
     @
         #
         | name 'Bill'
-        | species 'boxer'
-        | food (@ 'bread' 'butter')
+        | breed 'boxer'
+        | food (@ 'bananas' 'beans' 'biscuits')
     | 
         #
         | name 'Debra'
-        | species 'doberman'
-        | food (@ 'donuts' 'dates')
+        | breed 'doberman'
+        | food (@ 'dates' 'donuts')
+
+// on fewer lines, but harder to read:
+dogs = @
+| (# name 'Bill'  breed 'boxer'    food (@ 'bananas' 'beans' 'biscuits')
+| (# name 'Debra' breed 'doberman' food (@ 'dates' 'donuts'))
 ```
 
 #### Functions
 
-The `fun` operator creates a function. Operators for calling functions (such as `\` for functions and `~` for methods) are special: the first right operand is always the function.
+The `fun` operator creates a function, `\` calls a function. Operators for calling functions are special: the first right operand is always the function:
 
 ```
 double = fun x (2 * x)   // body in parentheses
@@ -116,18 +112,31 @@ Bracket functions have parameters `a`, `b` and `c` and are ideal for simple 'one
 add = [a + b]   // function
 ```
 
-`scope` and `as` are Zap's equivalent to  IIFEs (immediately-invoked function expressions) or blocks. `scope` takes no arguments, `as` takes one:
+`scope` and `as` are Zap's equivalent to IIFEs (immediately-invoked function expressions) or blocks. `scope` takes no arguments, `as` takes one:
 
 ```
-@ 3 4 5 ~pop as x (x ^ 2 + x)   // 30
+x = scope
+    y = 2 + 3
+    y ^ 2 + y   // 30
+x               // 30
+
+x = 2 + 3 as y
+    y ^ 2 + y   // 30
+x               // 30
+```
+
+The `~` operator calls a method:
+
+```
+'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
 ```
 
 #### Generators
 
-`yield` and `yieldFrom` can be used in a function body (to get generator function) or in the body of `scope`, `as` or loops (to get a generator):
+`yield` and `yieldFrom` can be used in the body of functions, `scope`, `as` and loops:
 
 ```
-g = 5 do i (yield i)
+g = 5 do i (yield i)   // generator
 
 g ~next   // {value: 0, done: false}
 g ~next   // {value: 1, done: false}
@@ -171,7 +180,7 @@ x  `+` x      // [10, 12, 14]
 
 #### Elementwise
 
-Elementwise operators can be used with iterables or non-iterables:
+The many elementwise operators can be used with iterables or non-iterables:
 
 ```
 @ 4 9 16 sqrt   // [2, 3, 4]
@@ -208,7 +217,7 @@ asyncScope
 
 #### DOM
 
-DOM operators can work with individual HTML/SVG elements, iterables of elements and CSS selector strings:
+DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:
 
 ```
 // set color of each span with class danger to red
