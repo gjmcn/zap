@@ -7,17 +7,17 @@ import yargs from 'yargs';
 import zap from '../dist/zap.mjs';
 
 const options = yargs
-  .usage('Usage: zap [options] [path/to/script.za]')
+  .usage('\nUsage: zap [options] [path/to/script.za]')
   .option('a', { alias: 'all',         describe: 'Compile all .za files in directory to .js files',  type: 'boolean' })
   .option('c', { alias: 'compile',     describe: 'Compile .za file to .js file of same name',        type: 'boolean' })
   .option('e', { alias: 'eval',        describe: 'Evaluate a string from the command line',          type: 'boolean' })
   .option('h', { alias: 'help',                                                                      type: 'boolean' })
   .option('i', { alias: 'interactive', describe: 'Run an interactive Zap REPL',                      type: 'boolean' })
-  .option('m', { alias: 'map',         describe: 'Generate a source map and save as a .js.map file', type: 'boolean' })
+  .option('m', { alias: 'map',         describe: 'Generate source map(s), save as .js.map file(s)',  type: 'boolean' })
   .option('n', { alias: 'nodes',       describe: 'Print the JavaScript tree produced by the parser', type: 'boolean' }) 
   .option('p', { alias: 'print',       describe: 'Print the generated JavaScript',                   type: 'boolean' })
   .option('t', { alias: 'tokens',      describe: 'Print the tokens produced by the lexer',           type: 'boolean' })
-  .option('r', { alias: 'proc',        describe: 'Print the tokens after processing blocks',         type: 'boolean' })
+  .option('r', { alias: 'proc',        describe: 'Print the tokens after processing the blocks',     type: 'boolean' })
   .option('v', { alias: 'version',                                                                   type: 'boolean' })
   .argv;
 
@@ -93,7 +93,7 @@ if (!options.h && !options.v) {
           const mapPath = jsPath + '.map';
           try {
             const zapCode = fs.readFileSync(itemPath, 'utf8');
-            const result = zap(zapCode, zapOptions);  
+            const result = zap(zapCode, zapOptions);
             if (options.m) {
               result.js += `\n//# sourceMappingURL=${path.basename(jsPath)}.map`;
               fs.writeFileSync(mapPath, result.sourceMap.toString());

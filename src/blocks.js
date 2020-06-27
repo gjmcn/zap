@@ -5,7 +5,6 @@
 //  - inline blocks do not span multiple lines
 //  - opening and closing brackets match
 //  - indents are valid
-//  - (does not check that blocks are non-empty)
 
 export default tokens => {
 

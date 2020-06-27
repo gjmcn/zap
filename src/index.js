@@ -2,7 +2,7 @@ import lexer from './lexer.js';
 import blocks from './blocks.js';
 import parse from './parse.js';
 
-// compile zap code; returns object with some/all properties:
+// compile zap code; returns an object with some/all properties:
 // tokens, procTokens, jsTree, sourceMap, js
 export default (code, {
     tokens     = false,  // return tokens 
