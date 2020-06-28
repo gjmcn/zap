@@ -19,67 +19,46 @@
 <p>UMD: <code>dist/zap.umd.js</code>. This can be loaded with a <code>&lt;script&gt;</code> tag and will create a global <code>zap</code> function.</p>
 </li>
 </ul>
-<p>The exported <code>zap</code> function compiles a string of Zap code to JavaScript. The optional second argument of <code>zap</code> is an options object. The <code>asyncIIFE</code> option indicates whether the generated code should be wrapped in an asynchronous (rather than the default synchronous) IIFE. The other options specify which properties to include in the returned object:</p>
+<p>The exported <code>zap</code> function compiles a string of Zap code to JavaScript. The optional second argument of <code>zap</code> is an options object that specifies which properties to include in the returned object:</p>
 <table class="table table-sm w600">
 <thead>
 <tr>
 <th>Property</th>
-<th>Type</th>
 <th>Default</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>asyncIIFE</code></td>
-<td>boolean</td>
-<td><code>false</code></td>
-<td>IIFE that wraps JavaScript code is asynchronous</td>
-</tr>
-<tr>
 <td><code>js</code></td>
-<td>boolean</td>
 <td><code>true</code></td>
 <td>JavaScript code</td>
 </tr>
 <tr>
 <td><code>sourceMap</code></td>
-<td>boolean</td>
 <td><code>false</code></td>
 <td>source map</td>
 </tr>
 <tr>
-<td><code>sourceFile</code></td>
-<td>string</td>
-<td><code>null</code></td>
-<td>path to source file — used for source map</td>
-</tr>
-<tr>
 <td><code>tokens</code></td>
-<td>boolean</td>
 <td><code>false</code></td>
 <td>tokens produced by the lexer</td>
 </tr>
 <tr>
 <td><code>procTokens</code></td>
-<td>boolean</td>
 <td><code>false</code></td>
-<td>processed tokens</td>
+<td>tokens after processing blocks</td>
 </tr>
 <tr>
 <td><code>jsTree</code></td>
-<td>boolean</td>
 <td><code>false</code></td>
 <td>JavaScript tree produced by the parser</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>The compiled code runs in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>.</p>
-</blockquote>
-<blockquote>
-<p>Zap compiles to modern JavaScript. Where appropriate, use a transpiler such as <a href="https://babeljs.io/">Babel</a> to ensure compatibility with the target environment(s).</p>
-</blockquote>
+<p>When <code>sourceMap</code> is <code>true</code>, add a <code>sourceFile</code> option giving the path to the source file.</p>
+<p>The generated JavaScript code is wrapped in an IIFE and runs in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>. To use an asynchronous IIFE, add a truthy <code>asyncIIFE</code> option to the options object.</p>
+<p>Zap code compiles to modern JavaScript. Where appropriate, use a transpiler such as <a href="https://babeljs.io/">Babel</a> to ensure compatibility with the target environment(s).</p>
 <h4 id="command-line">Command Line</h4>
 <blockquote>
 <p>The command line app and the REPL are currently very basic with limited functionality.</p>
@@ -134,7 +113,7 @@
 <tr>
 <td><code>-m</code></td>
 <td><code>--map</code></td>
-<td>Generate a source map and save as a <code>.js.map</code> file</td>
+<td>Generate source map(s), save as <code>.js.map</code> file(s)</td>
 </tr>
 <tr>
 <td><code>-n</code></td>
@@ -154,7 +133,7 @@
 <tr>
 <td><code>-r</code></td>
 <td><code>--proc</code></td>
-<td>Print the processed tokens</td>
+<td>Print the tokens after processing the blocks</td>
 </tr>
 <tr>
 <td><code>-v</code></td>
@@ -184,7 +163,7 @@
 <p><code>--compile</code>, <code>--map</code>, <code>--nodes</code>, <code>--print</code>, <code>--tokens</code> and <code>--proc</code> can be combined.</p>
 </li>
 <li>
-<p>In the Zap REPL, executing e.g. <code>x = 5</code> will create a local variable inside an IIFE, so <code>x</code> will not be visible to subsequent commands. Instead, use <code>global :x 5</code> to create a global variable.</p>
+<p>In the Zap REPL, executing e.g. <code>x = 5</code> will create a local variable inside an IIFE, so <code>x</code> will not be visible to subsequent commands. Instead, use <code>global :x = 5</code> to create a global variable.</p>
 </li>
 <li>
 <p>All file actions are synchronous.</p>

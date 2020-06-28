@@ -24,21 +24,21 @@ npm install --save '@gjmcn/zap'
 
 * UMD: `dist/zap.umd.js`. This can be loaded with a `<script>` tag and will create a global `zap` function.
 
-The exported `zap` function compiles a string of Zap code to JavaScript. The optional second argument of `zap` is an options object. The `asyncIIFE` option indicates whether the generated code should be wrapped in an asynchronous (rather than the default synchronous) IIFE. The other options specify which properties to include in the returned object:
+The exported `zap` function compiles a string of Zap code to JavaScript. The optional second argument of `zap` is an options object that specifies which properties to include in the returned object:
 
-| Property     | Type    | Default | Description |
-| -------------|---------|---------|-------------|
-| `asyncIIFE`  | boolean | `false` | IIFE that wraps JavaScript code is asynchronous|
-| `js`         | boolean | `true`  | JavaScript code |
-| `sourceMap`  | boolean | `false` | source map |
-| `sourceFile` | string  | `null`  | path to source file &mdash; used for source map 
-| `tokens`     | boolean | `false` | tokens produced by the lexer |
-| `procTokens` | boolean | `false` | processed tokens |
-| `jsTree`     | boolean | `false` | JavaScript tree produced by the parser {.table .table-sm .w600}|
+| Property     | Default | Description |
+| -------------|---------|-------------|
+| `js`         | `true`  | JavaScript code |
+| `sourceMap`  | `false` | source map | 
+| `tokens`     | `false` | tokens produced by the lexer |
+| `procTokens` | `false` | tokens after processing blocks |
+| `jsTree`     | `false` | JavaScript tree produced by the parser {.table .table-sm .w600}|
 
-> The compiled code runs in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+When `sourceMap` is `true`, add a `sourceFile` option giving the path to the source file.
 
-> Zap compiles to modern JavaScript. Where appropriate, use a transpiler such as [Babel](https://babeljs.io/) to ensure compatibility with the target environment(s).
+The generated JavaScript code is wrapped in an IIFE and runs in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). To use an asynchronous IIFE, add a truthy `asyncIIFE` option to the options object.
+
+Zap code compiles to modern JavaScript. Where appropriate, use a transpiler such as [Babel](https://babeljs.io/) to ensure compatibility with the target environment(s).
 
 #### Command Line {#command-line}
 
@@ -77,11 +77,11 @@ to print the command-line options:
 | `-e`  | `--eval`        | Evaluate a string from the command line |
 | `-h`  | `--help`        | Print help |
 | `-i`  | `--interactive` | Run an interactive Zap REPL |
-| `-m`  | `--map`         | Generate a source map and save as a `.js.map` file |
+| `-m`  | `--map`         | Generate source map(s), save as `.js.map` file(s) |
 | `-n`  | `--nodes`       | Print the JavaScript tree produced by the parser |
 | `-p`  | `--print`       | Print the generated JavaScript |
 | `-t`  | `--tokens`      | Print the tokens produced by the lexer |
-| `-r`  | `--proc`        | Print the processed tokens |
+| `-r`  | `--proc`        | Print the tokens after processing the blocks |
 | `-v`  | `--version`     | Print version number {.table .table-sm .w600} |
 
 Additional information:
@@ -98,7 +98,7 @@ Additional information:
 
 * `--compile`, `--map`, `--nodes`, `--print`, `--tokens` and `--proc` can be combined.
 
-* In the Zap REPL, executing e.g. `x = 5` will create a local variable inside an IIFE, so `x` will not be visible to subsequent commands. Instead, use `global :x 5` to create a global variable.
+* In the Zap REPL, executing e.g. `x = 5` will create a local variable inside an IIFE, so `x` will not be visible to subsequent commands. Instead, use `global :x = 5` to create a global variable.
 
 * All file actions are synchronous.
 
