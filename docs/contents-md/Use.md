@@ -104,6 +104,6 @@ Additional information:
 
 #### Code Editors
 
-##### [__VS Code__](https://code.visualstudio.com/)
+##### [VS Code](https://code.visualstudio.com/)
 
 Use the [Zap Highlight](https://github.com/gjmcn/zap-highlight-vscode) extension for syntax highlighting. Given the flexibility of operator positioning in Zap, and that only operators 'do things' (functions are called with operators and there are no keywords), a theme that highlights operators differently to all other language elements can help readability. The included _Solarized Dark_ theme and the _One Dark Pro_ extension theme are good examples of this.
