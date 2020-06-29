@@ -24,11 +24,12 @@ false ? 5 10   // 10
 if (exam &gt;= 50) 'Pass'          // 'Pass'
 if (exam &gt;= 80) 'Distinction'   // undefined
 
-grade = if
-| (exam &gt;= 80) 'Distinction'
-| (exam &gt;= 50) 'Pass'
-| else         'Fail'
-grade   // 'Pass'
+// prints 'You got a Pass'
+'You got a ' +
+    if
+    | (exam &gt;= 80) 'Distinction'
+    | (exam &gt;= 50) 'Pass'
+    | else         'Fail'
 
 // prints 'Good', returns 'Pass'
 if (exam &gt;= 80)

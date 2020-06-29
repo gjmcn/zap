@@ -35,11 +35,12 @@ exam = 60
 if (exam >= 50) 'Pass'          // 'Pass'
 if (exam >= 80) 'Distinction'   // undefined
 
-grade = if
-| (exam >= 80) 'Distinction'
-| (exam >= 50) 'Pass'
-| else         'Fail'
-grade   // 'Pass'
+// prints 'You got a Pass'
+'You got a ' +
+    if
+    | (exam >= 80) 'Distinction'
+    | (exam >= 50) 'Pass'
+    | else         'Fail'
 
 // prints 'Good', returns 'Pass'
 if (exam >= 80)

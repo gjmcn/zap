@@ -6,10 +6,10 @@
 
   const panel = document.getElementById('panel');
 
-  //current content file and anchor
+  // current content file and anchor
   let filename, anchor;
 
-  //local storage for scroll position
+  // local storage for scroll position
   let saveScrollPosn, loadScrollPosn;
   {
     if (require('./storageAvailable.js')('localStorage')) {
@@ -31,7 +31,7 @@
       : bottom - holderRect.bottom <= height - 20;
   }
 
-  //load content into main panel
+  // load content into main panel
   async function loadPanel(span, returning) {
 
     if (filename) saveScrollPosn();
@@ -42,7 +42,7 @@
  
     if (filename !== oldFilename) {
 
-      //clear panel and make sidebar link bold
+      // clear panel and make sidebar link bold
       panel.innerHTML = '';
       for (let elm of document.querySelectorAll('#sidebar span')) {
         elm.classList.remove('selected');
@@ -54,7 +54,7 @@
         sidebarLink.scrollIntoView();
       }
 
-      //load content and highlight code
+      // load content and highlight code
       const content = await fetch(`contents-html/${filename}.html`)
         .then(response => response.text());
       panel.innerHTML = content;
@@ -65,7 +65,7 @@
         }
       }
 
-      //internal links to different 'page'
+      // internal links to different 'page'
       for (let elm of panel.querySelectorAll('a')) {
         elm.addEventListener('click', evt => {
           if (elm.getAttribute('href')[0] === '?') {
@@ -79,8 +79,8 @@
 
     }
 
-    //scroll
-    if (returning) {  //to previous scroll posn if arrive via back/forward button
+    // scroll
+    if (returning) {  // to previous scroll posn if arrive via back/forward button
       panel.scrollTop = loadScrollPosn(); 
     }
     else if (anchor) {  //to section
@@ -89,12 +89,12 @@
 
   };
 
-  //navigation
+  // navigation
   {
-    //backward and forward buttons
+    // backward and forward buttons
     window.onpopstate = () => loadPanel(null, true);
 
-    //side bar links
+    // side bar links
     for (let elm of document.querySelectorAll('#sidebar span')) {
       elm.addEventListener('click',  evt => {
         history.pushState(null, '', `?${evt.target.getAttribute('data-file')}`);
@@ -102,15 +102,15 @@
       });
     };
 
-    //zap link in navbar
+    // zap link in navbar
     document.querySelector('#zap-link').addEventListener('click', () => {
       document.querySelector('#sidebar span').click();
     });
 
-    //pageshow
+    // pageshow
     window.addEventListener('pageshow', evt => loadPanel(null, evt.persisted));
 
-    //pagehide
+    // pagehide
     window.addEventListener('pagehide', () => saveScrollPosn());
   }
 
