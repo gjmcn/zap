@@ -13,12 +13,12 @@
 </li>
 </ul>
 <p>While not necessary, we typically use import and export operators at the start of a file:</p>
-<pre><code>import '/modules/a.js' f1 f2
-import '/modules/b.js' g
-export h1 h2
+<pre><code><span class="zap-keyword">import</span> <span class="zap-string">'/modules/a.js'</span> <span class="zap-identifier">f1</span> <span class="zap-identifier">f2</span>
+<span class="zap-keyword">import</span> <span class="zap-string">'/modules/b.js'</span> <span class="zap-identifier">g</span>
+<span class="zap-keyword">export</span> <span class="zap-identifier">h1</span> <span class="zap-identifier">h2</span>
 
-h1 = [a \f1 \g]
-h2 = [a \f2 \g]
+<span class="zap-identifier">h1</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">\</span><span class="zap-identifier">f1</span> <span class="zap-operator">\</span><span class="zap-identifier">g</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">h2</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">\</span><span class="zap-identifier">f2</span> <span class="zap-operator">\</span><span class="zap-identifier">g</span><span class="zap-punctuation">]</span>
 </code></pre>
 <blockquote>
 <p>Do not assign to imports. Assignment operators that create <a href="?Assignment#local-variables">local variables</a> will create a new variable that masks the import. Assignment operators that update variables (e.g. <a href="?Assignment#update-assignment"><code>+=</code></a>) will throw an error since imports are constants.</p>
@@ -26,79 +26,77 @@ h2 = [a \f2 \g]
 <hr>
 <h4 id="export"><code>export</code></h4>
 <p>Export variables:</p>
-<pre><code>export add subtract
+<pre><code><span class="zap-keyword">export</span> <span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span>
 
-add = [a + b]
-subtract = [a - b]
+<span class="zap-identifier">add</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">subtract</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p><code>export</code> can only be used once per file.</p>
 <hr>
 <h4 id="import"><code>import</code></h4>
 <p>Use <code>import</code> with one operand to import a module for side effects only:</p>
-<pre><code>import '/modules/do-something.js'
+<pre><code><span class="zap-keyword">import</span> <span class="zap-string">'/modules/do-something.js'</span>
 </code></pre>
 <p>Use additional operands for named imports:</p>
-<pre><code>import '/modules/arithmetic.js' add subtract
-// use add and subtract here
+<pre><code><span class="zap-keyword">import</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span>
+<span class="zap-comment">// use add and subtract here</span>
 </code></pre>
 <hr>
 <h4 id="import-as"><code>importAs</code></h4>
 <p>Rename imports. Operands are passed as <em>importName</em> <em>newName</em> pairs:</p>
-<pre><code>importAs '/modules/arithmetic.js'
-| add plus
-| subtract takeaway
-// use plus and takeaway here
+<pre><code><span class="zap-keyword">importAs</span> <span class="zap-string">'/modules/arithmetic.js'</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">add</span> <span class="zap-identifier">plus</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">subtract</span> <span class="zap-identifier">takeaway</span>
+<span class="zap-comment">// use plus and takeaway here</span>
 </code></pre>
 <hr>
 <h4 id="import-all"><code>importAll</code></h4>
 <p>Import all of a module's exports as an object:</p>
-<pre><code>importAll '/modules/arithmetic.js' arith
-// use  arith :add  and  arith :subtract  here
+<pre><code><span class="zap-keyword">importAll</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-identifier">arith</span>
+<span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
 </code></pre>
 <hr>
 <h4 id="import-default"><code>importDefault</code></h4>
 <p>Import default export.</p>
 <p>Zap does not use default exports, but many JavaScript modules do:</p>
-<pre><code>importDefault '/modules/my-js-module.js' theDefault
-// use theDefault here
+<pre><code><span class="zap-keyword">importDefault</span> <span class="zap-string">'/modules/my-js-module.js'</span> <span class="zap-identifier">theDefault</span>
+<span class="zap-comment">// use theDefault here</span>
 </code></pre>
 <hr>
 <h4 id="load"><code>load</code></h4>
 <p>Dynamically import a module.</p>
 <p><code>load</code> is not subject to the restrictions that apply to other import operators: <code>load</code> can be used anywhere and the module path/url can be any expression. <code>import</code> returns a promise that resolves to an object:</p>
-<pre><code>load '/modules/arithmetic.js' ~then 
-    fun arith
-        // use  arith :add  and  arith :subtract  here
+<pre><code><span class="zap-keyword">load</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-operator">~</span><span class="zap-identifier">then</span> 
+    <span class="zap-keyword">fun</span> <span class="zap-identifier">arith</span>
+        <span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
 </code></pre>
 <p>Or using <code>await</code>:</p>
-<pre><code>asyncScope
-    add subtract #= '/modules/arithmetic.js' load await
-    // use add and subtract here
+<pre><code><span class="zap-keyword">asyncScope</span>
+    <span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span> <span class="zap-operator">#=</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-keyword">load</span> <span class="zap-keyword">await</span>
+    <span class="zap-comment">// use add and subtract here</span>
 </code></pre>
 <hr>
 <h4>CommonJS Modules</h4>
 <p>CommonJS modules do not require dedicated operators or rules.</p>
 <p>The following export examples are equivalent:</p>
-<pre><code>module :exports = #
-| add [a + b]
-| subtract [a - b]
+<pre><code><span class="zap-identifier">module</span> <span class="zap-operator">:</span><span class="zap-identifier">exports</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">add</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">subtract</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
-<pre><code>add = [a + b]
-subtract = [a - b]
-exports attach add subtract
+<pre><code><span class="zap-identifier">add</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">subtract</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">exports</span> <span class="zap-keyword">attach</span> <span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span>
 </code></pre>
-<pre><code>exports
-| chg 'add' [a + b]
-| chg 'subtract' [a - b]
+<pre><code><span class="zap-identifier">exports</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">chg</span> <span class="zap-string">'add'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">chg</span> <span class="zap-string">'subtract'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p>Use the <code>require</code> function to load a module:</p>
-<pre><code>arith = 'arithmetic.js' \require
-// use  arith :add  and  arith :subtract  here
+<pre><code><span class="zap-identifier">arith</span> <span class="zap-operator">=</span> <span class="zap-string">'arithmetic.js'</span> <span class="zap-operator">\</span><span class="zap-identifier">require</span>
+<span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
 </code></pre>
 <p>Or with destructuring:</p>
-<pre><code>add subtract #= 'arithmetic.js' \require
-// use add and subtract here
+<pre><code><span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span> <span class="zap-operator">#=</span> <span class="zap-string">'arithmetic.js'</span> <span class="zap-operator">\</span><span class="zap-identifier">require</span>
+<span class="zap-comment">// use add and subtract here</span>
 </code></pre>
-
-
 <br><br><br>

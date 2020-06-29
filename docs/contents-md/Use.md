@@ -4,23 +4,17 @@
 
 #### Install
 
-```{.no-highlight}
-npm install --save '@gjmcn/zap'
-```
+<pre><code>npm install --save '@gjmcn/zap'</code></pre>
 
 #### Load
 
 * CommonJS:
 
-  ```{.no-highlight}
-  const zap = require('@gjmcn/zap');
-  ```
+  <pre><code>const zap = require('@gjmcn/zap');</code></pre>
 
 * ES module:
 
-  ```{.no-highlight}
-  import zap from '@gjmcn/zap';
-  ```
+  <pre><code>import zap from '@gjmcn/zap';</code></pre>
 
 * UMD: `dist/zap.umd.js`. This can be loaded with a `<script>` tag and will create a global `zap` function.
 
@@ -46,27 +40,19 @@ Zap code compiles to modern JavaScript. Where appropriate, use a transpiler such
 
 Zap can be installed as a command line app:
 
-```{.no-highlight}
-npm install -g @gjmcn/zap
-```
+<pre><code>npm install -g @gjmcn/zap</code></pre>
 
 Use `zap` with no arguments to start an interactive Zap REPL:
 
-```{.no-highlight}
-zap
-```
+<pre><code>zap</code></pre>
 
 Pass a file path to compile a file. For example, to compile the file `index.za` to `index.js` (in the same directory):
 
-```{.no-highlight}
-zap index.za
-```
+<pre><code>zap index.za</code></pre>
 
 Use:
 
-```{.no-highlight}
-zap --help
-```
+<pre><code>zap --help</code></pre>
 
 to print the command-line options:
 

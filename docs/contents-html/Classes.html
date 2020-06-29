@@ -3,53 +3,51 @@
 <h4 id="class"><code>class</code></h4>
 <p>Create a class.</p>
 <p>We can use a regular function as a constructor:</p>
-<pre><code>Animal = fun name age
-    this :name = name
-    this :age = age
+<pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">name</span> <span class="zap-identifier">age</span>
+    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
+    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
 
-alex = new Animal 'Alex' 8   // Animal {name: &quot;Alex&quot;, age: 8}
+<span class="zap-identifier">alex</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span> <span class="zap-number">8</span>   <span class="zap-comment">// Animal {name: "Alex", age: 8}</span>
 </code></pre>
 <p>The <code>class</code> operator is used like <a href="?Writing-Functions#fun"><code>fun</code></a>, but returns a class rather than a function. Furthermore, when <code>class</code> is used:</p>
 <ul>
-<li>
-<p>If the constructor's <a href="?Syntax#body-operands">body</a> is empty, the parameters are automatically added to <code>this</code>:</p>
-<pre><code>Animal = class name age ()
-
-// is equivalent to:
-
-Animal = class name age
-    this :name = name
-    this :age = age
-</code></pre>
-</li>
-<li>
-<p>The constructor always returns the new instance:</p>
-<pre><code>Animal = fun (# u 5)     // function
-new Animal               // {u: 5}
-
-Animal = class (# u 5)   // class
-new Animal               // Animal {}
-</code></pre>
-</li>
-<li>
-<p>Calling the constructor throws an error:</p>
-<pre><code>Animal = class name ()
-
-new Animal 'Alex'   // Animal {name: &quot;Alex&quot;}
-
-\Animal 'Alex'      // TypeError: Class constructor Animal cannot
-                    // be invoked without 'new'
-</code></pre>
-</li>
+<li>If the constructor's <a href="?Syntax#body-operands">body</a> is empty, the parameters are automatically added to <code>this</code>:</li>
 </ul>
+<pre class="indent"><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-identifier">age</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
+
+<span class="zap-comment">// is equivalent to:</span>
+
+<span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-identifier">age</span>
+    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
+    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
+</code></pre>
+<ul>
+<li>The constructor always returns the new instance:</li>
+</ul>
+<pre class="indent"><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>     <span class="zap-comment">// function</span>
+<span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span>               <span class="zap-comment">// {u: 5}</span>
+
+<span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// class</span>
+<span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span>               <span class="zap-comment">// Animal {}</span>
+</code></pre>
+<ul>
+<li>Calling the constructor throws an error:</li>
+</ul>
+<pre class="indent"><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
+
+<span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span>   <span class="zap-comment">// Animal {name: "Alex"}</span>
+
+<span class="zap-operator">\</span><span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span>      <span class="zap-comment">// TypeError: Class constructor Animal cannot</span>
+                    <span class="zap-comment">// be invoked without 'new'</span>
+</code></pre>
 <p>Use <a href="?Get-Property#colon-proto-getter"><code>::</code></a> to add a function to an object's prototype — i.e. to add a method to a class:</p>
-<pre><code>Animal = class name ()
+<pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
 
-Animal ::speak = fun
-    + (this :name)' makes a noise'
+<span class="zap-identifier">Animal</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' makes a noise'</span>
 
-alex = new Animal 'Alex'
-alex ~speak   // 'Alex makes a noise'
+<span class="zap-identifier">alex</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span>
+<span class="zap-identifier">alex</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span>   <span class="zap-comment">// 'Alex makes a noise'</span>
 </code></pre>
 <hr>
 <h4 id="extends"><code>extends</code></h4>
@@ -63,33 +61,31 @@ alex ~speak   // 'Alex makes a noise'
 <p>If the constructor <a href="?Syntax#body-operands">body</a> is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.</p>
 </li>
 </ul>
-<pre><code>Animal = class name ()
+<pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
 
-Cat = extends Animal ()   // default constructor
-Cat ::speak = fun
-    + (this :name)' meows'
+<span class="zap-identifier">Cat</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Animal</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// default constructor</span>
+<span class="zap-identifier">Cat</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' meows'</span>
 
-Dog = extends Animal name breed
-    \super name   // see below
-    this :breed = breed
-Dog ::speak = fun
-    + (this :name)' the '(this :breed)' barks'
+<span class="zap-identifier">Dog</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Animal</span> <span class="zap-identifier">name</span> <span class="zap-identifier">breed</span>
+    <span class="zap-operator">\</span><span class="zap-variable">super</span> <span class="zap-identifier">name</span>   <span class="zap-comment">// see below</span>
+    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">breed</span> <span class="zap-operator">=</span> <span class="zap-identifier">breed</span>
+<span class="zap-identifier">Dog</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' the '</span><span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">breed</span><span class="zap-punctuation">)</span><span class="zap-string">' barks'</span>
 
-colin = new Cat 'Colin'
-colin ~speak   // 'Colin meows'
+<span class="zap-identifier">colin</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Cat</span> <span class="zap-string">'Colin'</span>
+<span class="zap-identifier">colin</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span>   <span class="zap-comment">// 'Colin meows'</span>
 
-debra = new Dog 'Debra' 'doberman'
-debra ~speak   // 'Debra the doberman barks'  
+<span class="zap-identifier">debra</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Dog</span> <span class="zap-string">'Debra'</span> <span class="zap-string">'doberman'</span>
+<span class="zap-identifier">debra</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span>   <span class="zap-comment">// 'Debra the doberman barks'  </span>
 </code></pre>
 <p>In the <code>Dog</code> constructor above, we call <code>super</code> to call the constructor of the parent class. In fact, a subclass constructor <em>must</em> call <code>super</code> — and the call must be before <code>this</code> is used.</p>
 <p>When using <code>extends</code>, the parent class need not have been created with <code>class</code>; it can be a regular function or a built-in object:</p>
-<pre><code>Animal = fun ()             // function
-Dog = extends Animal ()     // class
-new Dog                     // Dog {}
+<pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>             <span class="zap-comment">// function</span>
+<span class="zap-identifier">Dog</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Animal</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>     <span class="zap-comment">// class</span>
+<span class="zap-keyword">new</span> <span class="zap-identifier">Dog</span>                     <span class="zap-comment">// Dog {}</span>
 
-Vector = extends Array ()   // class
-new Vector 3                // Vector [empty × 3]
+<span class="zap-identifier">Vector</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Array</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// class</span>
+<span class="zap-keyword">new</span> <span class="zap-identifier">Vector</span> <span class="zap-number">3</span>                <span class="zap-comment">// Vector [empty × 3]</span>
 </code></pre>
-
-
 <br><br><br>

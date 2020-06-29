@@ -35,11 +35,11 @@
 <h4 id="select"><code>select</code></h4>
 <p><code>select</code> takes a CSS selector string and returns the first matching element — or <code>null</code> if there are no matching elements.
 When used with one operand, <code>select</code> searches the document. If two operands are used, <code>select</code> searches the descendants of the <a href="#first-element">first element</a> of the first operand:</p>
-<pre><code>select 'p'               // first &lt;p&gt; in the document
-select '.news p'         // first &lt;p&gt; in an element with class 'news' 
-elmA select 'p'          // first &lt;p&gt; in element elmA
-@ elmA elmB select 'p'   // first &lt;p&gt; in element elmA 
-'.news' select 'p'       // first &lt;p&gt; in first element with class 'news'
+<pre><code><span class="zap-keyword">select</span> <span class="zap-string">'p'</span>               <span class="zap-comment">// first &lt;p&gt; in the document</span>
+<span class="zap-keyword">select</span> <span class="zap-string">'.news p'</span>         <span class="zap-comment">// first &lt;p&gt; in an element with class 'news' </span>
+<span class="zap-identifier">elmA</span> <span class="zap-keyword">select</span> <span class="zap-string">'p'</span>          <span class="zap-comment">// first &lt;p&gt; in element elmA</span>
+<span class="zap-operator">@</span> <span class="zap-identifier">elmA</span> <span class="zap-identifier">elmB</span> <span class="zap-keyword">select</span> <span class="zap-string">'p'</span>   <span class="zap-comment">// first &lt;p&gt; in element elmA </span>
+<span class="zap-string">'.news'</span> <span class="zap-keyword">select</span> <span class="zap-string">'p'</span>       <span class="zap-comment">// first &lt;p&gt; in first element with class 'news'</span>
 </code></pre>
 <hr>
 <h4 id="select-all"><code>selectAll</code></h4>
@@ -47,16 +47,16 @@ elmA select 'p'          // first &lt;p&gt; in element elmA
 <hr>
 <h4 id="create"><code>create</code>, <code>createSVG</code></h4>
 <p>Create HTML/SVG elements. The first operand is a tag name:</p>
-<pre><code>create 'p'         // &lt;p&gt;
-createSVG 'rect'   // &lt;rect&gt;
+<pre><code><span class="zap-keyword">create</span> <span class="zap-string">'p'</span>         <span class="zap-comment">// &lt;p&gt;</span>
+<span class="zap-keyword">createSVG</span> <span class="zap-string">'rect'</span>   <span class="zap-comment">// &lt;rect&gt;</span>
 </code></pre>
 <p>The second operand specifies the number of elements to create. When a second operand is used, an array is returned:</p>
-<pre><code>create 'p' 2         // [&lt;p&gt;, &lt;p&gt;]
-createSVG 'rect' 2   // [&lt;rect&gt;, &lt;rect&gt;]
+<pre><code><span class="zap-keyword">create</span> <span class="zap-string">'p'</span> <span class="zap-number">2</span>         <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;]</span>
+<span class="zap-keyword">createSVG</span> <span class="zap-string">'rect'</span> <span class="zap-number">2</span>   <span class="zap-comment">// [&lt;rect&gt;, &lt;rect&gt;]</span>
 </code></pre>
 <p>Typically, we use <a href="#create-convenience">convenience operators</a> instead of <code>create</code>/<code>createSVG</code>. For example:</p>
-<pre><code>$p        // &lt;p&gt;
-$rect 2   // [&lt;rect&gt;, &lt;rect&gt;]
+<pre><code><span class="zap-keyword">$p</span>        <span class="zap-comment">// &lt;p&gt;</span>
+<span class="zap-keyword">$rect</span> <span class="zap-number">2</span>   <span class="zap-comment">// [&lt;rect&gt;, &lt;rect&gt;]</span>
 </code></pre>
 <hr>
 <h4 id="fragment"><code>fragment</code></h4>
@@ -64,59 +64,59 @@ $rect 2   // [&lt;rect&gt;, &lt;rect&gt;]
 <hr>
 <h4 id="encode"><code>encode</code>, <code>encodeSVG</code></h4>
 <p><code>encode</code> takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's <code>__data__</code> property is set to the datum. The new elements are returned as an array:</p>
-<pre><code>p = @ 5 6 7 encode 'p'   // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
-p :1 :__data__           // 6
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-keyword">encode</span> <span class="zap-string">'p'</span>   <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
+<span class="zap-identifier">p</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">:</span><span class="zap-identifier">__data__</span>           <span class="zap-comment">// 6</span>
 </code></pre>
 <p>Various DOM operators such as <a href="#insert"><code>insert</code></a>, <a href="#into"><code>into</code></a>, <a href="#insert-each"><code>insertEach</code></a>, <a href="#attr"><code>attr</code></a>, <a href="#attr"><code>prop</code></a>, <a href="#attr"><code>style</code></a>, <a href="#html"><code>html</code></a>, <a href="#html"><code>text</code></a>, <a href="#on"><code>on</code></a> and <a href="#on"><code>off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
 <p>The optional third operand of <code>encode</code> specifies whether to set the <code>__data__</code> property of the new elements. This operand defaults to <code>true</code>.</p>
 <p>Use <code>encodeSVG</code> to encode data as SVG elements rather than HTML:</p>
-<pre><code>o = @ (# u 5 v 6) (# u 7 v 8)
-r = encodeSVG o 'rect'   // [&lt;rect&gt;, &lt;rect&gt;]
-r :1 :__data__           // {u: 7, v: 8}
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>
+<span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-keyword">encodeSVG</span> <span class="zap-identifier">o</span> <span class="zap-string">'rect'</span>   <span class="zap-comment">// [&lt;rect&gt;, &lt;rect&gt;]</span>
+<span class="zap-identifier">r</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">:</span><span class="zap-identifier">__data__</span>           <span class="zap-comment">// {u: 7, v: 8}</span>
 </code></pre>
 <hr>
 <h4 id="insert"><code>insert</code></h4>
 <p>Insert <a href="#all-elements">all elements</a> of the second operand into the 'target': the <a href="#first-element">first element</a> of the first operand. Alternatively, the second operand can be a callback function that returns an element or an iterable of elements. The callback is passed the target's data (see <a href="#encode"><code>encode</code></a>) and the callback's <code>this</code> is set to the target.</p>
 <p><code>insert</code> returns the inserted element(s):</p>
-<pre><code>// insert 3 &lt;p&gt; into elm, returns [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
-elm insert (3 $p)
+<pre><code><span class="zap-comment">// insert 3 &lt;p&gt; into elm, returns [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
+<span class="zap-identifier">elm</span> <span class="zap-keyword">insert</span> <span class="zap-punctuation">(</span><span class="zap-number">3</span> <span class="zap-keyword">$p</span><span class="zap-punctuation">)</span>
 
-// insert 1 &lt;p&gt; into elm, returns [&lt;p&gt;]
-elm insert (1 $p)
+<span class="zap-comment">// insert 1 &lt;p&gt; into elm, returns [&lt;p&gt;]</span>
+<span class="zap-identifier">elm</span> <span class="zap-keyword">insert</span> <span class="zap-punctuation">(</span><span class="zap-number">1</span> <span class="zap-keyword">$p</span><span class="zap-punctuation">)</span>
 
-// insert 1 &lt;p&gt; into elm, returns &lt;p&gt;
-elm insert ($p)
+<span class="zap-comment">// insert 1 &lt;p&gt; into elm, returns &lt;p&gt;</span>
+<span class="zap-identifier">elm</span> <span class="zap-keyword">insert</span> <span class="zap-punctuation">(</span><span class="zap-keyword">$p</span><span class="zap-punctuation">)</span>
 
-// insert all &lt;p&gt; in document into elm, returns all &lt;p&gt; as an array
-elm insert 'p'
+<span class="zap-comment">// insert all &lt;p&gt; in document into elm, returns all &lt;p&gt; as an array</span>
+<span class="zap-identifier">elm</span> <span class="zap-keyword">insert</span> <span class="zap-string">'p'</span>
 </code></pre>
 <p>As shown in the final example, <code>insert</code> can be used to move elements that are already in the document.</p>
 <p>The optional third operand of <code>insert</code> specifies where to insert elements into the target. The third operand must be a callback function; it is passed the target's data and the callback's <code>this</code> is set to the target. Elements are inserted before the <a href="#first-element">first element</a> returned by the callback. If the callback returns <code>null</code> or is omitted, elements are inserted at the end of the target.</p>
 <hr>
 <h4 id="into"><code>into</code></h4>
 <p><code>into</code> is the same as <a href="#insert"><code>insert</code></a>, but with the first two operands swapped. The only other difference is that <code>into</code> returns the target element rather than the inserted elements:</p>
-<pre><code>2 $p into ($div)   // &lt;div&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;/div&gt;
+<pre><code><span class="zap-number">2</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">into</span> <span class="zap-punctuation">(</span><span class="zap-keyword">$div</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// &lt;div&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;/div&gt;</span>
 </code></pre>
 <hr>
 <h4 id="insert-each"><code>insertEach</code></h4>
 <p><code>insertEach</code> is similar to using <a href="#insert"><code>insert</code></a> on each element of the first operand (which can be a CSS selector string, an iterable of elements or an element). However, the second operand of <code>insertEach</code> <em>must</em> be a callback function. The callback is passed the 'current index' as its second argument and the results of the callback are collected in an array and returned (each entry of the array is an element or an iterable of elements):</p>
-<pre><code>divs = @ 5 6 7 encode 'div'   // [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;]
+<pre><code><span class="zap-identifier">divs</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-keyword">encode</span> <span class="zap-string">'div'</span>   <span class="zap-comment">// [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;]</span>
 
-// insert a &lt;p&gt; into each &lt;div&gt;
-ps = divs insertEach
-    fun data index
-        $p text 
-            + (this :tagName)' 'data' 'index
+<span class="zap-comment">// insert a &lt;p&gt; into each &lt;div&gt;</span>
+<span class="zap-identifier">ps</span> <span class="zap-operator">=</span> <span class="zap-identifier">divs</span> <span class="zap-keyword">insertEach</span>
+    <span class="zap-keyword">fun</span> <span class="zap-identifier">data</span> <span class="zap-identifier">index</span>
+        <span class="zap-keyword">$p</span> <span class="zap-keyword">text</span> 
+            <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">tagName</span><span class="zap-punctuation">)</span><span class="zap-string">' '</span><span class="zap-identifier">data</span><span class="zap-string">' '</span><span class="zap-identifier">index</span>
             
-ps        // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]
-ps text   // ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']
+<span class="zap-identifier">ps</span>        <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
+<span class="zap-identifier">ps</span> <span class="zap-keyword">text</span>   <span class="zap-comment">// ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']</span>
 </code></pre>
 <p>The following example uses <code>insert</code> and <code>insertEach</code> to represent an array-of-arrays as an HTML table:</p>
-<pre><code>x = @ (@ 4 5 6) (@ 7 8 9)   // [[4, 5, 6], [7, 8, 9]]
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">8</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [[4, 5, 6], [7, 8, 9]]</span>
 
-'body' insert ($table)
-| insert [encode x 'tr']
-| insertEach [a encode 'td' text [a]]
+<span class="zap-string">'body'</span> <span class="zap-keyword">insert</span> <span class="zap-punctuation">(</span><span class="zap-keyword">$table</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">insert</span> <span class="zap-punctuation">[</span><span class="zap-keyword">encode</span> <span class="zap-identifier">x</span> <span class="zap-string">'tr'</span><span class="zap-punctuation">]</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">insertEach</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">encode</span> <span class="zap-string">'td'</span> <span class="zap-keyword">text</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span><span class="zap-punctuation">]</span>
 </code></pre>
 <hr>
 <h4 id="attr"><code>attr</code>, <code>prop</code>, <code>style</code></h4>
@@ -124,33 +124,33 @@ ps text   // ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']
 <p>The second operand is the attribute/property/style name.</p>
 <p>When used with two operands, these operators are getters. If the first operand is an iterable, the values are returned as an array.</p>
 <p>When used with three operands, these operators are setters. If the third operand is a function, it is called for each element. The function is passed the element's <code>__data__</code> property (see <a href="#encode"><code>encode</code></a>) and the current index; the function's <code>this</code> is set to the element. The value returned by the function is used as the new attribute/property/style value. If the third operand is not a function, it is used as the new attribute/property/style value for each element. Setters return the modified element(s).</p>
-<pre><code>divs = @ 'red' 'blue' encode 'div'
-| style 'background-color' [a]
-| style 'height' '20px'   // [&lt;div&gt;, &lt;div&gt;]
+<pre><code><span class="zap-identifier">divs</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'red'</span> <span class="zap-string">'blue'</span> <span class="zap-keyword">encode</span> <span class="zap-string">'div'</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">style</span> <span class="zap-string">'background-color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span> <span class="zap-string">'20px'</span>   <span class="zap-comment">// [&lt;div&gt;, &lt;div&gt;]</span>
 
-// style gets computed style - elements must be in the document
-divs into 'body'
+<span class="zap-comment">// style gets computed style - elements must be in the document</span>
+<span class="zap-identifier">divs</span> <span class="zap-keyword">into</span> <span class="zap-string">'body'</span>
 
-divs style 'background-color'   // [&quot;rgb(255, 0, 0)&quot;, &quot;rgb(0, 0, 255)&quot;]
-divs style 'height'             // ['20px', '20px']
-divs :0 style 'height'          // '20px'
+<span class="zap-identifier">divs</span> <span class="zap-keyword">style</span> <span class="zap-string">'background-color'</span>   <span class="zap-comment">// ["rgb(255, 0, 0)", "rgb(0, 0, 255)"]</span>
+<span class="zap-identifier">divs</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span>             <span class="zap-comment">// ['20px', '20px']</span>
+<span class="zap-identifier">divs</span> <span class="zap-operator">:</span><span class="zap-number">0</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span>          <span class="zap-comment">// '20px'</span>
 
-'div' style 'width' '40px'   // set width of all divs in document
-'div' style 'width'          // ['40px', '40px'] (if no preexisting divs)
+<span class="zap-string">'div'</span> <span class="zap-keyword">style</span> <span class="zap-string">'width'</span> <span class="zap-string">'40px'</span>   <span class="zap-comment">// set width of all divs in document</span>
+<span class="zap-string">'div'</span> <span class="zap-keyword">style</span> <span class="zap-string">'width'</span>          <span class="zap-comment">// ['40px', '40px'] (if no preexisting divs)</span>
 </code></pre>
 <p>A callback function can be used with any elements; they need not have their own data:</p>
-<pre><code>colors = @ 'red' 'green' 'blue'
+<pre><code><span class="zap-identifier">colors</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'red'</span> <span class="zap-string">'green'</span> <span class="zap-string">'blue'</span>
 
-// create 3 &lt;p&gt;, give each a different color
-3 $p style 'color' [colors , b]
+<span class="zap-comment">// create 3 &lt;p&gt;, give each a different color</span>
+<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> <span class="zap-operator">,</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
-<pre><code>// use 'html' or document :documentElement to set globals
-// (i.e. variables that would be set under :root in CSS)
-'html' style '--size' '24px'
+<pre><code><span class="zap-comment">// use 'html' or document :documentElement to set globals</span>
+<span class="zap-comment">// (i.e. variables that would be set under :root in CSS)</span>
+<span class="zap-string">'html'</span> <span class="zap-keyword">style</span> <span class="zap-string">'--size'</span> <span class="zap-string">'24px'</span>
 
-// scope --color variable to element with id 'apple'
-'#apple' style '--color' 'green'
+<span class="zap-comment">// scope --color variable to element with id 'apple'</span>
+<span class="zap-string">'#apple'</span> <span class="zap-keyword">style</span> <span class="zap-string">'--color'</span> <span class="zap-string">'green'</span>
 </code></pre>
 <hr>
 <h4 id="html"><code>html</code>, <code>text</code></h4>
@@ -192,9 +192,9 @@ divs :0 style 'height'          // '20px'
 <hr>
 <h4 id="on"><code>on</code>, <code>off</code></h4>
 <p>Add/remove event listeners from <a href="#all-elements">all elements</a> of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler — a function. The handler is passed the 'firing' element's <code>__data__</code> property (see <a href="#encode"><code>encode</code></a>) and the event. The handler's <code>this</code> is set to the firing element.</p>
-<pre><code>@ 5 6 7 encode 'p'
-| text 'show data'
-| on 'click' [this text a]    // [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] 
+<pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-keyword">encode</span> <span class="zap-string">'p'</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">text</span> <span class="zap-string">'show data'</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">on</span> <span class="zap-string">'click'</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span> <span class="zap-keyword">text</span> <span class="zap-identifier">a</span><span class="zap-punctuation">]</span>    <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] </span>
 </code></pre>
 <p>The optional fourth operand is an options object or a boolean indicating whether to use capture — see <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> for details. The fourth operand defaults to <code>false</code>.</p>
 <p>The behavior of <code>on</code> and <code>off</code> differs slightly from that of the native methods <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">EventTarget :removeEventListener</a>:</p>
@@ -230,10 +230,10 @@ divs :0 style 'height'          // '20px'
 <p>The <code>scale</code> option is ignored if <code>context</code> is not <code>'2d'</code>.</p>
 <p>Any additional options passed to <code>sketch</code> are passed on to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext"><code>getContext</code></a> when creating the context.</p>
 <p>The canvas and context are returned as an array:</p>
-<pre><code>canvas ctx @= sketch
+<pre><code><span class="zap-identifier">canvas</span> <span class="zap-identifier">ctx</span> <span class="zap-operator">@=</span> <span class="zap-keyword">sketch</span>
 
-ctx :fillStyle = 'green'
-ctx ~fillRect 50 20 200 100
+<span class="zap-identifier">ctx</span> <span class="zap-operator">:</span><span class="zap-identifier">fillStyle</span> <span class="zap-operator">=</span> <span class="zap-string">'green'</span>
+<span class="zap-identifier">ctx</span> <span class="zap-operator">~</span><span class="zap-identifier">fillRect</span> <span class="zap-number">50</span> <span class="zap-number">20</span> <span class="zap-number">200</span> <span class="zap-number">100</span>
 </code></pre>
 <hr>
 <h4 id="create-convenience">Convenience Operators for Creating Elements</h4>
@@ -260,6 +260,5 @@ ctx ~fillRect 50 20 200 100
 <blockquote>
 <p>Where HTML and SVG elements have the same name (e.g. <code>a</code>, <code>script</code>, <code>style</code> and <code>title</code>), there are convenience operators for the HTML elements, but not for the SVG elements.</p>
 </blockquote>
-
 
 <br><br><br>

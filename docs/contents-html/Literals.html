@@ -1,56 +1,54 @@
 <h2>Literals</h2>
 <hr>
 <h4>Basics</h4>
-<pre><code>5           // 5 (number)
-5.6         // 5.6 (number)
-5e-2        // 0.05 (number)
-'abc'       // 'abc' (string)
-&quot;abc&quot;       // 'abc' (string)
-&quot;a
-bc&quot;         // 'a\nbc' (&quot;...&quot; strings can be multiline)
-&amp;/abc/      // /abc/ (regular expression)
-false       // false (boolean)
-null        // null
-undefined   // undefined
+<pre><code><span class="zap-number">5</span>           <span class="zap-comment">// 5 (number)</span>
+<span class="zap-number">5.6</span>         <span class="zap-comment">// 5.6 (number)</span>
+<span class="zap-number">5e-2</span>        <span class="zap-comment">// 0.05 (number)</span>
+<span class="zap-string">'abc'</span>       <span class="zap-comment">// 'abc' (string)</span>
+<span class="zap-string">"abc"</span>       <span class="zap-comment">// 'abc' (string)</span>
+<span class="zap-string">"a
+bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be multiline)</span>
+<span class="zap-regexp">&/abc/</span>      <span class="zap-comment">// /abc/ (regular expression)</span>
+<span class="zap-literal">false</span>       <span class="zap-comment">// false (boolean)</span>
+<span class="zap-literal">null</span>        <span class="zap-comment">// null</span>
+<span class="zap-literal">undefined</span>   <span class="zap-comment">// undefined</span>
 </code></pre>
 <hr>
 <h4 id="objects-and-maps">Objects and Maps</h4>
 <p>Use the <code>#</code> operator for an object, and <code>##</code> for a map:</p>
-<pre><code>#             // empty object
-# u 5 v 6     // {u: 5, v: 6}
+<pre><code><span class="zap-operator">#</span>             <span class="zap-comment">// empty object</span>
+<span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>     <span class="zap-comment">// {u: 5, v: 6}</span>
 
-##            // empty map
-## u 5 v 6    // Map {'u' =&gt; 5, 'v' =&gt; 6}
+<span class="zap-operator">##</span>            <span class="zap-comment">// empty map</span>
+<span class="zap-operator">##</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>    <span class="zap-comment">// Map {'u' =&gt; 5, 'v' =&gt; 6}</span>
 </code></pre>
 <p><code>#</code> and <code>##</code> use the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>, which is why the property names in the above examples need not be quoted.</p>
 <hr>
 <h4 id="arrays">Arrays</h4>
 <p>Use the <code>@</code> operator for an array:</p>
-<pre><code>@        // empty array
-@ 5 6    // [5, 6]
+<pre><code><span class="zap-operator">@</span>        <span class="zap-comment">// empty array</span>
+<span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>    <span class="zap-comment">// [5, 6]</span>
 </code></pre>
 <p>There is also an <code>array</code> operator that takes any number of iterables and returns a new array containing the elements of all of the iterables:</p>
-<pre><code>x = @ 5 6 7   // [5, 6, 7]
-y = @@ 8 9    // Set {8, 9} (see below)
-z = 'abc'     // 'abc'
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>   <span class="zap-comment">// [5, 6, 7]</span>
+<span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">8</span> <span class="zap-number">9</span>    <span class="zap-comment">// Set {8, 9} (see below)</span>
+<span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-string">'abc'</span>     <span class="zap-comment">// 'abc'</span>
 
-array         // []
-x array       // [5, 6, 7] (shallow copy of x)  
-y array       // [8, 9]  
-z array       // ['a', 'b', 'c']
+<span class="zap-keyword">array</span>         <span class="zap-comment">// []</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// [5, 6, 7] (shallow copy of x)  </span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// [8, 9]  </span>
+<span class="zap-identifier">z</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// ['a', 'b', 'c']</span>
 
-x y z array   // [5, 6, 7, 8, 9, 'a', 'b', 'c']
+<span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-identifier">z</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [5, 6, 7, 8, 9, 'a', 'b', 'c']</span>
 </code></pre>
 <hr>
 <h4 id="sets">Sets</h4>
 <p>Use the <code>@@</code> operator for a set:</p>
-<pre><code>@@       // empty set
-@@ 5 6   // Set {5, 6}
+<pre><code><span class="zap-operator">@@</span>       <span class="zap-comment">// empty set</span>
+<span class="zap-operator">@@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>   <span class="zap-comment">// Set {5, 6}</span>
 </code></pre>
 <p>Note that <code>@@</code> interprets each operand as an element, whereas the <code>Set</code> constructor extracts elements from an iterable:</p>
-<pre><code>@@ 'ab'        // Set {'ab'}
-new Set 'ab'   // Set {'a', 'b'}
+<pre><code><span class="zap-operator">@@</span> <span class="zap-string">'ab'</span>        <span class="zap-comment">// Set {'ab'}</span>
+<span class="zap-keyword">new</span> <span class="zap-identifier">Set</span> <span class="zap-string">'ab'</span>   <span class="zap-comment">// Set {'a', 'b'}</span>
 </code></pre>
-
-
 <br><br><br>

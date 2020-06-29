@@ -20,36 +20,36 @@ The `class` operator is used like [`fun`](?Writing-Functions#fun), but returns a
 
 * If the constructor's [body](?Syntax#body-operands) is empty, the parameters are automatically added to `this`:
 
-    ```
-    Animal = class name age ()
+```{.indent}
+Animal = class name age ()
 
-    // is equivalent to:
+// is equivalent to:
 
-    Animal = class name age
-        this :name = name
-        this :age = age
-    ```
+Animal = class name age
+    this :name = name
+    this :age = age
+```
 
 * The constructor always returns the new instance:
 
-    ```
-    Animal = fun (# u 5)     // function
-    new Animal               // {u: 5}
+```{.indent}
+Animal = fun (# u 5)     // function
+new Animal               // {u: 5}
 
-    Animal = class (# u 5)   // class
-    new Animal               // Animal {}
-    ```
+Animal = class (# u 5)   // class
+new Animal               // Animal {}
+```
 
 *  Calling the constructor throws an error:
 
-    ```
-    Animal = class name ()
-    
-    new Animal 'Alex'   // Animal {name: "Alex"}
-    
-    \Animal 'Alex'      // TypeError: Class constructor Animal cannot
-                        // be invoked without 'new'
-    ```
+```{.indent}
+Animal = class name ()
+
+new Animal 'Alex'   // Animal {name: "Alex"}
+
+\Animal 'Alex'      // TypeError: Class constructor Animal cannot
+                    // be invoked without 'new'
+```
 
 Use [`::`](?Get-Property#colon-proto-getter) to add a function to an object's prototype — i.e. to add a method to a class:
 

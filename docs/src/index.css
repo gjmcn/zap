@@ -165,6 +165,11 @@ pre {
   padding: 8px 10px;
 }
 
+pre.indent {
+  margin-left: 40px;
+  max-width: 640px;
+}
+
 code {  
   color: #333;
   padding: 2px 6px;
@@ -181,6 +186,7 @@ pre > code {
   font-weight: 400;
   white-space: pre;
 }
+
 
 /* ----- Zap highlighting, colors matched to Zap playground ----- */
 

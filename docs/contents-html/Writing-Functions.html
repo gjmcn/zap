@@ -6,26 +6,26 @@
 <h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
 <p>Create a regular function.</p>
 <p>The operands of <code>fun</code> are the parameter names and the function <a href="?Syntax#body-operands">body</a>:</p>
-<pre><code>// no parameters, body in parentheses
-f = fun (5)
-\f   // 5
+<pre><code><span class="zap-comment">// no parameters, body in parentheses</span>
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-punctuation">(</span><span class="zap-number">5</span><span class="zap-punctuation">)</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span>   <span class="zap-comment">// 5</span>
 
-// 2 parameters, body in parentheses
-f = fun x y (x + y)
-\f 5 10   // 15
+<span class="zap-comment">// 2 parameters, body in parentheses</span>
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-punctuation">(</span><span class="zap-identifier">x</span> <span class="zap-operator">+</span> <span class="zap-identifier">y</span><span class="zap-punctuation">)</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">10</span>   <span class="zap-comment">// 15</span>
 
-// 2 parameters, body in indented block
-f = fun x y
-    z = x + y
-    z + 30 / z
-\f 5 10   // 3
+<span class="zap-comment">// 2 parameters, body in indented block</span>
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span>
+    <span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-identifier">x</span> <span class="zap-operator">+</span> <span class="zap-identifier">y</span>
+    <span class="zap-identifier">z</span> <span class="zap-operator">+</span> <span class="zap-number">30</span> <span class="zap-operator">/</span> <span class="zap-identifier">z</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">10</span>   <span class="zap-comment">// 3</span>
 </code></pre>
 <p>Use <code>asyncFun</code> to create an asynchronous function. The following example uses <a href="?Print-and-Debug#period"><code>period</code></a> to create a promise that resolves after <code>delay</code> milliseconds:</p>
-<pre><code>af = asyncFun delay
-    delay period await
-    print 'done'
+<pre><code><span class="zap-identifier">af</span> <span class="zap-operator">=</span> <span class="zap-keyword">asyncFun</span> <span class="zap-identifier">delay</span>
+    <span class="zap-identifier">delay</span> <span class="zap-keyword">period</span> <span class="zap-keyword">await</span>
+    <span class="zap-keyword">print</span> <span class="zap-string">'done'</span>
 
-1000 \af   // waits 1000 ms, prints 'done'
+<span class="zap-number">1000</span> <span class="zap-operator">\</span><span class="zap-identifier">af</span>   <span class="zap-comment">// waits 1000 ms, prints 'done'</span>
 </code></pre>
 <hr>
 <h4 id="proc"><code>proc</code>, <code>asyncProc</code></h4>
@@ -33,17 +33,17 @@ f = fun x y
 <hr>
 <h4 id="bracket-functions">Bracket Functions</h4>
 <p>Brackets can be used to create a (synchronous) function comprised of a single expression. Use square brackets for a <a href="#writing-functions">regular function</a> and curly brackets for a <a href="#writing-functions">procedure</a>. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>:</p>
-<pre><code>f = []        // regular function (body is empty)
-\f            // undefined
+<pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-punctuation">]</span>        <span class="zap-comment">// regular function (body is empty)</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span>            <span class="zap-comment">// undefined</span>
 
-f = [5]       // regular function
-\f            // 5 
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-number">5</span><span class="zap-punctuation">]</span>       <span class="zap-comment">// regular function</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span>            <span class="zap-comment">// 5 </span>
 
-f = [a + 5]   // regular function
-\f 10         // 15
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// regular function</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">10</span>         <span class="zap-comment">// 15</span>
 
-f = {a + b}   // procedure
-\f 10 5       // 15
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">{</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">}</span>   <span class="zap-comment">// procedure</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">10</span> <span class="zap-number">5</span>       <span class="zap-comment">// 15</span>
 </code></pre>
 <blockquote>
 <p>When bracket functions are nested, the inner function cannot see the parameters of the outer function because of the shared parameter names.</p>
@@ -51,43 +51,43 @@ f = {a + b}   // procedure
 <hr>
 <h4 id="rest">The <code>rest</code> Parameter</h4>
 <p>If the final parameter of a function is called <code>rest</code>, it collects 'the rest of the arguments' in an array:</p>
-<pre><code>f = fun x y rest
-    rest
-\f 5 6 7 8   // [7, 8]
+<pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-identifier">rest</span>
+    <span class="zap-identifier">rest</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-number">8</span>   <span class="zap-comment">// [7, 8]</span>
 
-f = fun rest
-    rest
-\f 5 6 7 8   // [5, 6, 7, 8]
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">rest</span>
+    <span class="zap-identifier">rest</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-number">8</span>   <span class="zap-comment">// [5, 6, 7, 8]</span>
 </code></pre>
 <hr>
 <h4 id="default-parameters">Default Parameters</h4>
 <p>Use <a href="?Assignment#conditional-assignment"><code>?=</code></a> to set a default parameter value — the default is used if <code>undefined</code> or <code>null</code> is passed, or if no value is passed:</p>
-<pre><code>f = fun x
-    x ?= 5
-    x + 10
+<pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">?=</span> <span class="zap-number">5</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">+</span> <span class="zap-number">10</span>
 
-\f 3   // 13
-\f     // 15  
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">3</span>   <span class="zap-comment">// 13</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span>     <span class="zap-comment">// 15  </span>
 </code></pre>
 <hr>
 <h4 id="options">The <code>ops</code> Parameter</h4>
 <p>A parameter called <code>ops</code> ('options') automatically defaults to an empty object. The assignment operator <code>&lt;-</code> is specifically for working with <code>ops</code> objects. <code>&lt;-</code> assigns a property of <code>ops</code> to a variable of the same name; the given default value is used if the property does not exist, or is <code>undefined</code> or <code>null</code>:</p>
-<pre><code>area = fun ops
-    width &lt;- 5
-    height &lt;- 10
-    width * height
+<pre><code><span class="zap-identifier">area</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">ops</span>
+    <span class="zap-identifier">width</span> <span class="zap-operator">&lt;-</span> <span class="zap-number">5</span>
+    <span class="zap-identifier">height</span> <span class="zap-operator">&lt;-</span> <span class="zap-number">10</span>
+    <span class="zap-identifier">width</span> <span class="zap-operator">*</span> <span class="zap-identifier">height</span>
 
-# width 20 height 30 \area   // 600
-# height 30 \area            // 150
-\area                        // 50
+<span class="zap-operator">#</span> <span class="zap-identifier">width</span> <span class="zap-number">20</span> <span class="zap-identifier">height</span> <span class="zap-number">30</span> <span class="zap-operator">\</span><span class="zap-identifier">area</span>   <span class="zap-comment">// 600</span>
+<span class="zap-operator">#</span> <span class="zap-identifier">height</span> <span class="zap-number">30</span> <span class="zap-operator">\</span><span class="zap-identifier">area</span>            <span class="zap-comment">// 150</span>
+<span class="zap-operator">\</span><span class="zap-identifier">area</span>                        <span class="zap-comment">// 50</span>
 </code></pre>
 <p><code>ops</code> can be used with other parameters:</p>
-<pre><code>f = fun x ops rest
-    u &lt;- 5
-    v &lt;- 6
-    @ x u v rest
+<pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-identifier">ops</span> <span class="zap-identifier">rest</span>
+    <span class="zap-identifier">u</span> <span class="zap-operator">&lt;-</span> <span class="zap-number">5</span>
+    <span class="zap-identifier">v</span> <span class="zap-operator">&lt;-</span> <span class="zap-number">6</span>
+    <span class="zap-operator">@</span> <span class="zap-identifier">x</span> <span class="zap-identifier">u</span> <span class="zap-identifier">v</span> <span class="zap-identifier">rest</span>
 
-\f 10 (# u 20) 30 40   // [10, 20, 6, [30, 40]]   
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">10</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span> <span class="zap-number">30</span> <span class="zap-number">40</span>   <span class="zap-comment">// [10, 20, 6, [30, 40]]   </span>
 </code></pre>
 <blockquote>
 <p>Except for defaulting to an empty object, there is nothing special about <code>ops</code> — it can be used and modified like any other object.</p>
@@ -101,31 +101,31 @@ f = fun rest
 <hr>
 <h4 id="scope-op"><code>scope</code>, <code>asyncScope</code></h4>
 <p>Using <code>scope</code> is equivalent to writing a <a href="#writing-functions">procedure</a> with no parameters and immediately calling it. Like all <a href="?Syntax#body-operands">body</a> operands, variables created inside the body of <code>scope</code> are local:</p>
-<pre><code>x = 5
-y = scope
-    x = 10
-    x + 20
-y   // 30
-x   // 5
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>
+<span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-keyword">scope</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">10</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">+</span> <span class="zap-number">20</span>
+<span class="zap-identifier">y</span>   <span class="zap-comment">// 30</span>
+<span class="zap-identifier">x</span>   <span class="zap-comment">// 5</span>
 </code></pre>
 <p><code>asyncScope</code> is the asynchronous version of <code>scope</code> — so <code>asyncScope</code> returns a promise rather than returning a value directly. <code>await</code> can be used in the body of <code>asyncScope</code>:</p>
-<pre><code>// waits 1000 ms, prints 5
-asyncScope
-    period 1000 await
-    print 5
+<pre><code><span class="zap-comment">// waits 1000 ms, prints 5</span>
+<span class="zap-keyword">asyncScope</span>
+    <span class="zap-keyword">period</span> <span class="zap-number">1000</span> <span class="zap-keyword">await</span>
+    <span class="zap-keyword">print</span> <span class="zap-number">5</span>
 </code></pre>
 <hr>
 <h4 id="as"><code>as</code>, <code>asyncAs</code></h4>
 <p>Like <a href="#scope-op"><code>scope</code></a> and <a href="#scope-op"><code>asyncScope</code></a>, but the <a href="?Syntax#body-operands">body</a> is preceded by an expression and a parameter that represents the value of the expression. The following example uses the <a href="?Reduce#min"><code>max</code></a> operator:</p>
-<pre><code>// array of objects
-dogs = @
-| (# name 'Alex' age 3) 
-| (# name 'Beth' age 8) 
-| (# name 'Cody' age 2)
+<pre><code><span class="zap-comment">// array of objects</span>
+<span class="zap-identifier">dogs</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Alex'</span> <span class="zap-identifier">age</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Beth'</span> <span class="zap-identifier">age</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Cody'</span> <span class="zap-identifier">age</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>
 
-// returns 'The oldest dog Beth is 8'
-dogs max [a :age] as oldest
-    + 'The oldest dog '(oldest :name)' is '(oldest :age)
+<span class="zap-comment">// returns 'The oldest dog Beth is 8'</span>
+<span class="zap-identifier">dogs</span> <span class="zap-keyword">max</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span><span class="zap-punctuation">]</span> <span class="zap-keyword">as</span> <span class="zap-identifier">oldest</span>
+    <span class="zap-operator">+</span> <span class="zap-string">'The oldest dog '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' is '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span><span class="zap-punctuation">)</span>
 </code></pre>
 <blockquote>
 <p>The parameter of <code>as</code> can be <a href="#options"><code>ops</code></a>, but not <a href="#rest"><code>rest</code></a>.</p>
@@ -133,27 +133,26 @@ dogs max [a :age] as oldest
 <hr>
 <h4 id="generator-functions">Generator Functions</h4>
 <p>If <code>yield</code> or <code>yieldFrom</code> are used inside the body of <a href="#fun"><code>fun</code></a> (or <a href="#fun"><code>asyncFun</code></a>), a generator function (or asynchronous generator function) is created:</p>
-<pre><code>f = fun
-    yield 5
-    yield 10   // generator function
+<pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-keyword">yield</span> <span class="zap-number">5</span>
+    <span class="zap-keyword">yield</span> <span class="zap-number">10</span>   <span class="zap-comment">// generator function</span>
 
-g = \f         // generator
-g ~next        // {value: 5, done: false}
+<span class="zap-identifier">g</span> <span class="zap-operator">=</span> <span class="zap-operator">\</span><span class="zap-identifier">f</span>         <span class="zap-comment">// generator</span>
+<span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>        <span class="zap-comment">// {value: 5, done: false}</span>
 </code></pre>
 <p>A <a href="#writing-functions">procedure</a> cannot be a generator function:</p>
-<pre><code>proc
-    yield 5   // syntax error, invalid use of yield
+<pre><code><span class="zap-keyword">proc</span>
+    <span class="zap-keyword">yield</span> <span class="zap-number">5</span>   <span class="zap-comment">// syntax error, invalid use of yield</span>
 </code></pre>
 <p><code>yield</code> and <code>yieldFrom</code> <em>can</em> be used inside <a href="#scope-op"><code>scope</code></a>, <a href="#scope-op"><code>asyncScope</code></a>, <a href="#as"><code>as</code></a> and <a href="#as"><code>asyncAs</code></a>:</p>
-<pre><code>g = scope
-    yield 5
-    yield 10   // generator
+<pre><code><span class="zap-identifier">g</span> <span class="zap-operator">=</span> <span class="zap-keyword">scope</span>
+    <span class="zap-keyword">yield</span> <span class="zap-number">5</span>
+    <span class="zap-keyword">yield</span> <span class="zap-number">10</span>   <span class="zap-comment">// generator</span>
 
-g ~next        // {value: 5, done: false}
+<span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>        <span class="zap-comment">// {value: 5, done: false}</span>
 </code></pre>
 <blockquote>
 <p>When <code>yield</code> or <code>yieldFrom</code> are used in <a href="#scope-op"><code>scope</code></a>, <a href="#scope-op"><code>asyncScope</code></a>, <a href="#as"><code>as</code></a> or <a href="#as"><code>asyncAs</code></a>, the operator will behave like a <a href="#writing-functions">regular function</a> rather than a <a href="#writing-functions">procedure</a> — in particular, the body will have its own <code>this</code>.</p>
 </blockquote>
-
 
 <br><br><br>

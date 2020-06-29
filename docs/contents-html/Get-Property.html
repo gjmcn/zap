@@ -2,99 +2,98 @@
 <hr>
 <h4 id="colon-getter"><code>:</code></h4>
 <p><code>:</code> gets an object/array property or a character from a string. <code>:</code> uses the <a href="?Syntax#right-operand-rule">right operand rule</a> and the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
-<pre><code>circle = #
-| radius 50
-| center (@ 100 200)
-| color 'red'
+<pre><code><span class="zap-identifier">circle</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">radius</span> <span class="zap-number">50</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">center</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">100</span> <span class="zap-number">200</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">color</span> <span class="zap-string">'red'</span>
 
-r = 'radius'
+<span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-string">'radius'</span>
 
-circle :radius            // 50
-:radius circle            // 50
-circle :(r)               // 50
-circle :('rad' + 'ius')   // 50
-circle :center :1         // 200   
-circle :color :2          // 'd'
+<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">radius</span>            <span class="zap-comment">// 50</span>
+<span class="zap-operator">:</span><span class="zap-identifier">radius</span> <span class="zap-identifier">circle</span>            <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-punctuation">(</span><span class="zap-identifier">r</span><span class="zap-punctuation">)</span>               <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">center</span> <span class="zap-operator">:</span><span class="zap-number">1</span>         <span class="zap-comment">// 200   </span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">color</span> <span class="zap-operator">:</span><span class="zap-number">2</span>          <span class="zap-comment">// 'd'</span>
 </code></pre>
 <hr>
 <h4 id="colon-proto-getter"><code>::</code></h4>
 <p>As <a href="#colon-getter"><code>:</code></a>, but <code>::</code> gets a property from the object's prototype:</p>
-<pre><code>Array :prototype :slice   // function
-Array ::slice             // same function
+<pre><code><span class="zap-identifier">Array</span> <span class="zap-operator">:</span><span class="zap-identifier">prototype</span> <span class="zap-operator">:</span><span class="zap-identifier">slice</span>   <span class="zap-comment">// function</span>
+<span class="zap-identifier">Array</span> <span class="zap-operator">::</span><span class="zap-identifier">slice</span>             <span class="zap-comment">// same function</span>
 </code></pre>
 <hr>
 <h4 id="conditional-get"><code>?:</code></h4>
 <p>As <a href="#colon-getter"><code>:</code></a>, but <code>?:</code> short-circuits and returns <code>undefined</code> if the object is <code>null</code> or <code>undefined</code>:</p>
-<pre><code>o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span> <span class="zap-identifier">y</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// {u: 5, v: {x: 10, y: 20}}</span>
 
-o :q       // undefined
-o :q :y    // TypeError: Cannot read property 'y' of undefined
-o :q ?:y   // undefined
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">q</span>       <span class="zap-comment">// undefined</span>
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">q</span> <span class="zap-operator">:</span><span class="zap-identifier">y</span>    <span class="zap-comment">// TypeError: Cannot read property 'y' of undefined</span>
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">q</span> <span class="zap-operator">?:</span><span class="zap-identifier">y</span>   <span class="zap-comment">// undefined</span>
 </code></pre>
 <hr>
 <h4 id="comma-getter"><code>,</code></h4>
 <p>As <a href="#colon-getter"><code>:</code></a>, but <code>,</code> does not use the <a href="?Syntax#right-operand-rule">right operand rule</a> or the <a href="?Syntax#identifier-name-rule">identifier-name rule</a>:</p>
-<pre><code>circle = #
-| radius 50
-| center (@ 100 200)
-| color 'red'
+<pre><code><span class="zap-identifier">circle</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">radius</span> <span class="zap-number">50</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">center</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">100</span> <span class="zap-number">200</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">color</span> <span class="zap-string">'red'</span>
 
-r = 'radius'
+<span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-string">'radius'</span>
 
-circle , 'radius'          // 50
-circle , r                 // 50
-circle , ('rad' + 'ius')   // 50
-circle , 'center' , 1      // 200   
-circle , 'color' , 2       // 'd'
+<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'radius'</span>          <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-identifier">r</span>                 <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'center'</span> <span class="zap-operator">,</span> <span class="zap-number">1</span>      <span class="zap-comment">// 200   </span>
+<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'color'</span> <span class="zap-operator">,</span> <span class="zap-number">2</span>       <span class="zap-comment">// 'd'</span>
 </code></pre>
 <hr>
 <h4 id="at"><code>at</code></h4>
 <p><code>at</code> can get multiple properties or characters — the second operand of <code>at</code> must be an iterable.</p>
 <p><code>at</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>at</code> returns an array.</p>
-<pre><code>// array of objects
-data = @
-| (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
-| (# Name 'dodge rampage' Horsepower 84 Origin 'USA')
-| (# Name 'ford ranger'   Horsepower 79 Origin 'USA')
+<pre><code><span class="zap-comment">// array of objects</span>
+<span class="zap-identifier">data</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">Name</span> <span class="zap-string">'vw pickup'</span>     <span class="zap-identifier">Horsepower</span> <span class="zap-number">52</span> <span class="zap-identifier">Origin</span> <span class="zap-string">'Europe'</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">Name</span> <span class="zap-string">'dodge rampage'</span> <span class="zap-identifier">Horsepower</span> <span class="zap-number">84</span> <span class="zap-identifier">Origin</span> <span class="zap-string">'USA'</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">Name</span> <span class="zap-string">'ford ranger'</span>   <span class="zap-identifier">Horsepower</span> <span class="zap-number">79</span> <span class="zap-identifier">Origin</span> <span class="zap-string">'USA'</span><span class="zap-punctuation">)</span>
 
-data at (@ 2 0)
-    // [
-    //   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}
-    //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
-    // ]
+<span class="zap-identifier">data</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">0</span><span class="zap-punctuation">)</span>
+    <span class="zap-comment">// [</span>
+    <span class="zap-comment">//   {Name: 'ford ranger', Horsepower: 79, Origin: 'USA'}</span>
+    <span class="zap-comment">//   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}</span>
+    <span class="zap-comment">// ]</span>
 
-data :2 at (@ 'Name' 'Origin')
-    // {Name: 'ford ranger', Origin: 'USA'}
+<span class="zap-identifier">data</span> <span class="zap-operator">:</span><span class="zap-number">2</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'Name'</span> <span class="zap-string">'Origin'</span><span class="zap-punctuation">)</span>
+    <span class="zap-comment">// {Name: 'ford ranger', Origin: 'USA'}</span>
 
-data :0 :Origin at (@ 1 3)   // 'uo'
+<span class="zap-identifier">data</span> <span class="zap-operator">:</span><span class="zap-number">0</span> <span class="zap-operator">:</span><span class="zap-identifier">Origin</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 'uo'</span>
 </code></pre>
 <p>The second operand of <code>at</code> can be any iterable. For example, a string or a <a href="?Ranges">range</a>:</p>
-<pre><code># u 5 v 6 w 7 at 'uw'        // {u: 5, w 7}
-'abcdefghij' at (1 to 9 2)   // 'bdfhj'
+<pre><code><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-keyword">at</span> <span class="zap-string">'uw'</span>        <span class="zap-comment">// {u: 5, w 7}</span>
+<span class="zap-string">'abcdefghij'</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">9</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 'bdfhj'</span>
 </code></pre>
 <hr>
 <h4 id="getter"><code>getter</code></h4>
 <p>Use a custom getter function for a property:</p>
-<pre><code>o = # celsius 10
-o 'fahrenheit' getter [this :celsius * 1.8 + 32]
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">celsius</span> <span class="zap-number">10</span>
+<span class="zap-identifier">o</span> <span class="zap-string">'fahrenheit'</span> <span class="zap-keyword">getter</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span> <span class="zap-operator">*</span> <span class="zap-number">1.8</span> <span class="zap-operator">+</span> <span class="zap-number">32</span><span class="zap-punctuation">]</span>
 
-o :fahrenheit     // 50
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">fahrenheit</span>     <span class="zap-comment">// 50</span>
 
-o :celsius = 20   // 20 (set celsius property to 20)
-o :fahrenheit     // 68
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span> <span class="zap-operator">=</span> <span class="zap-number">20</span>   <span class="zap-comment">// 20 (set celsius property to 20)</span>
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">fahrenheit</span>     <span class="zap-comment">// 68</span>
 </code></pre>
 <p>In general:</p>
-<pre><code>o 'x' getter f
+<pre><code><span class="zap-identifier">o</span> <span class="zap-string">'x'</span> <span class="zap-keyword">getter</span> <span class="zap-identifier">f</span>
 </code></pre>
 <p>is equivalent to:</p>
-<pre><code>Object ~defineProperty o 'x'
-    #
-    | get f
-    | configurable true
-    | enumerable true
+<pre><code><span class="zap-identifier">Object</span> <span class="zap-operator">~</span><span class="zap-identifier">defineProperty</span> <span class="zap-identifier">o</span> <span class="zap-string">'x'</span>
+    <span class="zap-operator">#</span>
+    <span class="zap-punctuation">|</span> <span class="zap-identifier">get</span> <span class="zap-identifier">f</span>
+    <span class="zap-punctuation">|</span> <span class="zap-identifier">configurable</span> <span class="zap-literal">true</span>
+    <span class="zap-punctuation">|</span> <span class="zap-identifier">enumerable</span> <span class="zap-literal">true</span>
 </code></pre>
 <p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a> for details.</p>
 <p><code>getter</code> returns the modified object.</p>
-
 
 <br><br><br>

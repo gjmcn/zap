@@ -2,8 +2,6 @@
 
   'use strict';
 
-  const indexHighlight = require('./index-highlight.js');
-
   const panel = document.getElementById('panel');
 
   // current content file and anchor
@@ -54,16 +52,9 @@
         sidebarLink.scrollIntoView();
       }
 
-      // load content and highlight code
-      const content = await fetch(`contents-html/${filename}.html`)
+      // load content
+      panel.innerHTML = await fetch(`contents-html/${filename}.html`)
         .then(response => response.text());
-      panel.innerHTML = content;
-      const preCodes = document.querySelectorAll('pre > code');
-      for (let elm of preCodes) {
-        if (!elm.classList.contains('no-highlight')) {
-          elm.innerHTML = indexHighlight(elm.innerText);  // innerText so e.g. '<' not '&lt;'
-        }
-      }
 
       // internal links to different 'page'
       for (let elm of panel.querySelectorAll('a')) {

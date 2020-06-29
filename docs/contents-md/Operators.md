@@ -51,23 +51,23 @@ The operators `&&`, `||`, `??`, `?`, `<-`, `?=` and `?:` use short-circuit evalu
 
 These operators behave the same as their JavaScript counterparts except that:
 
-  * `delete` takes two operands: an object and a property name:
+* `delete` takes two operands: an object and a property name:
 
-    ```
-    o = # u 5 v 6
-    o delete 'u'    // true
-    o               // {v: 6}
-    ```
+```{.indent}
+o = # u 5 v 6
+o delete 'u'    // true
+o               // {v: 6}
+```
   
-  * The operands of `new` are a constructor and arguments to pass to the constructor (the constructor is not called explicitly):
+* The operands of `new` are a constructor and arguments to pass to the constructor (the constructor is not called explicitly):
 
-    ```
-    new Date           // current local date and time
-    new Date '2050'    // 01 January 2050, 00:00:00
-    new Date 2050 11   // 01 December, 2050, 00:00:00
-    ```
+```{.indent}
+new Date           // current local date and time
+new Date '2050'    // 01 January 2050, 00:00:00
+new Date 2050 11   // 01 December, 2050, 00:00:00
+```
 
-  * JavaScript's `yield*` is called `yieldFrom` in Zap.
+* JavaScript's `yield*` is called `yieldFrom` in Zap.
 
 ---
 

@@ -6,68 +6,67 @@
 <hr>
 <h4 id="standard-assignment"><code>=</code></h4>
 <p>Standard assignment:</p>
-<pre><code>x = 5   // 5
-x       // 5
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>   <span class="zap-comment">// 5</span>
+<span class="zap-identifier">x</span>       <span class="zap-comment">// 5</span>
 </code></pre>
 <hr>
 <h4 id="non-local"><code>\=</code></h4>
 <p>Assign, but do not trigger the creation of a local variable (see <a href="#local-variables">Local Variables</a>):</p>
-<pre><code>x = 5         // 5
-scope
-    x         // 5
-    x \= 10   // 10
-    x         // 10
-x             // 10
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>         <span class="zap-comment">// 5</span>
+<span class="zap-keyword">scope</span>
+    <span class="zap-identifier">x</span>         <span class="zap-comment">// 5</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">\=</span> <span class="zap-number">10</span>   <span class="zap-comment">// 10</span>
+    <span class="zap-identifier">x</span>         <span class="zap-comment">// 10</span>
+<span class="zap-identifier">x</span>             <span class="zap-comment">// 10</span>
 </code></pre>
 <hr>
 <h4 id="update-assignment"><code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code></h4>
 <p>Update-assignment:</p>
-<pre><code>x = 5     // 5
-x += 10   // 15
-x         // 15
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>     <span class="zap-comment">// 5</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">+=</span> <span class="zap-number">10</span>   <span class="zap-comment">// 15</span>
+<span class="zap-identifier">x</span>         <span class="zap-comment">// 15</span>
 </code></pre>
 <hr>
 <h4 id="conditional-assignment"><code>?=</code></h4>
 <p>Use <code>?=</code> for <em>conditional assignment</em>: if the variable (the first operand) is currently <code>undefined</code> or <code>null</code>, the second operand is evaluated and the result is assigned to the variable. If the variable <em>is not</em> currently <code>undefined</code> or <code>null</code>, the variable is assigned its current value and the second operand is not evaluated (short-circuit evaluation):</p>
-<pre><code>x = null
-x ?= 5    // 5 (x is 5)
-x ?= 10   // 5 (x is 5)
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-literal">null</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">?=</span> <span class="zap-number">5</span>    <span class="zap-comment">// 5 (x is 5)</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">?=</span> <span class="zap-number">10</span>   <span class="zap-comment">// 5 (x is 5)</span>
 </code></pre>
 <hr>
 <h4 id="destructure-object"><code>#=</code></h4>
 <p>Destructure an object:</p>
-<pre><code>o = # h 5 i 6 j 7
-h j z #= o   // returns o, h is 5, j is 7, z is undefined
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">h</span> <span class="zap-number">5</span> <span class="zap-identifier">i</span> <span class="zap-number">6</span> <span class="zap-identifier">j</span> <span class="zap-number">7</span>
+<span class="zap-identifier">h</span> <span class="zap-identifier">j</span> <span class="zap-identifier">z</span> <span class="zap-operator">#=</span> <span class="zap-identifier">o</span>   <span class="zap-comment">// returns o, h is 5, j is 7, z is undefined</span>
 </code></pre>
 <hr>
 <h4 id="destructure-iterable"><code>@=</code></h4>
 <p>Destructure an iterable:</p>
-<pre><code>x = @ 5 6 7
-u v @= x       // returns x, u is 5, v is 6
-u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>
+<span class="zap-identifier">u</span> <span class="zap-identifier">v</span> <span class="zap-operator">@=</span> <span class="zap-identifier">x</span>       <span class="zap-comment">// returns x, u is 5, v is 6</span>
+<span class="zap-identifier">u</span> <span class="zap-identifier">v</span> <span class="zap-identifier">w</span> <span class="zap-identifier">z</span> <span class="zap-operator">@=</span> <span class="zap-identifier">x</span>   <span class="zap-comment">// returns x, u is 5, v is 6, w is 7, z is undefined</span>
 </code></pre>
 <hr>
 <h4 id="local-variables">Local Variables</h4>
 <p>Assignment triggers the creation of a local variable. The variable is created at the start of the current <a href="?Syntax#body-operands">body</a> (or start of the file if not inside a body), and has the value <code>undefined</code> until it is assigned to. The following example uses the <a href="?Writing-Functions#scope-op"><code>scope</code></a> operator:</p>
-<pre><code>x = 5        // 5 (outer x)
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>        <span class="zap-comment">// 5 (outer x)</span>
 
-scope
-    x        // 5 (outer x)
+<span class="zap-keyword">scope</span>
+    <span class="zap-identifier">x</span>        <span class="zap-comment">// 5 (outer x)</span>
 
-// assign to x in the body of scope so a local x is created
-scope
-    x        // undefined (local x)
-    x = 10   // 10 (local x)
-    x        // 10 (local x)
+<span class="zap-comment">// assign to x in the body of scope so a local x is created</span>
+<span class="zap-keyword">scope</span>
+    <span class="zap-identifier">x</span>        <span class="zap-comment">// undefined (local x)</span>
+    <span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">10</span>   <span class="zap-comment">// 10 (local x)</span>
+    <span class="zap-identifier">x</span>        <span class="zap-comment">// 10 (local x)</span>
 
-x            // 5 (outer x)
+<span class="zap-identifier">x</span>            <span class="zap-comment">// 5 (outer x)</span>
 </code></pre>
 <p>Variables created outside of a body are <em>not</em> global — they are not visible to other files. <a href="?Set-Property">Set a property</a> of the global object to create a global variable:</p>
-<pre><code>globalThis :x = 5   // works in any JavaScript environment
-window :y = 6       // works in browsers
-global :z = 7       // works in Node.js
+<pre><code><span class="zap-identifier">globalThis</span> <span class="zap-operator">:</span><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>   <span class="zap-comment">// works in any JavaScript environment</span>
+<span class="zap-identifier">window</span> <span class="zap-operator">:</span><span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-number">6</span>       <span class="zap-comment">// works in browsers</span>
+<span class="zap-identifier">global</span> <span class="zap-operator">:</span><span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-number">7</span>       <span class="zap-comment">// works in Node.js</span>
 </code></pre>
 <p>Only <a href="#standard-assignment"><code>=</code></a>, <a href="#destructure-object"><code>#=</code></a>, <a href="#destructure-iterable"><code>@=</code></a> and <a href="?Writing-Functions#options"><code>&lt;-</code></a> (discussed in <a href="?Writing-Functions">Writing Functions</a>) trigger the creation of local variables. The other assignment operators change the value of an existing variable.</p>
-
 
 <br><br><br>

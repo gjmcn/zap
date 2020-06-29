@@ -1,19 +1,16 @@
 <h2>Use</h2>
 <hr>
 <h4>Install</h4>
-<pre><code class="no-highlight">npm install --save '@gjmcn/zap'
-</code></pre>
+<pre><code>npm install --save '@gjmcn/zap'</code></pre>
 <h4>Load</h4>
 <ul>
 <li>
 <p>CommonJS:</p>
-<pre><code class="no-highlight">const zap = require('@gjmcn/zap');
-</code></pre>
+<pre><code>const zap = require('@gjmcn/zap');</code></pre>
 </li>
 <li>
 <p>ES module:</p>
-<pre><code class="no-highlight">import zap from '@gjmcn/zap';
-</code></pre>
+<pre><code>import zap from '@gjmcn/zap';</code></pre>
 </li>
 <li>
 <p>UMD: <code>dist/zap.umd.js</code>. This can be loaded with a <code>&lt;script&gt;</code> tag and will create a global <code>zap</code> function.</p>
@@ -64,17 +61,13 @@
 <p>The command line app and the REPL are currently very basic with limited functionality.</p>
 </blockquote>
 <p>Zap can be installed as a command line app:</p>
-<pre><code class="no-highlight">npm install -g @gjmcn/zap
-</code></pre>
+<pre><code>npm install -g @gjmcn/zap</code></pre>
 <p>Use <code>zap</code> with no arguments to start an interactive Zap REPL:</p>
-<pre><code class="no-highlight">zap
-</code></pre>
+<pre><code>zap</code></pre>
 <p>Pass a file path to compile a file. For example, to compile the file <code>index.za</code> to <code>index.js</code> (in the same directory):</p>
-<pre><code class="no-highlight">zap index.za
-</code></pre>
+<pre><code>zap index.za</code></pre>
 <p>Use:</p>
-<pre><code class="no-highlight">zap --help
-</code></pre>
+<pre><code>zap --help</code></pre>
 <p>to print the command-line options:</p>
 <table class="table table-sm w600">
 <thead>
@@ -172,6 +165,5 @@
 <h4>Code Editors</h4>
 <h5><a href="https://code.visualstudio.com/">VS Code</a></h5>
 <p>Use the <a href="https://github.com/gjmcn/zap-highlight-vscode">Zap Highlight</a> extension for syntax highlighting. Given the flexibility of operator positioning in Zap, and that only operators 'do things' (functions are called with operators and there are no keywords), a theme that highlights operators differently to all other language elements can help readability. The included <em>Solarized Dark</em> theme and the <em>One Dark Pro</em> extension theme are good examples of this.</p>
-
 
 <br><br><br>

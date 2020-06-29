@@ -1,11 +1,11 @@
 <h2>Elementwise</h2>
 <hr>
 <p>Elementwise operators take a single operand. If the operand is a non-string iterable, the operator acts on each element independently and returns the results as an array. Otherwise, the operator acts on the operand directly and returns the result:</p>
-<pre><code>4 sqrt        // 2
-@ 9 16 sqrt   // [3, 4]
+<pre><code><span class="zap-number">4</span> <span class="zap-keyword">sqrt</span>        <span class="zap-comment">// 2</span>
+<span class="zap-operator">@</span> <span class="zap-number">9</span> <span class="zap-number">16</span> <span class="zap-keyword">sqrt</span>   <span class="zap-comment">// [3, 4]</span>
 
-'ab' toUpperCase          // 'AB'
-@ 'cd' 'ef' toUpperCase   // ['CD', 'EF']
+<span class="zap-string">'ab'</span> <span class="zap-keyword">toUpperCase</span>          <span class="zap-comment">// 'AB'</span>
+<span class="zap-operator">@</span> <span class="zap-string">'cd'</span> <span class="zap-string">'ef'</span> <span class="zap-keyword">toUpperCase</span>   <span class="zap-comment">// ['CD', 'EF']</span>
 </code></pre>
 <hr>
 <h4 id="ew-math">Math</h4>
@@ -83,6 +83,5 @@
 <blockquote>
 <p><code>toLowerCase</code>, <code>toUpperCase</code>, <code>trim</code>, <code>trimEnd</code> and <code>trimStart</code> convert values to strings.</p>
 </blockquote>
-
 
 <br><br><br>
