@@ -1,3 +1,3 @@
-Zap is a high-level language with a simple, flexible syntax. Zap compiles to JavaScript and can use JavaScript's built-in objects. JavaScript libraries can be used in Zap and vice-versa.
+Zap is a compile-to-JavaScript language with a clean, concise syntax and powerful high-level operators. Zap can use JavaScript objects and libraries, and vice-versa.
 
 See [the docs](https://gjmcn.github.io/zap) for more details.
