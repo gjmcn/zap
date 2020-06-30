@@ -20,8 +20,6 @@ The following terms are used in this section to describe the elements associated
 
   * element &#8594; element; where relevant, the operator returns the element.
 
-> Since many DOM operators can take a CSS selector string, the [`select`](#select) and [`selectAll`](#select-all) operators are not used as frequently as might be expected.
-
 > The DOM operators are loosely based on [d3-selection](https://github.com/d3/d3-selection). In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the [`encode`](#encode) operator to map data to elements rather than D3's _enter-update-exit_ approach. Currently, `encode` cannot map data to existing elements; this functionality will be added in a future version. 
 
 ---
@@ -38,6 +36,8 @@ elmA select 'p'          // first <p> in element elmA
 @ elmA elmB select 'p'   // first <p> in element elmA 
 '.news' select 'p'       // first <p> in first element with class 'news'
 ```
+
+Since many DOM operators can take a CSS selector string, `select` and [`selectAll`](#select-all) are not used as frequently as might be expected.
 
 ---
 

@@ -26,9 +26,6 @@
 </li>
 </ul>
 <blockquote>
-<p>Since many DOM operators can take a CSS selector string, the <a href="#select"><code>select</code></a> and <a href="#select-all"><code>selectAll</code></a> operators are not used as frequently as might be expected.</p>
-</blockquote>
-<blockquote>
 <p>The DOM operators are loosely based on <a href="https://github.com/d3/d3-selection">d3-selection</a>. In particular, data can be encoded as (and is automatically attached to) elements. Zap uses the <a href="#encode"><code>encode</code></a> operator to map data to elements rather than D3's <em>enter-update-exit</em> approach. Currently, <code>encode</code> cannot map data to existing elements; this functionality will be added in a future version.</p>
 </blockquote>
 <hr>
@@ -41,6 +38,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 <span class="zap-operator">@</span> <span class="zap-identifier">elmA</span> <span class="zap-identifier">elmB</span> <span class="zap-keyword">select</span> <span class="zap-string">'p'</span>   <span class="zap-comment">// first &lt;p&gt; in element elmA </span>
 <span class="zap-string">'.news'</span> <span class="zap-keyword">select</span> <span class="zap-string">'p'</span>       <span class="zap-comment">// first &lt;p&gt; in first element with class 'news'</span>
 </code></pre>
+<p>Since many DOM operators can take a CSS selector string, <code>select</code> and <a href="#select-all"><code>selectAll</code></a> are not used as frequently as might be expected.</p>
 <hr>
 <h4 id="select-all"><code>selectAll</code></h4>
 <p>As <a href="#select"><code>select</code></a>, but <code>selectAll</code> returns all of the matching elements as an array — an empty array if there are no matching elements.</p>
