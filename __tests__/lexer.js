@@ -2,13 +2,14 @@ const zap = require('../dist/zap.cjs');
 const each = require('jest-each').default;
 
 const zapOptions = {tokens: true, js: false};
+const fail = Symbol('fail');
 
 function tokens(zapCode) {
   try {
     return zap(zapCode, zapOptions).tokens;
   }
-  catch (err) {  // return error (if throw, jest output includes entire zap.cjs)
-    return err;
+  catch (err) {  // if throw, jest output includes entire zap.cjs
+    return fail;
   }
 }
 
@@ -25,7 +26,12 @@ function isValidToken(zapCode) {
 
 function lexerTestEach(type, arr) {
   each(arr).test(`${type}: %s`, value => {
-    expect(tokens(value)).toStrictEqual([{type, value, line: 1, column: 0}]);
+    const tkns = tokens(value);
+    expect({
+      type: tkns[0].type,
+      value: tkns[0].value,
+      n: tkns.length
+    }).toStrictEqual({type, value, n: 1});
   });
 }
 
@@ -64,9 +70,9 @@ lexerTestEach('openParentheses', [
   '('
 ]);
 
-// function
+// (bracket) function
 lexerTestEach('function', [
-  '[', '{', '[**', '{**'
+  '[', '{'
 ]);
 
 // closeBracket
@@ -74,108 +80,109 @@ lexerTestEach('closeBracket', [
   ')', ']', '}'
 ]);
 
-// closeSubexpr
-lexerTestEach('closeSubexpr', [
-  ';'
-]);
-
-// spreadOrRest
-lexerTestEach('spreadOrRest', [
-  '...'
-]);
-
-// arrow
-lexerTestEach('arrow', [
-  '->', '=>'
-]);
-
 // operator
 lexerTestEach('operator', [
-  '~', '+', '-', '*', '/', '%', '^',
+  '+', '-', '*', '/', '%', '^',
   '<>', '><', '&&', '||', '??', '?', '!',
   '<', '<=', '>', '>=', '==', '!=',
-  '=', '\\=', '?=', '+=', '-=', '*=', '/=', '%=', '^=', '#=', '@=', '=:',
-  ':', '\\:', '?:', '+:', '-:', '*:', '/:', '%:', '^:', '::',
-  '\\', '<\\', '|', '<|', '?|', '#', '##', '@', '@@', '>>', '>>>'
+  '=', '\\=', '<-', '?=', '+=', '-=', '*=', '/=', '%=', '^=', '#=', '@=',
+  ',', ':', '::', '?:',
+  '\\', '<\\', '~', '<~',
+  '#', '##', '@', '@@'
 ]);
 
-// bactick-operator
+// backtick - preTick
 each(['`+', '`-', '`*', '`/', '`%', '`^'])
   .test('backtick-operator: %s', value => {
-  expect(tokens(value)).toStrictEqual([
-    {type: 'operator', value: value.slice(1), line: 1, column: 0,
-     preTick: true}
-  ]);
-});
+    const tkns = tokens(value);
+    expect([tkns[0].type, tkns[0].value, tkns[0].preTick, tkns[0].postTick,
+        tkns.length])
+      .toStrictEqual(['operator', value.slice(1), true, undefined, 1]);
+  });
+
+// backtick - postTick
 each(['&&`', '||`', '??`', '<`', '<=`'])
   .test('backtick-operator: %s', value => {
-  expect(tokens(value)).toStrictEqual([
-    {type: 'operator', value: value.slice(0, -1), line: 1, column: 0,
-     postTick: true}
-  ]);
-});
+    const tkns = tokens(value);
+    expect([tkns[0].type, tkns[0].value, tkns[0].preTick, tkns[0].postTick,
+        tkns.length])
+      .toStrictEqual(['operator', value.slice(0, -1), undefined, true, 1]);
+  });
+
+// backtick - preTick and postTick
 each(['`>`', '`>=`', '`==`', '`!=`', '`<>`', '`><`'])
   .test('backtick-operator: %s', value => {
-  expect(tokens(value)).toStrictEqual([
-    {type: 'operator', value: value.slice(1, -1), line: 1, column: 0,
-     preTick: true, postTick: true}
-  ]);
-});
+    const tkns = tokens(value);
+    expect([tkns[0].type, tkns[0].value, tkns[0].preTick, tkns[0].postTick,
+        tkns.length])
+      .toStrictEqual(['operator', value.slice(1, -1), true, true, 1]);
+  });
 
 // word operator (not exhaustive)
 lexerTestEach('operator', [
-  '$if', '$array', '$sin', '$binCount', '$pick', '$div', '$svg'
+  'if', 'array', 'sin', 'binCount', 'select', '$div', '$svg'
 ]);
 
 // multiple tokens
 each([
-  ['x = 5;',
-    ['identifier', 'operator', 'number', 'closeSubexpr']],
+  ['x = 5',
+    ['identifier', 'operator', 'number']],
+
   ['@ 5 6 7 `+ y',
     ['operator', 'number', 'number', 'number', 'operator', 'identifier']],
+
   ["'ab' + (x + 'cde') :length",
     ['string', 'operator', 'openParentheses', 'identifier', 'operator',
      'string', 'closeBracket', 'operator', 'identifier']],
-  ['\\["abc" |slice 1 |toUpperCase] $print',
+
+  ['\\["abc" ~slice 1 toUpperCase] print',
     ['operator', 'function', 'string', 'operator', 'identifier', 'number',
-     'operator', 'identifier', 'closeBracket', 'operator']],
-  ["'hi' $print; # u 5; // blah\nf = {5}",
-    ['string', 'operator', 'closeSubexpr', 'operator', 'identifier', 'number',
-     'closeSubexpr', 'identifier', 'operator', 'function', 'number',
-     'closeBracket']],
-  ['//import and export\n$import "my-mod.js" add;\n$export add10;\nadd10 = [a \\add 10];',
-    ['operator', 'string', 'identifier', 'closeSubexpr', 'operator',
-     'identifier', 'closeSubexpr', 'identifier', 'operator', 'function',
-     'identifier', 'operator', 'identifier', 'number', 'closeBracket',
-     'closeSubexpr']],
-  ['[*** false 6] ',
-    ['function', 'operator', 'identifier', 'number', 'closeBracket']],
+     'operator', 'closeBracket', 'operator']],
+
+  [`
+'hi' print
+# u 5 // blah
+f = {5}
+`,
+    ['newline', 'string', 'operator', 'newline', 'operator', 'identifier',
+     'number', 'newline', 'identifier', 'operator', 'function', 'number',
+     'closeBracket', 'newline']],
+
+  [
+`//import and export
+import "my-mod.js" add
+export add10
+add10 = [a \\add 10]`,
+    ['newline', 'operator', 'string', 'identifier', 'newline', 'operator',
+     'identifier', 'newline', 'identifier', 'operator', 'function',
+     'identifier', 'operator', 'identifier', 'number', 'closeBracket']],
+
   ['5 &&&/abc/',
     ['number', 'operator', 'regexp']],
+
   ['5 3 -//blah',
     ['number', 'number', 'operator']],
-  ['[x ->- x 3]',
-    ['function', 'identifier', 'arrow','operator', 'identifier', 'number',
+
+  ['f = fun x $_yz (x ^ $_yz)',
+    ['identifier', 'operator', 'operator', 'identifier', 'identifier',
+     'openParentheses', 'identifier', 'operator', 'identifier',
      'closeBracket']],
-  ['f = [x $_yz => x ^ $_yz]',
-    ['identifier', 'operator', 'function', 'identifier', 'identifier', 'arrow',
-     'identifier', 'operator', 'identifier', 'closeBracket']],
-  ['\\{** abc -> @@ abc :size} true |next',
-    ['operator', 'function', 'identifier', 'arrow', 'operator', 'identifier',
-     'operator', 'identifier', 'closeBracket', 'identifier', 'operator',
-     'identifier']],
-  ['5"abc"false+$toUpperCase!',
+ 
+  ['5"abc"false+toUpperCase!',
     ['number', 'string', 'identifier', 'operator', 'operator', 'operator']]
+
 ]).test('multiple tokens, %s', (value, result) => {
     expect(tokens(value).map(obj => obj.type)).toStrictEqual(result);
   });
 
 // invalid
 each([
-  '&//', '&//g', '+-', '-/',
-  '-->', '==>', '=+', '&&!',
-  '..', '....',
-  '"ab', "'ab", 'ab"', "ab'"
+  '&//', '&//g',
+  '+-', '-/', '=+', '&&!',
+  '->', '-->', '=>', '==>',
+  '..', '...', '....',
+  '"ab', "'ab", 'ab"', "ab'",
+  ';'
 ]).test('invalid, %s', value => {
   expect(isValidToken(value)).toBe(false);
 });
