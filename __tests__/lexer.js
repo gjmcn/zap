@@ -1,22 +1,11 @@
 const zap = require('../dist/zap.cjs');
 const each = require('jest-each').default;
-
-const zapOptions = {tokens: true, js: false};
-const fail = Symbol('fail');
-
-function tokens(zapCode) {
-  try {
-    return zap(zapCode, zapOptions).tokens;
-  }
-  catch (err) {  // if throw, jest output includes entire zap.cjs
-    return fail;
-  }
-}
+const tokens = require('./test-helpers.js').tokens;
 
 function isValidToken(zapCode) {
   try {
-    const tkns = zap(zapCode, zapOptions).tokens;
-    if (tkns.length !== 1) throw '';
+    const tkns = zap(zapCode, {tokens: true, js: false}).tokens;
+    if (tkns.length !== 1) return false;
     return true;
   }
   catch (err) {
@@ -126,18 +115,22 @@ lexerTestEach('operator', [
 // multiple tokens
 each([
   ['x = 5',
-    ['identifier', 'operator', 'number']],
+    ['identifier', 'operator', 'number']
+  ],
 
   ['@ 5 6 7 `+ y',
-    ['operator', 'number', 'number', 'number', 'operator', 'identifier']],
+    ['operator', 'number', 'number', 'number', 'operator', 'identifier']
+  ],
 
   ["'ab' + (x + 'cde') :length",
     ['string', 'operator', 'openParentheses', 'identifier', 'operator',
-     'string', 'closeBracket', 'operator', 'identifier']],
+     'string', 'closeBracket', 'operator', 'identifier']
+  ],
 
   ['\\["abc" ~slice 1 toUpperCase] print',
     ['operator', 'function', 'string', 'operator', 'identifier', 'number',
-     'operator', 'closeBracket', 'operator']],
+     'operator', 'closeBracket', 'operator']
+  ],
 
   [`
 'hi' print
@@ -146,7 +139,8 @@ f = {5}
 `,
     ['newline', 'string', 'operator', 'newline', 'operator', 'identifier',
      'number', 'newline', 'identifier', 'operator', 'function', 'number',
-     'closeBracket', 'newline']],
+     'closeBracket', 'newline']
+  ],
 
   [
 `//import and export
@@ -155,21 +149,26 @@ export add10
 add10 = [a \\add 10]`,
     ['newline', 'operator', 'string', 'identifier', 'newline', 'operator',
      'identifier', 'newline', 'identifier', 'operator', 'function',
-     'identifier', 'operator', 'identifier', 'number', 'closeBracket']],
+     'identifier', 'operator', 'identifier', 'number', 'closeBracket']
+  ],
 
   ['5 &&&/abc/',
-    ['number', 'operator', 'regexp']],
+    ['number', 'operator', 'regexp']
+  ],
 
   ['5 3 -//blah',
-    ['number', 'number', 'operator']],
+    ['number', 'number', 'operator']
+  ],
 
   ['f = fun x $_yz (x ^ $_yz)',
     ['identifier', 'operator', 'operator', 'identifier', 'identifier',
      'openParentheses', 'identifier', 'operator', 'identifier',
-     'closeBracket']],
+     'closeBracket']
+  ],
  
   ['5"abc"false+toUpperCase!',
-    ['number', 'string', 'identifier', 'operator', 'operator', 'operator']]
+    ['number', 'string', 'identifier', 'operator', 'operator', 'operator']
+  ]
 
 ]).test('multiple tokens, %s', (value, result) => {
     expect(tokens(value).map(obj => obj.type)).toStrictEqual(result);
