@@ -262,6 +262,21 @@ export default {
     return e;
   },
 
+  _addRemoveClass(a, e, c) {
+    a = a ? 'add' : 'remove';
+    c = c.trim().split(/^|\s+/);
+    e = this._autoSelect(e);
+    if (e && e[Symbol.iterator]) {
+      for (let q of e) {
+        q.classList[a](...c);
+      }
+    }
+    else {
+      e.classList[a](...c);
+    }
+    return e;
+  },
+
 
   // ----- call directly as _z_ methods in generated code -----
 
@@ -685,35 +700,10 @@ export default {
   },
   raiseUse: ['_autoSelect'],
 
-  addClass(e, c) {
-    c = c.trim().split(/^|\s+/);
-    e = this._autoSelect(e);
-    if (e && e[Symbol.iterator]) {
-      for (let q of e) {
-        q.classList.add(...c);
-      }
-    }
-    else {
-      e.classList.add(...c);
-    }
-    return e;
-  },
-  addClassUse: ['_autoSelect'],
-
-  removeClass(e, c) {
-    c = c.trim().split(/^|\s+/);
-    e = this._autoSelect(e);
-    if (e && e[Symbol.iterator]) {
-      for (let q of e) {
-        q.classList.remove(...c);
-      }
-    }
-    else {
-      e.classList.remove(...c);
-    }
-    return e;
-  },
-  removeClassUse: ['_autoSelect'],
+  addClass(e, c) { return this._addRemoveClass(true, e, c) },
+  addClassUse: ['_autoSelect', '_addRemoveClass'],
+  removeClass(e, c) { return this._addRemoveClass(false, e, c) },
+  addClassUse: ['_autoSelect', '_addRemoveClass'],
 
   removeAttr(e, a) {
     e = this._autoSelect(e);
