@@ -702,8 +702,9 @@ export default {
 
   addClass(e, c) { return this._addRemoveClass(true, e, c) },
   addClassUse: ['_autoSelect', '_addRemoveClass'],
+  
   removeClass(e, c) { return this._addRemoveClass(false, e, c) },
-  addClassUse: ['_autoSelect', '_addRemoveClass'],
+  removeClassUse: ['_autoSelect', '_addRemoveClass'],
 
   removeAttr(e, a) {
     e = this._autoSelect(e);
