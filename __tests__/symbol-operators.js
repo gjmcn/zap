@@ -3,11 +3,11 @@ const {compute, testEach} = require('./test-helpers.js');
 testEach('literals', [
   ['#', {}],
   ['# u 5', {u: 5}],
-  ['# ("u" + "v") false "$if" true', {uv: false, $if: true}],
+  ['# ("u" + "v") false "if" true', {uv: false, if: true}],
   ['##', new Map()],
   ['## null 5', new Map([[null, 5]])],
   ['## u 10 5 20', new Map([['u', 10], [5, 20]])],
-  ['## ("u" + "v") false "$if" true', new Map([['uv', false], ['$if', true]])],
+  ['## ("u" + "v") false "if" true', new Map([['uv', false], ['if', true]])],
   ['@', []],
   ['@ 5', [5]],
   ['@ "ab" NaN', ['ab', NaN]],
@@ -17,7 +17,11 @@ testEach('literals', [
 ], 'true');
 
 test('unary minus', () => {
-  expect(compute('~5')).toBe(-5);
+  expect(compute('- 5')).toBe(-5);
+});
+
+test('unary plus', () => {
+  expect(compute('"5" +')).toBe(5);
 });
 
 test('logical not', () => {
@@ -93,7 +97,7 @@ testEach('backtick pre', [
   ['@ 5 2 `!= 5',     [false, true]],
   ['@@ 2 5 `+ 10',    [12, 15]],
   ['"ab" `+ "c"',     ['ac', 'bc']],
-  ['3 >> 4 `+ 10',    [13, 14]],
+  ['3 to 4 `+ 10',    [13, 14]],
 ], 'true');
 
 testEach('backtick post', [
@@ -117,7 +121,7 @@ testEach('backtick post', [
   ['5 !=` (@ 5 2)',     [false, true]],
   ['10 +` (@@ 2 5)',    [12, 15]],
   ['"c" +` "ab"',       ['ca', 'cb']],
-  ['10 +` (3 >> 4)',    [13, 14]],
+  ['10 +` (3 to 4)',    [13, 14]],
 ], 'true');
 
 testEach('backtick both', [
@@ -140,21 +144,10 @@ testEach('backtick both', [
   ['@ 5 3 `==` (@ 5 2)',    [true, false]],
   ['@ 5 3 `!=` (@ 5 2)',    [false, true]],
   ['@ 5 3 `+` (@@ 10 20)',  [15, 23]],
-  ['@ 10 20 `+` (3 >> 4)',  [13, 24]],
-  ['\\[** $yield "a"; $yield "b"] `+` "cd"',   ['ac', 'bd']],
-], 'true');
-
-testEach('range', [
-  ['5 >> 5 $array',       []],
-  ['1 >> 2 $array',       [1, 2]],
-  ['3 >> 6 $array',       [3, 4, 5, 6]],
-  ['0 >> 4 2 $array',     [0, 2, 4]],
-  ['1.5 >> ~4 ~2 $array', [1.5, -0.5, -2.5]],
-  ['5 >>> 5 0 $array',    []],
-  ['5 >>> 5 1 $array',    [5]],
-  ['5 >>> 5 3 $array',    [5, 5, 5]],
-  ['2 >>> 5 4 $array',    [2, 3, 4 ,5]],
-  ['1.5 >>> ~4 3 $array', [1.5, -1.25, -4]],
+  ['@@ 10 20 `+` (3 to 4)', [13, 24]],
+  ['(3 to 4) `+` "ab"',     ['3a', '4b']],
+  ['@ 3 4 5 `+` (@ 10 20)',   [13, 24]],
+  ['@ 3 4 `+` (@ 10 20 30)',  [13, 24,]],
 ], 'true');
 
 testEach('call function', [

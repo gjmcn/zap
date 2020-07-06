@@ -79,7 +79,7 @@ test('base indent, first line - throws', () => {expect(() => {tokenTypes(
 test('base indent, second line - throws', () => {expect(() => {tokenTypes(
 `
     x`
-  )}).toThrow('invalid indent - base block cannot be indented')});
+)}).toThrow('invalid indent - base block cannot be indented')});
 
 test('invalid indent - throws', () => {expect(() => {tokenTypes(
 `x =
