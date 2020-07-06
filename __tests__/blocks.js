@@ -72,6 +72,40 @@ print 'done'`
   ])
 });
 
+test('base indent - throws', () => {expect(() => {tokenTypes(
+`    x`
+)}).toThrow('invalid indent - base block cannot be indented')});
 
-////////////////////////////
-// TO DO: BLOCK ERRORS
+test('invalid indent - throws', () => {expect(() => {tokenTypes(
+`x =
+   5 + 6`
+)}).toThrow('invalid indent - must be a multiple of 4 spaces')});
+
+test('double indent - throws', () => {expect(() => {tokenTypes(
+`x =
+        5 + 6`
+)}).toThrow('invalid indent - increase of more than 1 block')});
+
+test('opening line continue - throws', () => {expect(() => {tokenTypes(
+`| 5`
+)}).toThrow('invalid line continue')});
+
+test('open block with line continue - throws', () => {expect(() => {tokenTypes(
+`x = 
+    | 5 + 6`
+)}).toThrow('invalid line continue')});
+
+test('unclosed parentheses - throw', () => {expect(() => {tokenTypes(
+`5 + (6 +
+    7 + 8
+|)`
+)}).toThrow('unclosed brackets')});
+
+test('unclosed brackets - throw', () => { expect(() => {tokenTypes(
+`f = 5 + [a +
+    7 + 8]`
+)}).toThrow('unclosed brackets')});
+
+test('bracket mismatch - throw', () => { expect(() => {tokenTypes(
+`5 + (6 * 7]`
+)}).toThrow('bracket mismatch')});
