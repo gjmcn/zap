@@ -277,6 +277,19 @@ export default {
     return e;
   },
 
+  _eachElement(f, e, v) {
+    e = this._autoSelect(e);
+    if (e && e[Symbol.iterator]) {
+      for (let q of e) {
+        f(q, v);
+      }
+    }
+    else {
+      f(e, v);
+    }
+    return e;
+  },
+
 
   // ----- call directly as _z_ methods in generated code -----
 
@@ -706,33 +719,20 @@ export default {
   removeClass(e, c) { return this._addRemoveClass(false, e, c) },
   removeClassUse: ['_autoSelect', '_addRemoveClass'],
 
-  removeAttr(e, a) {
-    e = this._autoSelect(e);
-    if (e && e[Symbol.iterator]) {
-      for (let q of e) {
-        q.removeAttribute(a);
-      }
-    }
-    else {
-      e.removeAttribute(a);
-    }
-    return e;
+  toggleClass(e, v) {
+    return this._eachElement((x, y) => x.classList.toggle(y), e, v);
   },
-  removeAttrUse: ['_autoSelect'],
+  toggleClassUse: ['_autoSelect', '_eachElement'],
 
-  removeStyle(e, s) {
-    e = this._autoSelect(e);
-    if (e && e[Symbol.iterator]) {
-      for (let q of e) {
-        q.style.removeProperty(s);
-      }
-    }
-    else {
-      e.style.removeProperty(s);
-    }
-    return e;
+  removeAttr(e, v) {
+    return this._eachElement((x, y) => x.removeAttribute(y), e, v);
   },
-  removeStyleUse: ['_autoSelect'],
+  removeAttrUse: ['_autoSelect', '_eachElement'],
+
+  removeStyle(e, v) {
+    return this._eachElement((x, y) => x.style.removeProperty(y), e, v);
+  },
+  removeStyleUse: ['_autoSelect', '_eachElement'],
 
   hasClass(e, c) {
     let r;

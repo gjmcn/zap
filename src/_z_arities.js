@@ -63,6 +63,7 @@ m.set('lower',      [1, 1]);
 m.set('raise',      [1, 1]);
 m.set('addClass',   [2, 2]);
 m.set('removeClass',[2, 2]);
+m.set('toggleClass',[2, 2]);
 m.set('hasClass',   [2, 2]);
 m.set('hasAttr',    [2, 2]);
 m.set('removeAttr', [2, 2]);

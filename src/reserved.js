@@ -14,7 +14,8 @@ const reserved = {
     'select', 'selectAll', 'insert', 'insertEach', 'into', 'encode',
     'encodeSVG', 'create', 'createSVG', 'fragment', 'attr', 'prop', 'style',
     'text', 'html', 'remove', 'lower', 'raise', 'addClass', 'removeClass',
-    'hasClass', 'hasAttr', 'removeAttr', 'removeStyle', 'on', 'off', 'sketch',
+    'toggleClass', 'hasClass', 'hasAttr', 'removeAttr', 'removeStyle', 'on',
+    'off', 'sketch',
      
     // HTML convenience
     '$a', '$abbr', '$address', '$area', '$article', '$aside', '$audio', '$b',
