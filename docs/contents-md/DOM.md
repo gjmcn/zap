@@ -252,6 +252,14 @@ Returns the element(s).
 
 ---
 
+#### `toggleClass` {#toggle-class}
+
+Add or remove a class from [all elements](#all-elements) of the first operand: if an element has the class, it is removed; otherwise it is added. The second operand is the class name.
+
+Returns the element(s).
+
+---
+
 #### `removeAttr`, `removeStyle` {#remove-attr}
 
 Remove an attribute/style from [all elements](#all-elements) of the first operand. The second operand is the name of the attribute/style to remove. 
