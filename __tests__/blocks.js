@@ -72,9 +72,14 @@ print 'done'`
   ])
 });
 
-test('base indent - throws', () => {expect(() => {tokenTypes(
+test('base indent, first line - throws', () => {expect(() => {tokenTypes(
 `    x`
 )}).toThrow('invalid indent - base block cannot be indented')});
+
+test('base indent, second line - throws', () => {expect(() => {tokenTypes(
+`
+    x`
+  )}).toThrow('invalid indent - base block cannot be indented')});
 
 test('invalid indent - throws', () => {expect(() => {tokenTypes(
 `x =
@@ -96,13 +101,20 @@ test('open block with line continue - throws', () => {expect(() => {tokenTypes(
 )}).toThrow('invalid line continue')});
 
 test('unclosed parentheses - throw', () => {expect(() => {tokenTypes(
-`5 + (6 +
-    7 + 8
-|)`
+  `5 + (6 +`
 )}).toThrow('unclosed brackets')});
 
-test('unclosed brackets - throw', () => { expect(() => {tokenTypes(
-`f = 5 + [a +
+test('unclosed brackets - throw', () => {expect(() => {tokenTypes(
+  `[a`
+)}).toThrow('unclosed brackets')});
+
+test('parentheses across lines - throw', () => {expect(() => {tokenTypes(
+`5 + (6 +
+    7 + 8)`
+)}).toThrow('unclosed brackets')});
+
+test('brackets across lines - throw', () => { expect(() => {tokenTypes(
+`f = [a +
     7 + 8]`
 )}).toThrow('unclosed brackets')});
 

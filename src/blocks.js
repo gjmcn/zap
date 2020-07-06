@@ -111,7 +111,7 @@ export default tokens => {
         // increased indent? - open block as long as not at start of file
         if (tkn.indent > indent) {
           if (newTokens.length === 0) {
-            syntaxError(tkn, 'invalid indent - base block cannot have indent');
+            syntaxError(tkn, 'invalid indent - base block cannot be indented');
           }
           openIndentBlock(tkn);
         }
