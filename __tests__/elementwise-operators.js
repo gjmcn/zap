@@ -1,4 +1,4 @@
-const {compute, testEach, simpleTest} = require('./test-helpers.js');
+const {testEach, simpleTest} = require('./test-helpers.js');
 
 // Math methods
 simpleTest('abs',    '- 5 abs',      5);
