@@ -257,6 +257,19 @@ x :(i)`, 6
   ],
 ]);
 
+testEach(', get', [
+  ['# u 5 v 6 , "v"', 6],
+  ['@ 5 6 , 1',       6],
+  [', (@ 5 6) 1',     6],
+  ["'abc' , 1",       'b'],
+  ['# uv 5 wx 6 , ("u" + "v")', 5],
+  [`
+x = @ 5 6
+i = 1
+x , i`, 6
+  ],
+]);
+
 testEach(':: get', [
   ['Array :: slice typeof', 'function'],
   [`
@@ -291,6 +304,41 @@ x = 5
 x`, 5
   ],
 ]);
+
+test('assignment - set object property', () => {
+  expect(compute(`
+q = 'd'
+w = 'i'  
+o = #
+o :a = 5
+:b o = 6
+o :'if' = 7
+o :('cd' :0) = 8
+o :(q) = 9
+o , 'e' = 10
+, o 'f' = 11
+o 'g' , = 12 
+o , 'do' = 13 
+o , ('gh', 1) = 14
+o , w = 15 
+o`)).toStrictEqual({
+  a: 5, b: 6, if: 7, c: 8, d: 9, e: 10, f: 11, g: 12, do: 13, h: 14, i: 15   
+})});
+
+test('assignment - set array property', () => {
+  expect(compute(`
+q = 1 
+w = 4  
+x = @ 5 6 7
+x :0 = 10
+x :(q) = 20
+x , 3 = 30
+x , w = 40
+x`)).toStrictEqual([10, 20, 7, 30, 40])});
+
+test('assignment - set property, returns new value', () => {
+  expect(compute('# u 5 :v = 6')).toBe(6);
+});
 
 testEach('\\= assignment', [
   [`
@@ -432,6 +480,42 @@ x ^= 3
 x`, 1000
   ],
 ]);
+
+test('update assignment - set object property', () => {
+  expect(compute(`
+q = 'g'
+w = 'h'  
+o = # a 5 b 6 c 7 d 8 e 9 f 10 g 11 h 12 i 13 j 14
+o :a += 10
+o :b -= 10
+:c o *= 10
+o , "d" /= 2
+o "e" , ^= 2
+, o "f" %= 7
+o :(q) += 10
+o , w -= 10
+o :('ijk' :0) *= 10
+o , ('ijk' , 1) /= 7
+o`)).toStrictEqual({
+  a: 15, b: -4, c: 70, d: 4, e: 81, f: 3, g: 21, h: 2, i: 130, j: 2
+})});
+
+test('update assignment - set array property', () => {
+  expect(compute(`
+q = 1 
+w = 4  
+x = @ 3 4 5 6 7 8
+x :0 += 10
+x :(q) -= 10
+:(5 - 3) x *= 10 
+x , 3 /= 2
+x , w ^= 2
+x , (2 + 3) %= 5
+x`)).toStrictEqual([13, -6, 50, 3, 49, 3])});
+
+test('update assignment - set property, returns new value', () => {
+  expect(compute('@ 5 6 :0 = 10')).toBe(10);
+});
 
 testEach('destructure object', [
   [`
