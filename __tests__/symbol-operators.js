@@ -305,7 +305,7 @@ x`, 5
   ],
 ]);
 
-test('assignment - set object property', () => {
+test('= assignment - set object property', () => {
   expect(compute(`
 q = 'd'
 w = 'i'  
@@ -325,7 +325,7 @@ o`)).toStrictEqual({
   a: 5, b: 6, if: 7, c: 8, d: 9, e: 10, f: 11, g: 12, do: 13, h: 14, i: 15   
 })});
 
-test('assignment - set array property', () => {
+test('= assignment - set array property', () => {
   expect(compute(`
 q = 1 
 w = 4  
@@ -336,7 +336,7 @@ x , 3 = 30
 x , w = 40
 x`)).toStrictEqual([10, 20, 7, 30, 40])});
 
-test('assignment - set property, returns new value', () => {
+test('= assignment - set property, returns new value', () => {
   expect(compute('# u 5 :v = 6')).toBe(6);
 });
 
