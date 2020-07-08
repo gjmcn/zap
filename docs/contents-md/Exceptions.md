@@ -47,11 +47,11 @@ If the body of `try` does not throw, `try` returns `undefined`.
 The body is only executed if the `try` expression is truthy:
 
 ```
-// prints 'something went wrong!'
+// prints 'something went wrong'
 try
     \Error 'something went wrong' throw
 | catch err
-    + (err :message)'!' print
+    err :message print
 ```
 
 `catch` returns `undefined`.
@@ -59,13 +59,13 @@ try
 Here is an example of using `catch` with [`asyncTry`](#try):
 
 ```
-// waits 1000 ms, prints 'something went wrong!'
+// waits 1000 ms, prints 'something went wrong'
 asyncScope
     asyncTry
         period 1000 await
         \Error 'something went wrong' throw
     | await catch err
-        + (err :message)'!' print
+        err :message print
 ```
 
 `asyncCatch` is the asynchronous version of `catch`. `asyncCatch` returns a promise that resolves to `undefined`. `await` can be used in the body of `asyncCatch`.

@@ -27,21 +27,21 @@
 <li>a <a href="?Syntax#body-operands">body</a></li>
 </ul>
 <p>The body is only executed if the <code>try</code> expression is truthy:</p>
-<pre><code><span class="zap-comment">// prints 'something went wrong!'</span>
+<pre><code><span class="zap-comment">// prints 'something went wrong'</span>
 <span class="zap-keyword">try</span>
     <span class="zap-operator">\</span><span class="zap-identifier">Error</span> <span class="zap-string">'something went wrong'</span> <span class="zap-keyword">throw</span>
 <span class="zap-punctuation">|</span> <span class="zap-keyword">catch</span> <span class="zap-identifier">err</span>
-    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span><span class="zap-punctuation">)</span><span class="zap-string">'!'</span> <span class="zap-keyword">print</span>
+    <span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span> <span class="zap-keyword">print</span>
 </code></pre>
 <p><code>catch</code> returns <code>undefined</code>.</p>
 <p>Here is an example of using <code>catch</code> with <a href="#try"><code>asyncTry</code></a>:</p>
-<pre><code><span class="zap-comment">// waits 1000 ms, prints 'something went wrong!'</span>
+<pre><code><span class="zap-comment">// waits 1000 ms, prints 'something went wrong'</span>
 <span class="zap-keyword">asyncScope</span>
     <span class="zap-keyword">asyncTry</span>
         <span class="zap-keyword">period</span> <span class="zap-number">1000</span> <span class="zap-keyword">await</span>
         <span class="zap-operator">\</span><span class="zap-identifier">Error</span> <span class="zap-string">'something went wrong'</span> <span class="zap-keyword">throw</span>
     <span class="zap-punctuation">|</span> <span class="zap-keyword">await</span> <span class="zap-keyword">catch</span> <span class="zap-identifier">err</span>
-        <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span><span class="zap-punctuation">)</span><span class="zap-string">'!'</span> <span class="zap-keyword">print</span>
+        <span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span> <span class="zap-keyword">print</span>
 </code></pre>
 <p><code>asyncCatch</code> is the asynchronous version of <code>catch</code>. <code>asyncCatch</code> returns a promise that resolves to <code>undefined</code>. <code>await</code> can be used in the body of <code>asyncCatch</code>.</p>
 
