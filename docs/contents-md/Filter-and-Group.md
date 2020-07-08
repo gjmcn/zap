@@ -38,8 +38,8 @@ x group [a :u]   // Map {
 x group [a :u] [a mean [a :v]]   // Map {5 => 20, 6 => 20}
 
 // groupCount
-x groupCount [a :u]                       // Map {5 => 2, 6 => 1}
-x groupCount [a :u] [a == 1 ? '1' '>1']   // Map {5 => '>1', 6 => '1'}
+x groupCount [a :u]           // Map {5 => 2, 6 => 1}
+x groupCount [a :u] [a > 1]   // Map {5 => true, 6 => false}
 ```
 
 As shown in the example, `group` can take a second callback. This is applied to each group (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.
