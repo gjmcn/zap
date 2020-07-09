@@ -63,23 +63,22 @@ body {
   }
 }
 
-#sidebar span {
+#sidebar a {
   display: block;
   padding: 4px 10px;
   color: #181818;
   font-size: 0.90em;
   cursor: pointer;
 }
-#sidebar span:hover {
+#sidebar a:hover {
   background-color: #eee;
   text-decoration: none;
 }
-#sidebar span.selected {
+#sidebar a.selected {
   font-weight: 700;
 }
 
 #panel {
-  padding-top: 20px;
   padding-right: 15px;
   margin-left: 235px;
   height: calc(100vh - 46px);
@@ -87,7 +86,6 @@ body {
 }
 @media (max-width: 575.98px) {
   #panel {
-    padding-top: 12px;
     margin-left: 160px;
   }
 }
@@ -96,7 +94,11 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, dl, hr, blockquote, table {
   max-width: 680px;
 }
 h1, h2 {
+  margin-top: 1.1em;
   margin-bottom: 0;
+}
+h2:first-of-type {
+  margin-top: 0.7em;
 }
 h3, h4, h5, h6 {
   margin-bottom: 13px;

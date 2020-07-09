@@ -1,8 +1,8 @@
-## Assignment
+## Assignment {#assignment}
 
 ---
 
-> Assignment operators [do not follow the normal position and precedence rules](?Syntax#assignment-precedence).
+> Assignment operators [do not follow the normal position and precedence rules](#assignment-precedence).
 
 ---
 
@@ -81,7 +81,7 @@ u v w z @= x   // returns x, u is 5, v is 6, w is 7, z is undefined
 
 #### Local Variables {#local-variables}
 
-Assignment triggers the creation of a local variable. The variable is created at the start of the current [body](?Syntax#body-operands) (or start of the file if not inside a body), and has the value `undefined` until it is assigned to. The following example uses the [`scope`](?Writing-Functions#scope-op) operator:
+Assignment triggers the creation of a local variable. The variable is created at the start of the current [body](#body-operands) (or start of the file if not inside a body), and has the value `undefined` until it is assigned to. The following example uses the [`scope`](#scope-op) operator:
 
 ```
 x = 5        // 5 (outer x)
@@ -98,7 +98,7 @@ scope
 x            // 5 (outer x)
 ```
 
-Variables created outside of a body are _not_ global &mdash; they are not visible to other files. [Set a property](?Set-Property) of the global object to create a global variable:
+Variables created outside of a body are _not_ global &mdash; they are not visible to other files. [Set a property](#set-property) of the global object to create a global variable:
 
 ```
 globalThis :x = 5   // works in any JavaScript environment
@@ -106,4 +106,4 @@ window :y = 6       // works in browsers
 global :z = 7       // works in Node.js
 ```
 
-Only [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) and [`<-`](?Writing-Functions#options) (discussed in [Writing Functions](?Writing-Functions)) trigger the creation of local variables. The other assignment operators change the value of an existing variable.
+Only [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) and [`<-`](#options) (discussed in [Writing Functions](#writing-functions)) trigger the creation of local variables. The other assignment operators change the value of an existing variable.

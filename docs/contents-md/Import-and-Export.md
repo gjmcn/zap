@@ -1,4 +1,4 @@
-## Import and Export
+## Import and Export {#import-and-export}
 
 ---
 
@@ -6,7 +6,7 @@ The following rules apply to import and export operators:
 
 * Can only be used at the 'top-level' &mdash; not inside parentheses, indented blocks or bracket functions.
 
-* The first operand of import operators is the module path/url which must be a string literal. All other operands of import and export operators must be [identifiers](?Syntax#identifiers). 
+* The first operand of import operators is the module path/url which must be a string literal. All other operands of import and export operators must be [identifiers](#identifiers). 
 
 * Return `undefined`.
 
@@ -21,7 +21,7 @@ h1 = [a \f1 \g]
 h2 = [a \f2 \g]
 ```
 
-> Do not assign to imports. Assignment operators that create [local variables](?Assignment#local-variables) will create a new variable that masks the import. Assignment operators that update variables (e.g. [`+=`](?Assignment#update-assignment)) will throw an error since imports are constants.
+> Do not assign to imports. Assignment operators that create [local variables](#local-variables) will create a new variable that masks the import. Assignment operators that update variables (e.g. [`+=`](#update-assignment)) will throw an error since imports are constants.
 
 ---
 

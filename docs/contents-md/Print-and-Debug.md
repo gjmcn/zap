@@ -1,4 +1,4 @@
-## Print and Debug
+## Print and Debug {#print-and-debug}
 
 ---
 

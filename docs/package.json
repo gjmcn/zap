@@ -12,7 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "@observablehq/inspector": "^3.2.1",
-    "d3-require": "^1.2.4"
+    "d3-require": "^1.2.4",
+    "intersection-observer": "^0.11.0",
+    "scrollama": "^2.2.1"
   },
   "devDependencies": {
     "browserify": "^16.5.1",

@@ -1,4 +1,4 @@
-## Elementwise
+## Elementwise {#elementwise}
 
 ---
 

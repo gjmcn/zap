@@ -1,4 +1,4 @@
-## Reduce
+## Reduce {#reduce}
 
 ---
 

@@ -1,10 +1,10 @@
-## Overview
+## Overview {#overview}
 
 ---
 
 Zap is a compile-to-JavaScript language with a clean, concise syntax and powerful high-level operators. Zap can use JavaScript objects and libraries, and vice-versa.
 
-#### Literals
+__Literals__ are particularly simple:
 
 ```
 # u 5 v 6    // Object {u: 5, v: 6}
@@ -13,9 +13,7 @@ Zap is a compile-to-JavaScript language with a clean, concise syntax and powerfu
 @@ 5 6       // Set {5, 6}
 ```
 
-#### Expressions
-
-Everything in Zap is an expression &mdash; no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or the end of the expression is reached:
+Everything in Zap is an __expression__ &mdash; no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or the end of the expression is reached:
 
 ```
 @ 3 4 5     // [3, 4, 5]
@@ -41,9 +39,7 @@ Many operators have names rather than symbols:
 typeof 5 == 'number' print   // prints (and returns) true
 ```
 
-#### Indentation
-
-Indented blocks or parentheses can be used for precedence:
+__Indented blocks__ or __parentheses__ can be used for precedence:
 
 ```
 3 * (4 + 5)   // 27
@@ -64,8 +60,6 @@ Indented blocks can contain multiple expressions:
     z = value + index
     z ^ 2 + z print
 ```
-
-#### Line Continuation
 
 An expression terminates at the end of a line unless the following line opens an indentated block or continues the line with `|`. 
 
@@ -89,9 +83,7 @@ dogs = @
 | (# name 'Debra' breed 'doberman' food (@ 'dates' 'donuts'))
 ```
 
-#### Functions
-
-`fun` creates a function; `\` calls a function. `\` has special behavior: the first right operand is always the function:
+`fun` creates a __function__; `\` calls a function. `\` has special behavior: the first right operand is always the function:
 
 ```
 double = fun x (2 * x)   // body in parentheses
@@ -128,8 +120,6 @@ The `~` operator calls a method:
 'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
 ```
 
-#### Generators
-
 `yield` and `yieldFrom` can be used in the body of functions, loops, `scope` and `as`:
 
 ```
@@ -139,7 +129,7 @@ g ~next   // {value: 0, done: false}
 g ~next   // {value: 1, done: false}
 ```
 
-The range operators also create generators:
+The __range__ operators create generators:
 
 ```
 1 to 3           // generator (1 2 3)
@@ -147,9 +137,7 @@ The range operators also create generators:
 1 7 linSpace 4   // generator (1 3 5 7)
 ```
 
-#### Iterables
-
-There are lots of operators for working with iterables (arrays, sets, generators etc.). For example:
+There are lots of operators for working with __iterables__ (arrays, sets, generators etc.). For example:
 
 ```
 s = @@ 5 6 7              // Set {5, 6, 7}
@@ -162,7 +150,7 @@ s filter [a > 5]          // [6, 7]
 s group [a > 5]           // Map {false => [5], true => [6, 7]}
 ```
 
-Backticks tell an arithmetic, logical or comparison operator to iterate over an operand:
+__Backticks__ tell an arithmetic, logical or comparison operator to iterate over an operand:
 
 ```
 x = @ 5 6 7     // [5, 6, 7]
@@ -175,18 +163,14 @@ x  `+` x        // [10, 12, 14]
 'ab' `+` 'cd'   // ['ac', 'bd']
 ```
 
-#### Elementwise
-
-The many elementwise operators can be used with iterables or non-iterables:
+The many __elementwise operators__ can be used with iterables or non-iterables:
 
 ```
 @ 4 9 16 sqrt   // [2, 3, 4]
 4 sqrt          // 2
 ```
 
-#### Classes
-
-Use `class` to write a constructor and `extends` to write a subclass constructor. `::` gets a property from the prototype of an object so can be used to add methods:
+Use `class` to write a __constructor__ and `extends` to write a subclass constructor. `::` gets a property from the prototype of an object so can be used to add methods:
 ```
 // class with empty body: parameters become properties of 'this'
 Cat = class name ()
@@ -200,9 +184,7 @@ leo = new Lion 'Leo'   // Lion {name: "Leo"}
 leo ~speak 'hungry'    // 'I am Leo the hungry lion'
 ```
 
-#### Asynchronous Operators
-
-Except for `class` and `extends`, all operators that take a body operand have an asynchronous version:
+Except for `class` and `extends`, all operators that take a body operand have an __asynchronous__ version:
 
 ```
 // prints the length of the data (and returns a promise that
@@ -212,9 +194,7 @@ asyncScope
     data :length print
 ```
 
-#### DOM
-
-DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:
+__DOM operators__ work with individual HTML/SVG elements, iterables of elements and CSS selector strings:
 
 ```
 // set color of each span with class danger to red

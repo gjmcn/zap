@@ -1,4 +1,4 @@
-## Operators
+## Operators {#operators}
 
 ---
 
@@ -10,29 +10,29 @@
 | `*` `/` `%` `^` | 2+ | multiply, divide, remainder, exponentiate |
 | `<>` `><`  | 2+ | least, greatest |
 | `&&` `||` `??` | 2+ | logical and, or, nullish coalescing |
-| [`?`](?Conditional#ternary) | 2-3 | conditional |
+| [`?`](#ternary) | 2-3 | conditional |
 | `!` | 1 | logical not |
 | `<` `<=` `>` `>=` | 2 | compare |
 | `==` `!=` | 2 | strict equality, strict inequality |
-| [`=`](?Assignment#standard-assignment)  | 2  | assign |
-| [`\=`](?Assignment#non-local) | 2  | assign, do not trigger creation of local variable |
-| [`<-`](?Writing-Functions#options) | 2  | assign, use option of same name or default |
-| [`?=`](?Assignment#conditional-assignment) | 2  | conditional assign |
-| [`+=`](?Assignment#update-assignment) [`-=`](?Assignment#update-assignment) [`*=`](?Assignment#update-assignment) [`/=`](?Assignment#update-assignment) [`%=`](?Assignment#update-assignment) [`^=`](?Assignment#update-assignment) | 2 | update-assign |
-| [`#=`](?Assignment#destructure-object) | 2+ | destructure object |
-| [`@=`](?Assignment#destructure-iterable) | 2+ | destructure array |
-| [`,`](?Get-Property#comma-getter) | 2 | get property |
-| [`:`](?Get-Property#colon-getter)  | 2 | get property |
-| [`::`](?Get-Property#colon-proto-getter) | 2 | get property of prototype |
-| [`?:`](?Get-Property#conditional-get) | 2 | conditional get property |
-| [`\`](?Calling-Functions) | 1+ | call function |
-| [`<\`](?Calling-Functions#return-first) | 2+ | call function, return first argument |
-| [`~`](?Calling-Functions#calling-methods) | 2+ | call method |
-| [`<~`](?Calling-Functions#return-first) | 2+ | call method, return calling object |
-| [`#`](?Literals#objects-and-maps) | 0+ | object literal |
-| [`##`](?Literals#objects-and-maps) | 0+ | map literal |
-| [`@`](?Literals#arrays)  | 0+ | array literal |
-| [`@@`](?Literals#sets) | 0+ | set literal {.table .table-sm .w600} |
+| [`=`](#standard-assignment)  | 2  | assign |
+| [`\=`](#non-local) | 2  | assign, do not trigger creation of local variable |
+| [`<-`](#options) | 2  | assign, use option of same name or default |
+| [`?=`](#conditional-assignment) | 2  | conditional assign |
+| [`+=`](#update-assignment) [`-=`](#update-assignment) [`*=`](#update-assignment) [`/=`](#update-assignment) [`%=`](#update-assignment) [`^=`](#update-assignment) | 2 | update-assign |
+| [`#=`](#destructure-object) | 2+ | destructure object |
+| [`@=`](#destructure-iterable) | 2+ | destructure array |
+| [`,`](#comma-getter) | 2 | get property |
+| [`:`](#colon-getter)  | 2 | get property |
+| [`::`](#colon-proto-getter) | 2 | get property of prototype |
+| [`?:`](#conditional-get) | 2 | conditional get property |
+| [`\`](#calling-functions) | 1+ | call function |
+| [`<\`](#return-first) | 2+ | call function, return first argument |
+| [`~`](#calling-methods) | 2+ | call method |
+| [`<~`](#return-first) | 2+ | call method, return calling object |
+| [`#`](#objects-and-maps) | 0+ | object literal |
+| [`##`](#objects-and-maps) | 0+ | map literal |
+| [`@`](#arrays)  | 0+ | array literal |
+| [`@@`](#sets) | 0+ | set literal {.table .table-sm .w600} |
 
 The operators `+`, `-`, `*`, `/`, `%`, `^`, `&&`, `||`, `??`, `<>` and `><` can take more than two operands:
 
@@ -73,61 +73,61 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Body
 
-[`as`](?Writing-Functions#as) [`catch`](?Exceptions#catch) [`class`](?Classes#class) [`do`](?Loops#do) [`each`](?Loops#each) [`extends`](?Classes#extends) [`fun`](?Writing-Functions#fun) [`map`](?Loops#map) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`try`](?Exceptions#try) 
+[`as`](#as) [`catch`](#catch) [`class`](#class) [`do`](#do) [`each`](#each) [`extends`](#extends) [`fun`](#fun) [`map`](#map) [`proc`](#proc) [`scope`](#scope-op) [`try`](#try) 
 
-[`asyncAs`](?Writing-Functions#as) [`asyncCatch`](?Exceptions#catch) [`asyncDo`](?Loops#async-loops) [`asyncEach`](?Loops#async-loops) [`asyncFun`](?Writing-Functions#fun) [`asyncMap`](?Loops#async-loops) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncTry`](?Exceptions#try) 
+[`asyncAs`](#as) [`asyncCatch`](#catch) [`asyncDo`](#async-loops) [`asyncEach`](#async-loops) [`asyncFun`](#fun) [`asyncMap`](#async-loops) [`asyncProc`](#proc) [`asyncScope`](#scope-op) [`asyncTry`](#try) 
 
 ---
 
 #### Elementwise Math
 
-[`abs`](?Elementwise) [`acos`](?Elementwise) [`acosh`](?Elementwise) [`asin`](?Elementwise) [`asinh`](?Elementwise) [`atan`](?Elementwise) [`atanh`](?Elementwise) [`cbrt`](?Elementwise) [`ceil`](?Elementwise) [`clz32`](?Elementwise) [`cos`](?Elementwise) [`cosh`](?Elementwise) [`exp`](?Elementwise) [`expm1`](?Elementwise) [`floor`](?Elementwise) [`fround`](?Elementwise) [`log`](?Elementwise) [`log10`](?Elementwise) [`log1p`](?Elementwise)  [`log2`](?Elementwise) [`round`](?Elementwise) [`sign`](?Elementwise) [`sin`](?Elementwise) [`sinh`](?Elementwise) [`sqrt`](?Elementwise) [`tan`](?Elementwise) [`tanh`](?Elementwise) [`trunc`](?Elementwise)
+[`abs`](#elementwise) [`acos`](#elementwise) [`acosh`](#elementwise) [`asin`](#elementwise) [`asinh`](#elementwise) [`atan`](#elementwise) [`atanh`](#elementwise) [`cbrt`](#elementwise) [`ceil`](#elementwise) [`clz32`](#elementwise) [`cos`](#elementwise) [`cosh`](#elementwise) [`exp`](#elementwise) [`expm1`](#elementwise) [`floor`](#elementwise) [`fround`](#elementwise) [`log`](#elementwise) [`log10`](#elementwise) [`log1p`](#elementwise)  [`log2`](#elementwise) [`round`](#elementwise) [`sign`](#elementwise) [`sin`](#elementwise) [`sinh`](#elementwise) [`sqrt`](#elementwise) [`tan`](#elementwise) [`tanh`](#elementwise) [`trunc`](#elementwise)
 
 ---
 
 #### Elementwise Other
 
-[`boolean`](?Elementwise) [`date`](?Elementwise) [`isFinite`](?Elementwise) [`isInteger`](?Elementwise) [`isNaN`](?Elementwise) [`neg`](?Elementwise) [`not`](?Elementwise) [`number`](?Elementwise) [`string`](?Elementwise) [`toLowerCase`](?Elementwise) [`toUpperCase`](?Elementwise) [`trim`](?Elementwise) [`trimEnd`](?Elementwise) [`trimStart`](?Elementwise)
+[`boolean`](#elementwise) [`date`](#elementwise) [`isFinite`](lementwise) [`isInteger`](#elementwise) [`isNaN`](#elementwise) [`neg`](#elementwise) [`not`](#elementwise) [`number`](#elementwise) [`string`](#elementwise) [`toLowerCase`](#elementwise) [`toUpperCase`](#elementwise) [`trim`](#elementwise) [`trimEnd`](#elementwise) [`trimStart`](#elementwise)
 
 ---
 
 #### Filter, Group, Reduce, Sort
 
-[`bin`](?Order-and-Bin#bin)  [`binCount`](?Order-and-Bin#bin) [`count`](?Reduce#count) [`deviation`](?Reduce#sum) [`every`](?Reduce#every) [`filter`](?Filter-and-Group#filter)  [`find`](?Reduce#find) [`findIndex`](?Reduce#find) [`group`](?Filter-and-Group#group) [`groupCount`](?Filter-and-Group#group) [`max`](?Reduce#min) [`maxIndex`](?Reduce#min) [`mean`](?Reduce#sum) [`min`](?Reduce#min) [`minIndex`](?Reduce#min) [`order`](?Order-and-Bin#order) [`orderIndex`](?Order-and-Bin#order) [`reduce`](?Reduce#reduce-op) [`some`](?Reduce#every) [`sum`](?Reduce#sum) [`sumCumu`](?Reduce#sum-cumu) [`variance`](?Reduce#sum)
+[`bin`](#bin)  [`binCount`](#bin) [`count`](#count) [`deviation`](#sum) [`every`](#every) [`filter`](#filter)  [`find`](#find) [`findIndex`](#find) [`group`](#group) [`groupCount`](#group) [`max`](#min) [`maxIndex`](#min) [`mean`](#sum) [`min`](#min) [`minIndex`](#min) [`order`](#order) [`orderIndex`](#order) [`reduce`](#reduce-op) [`some`](#every) [`sum`](#sum) [`sumCumu`](#sum-cumu) [`variance`](#sum)
 
 ---
 
 #### Get/Set Property
 
-[`assign`](?Set-Property#copy-properties) [`at`](?Get-Property#at) [`attach`](?Set-Property#attach) [`chg`](?Set-Property#chg) [`getter`](?Get-Property#getter) [`setter`](?Set-Property#setter)
+[`assign`](#copy-properties) [`at`](#at) [`attach`](#attach) [`chg`](#chg) [`getter`](#getter) [`setter`](#setter)
 
 ---
 
 #### Import and Export
-[`export`](?Import-and-Export#export) [`import`](?Import-and-Export#import) [`importAll`](?Import-and-Export#import-all) [`importAs`](?Import-and-Export#import-as) [`importDefault`](?Import-and-Export#import-default) [`load`](?Import-and-Export#load)
+[`export`](#export) [`import`](#import) [`importAll`](#import-all) [`importAs`](#import-as) [`importDefault`](#import-default) [`load`](#load)
 
 ---
 
 #### Other
 
-[`array`](?Literals#arrays) [`arrObj`](?Tabular-Data#array-of-objects) [`apply`](?Calling-Functions#call-and-apply) [`call`](?Calling-Functions#call-and-apply) [`debugger`](?Print-and-Debug#debugger) [`if`](?Conditional#if) [`linSpace`](?Ranges#lin-space) [`objArr`](?Tabular-Data#object-of-arrays) [`period`](?Print-and-Debug#period) [`print`](?Print-and-Debug#print) [`throw`](?Exceptions#throw) [`to`](?Ranges#to) [`transpose`](?Tabular-Data#transpose) 
+[`array`](#arrays) [`arrObj`](#array-of-objects) [`apply`](#call-and-apply) [`call`](#call-and-apply) [`debugger`](#debugger) [`if`](#if) [`linSpace`](#lin-space) [`objArr`](#object-of-arrays) [`period`](#period) [`print`](#print) [`throw`](#throw) [`to`](#to) [`transpose`](#transpose) 
 
 ---
 
 #### Random and Shuffle
 
-[`binomial`](?Random-and-Shuffle#binomial) [`categorical`](?Random-and-Shuffle#categorical) [`exponential`](?Random-and-Shuffle#exponential) [`geometric`](?Random-and-Shuffle#geometric) [`logNormal`](?Random-and-Shuffle#log-normal) [`normal`](?Random-and-Shuffle#normal) [`random`](?Random-and-Shuffle#random) [`randomInt`](?Random-and-Shuffle#random-int) [`shuffle`](?Random-and-Shuffle#shuffle)
+[`binomial`](#binomial) [`categorical`](#categorical) [`exponential`](#exponential) [`geometric`](#geometric) [`logNormal`](#log-normal) [`normal`](#normal) [`random`](#random-op) [`randomInt`](#random-int) [`shuffle`](#shuffle)
 
 ---
 
 #### DOM
 
-[`addClass`](?DOM#add-class) [`attr`](?DOM#attr) [`create`](?DOM#create) [`createSVG`](?DOM#create) [`encode`](?DOM#encode) [`encodeSVG`](?DOM#encode) [`fragment`](?DOM#fragment) [`hasAttr`](?DOM#has-attr) [`hasClass`](?DOM#has-attr) [`html`](?DOM#html) [`insert`](?DOM#insert) [`insertEach`](?DOM#insert-each) [`into`](?DOM#into) [`lower`](?DOM#lower) [`off`](?DOM#on) [`on`](?DOM#on) [`prop`](?DOM#attr) [`raise`](?DOM#lower) [`remove`](?DOM#remove) [`removeAttr`](?DOM#remove-attr) [`removeClass`](?DOM#add-class) [`removeStyle`](?DOM#remove-attr) [`select`](?DOM#select) [`selectAll`](?DOM#select-all) [`sketch`](?DOM#sketch) [`style`](?DOM#attr) [`text`](?DOM#html) [`toggleClass`](?DOM#toggle-class)
+[`addClass`](#add-class) [`attr`](#attr) [`create`](#create) [`createSVG`](#create) [`encode`](#encode) [`encodeSVG`](#encode) [`fragment`](#fragment) [`hasAttr`](#has-attr) [`hasClass`](#has-attr) [`html`](#html) [`insert`](#insert) [`insertEach`](#insert-each) [`into`](#into) [`lower`](#lower) [`off`](#on) [`on`](#on) [`prop`](#attr) [`raise`](#lower) [`remove`](#remove) [`removeAttr`](#remove-attr) [`removeClass`](#add-class) [`removeStyle`](#remove-attr) [`select`](#select) [`selectAll`](#select-all) [`sketch`](#sketch) [`style`](#attr) [`text`](#html) [`toggleClass`](#toggle-class)
 
 ##### HTML Elements
 
-[`$a`](?DOM#create-convenience) [`$abbr`](?DOM#create-convenience) [`$address`](?DOM#create-convenience) [`$area`](?DOM#create-convenience) [`$article`](?DOM#create-convenience) [`$aside`](?DOM#create-convenience) [`$audio`](?DOM#create-convenience) [`$b`](?DOM#create-convenience) [`$base`](?DOM#create-convenience) [`$bdi`](?DOM#create-convenience) [`$bdo`](?DOM#create-convenience) [`$blockquote`](?DOM#create-convenience) [`$body`](?DOM#create-convenience) [`$br`](?DOM#create-convenience) [`$button`](?DOM#create-convenience) [`$canvas`](?DOM#create-convenience) [`$caption`](?DOM#create-convenience) [`$cite`](?DOM#create-convenience) [`$code`](?DOM#create-convenience) [`$col`](?DOM#create-convenience) [`$colgroup`](?DOM#create-convenience) [`$data`](?DOM#create-convenience) [`$datalist`](?DOM#create-convenience) [`$dd`](?DOM#create-convenience) [`$del`](?DOM#create-convenience) [`$details`](?DOM#create-convenience) [`$dfn`](?DOM#create-convenience) [`$dialog`](?DOM#create-convenience) [`$div`](?DOM#create-convenience) [`$dl`](?DOM#create-convenience) [`$dt`](?DOM#create-convenience) [`$em`](?DOM#create-convenience) [`$embed`](?DOM#create-convenience) [`$fieldset`](?DOM#create-convenience) [`$figcaption`](?DOM#create-convenience) [`$figure`](?DOM#create-convenience) [`$footer`](?DOM#create-convenience) [`$form`](?DOM#create-convenience) [`$h1`](?DOM#create-convenience) [`$h2`](?DOM#create-convenience) [`$h3`](?DOM#create-convenience) [`$h4`](?DOM#create-convenience) [`$h5`](?DOM#create-convenience) [`$h6`](?DOM#create-convenience) [`$head`](?DOM#create-convenience) [`$header`](?DOM#create-convenience) [`$hgroup`](?DOM#create-convenience) [`$hr`](?DOM#create-convenience) [`$i`](?DOM#create-convenience) [`$iframe`](?DOM#create-convenience) [`$img`](?DOM#create-convenience) [`$input`](?DOM#create-convenience) [`$ins`](?DOM#create-convenience) [`$kbd`](?DOM#create-convenience) [`$label`](?DOM#create-convenience) [`$legend`](?DOM#create-convenience) [`$li`](?DOM#create-convenience) [`$link`](?DOM#create-convenience) [`$main`](?DOM#create-convenience) [`$map`](?DOM#create-convenience) [`$mark`](?DOM#create-convenience) [`$menu`](?DOM#create-convenience) [`$meta`](?DOM#create-convenience) [`$meter`](?DOM#create-convenience) [`$nav`](?DOM#create-convenience) [`$noscript`](?DOM#create-convenience) [`$object`](?DOM#create-convenience) [`$ol`](?DOM#create-convenience) [`$optgroup`](?DOM#create-convenience) [`$option`](?DOM#create-convenience) [`$output`](?DOM#create-convenience) [`$p`](?DOM#create-convenience) [`$param`](?DOM#create-convenience) [`$picture`](?DOM#create-convenience) [`$pre`](?DOM#create-convenience) [`$progress`](?DOM#create-convenience) [`$q`](?DOM#create-convenience) [`$rb`](?DOM#create-convenience) [`$rp`](?DOM#create-convenience) [`$rt`](?DOM#create-convenience) [`$rtc`](?DOM#create-convenience) [`$ruby`](?DOM#create-convenience) [`$s`](?DOM#create-convenience) [`$samp`](?DOM#create-convenience) [`$script`](?DOM#create-convenience) [`$section`](?DOM#create-convenience) [`$select`](?DOM#create-convenience) [`$slot`](?DOM#create-convenience) [`$small`](?DOM#create-convenience) [`$source`](?DOM#create-convenience) [`$span`](?DOM#create-convenience) [`$strong`](?DOM#create-convenience) [`$style`](?DOM#create-convenience) [`$sub`](?DOM#create-convenience) [`$summary`](?DOM#create-convenience) [`$sup`](?DOM#create-convenience) [`$table`](?DOM#create-convenience) [`$tbody`](?DOM#create-convenience) [`$td`](?DOM#create-convenience) [`$template`](?DOM#create-convenience) [`$textarea`](?DOM#create-convenience) [`$tfoot`](?DOM#create-convenience) [`$th`](?DOM#create-convenience) [`$thead`](?DOM#create-convenience) [`$time`](?DOM#create-convenience) [`$title`](?DOM#create-convenience) [`$tr`](?DOM#create-convenience) [`$track`](?DOM#create-convenience) [`$u`](?DOM#create-convenience) [`$ul`](?DOM#create-convenience) [`$var`](?DOM#create-convenience) [`$video`](?DOM#create-convenience) [`$wbr`](?DOM#create-convenience)
+[`$a`](#create-convenience) [`$abbr`](#create-convenience) [`$address`](#create-convenience) [`$area`](#create-convenience) [`$article`](#create-convenience) [`$aside`](#create-convenience) [`$audio`](#create-convenience) [`$b`](#create-convenience) [`$base`](#create-convenience) [`$bdi`](#create-convenience) [`$bdo`](#create-convenience) [`$blockquote`](#create-convenience) [`$body`](#create-convenience) [`$br`](#create-convenience) [`$button`](#create-convenience) [`$canvas`](#create-convenience) [`$caption`](#create-convenience) [`$cite`](#create-convenience) [`$code`](#create-convenience) [`$col`](#create-convenience) [`$colgroup`](#create-convenience) [`$data`](#create-convenience) [`$datalist`](#create-convenience) [`$dd`](#create-convenience) [`$del`](#create-convenience) [`$details`](#create-convenience) [`$dfn`](#create-convenience) [`$dialog`](#create-convenience) [`$div`](#create-convenience) [`$dl`](#create-convenience) [`$dt`](#create-convenience) [`$em`](#create-convenience) [`$embed`](#create-convenience) [`$fieldset`](#create-convenience) [`$figcaption`](#create-convenience) [`$figure`](#create-convenience) [`$footer`](#create-convenience) [`$form`](#create-convenience) [`$h1`](#create-convenience) [`$h2`](#create-convenience) [`$h3`](#create-convenience) [`$h4`](#create-convenience) [`$h5`](#create-convenience) [`$h6`](#create-convenience) [`$head`](#create-convenience) [`$header`](#create-convenience) [`$hgroup`](#create-convenience) [`$hr`](#create-convenience) [`$i`](#create-convenience) [`$iframe`](#create-convenience) [`$img`](#create-convenience) [`$input`](#create-convenience) [`$ins`](#create-convenience) [`$kbd`](#create-convenience) [`$label`](#create-convenience) [`$legend`](#create-convenience) [`$li`](#create-convenience) [`$link`](#create-convenience) [`$main`](#create-convenience) [`$map`](#create-convenience) [`$mark`](#create-convenience) [`$menu`](#create-convenience) [`$meta`](#create-convenience) [`$meter`](#create-convenience) [`$nav`](#create-convenience) [`$noscript`](#create-convenience) [`$object`](#create-convenience) [`$ol`](#create-convenience) [`$optgroup`](#create-convenience) [`$option`](#create-convenience) [`$output`](#create-convenience) [`$p`](#create-convenience) [`$param`](#create-convenience) [`$picture`](#create-convenience) [`$pre`](#create-convenience) [`$progress`](#create-convenience) [`$q`](#create-convenience) [`$rb`](#create-convenience) [`$rp`](#create-convenience) [`$rt`](#create-convenience) [`$rtc`](#create-convenience) [`$ruby`](#create-convenience) [`$s`](#create-convenience) [`$samp`](#create-convenience) [`$script`](#create-convenience) [`$section`](#create-convenience) [`$select`](#create-convenience) [`$slot`](#create-convenience) [`$small`](#create-convenience) [`$source`](#create-convenience) [`$span`](#create-convenience) [`$strong`](#create-convenience) [`$style`](#create-convenience) [`$sub`](#create-convenience) [`$summary`](#create-convenience) [`$sup`](#create-convenience) [`$table`](#create-convenience) [`$tbody`](#create-convenience) [`$td`](#create-convenience) [`$template`](#create-convenience) [`$textarea`](#create-convenience) [`$tfoot`](#create-convenience) [`$th`](#create-convenience) [`$thead`](#create-convenience) [`$time`](#create-convenience) [`$title`](#create-convenience) [`$tr`](#create-convenience) [`$track`](#create-convenience) [`$u`](#create-convenience) [`$ul`](#create-convenience) [`$var`](#create-convenience) [`$video`](#create-convenience) [`$wbr`](#create-convenience)
 
 ##### SVG Elements
 
-[`$animate`](?DOM#create-convenience) [`$animateMotion`](?DOM#create-convenience) [`$animateTransform`](?DOM#create-convenience) [`$circle`](?DOM#create-convenience) [`$clipPath`](?DOM#create-convenience) [`$defs`](?DOM#create-convenience) [`$desc`](?DOM#create-convenience) [`$discard`](?DOM#create-convenience) [`$ellipse`](?DOM#create-convenience) [`$feBlend`](?DOM#create-convenience) [`$feColorMatrix`](?DOM#create-convenience) [`$feComponentTransfer`](?DOM#create-convenience) [`$feComposite`](?DOM#create-convenience) [`$feConvolveMatrix`](?DOM#create-convenience) [`$feDiffuseLighting`](?DOM#create-convenience) [`$feDisplacementMap`](?DOM#create-convenience) [`$feDistantLight`](?DOM#create-convenience) [`$feDropShadow`](?DOM#create-convenience) [`$feFlood`](?DOM#create-convenience) [`$feFuncA`](?DOM#create-convenience) [`$feFuncB`](?DOM#create-convenience) [`$feFuncG`](?DOM#create-convenience) [`$feFuncR`](?DOM#create-convenience) [`$feGaussianBlur`](?DOM#create-convenience) [`$feImage`](?DOM#create-convenience) [`$feMerge`](?DOM#create-convenience) [`$feMergeNode`](?DOM#create-convenience) [`$feMorphology`](?DOM#create-convenience) [`$feOffset`](?DOM#create-convenience) [`$fePointLight`](?DOM#create-convenience) [`$feSpecularLighting`](?DOM#create-convenience) [`$feSpotLight`](?DOM#create-convenience) [`$feTile`](?DOM#create-convenience) [`$feTurbulence`](?DOM#create-convenience) [`$filter`](?DOM#create-convenience) [`$foreignObject`](?DOM#create-convenience) [`$g`](?DOM#create-convenience) [`$hatch`](?DOM#create-convenience) [`$hatchpath`](?DOM#create-convenience) [`$image`](?DOM#create-convenience) [`$line`](?DOM#create-convenience) [`$linearGradient`](?DOM#create-convenience) [`$marker`](?DOM#create-convenience) [`$mask`](?DOM#create-convenience) [`$metadata`](?DOM#create-convenience) [`$mpath`](?DOM#create-convenience) [`$path`](?DOM#create-convenience) [`$pattern`](?DOM#create-convenience) [`$polygon`](?DOM#create-convenience) [`$polyline`](?DOM#create-convenience) [`$radialGradient`](?DOM#create-convenience) [`$rect `](?DOM#create-convenience) [`$set`](?DOM#create-convenience) [`$solidcolor`](?DOM#create-convenience) [`$stop`](?DOM#create-convenience) [`$svg`](?DOM#create-convenience) [`$switch`](?DOM#create-convenience) [`$symbol`](?DOM#create-convenience) [`$text`](?DOM#create-convenience) [`$textPath`](?DOM#create-convenience) [`$tspan`](?DOM#create-convenience) [`$use`](?DOM#create-convenience) [`$view`](?DOM#create-convenience)
+[`$animate`](#create-convenience) [`$animateMotion`](#create-convenience) [`$animateTransform`](#create-convenience) [`$circle`](#create-convenience) [`$clipPath`](#create-convenience) [`$defs`](#create-convenience) [`$desc`](#create-convenience) [`$discard`](#create-convenience) [`$ellipse`](#create-convenience) [`$feBlend`](#create-convenience) [`$feColorMatrix`](#create-convenience) [`$feComponentTransfer`](#create-convenience) [`$feComposite`](#create-convenience) [`$feConvolveMatrix`](#create-convenience) [`$feDiffuseLighting`](#create-convenience) [`$feDisplacementMap`](#create-convenience) [`$feDistantLight`](#create-convenience) [`$feDropShadow`](#create-convenience) [`$feFlood`](#create-convenience) [`$feFuncA`](#create-convenience) [`$feFuncB`](#create-convenience) [`$feFuncG`](#create-convenience) [`$feFuncR`](#create-convenience) [`$feGaussianBlur`](#create-convenience) [`$feImage`](#create-convenience) [`$feMerge`](#create-convenience) [`$feMergeNode`](#create-convenience) [`$feMorphology`](#create-convenience) [`$feOffset`](#create-convenience) [`$fePointLight`](#create-convenience) [`$feSpecularLighting`](#create-convenience) [`$feSpotLight`](#create-convenience) [`$feTile`](#create-convenience) [`$feTurbulence`](#create-convenience) [`$filter`](#create-convenience) [`$foreignObject`](#create-convenience) [`$g`](#create-convenience) [`$hatch`](#create-convenience) [`$hatchpath`](#create-convenience) [`$image`](#create-convenience) [`$line`](#create-convenience) [`$linearGradient`](#create-convenience) [`$marker`](#create-convenience) [`$mask`](#create-convenience) [`$metadata`](#create-convenience) [`$mpath`](#create-convenience) [`$path`](#create-convenience) [`$pattern`](#create-convenience) [`$polygon`](#create-convenience) [`$polyline`](#create-convenience) [`$radialGradient`](#create-convenience) [`$rect `](#create-convenience) [`$set`](#create-convenience) [`$solidcolor`](#create-convenience) [`$stop`](#create-convenience) [`$svg`](#create-convenience) [`$switch`](#create-convenience) [`$symbol`](#create-convenience) [`$text`](#create-convenience) [`$textPath`](#create-convenience) [`$tspan`](#create-convenience) [`$use`](#create-convenience) [`$view`](#create-convenience)

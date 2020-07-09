@@ -1,12 +1,12 @@
-## Random and Shuffle
+## Random {#random}
 
 ---
 
-Except for [`shuffle`](#shuffle), each operator in this section generates a number from a given distribution. An optional extra operand can be used to specify how many numbers to generate &mdash; in this case, the operator returns an array rather than a number.
+These operators (except for [`shuffle`](#shuffle)) generate a number from a given distribution. An optional extra operand can be used to specify how many numbers to generate &mdash; in this case, the operator returns an array rather than a number.
 
 ---
 
-#### `random` {#random}
+#### `random` {#random-op}
 
 Generate values from a uniform distribution with the given minimum (inclusive, default `0`) and maximum (exclusive, default `1`):
 
@@ -44,7 +44,7 @@ normal 5 10 20   // array of 20 values from normal distbn: mean 5, sd 10
 
 #### `logNormal` {#log-normal}
 
-Generate values from a log-normal distribution. Equivalent to applying [`exp`](?Elementwise) to result of [`normal`](#normal):
+Generate values from a log-normal distribution. Equivalent to applying [`exp`](#elementwise) to result of [`normal`](#normal):
 
 ```
 logNormal   // is equivalent to:

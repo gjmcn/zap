@@ -1,4 +1,4 @@
-## Ranges
+## Ranges {#ranges}
 
 ---
 
@@ -18,7 +18,7 @@ r ~next      // {value: 7, done: false}
 r ~next      // {value: undefined, done: true}
 ```
 
-Generators are iterables, so can be used with many operators &mdash; see e.g. [Loops](?Loops), [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and [Destructuring](?Assignment#destructure-iterable). Some examples:
+Generators are iterables, so can be used with many operators &mdash; see e.g. [Loops](#loops), [Reduce](#reduce), [Filter](#filter), [Group](#group), [Order](#order), [Bin](#bin), [Backticks](#backticks) and [Destructuring](#destructure-iterable). Some examples:
 
 ```
 5 to 7 each a (print a)   // prints 5 6 7

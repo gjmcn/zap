@@ -1,4 +1,4 @@
-## Syntax
+## Syntax {#syntax}
 
 ---
 
@@ -64,7 +64,7 @@ Indentation can also be used for precedence. Indented blocks *can* contain multi
 
 Opening an indented block automatically continues an expression &mdash; do not use a `|`.
 
-We can close an indented block (or more than one) and continue the expression with `|`. The following example uses the [array literal](?Literals#arrays) operator `@`and the [object literal](?Literals#objects-and-maps) operator `#` to create an array of objects:
+We can close an indented block (or more than one) and continue the expression with `|`. The following example uses the [array literal](#arrays) operator `@`and the [object literal](#objects-and-maps) operator `#` to create an array of objects:
 
 ```
 // an array of objects
@@ -94,7 +94,7 @@ Additional rules apply to some operators:
 
 ###### The Right Operand Rule {#right-operand-rule}
 
-The main [get property](?Get-Property) and [call function/method](?Calling-Functions) operators use the _right operand rule_: the first right operand is the property or function. We typically omit space to the right of operators that use this rule.
+The main [get property](#get-property) and [call function/method](#calling-functions) operators use the _right operand rule_: the first right operand is the property or function. We typically omit space to the right of operators that use this rule.
 
 ```
 f = [a + b]   // function (adds its arguments)
@@ -106,7 +106,7 @@ f = [a + b]   // function (adds its arguments)
 
 ##### The Identifier-Name Rule {#identifier-name-rule}
 
-The main [get property](?Get-Property) and [call method](?Calling-Functions#calling-methods) operators, as well as [object and map literals](?Literals#objects-and-maps) use the _identifier-name rule_: property names that are [identifiers](#identifiers) are treated as strings:
+The main [get property](#get-property) and [call method](#calling-methods) operators, as well as [object and map literals](#objects-and-maps) use the _identifier-name rule_: property names that are [identifiers](#identifiers) are treated as strings:
 
 ```
 # 'u' 5 'v' 6   // {u: 5, v: 6}
@@ -132,7 +132,7 @@ Reserved words must be quoted when the identifier-name rule applies:
 
 ##### Assignment {#assignment-precedence}
 
-[Assignment](?Assignment) operators have low precedence and must be placed between their two operands:
+[Assignment](#assignment) operators have low precedence and must be placed between their two operands:
 
 ```
 x = 1 + 2     // 3
@@ -141,7 +141,7 @@ x += 3 + 4    // 10
 y = x = 8     // syntax error, multiple assignments are not allowed 
 ```
 
-[Destructuring assignment operators](?Assignment#destructure-object) must be placed after the last variable being assigned to:
+[Destructuring assignment operators](#destructure-object) must be placed after the last variable being assigned to:
 
 ```
 x = @ 5 6
@@ -152,9 +152,9 @@ u v @= x   // [5, 6] (u is 5, v is 6)
 
 The following operators take a __body__ operand:
 
-[`fun`](?Writing-Functions#fun) [`proc`](?Writing-Functions#proc) [`scope`](?Writing-Functions#scope-op) [`as`](?Writing-Functions#as) [`class`](?Classes#class) [`extends`](?Classes#extends) [`each`](?Loops#each) [`map`](?Loops#map) [`do`](?Loops#do) [`try`](?Exceptions#try) [`catch`](?Exceptions#catch) 
+[`fun`](#fun) [`proc`](#proc) [`scope`](#scope-op) [`as`](#as) [`class`](#class) [`extends`](#extends) [`each`](#each) [`map`](#map) [`do`](#do) [`try`](#try) [`catch`](#catch) 
 
-[`asyncFun`](?Writing-Functions#fun) [`asyncProc`](?Writing-Functions#proc) [`asyncScope`](?Writing-Functions#scope-op) [`asyncAs`](?Writing-Functions#as) [`asyncEach`](?Loops#async-loops) [`asyncMap`](?Loops#async-loops) [`asyncDo`](?Loops#async-loops) [`asyncTry`](?Exceptions#try) [`asyncCatch`](?Exceptions#catch) 
+[`asyncFun`](#fun) [`asyncProc`](#proc) [`asyncScope`](#scope-op) [`asyncAs`](#as) [`asyncEach`](#async-loops) [`asyncMap`](#async-loops) [`asyncDo`](#async-loops) [`asyncTry`](#try) [`asyncCatch`](#catch) 
 
 The body is always the final operand and must be in parentheses or be an indented block. Also, the body cannot be before the operator:
 
@@ -171,7 +171,7 @@ x y (x + y) fun   // syntax error, missing body
 
 Body operands are important for the following reasons:
 
-* They dictate the visibility of variables &mdash; see [Local Variables](?Assignment#local-variables).
+* They dictate the visibility of variables &mdash; see [Local Variables](#local-variables).
 
 * `await` can only be used in the body of one of the asynchronous operators listed above.
 

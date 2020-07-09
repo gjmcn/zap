@@ -1,4 +1,4 @@
-## Classes
+## Classes {#classes}
 
 ---
 
@@ -16,9 +16,9 @@ Animal = fun name age
 alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
 ```
 
-The `class` operator is used like [`fun`](?Writing-Functions#fun), but returns a class rather than a function. Furthermore, when `class` is used:
+The `class` operator is used like [`fun`](#fun), but returns a class rather than a function. Furthermore, when `class` is used:
 
-* If the constructor's [body](?Syntax#body-operands) is empty, the parameters are automatically added to `this`:
+* If the constructor's [body](#body-operands) is empty, the parameters are automatically added to `this`:
 
 ```{.indent}
 Animal = class name age ()
@@ -51,7 +51,7 @@ new Animal 'Alex'   // Animal {name: "Alex"}
                     // be invoked without 'new'
 ```
 
-Use [`::`](?Get-Property#colon-proto-getter) to add a function to an object's prototype — i.e. to add a method to a class:
+Use [`::`](#colon-proto-getter) to add a function to an object's prototype — i.e. to add a method to a class:
 
 ```
 Animal = class name ()
@@ -73,7 +73,7 @@ Create a subclass.
 
 * The first operand of `extends` is the parent class.
 
-* If the constructor [body](?Syntax#body-operands) is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.
+* If the constructor [body](#body-operands) is empty, the subclass is given a default constructor that passes its arguments to the parent constructor.
 
 ```
 Animal = class name ()

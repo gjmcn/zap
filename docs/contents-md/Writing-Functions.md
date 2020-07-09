@@ -13,7 +13,7 @@ A function returns the value of the last expression evaluated.
 
 Create a regular function.
 
-The operands of `fun` are the parameter names and the function [body](?Syntax#body-operands):
+The operands of `fun` are the parameter names and the function [body](#body-operands):
 
 ```
 // no parameters, body in parentheses
@@ -31,7 +31,7 @@ f = fun x y
 \f 5 10   // 3
 ```
 
-Use `asyncFun` to create an asynchronous function. The following example uses [`period`](?Print-and-Debug#period) to create a promise that resolves after `delay` milliseconds:
+Use `asyncFun` to create an asynchronous function. The following example uses [`period`](#period) to create a promise that resolves after `delay` milliseconds:
 
 ```
 af = asyncFun delay
@@ -89,7 +89,7 @@ f = fun rest
 
 #### Default Parameters {#default-parameters}
 
-Use [`?=`](?Assignment#conditional-assignment) to set a default parameter value &mdash; the default is used if `undefined` or `null` is passed, or if no value is passed:
+Use [`?=`](#conditional-assignment) to set a default parameter value &mdash; the default is used if `undefined` or `null` is passed, or if no value is passed:
 
 ```
 f = fun x
@@ -138,7 +138,7 @@ f = fun x ops rest
 
 #### `scope`, `asyncScope` {#scope-op}
 
-Using `scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all [body](?Syntax#body-operands) operands, variables created inside the body of `scope` are local:
+Using `scope` is equivalent to writing a [procedure](#writing-functions) with no parameters and immediately calling it. Like all [body](#body-operands) operands, variables created inside the body of `scope` are local:
 
 ```
 x = 5
@@ -162,7 +162,7 @@ asyncScope
 
 #### `as`, `asyncAs` {#as}
 
-Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](?Syntax#body-operands) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](?Reduce#min) operator:
+Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](#body-operands) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](#min) operator:
 
 ```
 // array of objects

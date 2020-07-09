@@ -1,10 +1,10 @@
-## Get Property
+## Get Property {#get-property}
 
 ---
 
 #### `:` {#colon-getter}
 
-`:` gets an object/array property or a character from a string. `:` uses the [right operand rule](?Syntax#right-operand-rule) and the [identifier-name rule](?Syntax#identifier-name-rule):
+`:` gets an object/array property or a character from a string. `:` uses the [right operand rule](#right-operand-rule) and the [identifier-name rule](#identifier-name-rule):
 
 ```
 circle = #
@@ -51,7 +51,7 @@ o :q ?:y   // undefined
 
 #### `,` {#comma-getter}
 
-As [`:`](#colon-getter), but `,` does not use the [right operand rule](?Syntax#right-operand-rule) or the [identifier-name rule](?Syntax#identifier-name-rule):
+As [`:`](#colon-getter), but `,` does not use the [right operand rule](#right-operand-rule) or the [identifier-name rule](#identifier-name-rule):
 
 ```
 circle = #
@@ -95,7 +95,7 @@ data :2 at (@ 'Name' 'Origin')
 data :0 :Origin at (@ 1 3)   // 'uo'
 ```
 
-The second operand of `at` can be any iterable. For example, a string or a [range](?Ranges):
+The second operand of `at` can be any iterable. For example, a string or a [range](#ranges):
 
 ```
 # u 5 v 6 w 7 at 'uw'        // {u: 5, w 7}

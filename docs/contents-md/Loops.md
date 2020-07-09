@@ -1,8 +1,8 @@
-## Loops
+## Loops {#loops}
 
 ---
 
-> Operators for working with iterables (including loop operators, but also see e.g. [Reduce](?Reduce), [Filter and Group](?Filter-and-Group), [Order and Bin](?Order-and-Bin), [Backticks](?Backticks) and [Tabular Data](?Tabular-Data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
+> Operators for working with iterables (including loop operators, but also see e.g. [Reduce](#reduce), [Filter](#filter), [Group](#group), [Order](#order), [Bin](#bin), [Backticks](#backticks) and [Tabular Data](#tabular-data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
 
 ---
 
@@ -10,7 +10,7 @@
 
 Loop over an iterable.
 
-The first operand of `each` is the iterable; the final operand is the loop [body](?Syntax#body-operands). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
+The first operand of `each` is the iterable; the final operand is the loop [body](#body-operands). Between these, we can provide optional _loop parameters_ for the current value, current index and the iterable:
 
 ```
 // body in parentheses, prints: 4 5 6
@@ -61,7 +61,7 @@ As [`each`](#each), but `map` collects the value of the body (the last expressio
 
 Basic loop.
 
-The final operand of `do` is the loop [body](?Syntax#body-operands). The optional operands are the maximum number of steps and the current index:
+The final operand of `do` is the loop [body](#body-operands). The optional operands are the maximum number of steps and the current index:
 
 ```
 // prints 0 1 2 3 4

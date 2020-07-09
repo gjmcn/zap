@@ -1,8 +1,8 @@
-## Calling Functions
+## Calling Functions {#calling-functions}
 
 ---
 
-The `\` operator calls a function. `\` uses the [right operand rule](?Syntax#right-operand-rule):
+The `\` operator calls a function. `\` uses the [right operand rule](#right-operand-rule):
 
 ```
 f = [a + b]   // function (adds its arguments)
@@ -24,7 +24,7 @@ add = [a + b]         // function
 
 #### Methods {#calling-methods}
 
-`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](?Syntax#right-operand-rule) and the [identifier-name rule](?Syntax#identifier-name-rule):
+`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](#right-operand-rule) and the [identifier-name rule](#identifier-name-rule):
 
 ```
 x = @ 5 6 7 8
