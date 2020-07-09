@@ -1,5 +1,4 @@
 body {
-  overflow: hidden;
   font-size: 16px;
 }
 @media (max-width: 575.98px) {
@@ -8,29 +7,25 @@ body {
   }
 }
 
-#navbar {
-  padding-top: 0;
-  padding-bottom: 0;
-  height: 46px;
-  background-color: #2e333d !important;
-}
-
-#zap-link {
-  padding: 3px;
-  font-size: 19px;
+#zap-title {
+  padding: 5px 0 5px 5px;
   cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  font-size: 19px;
 }
 
-#zap-link img {
-  width: 25px;
-  height: 25px;
-  margin-right: 4px;
+#zap-title img {
+  width: 30px;
+  height: 30px;
   margin-bottom: 4px;
+  pointer-events: none;
 }
 
 #content-wrap {
   position: relative;
-  height: calc(100vh - 46px);
+  margin: 0 auto;
+  max-width: 1000px;
 }
 
 .huge {
@@ -43,15 +38,13 @@ body {
 
 #sidebar {
   position: fixed;
-  top: 46px;
+  top: 0;
   bottom: 0;
   width: 200px;
   padding: 15px 15px 0 15px;
-  background-color: #f9f9f9;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  border-right: 0.5px solid #999;
 }
 #sidebar::-webkit-scrollbar { 
   display: none;
@@ -71,18 +64,20 @@ body {
   cursor: pointer;
 }
 #sidebar a:hover {
-  background-color: #eee;
+  background-color: #f2f2f2;
   text-decoration: none;
 }
 #sidebar a.selected {
   font-weight: 700;
 }
 
+#sidebar hr {
+  margin: 12px 10px;
+}
+
 #panel {
   padding-right: 15px;
   margin-left: 235px;
-  height: calc(100vh - 46px);
-  overflow-y: auto;
 }
 @media (max-width: 575.98px) {
   #panel {
