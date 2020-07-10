@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const md = require('markdown-it')({ html: true })
   .use(require('markdown-it-attrs'));
@@ -37,7 +39,8 @@ let sidebarHtml = '';
 let panelHtml = '';
 
 for (let [anchor, heading] of sections) {
-  sidebarHtml += `<a href="#${anchor}">${heading}</a>`
+  sidebarHtml += `<a id="side-link-${anchor}" class="side-link" href="#${
+    anchor}">${heading}</a>`
   const mdText = fs.readFileSync(`./contents-md/${anchor}.md`, 'utf8')
     .replace(
       /```(\{\.indent\})?[\n\r]*([\s\S]*?)```/g,
