@@ -12,6 +12,7 @@
   <link rel="shortcut icon" href="images/zap-black.png">
   <title>Zap docs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="src/index.css">
@@ -35,13 +36,13 @@
       <h2 id="overview">Overview</h2>
 <hr>
 <p>Zap is a compile-to-JavaScript language with a clean, concise syntax and powerful high-level operators. Zap can use JavaScript objects and libraries, and vice-versa.</p>
-<p><strong>Literals</strong> are particularly simple:</p>
+<p>Literals are particularly simple:</p>
 <pre><code><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>    <span class="zap-comment">// Object {u: 5, v: 6}</span>
 <span class="zap-operator">##</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>   <span class="zap-comment">// Map {'u' =&gt; 5, 'v' =&gt; 6}</span>
 <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>        <span class="zap-comment">// Array [5, 6]</span>
 <span class="zap-operator">@@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>       <span class="zap-comment">// Set {5, 6}</span>
 </code></pre>
-<p>Everything in Zap is an <strong>expression</strong> — no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or the end of the expression is reached:</p>
+<p>Everything in Zap is an expression — no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or the end of the expression is reached:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">5</span>     <span class="zap-comment">// [3, 4, 5]</span>
 <span class="zap-number">3</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span>     <span class="zap-comment">// [3, 4, 5]</span>
 <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-operator">@</span>     <span class="zap-comment">// [3, 4, 5]</span>
@@ -57,7 +58,7 @@
 <p>Many operators have names rather than symbols:</p>
 <pre><code><span class="zap-keyword">typeof</span> <span class="zap-number">5</span> <span class="zap-operator">==</span> <span class="zap-string">'number'</span> <span class="zap-keyword">print</span>   <span class="zap-comment">// prints (and returns) true</span>
 </code></pre>
-<p><strong>Indented blocks</strong> or <strong>parentheses</strong> can be used for precedence:</p>
+<p>Indented blocks or parentheses can be used for precedence:</p>
 <pre><code><span class="zap-number">3</span> <span class="zap-operator">*</span> <span class="zap-punctuation">(</span><span class="zap-number">4</span> <span class="zap-operator">+</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 27</span>
 <span class="zap-number">3</span> <span class="zap-operator">*</span> 
     <span class="zap-number">4</span> <span class="zap-operator">+</span> <span class="zap-number">5</span>     <span class="zap-comment">// 27</span>
@@ -92,7 +93,7 @@
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Bill'</span>  <span class="zap-identifier">breed</span> <span class="zap-string">'boxer'</span>    <span class="zap-identifier">food</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'bananas'</span> <span class="zap-string">'beans'</span> <span class="zap-string">'biscuits'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Debra'</span> <span class="zap-identifier">breed</span> <span class="zap-string">'doberman'</span> <span class="zap-identifier">food</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'dates'</span> <span class="zap-string">'donuts'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
 </code></pre>
-<p><code>fun</code> creates a <strong>function</strong>; <code>\</code> calls a function. <code>\</code> has special behavior: the first right operand is always the function:</p>
+<p><code>fun</code> creates a function; <code>\</code> calls a function. <code>\</code> has special behavior: the first right operand is always the function:</p>
 <pre><code><span class="zap-identifier">double</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-punctuation">(</span><span class="zap-number">2</span> <span class="zap-operator">*</span> <span class="zap-identifier">x</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// body in parentheses</span>
 
 <span class="zap-identifier">add</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span>
@@ -123,12 +124,12 @@
 <span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>   <span class="zap-comment">// {value: 0, done: false}</span>
 <span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>   <span class="zap-comment">// {value: 1, done: false}</span>
 </code></pre>
-<p>The <strong>range</strong> operators create generators:</p>
+<p>The range operators create generators:</p>
 <pre><code><span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">3</span>           <span class="zap-comment">// generator (1 2 3)</span>
 <span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">7</span> <span class="zap-number">2</span>         <span class="zap-comment">// generator (1 3 5 7)</span>
 <span class="zap-number">1</span> <span class="zap-number">7</span> <span class="zap-keyword">linSpace</span> <span class="zap-number">4</span>   <span class="zap-comment">// generator (1 3 5 7)</span>
 </code></pre>
-<p>There are lots of operators for working with <strong>iterables</strong> (arrays, sets, generators etc.). For example:</p>
+<p>There are lots of operators for working with iterables (arrays, sets, generators etc.). For example:</p>
 <pre><code><span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>              <span class="zap-comment">// Set {5, 6, 7}</span>
 <span class="zap-identifier">s</span> <span class="zap-keyword">array</span>                   <span class="zap-comment">// [5, 6, 7]</span>
 <span class="zap-identifier">s</span> <span class="zap-keyword">each</span> <span class="zap-identifier">x</span> <span class="zap-punctuation">(</span><span class="zap-identifier">x</span> <span class="zap-operator">+</span> <span class="zap-number">10</span> <span class="zap-keyword">print</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// prints 15 16 17</span>
@@ -138,7 +139,7 @@
 <span class="zap-identifier">s</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>          <span class="zap-comment">// [6, 7] </span>
 <span class="zap-identifier">s</span> <span class="zap-keyword">group</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>           <span class="zap-comment">// Map {false =&gt; [5], true =&gt; [6, 7]}</span>
 </code></pre>
-<p><strong>Backticks</strong> tell an arithmetic, logical or comparison operator to iterate over an operand:</p>
+<p>Backticks tell an arithmetic, logical or comparison operator to iterate over an operand:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>     <span class="zap-comment">// [5, 6, 7]</span>
 <span class="zap-identifier">x</span>  <span class="zap-operator">`+</span>  <span class="zap-number">10</span>       <span class="zap-comment">// [15, 16, 17]       </span>
 <span class="zap-number">10</span>  <span class="zap-operator">+`</span> <span class="zap-identifier">x</span>        <span class="zap-comment">// [15, 16, 17]</span>
@@ -148,11 +149,11 @@
 <span class="zap-string">'ab'</span> <span class="zap-operator">`+</span>  <span class="zap-string">'cd'</span>   <span class="zap-comment">// ['acd', bcd']</span>
 <span class="zap-string">'ab'</span> <span class="zap-operator">`+`</span> <span class="zap-string">'cd'</span>   <span class="zap-comment">// ['ac', 'bd']</span>
 </code></pre>
-<p>The many <strong>elementwise operators</strong> can be used with iterables or non-iterables:</p>
+<p>The many elementwise operators can be used with iterables or non-iterables:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">9</span> <span class="zap-number">16</span> <span class="zap-keyword">sqrt</span>   <span class="zap-comment">// [2, 3, 4]</span>
 <span class="zap-number">4</span> <span class="zap-keyword">sqrt</span>          <span class="zap-comment">// 2</span>
 </code></pre>
-<p>Use <code>class</code> to write a <strong>constructor</strong> and <code>extends</code> to write a subclass constructor. <code>::</code> gets a property from the prototype of an object so can be used to add methods:</p>
+<p>Use <code>class</code> to write a constructor and <code>extends</code> to write a subclass constructor. <code>::</code> gets a property from the prototype of an object so can be used to add methods:</p>
 <pre><code><span class="zap-comment">// class with empty body: parameters become properties of 'this'</span>
 <span class="zap-identifier">Cat</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
 
@@ -164,14 +165,14 @@
 <span class="zap-identifier">leo</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Lion</span> <span class="zap-string">'Leo'</span>   <span class="zap-comment">// Lion {name: "Leo"}</span>
 <span class="zap-identifier">leo</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span> <span class="zap-string">'hungry'</span>    <span class="zap-comment">// 'I am Leo the hungry lion'</span>
 </code></pre>
-<p>Except for <code>class</code> and <code>extends</code>, all operators that take a body operand have an <strong>asynchronous</strong> version:</p>
+<p>Except for <code>class</code> and <code>extends</code>, all operators that take a body operand have an asynchronous version:</p>
 <pre><code><span class="zap-comment">// prints the length of the data (and returns a promise that</span>
 <span class="zap-comment">// resolves to the length)</span>
 <span class="zap-keyword">asyncScope</span>
     <span class="zap-identifier">data</span> <span class="zap-operator">=</span> <span class="zap-string">'data.json'</span> <span class="zap-operator">\</span><span class="zap-identifier">fetch</span> <span class="zap-keyword">await</span> <span class="zap-operator">~</span><span class="zap-identifier">json</span> <span class="zap-keyword">await</span>
     <span class="zap-identifier">data</span> <span class="zap-operator">:</span><span class="zap-identifier">length</span> <span class="zap-keyword">print</span>
 </code></pre>
-<p><strong>DOM operators</strong> work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
+<p>DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
 <pre><code><span class="zap-comment">// set color of each span with class danger to red</span>
 <span class="zap-string">'span.danger'</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-string">'red'</span>
 </code></pre>
