@@ -8,23 +8,19 @@ body {
   color: #000;
   text-decoration: none;
   font-size: 1.2em;
+  border-radius: 5px;
 }
 
 #zap-title img {
   width: 28px;
   height: 28px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   pointer-events: none;
 }
 
 #content-wrap {
-  position: relative;
   margin: 0 auto;
   max-width: 955px;
-}
-
-.huge {
-  font-size: 1.30em;
 }
 
 .small {
@@ -49,10 +45,11 @@ body {
   display: block;
   padding: 4px 10px;
   color: #181818;
-  font-size: 0.90em;
+  font-size: 0.9em;
   cursor: pointer;
+  border-radius: 5px;
 }
-#sidebar a:hover {
+#sidebar a:hover, #zap-title:hover {
   background-color: #f2f2f2;
   text-decoration: none;
 }
@@ -87,7 +84,7 @@ h4 { font-size: 1.42em }
 h5 { font-size: 1.22em }
 h6 { font-size: 1.1em }
 
-p, ul, ol, dl, hr, blockquote, table {
+p, ul, ol, dl, blockquote, table {
   margin-bottom: 19px;
 }
 
@@ -108,23 +105,16 @@ blockquote > p {
 }
 blockquote > p:before {
   content: "Note: ";
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .table-sm.w400 { max-width: 400px }
 .table-sm.w500 { max-width: 500px }
 .table-sm.w600 { max-width: 600px }
 
-.list-table td {
-  border-style: solid;
-  border-color: transparent;
-  border-width: 4px 8px 4px 0;
-}
-
 #panel a {
   color: #105fb8;
 }
-
 #panel a code {
   pointer-events: none;
 }
@@ -193,11 +183,10 @@ pre > code {
     padding: 15px 10px 0 10px;
   }
   #panel {
-    margin-left: 155px;
+    margin-left: 150px;
     padding-right: 20px;
   }
 }
-
 
 
 /* ----- Zap highlighting, colors matched to Zap playground ----- */
