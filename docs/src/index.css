@@ -120,7 +120,6 @@ blockquote > p:before {
 }
 
 pre, code {
-  font-size: 0.88em;
   font-family: 'Source Code Pro', monospace;
 }
 
@@ -143,6 +142,11 @@ code {
   border-radius: 3px;
   font-weight: 700;
   white-space: nowrap;
+  font-size: 0.86em;
+}
+
+h2 code, h3 code, h4 code, h5 code, h6 code {
+  font-size: 0.82em;
 }
 
 pre > code {
@@ -150,6 +154,7 @@ pre > code {
   background-color: transparent;
   color: #dedede;
   font-weight: 400;
+  font-size: 1.01em;
   white-space: pre;
 }
 
