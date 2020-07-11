@@ -163,9 +163,6 @@
         resultWidth = Math.min(resultWidth + 2, 92);
         setEditorWidth();
       }
-      else if (evt.ctrlKey && evt.shiftKey && evt.key === 'S') {
-        saveState();
-      }
       else {
         return;
       }
