@@ -180,9 +180,9 @@
 <span class="zap-punctuation">|</span> <span class="zap-keyword">into</span> <span class="zap-string">'body'</span>
 </code></pre><h2 id="use">Use</h2>
 <hr>
-<h4>Install</h4>
+<h5>Install</h5>
 <pre><code>npm install --save '@gjmcn/zap'</code></pre>
-<h4>Load</h4>
+<h5>Load</h5>
 <ul>
 <li>
 <p>CommonJS:</p>
@@ -234,7 +234,7 @@
 </tbody>
 </table>
 <p>When <code>sourceMap</code> is <code>true</code>, add a <code>sourceFile</code> option giving the path to the source file.</p>
-<p>The generated JavaScript code is wrapped in an IIFE and runs in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>. To use an asynchronous IIFE, add a truthy <code>asyncIIFE</code> option to the options object.</p>
+<p>The options object can also have an <code>iife</code> property that specifies whether the generated JavaScript should be wrapped in an <a href="https://developer.mozilla.org/en-US/docs/Glossary/IIFE">IIFE</a>. This property can be <code>'sync'</code> (synchronous IIFE, the default), <code>'async'</code> (asynchronous IIFE) or <code>'none'</code> (no IIFE). Wrapper IIFEs use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>.</p>
 <p>Zap code compiles to modern JavaScript. Where appropriate, use a transpiler such as <a href="https://babeljs.io/">Babel</a> to ensure compatibility with the target environment(s).</p>
 <h4 id="command-line">Command Line</h4>
 <blockquote>
@@ -334,9 +334,6 @@
 </li>
 <li>
 <p><code>--compile</code>, <code>--map</code>, <code>--nodes</code>, <code>--print</code>, <code>--tokens</code> and <code>--proc</code> can be combined.</p>
-</li>
-<li>
-<p>In the Zap REPL, executing e.g. <code>x = 5</code> will create a local variable inside an IIFE, so <code>x</code> will not be visible to subsequent commands. Instead, use <code>global :x = 5</code> to create a global variable.</p>
 </li>
 <li>
 <p>All file actions are synchronous.</p>
@@ -843,7 +840,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">x</span>            <span class="zap-comment">// 5 (outer x)</span>
 </code></pre>
-<p>Variables created outside of a body are <em>not</em> global — they are not visible to other files. <a href="#set-property">Set a property</a> of the global object to create a global variable:</p>
+<p>Using the default compiler options (see <a href="#use">Use</a>), variables created outside of a body are <em>not</em> global — i.e. they are not visible to other files. <a href="#set-property">Set a property</a> of the global object to create a global variable:</p>
 <pre><code><span class="zap-identifier">globalThis</span> <span class="zap-operator">:</span><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">5</span>   <span class="zap-comment">// works in any JavaScript environment</span>
 <span class="zap-identifier">window</span> <span class="zap-operator">:</span><span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-number">6</span>       <span class="zap-comment">// works in browsers</span>
 <span class="zap-identifier">global</span> <span class="zap-operator">:</span><span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-number">7</span>       <span class="zap-comment">// works in Node.js</span>

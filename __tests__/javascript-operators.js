@@ -54,6 +54,6 @@ testEach('new', [
 test('await', async () => {
   const val = await compute(`
 20 period await  
-5`, {asyncIIFE: true});
+5`, {iife: 'async'});
   expect(val).toBe(5);
 });

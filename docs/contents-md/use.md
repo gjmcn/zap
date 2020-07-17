@@ -2,11 +2,11 @@
 
 ---
 
-#### Install
+##### Install
 
 <pre><code>npm install --save '@gjmcn/zap'</code></pre>
 
-#### Load
+##### Load
 
 * CommonJS:
 
@@ -30,7 +30,7 @@ The exported `zap` function compiles a string of Zap code to JavaScript. The opt
 
 When `sourceMap` is `true`, add a `sourceFile` option giving the path to the source file.
 
-The generated JavaScript code is wrapped in an IIFE and runs in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). To use an asynchronous IIFE, add a truthy `asyncIIFE` option to the options object.
+The options object can also have an `iife` property that specifies whether the generated JavaScript should be wrapped in an [IIFE](https://developer.mozilla.org/en-US/docs/Glossary/IIFE). This property can be `'sync'` (synchronous IIFE, the default), `'async'` (asynchronous IIFE) or `'none'` (no IIFE). Wrapper IIFEs use [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). 
 
 Zap code compiles to modern JavaScript. Where appropriate, use a transpiler such as [Babel](https://babeljs.io/) to ensure compatibility with the target environment(s).
 
@@ -83,8 +83,6 @@ Additional information:
 * `--map` is the only option that can be combined with `--all`.
 
 * `--compile`, `--map`, `--nodes`, `--print`, `--tokens` and `--proc` can be combined.
-
-* In the Zap REPL, executing e.g. `x = 5` will create a local variable inside an IIFE, so `x` will not be visible to subsequent commands. Instead, use `global :x = 5` to create a global variable.
 
 * All file actions are synchronous.
 

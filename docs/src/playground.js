@@ -99,7 +99,7 @@
       }
       let jsCode;
       try {
-        jsCode = zap(editor.getValue(), {asyncIIFE: true});
+        jsCode = zap(editor.getValue(), {iife: 'async'});
       }
       catch (err) {
         print(err, 'throw');

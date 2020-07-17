@@ -98,7 +98,7 @@ scope
 x            // 5 (outer x)
 ```
 
-Variables created outside of a body are _not_ global &mdash; they are not visible to other files. [Set a property](#set-property) of the global object to create a global variable:
+Using the default compiler options (see [Use](#use)), variables created outside of a body are _not_ global &mdash; i.e. they are not visible to other files. [Set a property](#set-property) of the global object to create a global variable:
 
 ```
 globalThis :x = 5   // works in any JavaScript environment

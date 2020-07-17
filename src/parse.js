@@ -64,7 +64,7 @@ function tokenPosn(tkn, js) {
 //  - options 'jsTree', 'sourceMap', 'js' indicate what to include in returned
 //    object
 //  - 'sourceFile' option should be used if 'sourceMap' option true
-//  - 'asyncIIFE' option indicates if wrapper IIFE is to be asynchronous
+//  - 'iife': wrapper iife, can be 'none', 'sync' (default) or 'async'
 //  - returns object with none/some/all properties: 'jsTree', 'sourceMap', 'js'
 export default (tokens, options = {}) => {
 
@@ -88,13 +88,13 @@ export default (tokens, options = {}) => {
       assign: null,         // LHS and assignment, an array if used
       assignOpValue: null,  // assignment operator value, e.g. '#='
       variables: new Set(), // names of local variables - these bubble up to
-                            // the parent function or base block
+                            //   the parent function or base block
       awaitUsed: false,     // awaitUsed, stopUsed and yieldUsed indicate
-      stopUsed: false,      // whether await, stop and yield/yieldFrom are used
-      yieldUsed: false,     // inside the block - if truthy, these properties
-                            // bubble up to the parent function or base block
+      stopUsed: false,      //   if await, stop and yield/yieldFrom are used
+      yieldUsed: false,     //   inside the block - if truthy, these properties
+                            //   bubble up to the parent function or base block
       js: [],               // each entry is an array representing a subexpr,
-                            // or a comma (string) separating these
+                            //   or a comma (string) separating these
     }
     if (!b.token) {
       b.import = [];         // import statements
@@ -676,17 +676,23 @@ export default (tokens, options = {}) => {
       const addToStart = [];
       const pointToStart = js => ({js, line: 1, column: 0});
 
-      // import and export statements, IIFE and 'use strict'
+      // export statement
       if (baseBlock.export.size) {
         addToStart.push(
           pointToStart(`export var ${[...baseBlock.export].join(', ')};\n`));
-      }
+        }
+        
+      // import statements
       if (baseBlock.import.length) {
         addToStart.push(baseBlock.import);
       }
-      addToStart.push(`(${
-        options.asyncIIFE ? 'async ' : ''}() => {\n'use strict'; return `);
-      baseTree.push('\n})();');
+
+      // wrapper iife
+      if (options.iife !== 'none') {
+        addToStart.push(`(${options.iife === 'async' ? 'async ' : ''
+          }() => {\n'use strict'; return `);
+        baseTree.push('\n})();');
+      }
 
       // add used _z_ methods
       if (_z_used.size) {

@@ -21,8 +21,8 @@ const options = yargs
   .option('v', { alias: 'version',                                                                   type: 'boolean' })
   .argv;
 
-function basicCompile(zapCode) {
-  return zap(zapCode, {js: true}).js;
+function basicCompile(zapCode, iife = 'sync') {
+  return zap(zapCode, {js: true, iife}).js;
 }
 
 function isDir(p) {
@@ -47,7 +47,7 @@ if (!options.h && !options.v) {
       prompt: 'zap> ',
       useGlobal: true,
       eval: (cmd, context, filename, callback) => {
-        callback(null, (1, eval)(basicCompile(cmd)));
+        callback(null, (1, eval)(basicCompile(cmd, 'none')));
       }
     });
   }
@@ -135,7 +135,7 @@ if (!options.h && !options.v) {
         sourceFile: path.basename(sourceFile), 
         jsTree:     options.n,
         js:         (options.c || options.p),
-        asyncIIFE:  false
+        iife:       'sync'
       });
     }
     catch (err) {

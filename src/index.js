@@ -11,7 +11,7 @@ export default (code, {
     sourceFile = null,   // used for source map 
     jsTree     = false,  // return JS tree 
     js         = true,   // return generated JS
-    asyncIIFE  = false   // wrapper IIFE is async
+    iife       = 'sync'  // wrapper IIFE: 'none', 'sync', 'async'
   } = {}) => {
 
   const result = {};
@@ -26,7 +26,7 @@ export default (code, {
     
     if (sourceMap || jsTree || js) {
       Object.assign(result,
-        parse(pTkns, {sourceMap, sourceFile, jsTree, js, asyncIIFE}));
+        parse(pTkns, {sourceMap, sourceFile, jsTree, js, iife}));
     }
   
   }
