@@ -152,35 +152,14 @@ $div <\\vegaEmbed
 `
 ], [
 'html - quiz',
-`buttonStyle = fun btn
-    btn
-    | style 'text-align' 'center'
-    | style 'margin' '2px'
-    | style 'padding' '5px 0'
-    | style 'background-color' '#dde'
-    | style 'cursor' 'pointer'
+`answer = null
 
-question isCorrect @= 2 $h1
+question isCorrect @= 2 $h2
 | style 'display' 'inline-block'
-question
-| style 'text-align' 'center'
-| style 'width' '150px'
+| style 'padding-left' '40px'
 
-grid = $div
-grid
-| insert (1 to 91 10 encode 'div')
-| style 'display' 'flex'
-| insertEach
-    fun rowStart
-        rowStart to (rowStart + 9) encode 'div'
-        | text [a]
-        | style 'flex' '1 1 0'
-        | \\buttonStyle
-        | on 'click' [isCorrect text (this text number == answer ? '😄' '😞')]
-
-newQuestion = $div
-| text 'New Question'
-| \\buttonStyle
+newQuestion = $button
+| text 'New question'
 | on 'click'
     fun
         x y @= 1 11 randomInt 2
@@ -188,9 +167,19 @@ newQuestion = $div
         answer \\= x * y
         isCorrect text '😕'
 
-answer = null
+grid = $div
+| style 'display' 'grid'
+| style 'grid-template-columns' 'repeat(10, 1fr)'
+| style 'gap' '3px'
+
+grid
+| insert (1 to 100 encode 'button')
+| text [a]
+| style 'padding' '5px 0'
+| on 'click' [isCorrect text (this text number == answer ? '😄' '😞')]
+
 newQuestion ~click
-@ question isCorrect grid newQuestion into (fragment)`
+@ newQuestion question isCorrect grid into (fragment)`
 ], [
 'html - lucky dip',
 `// fill in choices (optional), choose a winner or loser
