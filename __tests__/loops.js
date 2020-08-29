@@ -1,6 +1,7 @@
 const {compute} = require('./test-helpers.js');
 
-// each, map
+
+// ========== each, map ==========
 
 test('each, array, 0 callback args', () => {
   expect(compute(`
@@ -112,8 +113,71 @@ test('map, array with empty entries', () => {
 });
 
 
+// ========== do ==========
+
+test('do, body only', () => {
+    expect(compute(`
+x = 1
+do
+    x *= 2
+    if (x > 20)
+        stop
+x
+`)).toBe(32);
+});
+
+test('do, with limit', () => {
+    expect(compute(`
+x = 1
+3 do (x *= 2)
+x
+`)).toBe(8);
+})
+
+test('do, with limit and index', () => {
+    expect(compute(`
+x = @
+3 do i (x ~push i)
+x
+`)).toStrictEqual([0, 1, 2]);
+});
+
+test('do, with infinite limit and index', () => {
+    expect(compute(`
+x = @
+Infinity do i
+    x ~push i
+    if (i == 3)
+        stop
+x
+`)).toStrictEqual([0, 1, 2, 3]);
+});
+
+test('do, if-else to stop', () => {
+    expect(compute(`
+x = 1
+do
+    if (x > 10)
+        stop
+    | else
+        x *= 2
+x
+`)).toBe(16);
+});
+
+test('do, number of steps fixed', () => {
+    expect(compute(`
+n = 3
+x = @
+n do i
+    n += 10
+    x ~push i
+x
+`)).toStrictEqual([0, 1, 2]);
+});
+
+
 // ========== !! TO DO !! ==========: 
-//  -do
 //  -asyncEach, asyncMap. asyncDo loops
 //  -stop
 //  -yield and yieldRrom in loops
