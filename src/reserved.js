@@ -75,7 +75,7 @@ const reserved = {
     'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation', 'arrObj',
     'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export', 'import',
     'importAs', 'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace',
-    'apply', 'call', 'print', 'load', 'stop'
+    'apply', 'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties'
 
   ]),
 

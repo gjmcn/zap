@@ -664,7 +664,7 @@
 <p><a href="#export"><code>export</code></a> <a href="#import"><code>import</code></a> <a href="#import-all"><code>importAll</code></a> <a href="#import-as"><code>importAs</code></a> <a href="#import-default"><code>importDefault</code></a> <a href="#load"><code>load</code></a></p>
 <hr>
 <h4>Other</h4>
-<p><a href="#arrays"><code>array</code></a> <a href="#array-of-objects"><code>arrObj</code></a> <a href="#call-and-apply"><code>apply</code></a> <a href="#call-and-apply"><code>call</code></a> <a href="#debugger"><code>debugger</code></a> <a href="#if"><code>if</code></a> <a href="#lin-space"><code>linSpace</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#period"><code>period</code></a> <a href="#print"><code>print</code></a> <a href="#throw"><code>throw</code></a> <a href="#to"><code>to</code></a> <a href="#transpose"><code>transpose</code></a></p>
+<p><a href="#arrays"><code>array</code></a> <a href="#array-of-objects"><code>arrObj</code></a> <a href="#call-and-apply"><code>apply</code></a> <a href="#call-and-apply"><code>call</code></a> <a href="#debugger"><code>debugger</code></a> <a href="#arrays"><code>empties</code></a> <a href="#if"><code>if</code></a> <a href="#lin-space"><code>linSpace</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#arrays"><code>ones</code></a> <a href="#period"><code>period</code></a> <a href="#print"><code>print</code></a> <a href="#throw"><code>throw</code></a> <a href="#to"><code>to</code></a> <a href="#transpose"><code>transpose</code></a> <a href="#arrays"><code>zeros</code></a></p>
 <hr>
 <h4>Random and Shuffle</h4>
 <p><a href="#binomial"><code>binomial</code></a> <a href="#categorical"><code>categorical</code></a> <a href="#exponential"><code>exponential</code></a> <a href="#geometric"><code>geometric</code></a> <a href="#log-normal"><code>logNormal</code></a> <a href="#normal"><code>normal</code></a> <a href="#random-op"><code>random</code></a> <a href="#random-int"><code>randomInt</code></a> <a href="#shuffle"><code>shuffle</code></a></p>
@@ -703,8 +703,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <hr>
 <h4 id="arrays">Arrays</h4>
 <p>Use the <code>@</code> operator for an array:</p>
-<pre><code><span class="zap-operator">@</span>        <span class="zap-comment">// empty array</span>
-<span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>    <span class="zap-comment">// [5, 6]</span>
+<pre><code><span class="zap-operator">@</span>       <span class="zap-comment">// empty array</span>
+<span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>   <span class="zap-comment">// [5, 6]</span>
 </code></pre>
 <p>There is also an <code>array</code> operator that takes any number of iterables and returns a new array containing the elements of all of the iterables:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>   <span class="zap-comment">// [5, 6, 7]</span>
@@ -717,6 +717,14 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">z</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// ['a', 'b', 'c']</span>
 
 <span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-identifier">z</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [5, 6, 7, 8, 9, 'a', 'b', 'c']</span>
+</code></pre>
+<p><code>empties</code>, <code>zeros</code> and <code>ones</code> create an array of a given length. <code>zeros</code> and <code>ones</code> set each entry to <code>0</code> or <code>1</code>. Include additional operands to create nested arrays:</p>
+<pre><code><span class="zap-number">3</span> <span class="zap-keyword">empties</span>    <span class="zap-comment">// [empty x 3]</span>
+<span class="zap-number">2</span> <span class="zap-number">3</span> <span class="zap-keyword">zeros</span>    <span class="zap-comment">// [[0, 0, 0], [0, 0, 0]]</span>
+<span class="zap-number">2</span> <span class="zap-number">3</span> <span class="zap-number">2</span> <span class="zap-keyword">ones</span>   <span class="zap-comment">// [</span>
+             <span class="zap-comment">//   [[1, 1], [1, 1], [1, 1]],</span>
+             <span class="zap-comment">//   [[1, 1], [1, 1], [1, 1]]]</span>
+             <span class="zap-comment">// ]</span>
 </code></pre>
 <hr>
 <h4 id="sets">Sets</h4>

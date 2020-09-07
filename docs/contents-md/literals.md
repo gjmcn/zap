@@ -41,8 +41,8 @@ Use the `#` operator for an object, and `##` for a map:
 Use the `@` operator for an array:
 
 ```
-@        // empty array
-@ 5 6    // [5, 6]
+@       // empty array
+@ 5 6   // [5, 6]
 ```
 
 There is also an `array` operator that takes any number of iterables and returns a new array containing the elements of all of the iterables:
@@ -58,6 +58,17 @@ y array       // [8, 9]
 z array       // ['a', 'b', 'c']
 
 x y z array   // [5, 6, 7, 8, 9, 'a', 'b', 'c']
+```
+
+`empties`, `zeros` and `ones` create an array of a given length. `zeros` and `ones` set each entry to `0` or `1`. Include additional operands to create nested arrays:
+
+```
+3 empties    // [empty x 3]
+2 3 zeros    // [[0, 0, 0], [0, 0, 0]]
+2 3 2 ones   // [
+             //   [[1, 1], [1, 1], [1, 1]],
+             //   [[1, 1], [1, 1], [1, 1]]]
+             // ]
 ```
 
 ---

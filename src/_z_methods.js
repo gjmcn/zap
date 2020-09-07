@@ -198,6 +198,24 @@ export default {
     return r;
   },
 
+  _mdArray(d, v) {
+    function f(j) {
+      const x = new Array(+d[j]);
+      if (j === d.length - 1) {
+        if (v !== undefined) {
+          x.fill(v);
+        }
+      }
+      else {
+        for (let i = 0; i < +d[j]; i++) {
+          x[i] = f(j + 1);
+        } 
+      }
+      return x;
+    }
+    return f(0);
+  },
+
   _encode(s, x, t, a = true) {
     let e = [];
     for (let v of x) {
@@ -566,6 +584,15 @@ export default {
     }
     return r;
   },
+
+  ones(...d) { return this._mdArray(d, 1) },
+  onesUse: ['_mdArray'],
+
+  zeros(...d) { return this._mdArray(d, 0) },
+  zerosUse: ['_mdArray'],
+
+  empties(...d) { return this._mdArray(d) },
+  emptiesUse: ['_mdArray'],
 
   select(...a) {
     return (a.length === 1)

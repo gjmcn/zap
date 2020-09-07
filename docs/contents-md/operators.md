@@ -110,7 +110,7 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Other
 
-[`array`](#arrays) [`arrObj`](#array-of-objects) [`apply`](#call-and-apply) [`call`](#call-and-apply) [`debugger`](#debugger) [`if`](#if) [`linSpace`](#lin-space) [`objArr`](#object-of-arrays) [`period`](#period) [`print`](#print) [`throw`](#throw) [`to`](#to) [`transpose`](#transpose) 
+[`array`](#arrays) [`arrObj`](#array-of-objects) [`apply`](#call-and-apply) [`call`](#call-and-apply) [`debugger`](#debugger) [`empties`](#arrays) [`if`](#if) [`linSpace`](#lin-space) [`objArr`](#object-of-arrays) [`ones`](#arrays) [`period`](#period) [`print`](#print) [`throw`](#throw) [`to`](#to) [`transpose`](#transpose) [`zeros`](#arrays)
 
 ---
 
