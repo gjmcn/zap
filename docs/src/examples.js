@@ -21,7 +21,7 @@ iris group [a :species] [a mean [a :petalWidth]]
 // comment later code to print an earlier result`
 ], [
 'vega-lite plot',
-`vegaEmbed = ('vega-embed@6.8.0' \\require await)
+`vegaEmbed = \\require 'vega-embed@6.12' await
   
 $div <\\vegaEmbed
     #
@@ -119,7 +119,7 @@ boundary = 0 1 linSpace 100 map x
     | y (x ^ 3 + 0.2 <> 1)
 
 // Vega-Lite plot
-vegaEmbed = 'vega-embed@6.8.0' \\require await
+vegaEmbed = 'vega-embed@6.12' \\require await
 enc = fun
     #
     | x (# field 'x' type 'quantitative')
