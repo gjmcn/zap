@@ -594,6 +594,41 @@ export default {
   empties(...d) { return this._mdArray(d) },
   emptiesUse: ['_mdArray'],
 
+  // set thoery functions from: https://github.com/d3/d3-array
+  difference(s, ...t) {
+    s = new Set(s);
+    for (let q of t) {
+      for (let v of q) {
+        s.delete(v);
+      }
+    }
+    return s;
+  },
+
+  intersection(s, ...t) {
+    s = new Set(s);
+    t = t.map(w => w instanceof Set ? w : new Set(w));
+    z: for (let v of s) {
+      for (let q of t) {
+        if (!q.has(v)) {
+          s.delete(v);
+          continue z;
+        }
+      }
+    }
+    return s;
+  },
+
+  union(...t) {
+    const s = new Set();
+    for (let q of t) {
+      for (let v of q) {
+        s.add(v);
+      }
+    }
+    return s;
+  },
+
   select(...a) {
     return (a.length === 1)
       ? document.querySelector(a[0])

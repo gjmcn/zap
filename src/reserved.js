@@ -68,6 +68,9 @@ const reserved = {
     'asyncFun', 'asyncProc', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap',
     'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends',
 
+    // sets
+    'difference', 'intersection', 'union',
+
     // other
     'array', 'getter', 'setter', 'chg', 'if', 'throw', 'debugger', 'reduce',
     'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
