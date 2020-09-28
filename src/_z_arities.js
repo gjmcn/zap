@@ -47,7 +47,7 @@ m.set('period',     [1, 2]);
 m.set('ones',       [1, Infinity]);
 m.set('zeros',      [1, Infinity]);
 m.set('empties',    [1, Infinity]);
-m.set('difference', [1, Infinity]);
+m.set('difference', [0, Infinity]);
 m.set('intersection', [0, Infinity]);
 m.set('union',      [0, Infinity]);
 m.set('select',     [1, 2]);

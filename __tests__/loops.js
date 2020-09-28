@@ -180,4 +180,4 @@ x
 // ========== !! TO DO !! ==========: 
 //  -asyncEach, asyncMap. asyncDo loops
 //  -stop
-//  -yield and yieldRrom in loops
+//  -yield and yieldFrom in loops
