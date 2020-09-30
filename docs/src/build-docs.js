@@ -30,6 +30,7 @@ const sections = [
   ['bin', 'Bin'],
   ['random', 'Random'],
   ['tabular-data', 'Tabular Data'],
+  ['set-theory', 'Set Theory'],
   ['import-and-export', 'Import and Export'],
   ['print-and-debug', 'Print and Debug'],
   ['dom', 'DOM'],

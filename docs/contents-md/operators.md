@@ -120,6 +120,12 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 ---
 
+#### Set Theory
+
+[`difference`](#set-theory) [`intersection`](#set-theory) [`union`](#set-theory)
+
+---
+
 #### DOM
 
 [`addClass`](#add-class) [`attr`](#attr) [`create`](#create) [`createSVG`](#create) [`encode`](#encode) [`encodeSVG`](#encode) [`fragment`](#fragment) [`hasAttr`](#has-attr) [`hasClass`](#has-attr) [`html`](#html) [`insert`](#insert) [`insertEach`](#insert-each) [`into`](#into) [`lower`](#lower) [`off`](#on) [`on`](#on) [`prop`](#attr) [`raise`](#lower) [`remove`](#remove) [`removeAttr`](#remove-attr) [`removeClass`](#add-class) [`removeStyle`](#remove-attr) [`select`](#select) [`selectAll`](#select-all) [`sketch`](#sketch) [`style`](#attr) [`text`](#html) [`toggleClass`](#toggle-class)
