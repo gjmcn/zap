@@ -4,7 +4,7 @@ const {compute} = require('./test-helpers.js');
 // ========== each, map ==========
 
 test('each, array, 0 callback args', () => {
-  expect(compute(`
+    expect(compute(`
 s = 0
 @ 5 6 7 each (s += 1)
 s
@@ -12,7 +12,7 @@ s
 });
 
 test('map, array, 0 callback args', () => {
-  expect(compute(`
+    expect(compute(`
 s = 0
 @ 5 6 7 map (s += 1)
 s
@@ -20,7 +20,7 @@ s
 });
 
 test('each, array, 1 callback arg', () => {
-  expect(compute(`
+    expect(compute(`
 x = @
 @ 5 6 7 each v (x ~push (v + 10))
 x
@@ -28,8 +28,8 @@ x
 });
 
 test('map, array, 1 callback arg', () => {
-  expect(compute(`@ 5 6 7 map v (v + 10)`))
-    .toStrictEqual([15, 16, 17]);
+    expect(compute(`@ 5 6 7 map v (v + 10)`))
+        .toStrictEqual([15, 16, 17]);
 });
 
 test('each, range, 2 callback args', () => {
@@ -41,12 +41,12 @@ x
 });
 
 test('map, range, 2 callback args', () => {
-  expect(compute(`5 to 7 map v i (@ v i)`))
-    .toStrictEqual([[5, 0], [6, 1], [7, 2]]);
+    expect(compute(`5 to 7 map v i (@ v i)`))
+        .toStrictEqual([[5, 0], [6, 1], [7, 2]]);
 });
 
 test('each, string, 3 callback args', () => {
-  expect(compute(`
+    expect(compute(`
 x = @
 'pq' each v i s
     x ~push v i s
@@ -62,7 +62,7 @@ test('map, string, 3 callback args', () => {
 });
 
 test('each, empty array', () => {
-  expect(compute(`
+    expect(compute(`
 s = 0
 @ each (s += 1)
 s
@@ -70,13 +70,13 @@ s
 });
 
 test('map, empty array', () => {
-  expect(compute(`@ map v (v + 10)`))
-    .toStrictEqual([]);
+    expect(compute(`@ map v (v + 10)`))
+        .toStrictEqual([]);
 });
 
 test('map, 1-entry array', () => {
-  expect(compute(`@ 5 map v (v + 10)`))
-    .toStrictEqual([15]);
+    expect(compute(`@ 5 map v (v + 10)`))
+        .toStrictEqual([15]);
 });
 
 test('each, returns iterable', () => {
@@ -88,7 +88,7 @@ x == y
 });
 
 test('each, loop parameters are local', () => {
-  expect(compute(`
+    expect(compute(`
 x = @
 'pq' each v i s
     x ~push v i s
@@ -100,7 +100,7 @@ x
 });
 
 test('each, array with empty entries', () => {
-  expect(compute(`
+    expect(compute(`
 s = 0
 new Array 3 each v (s += 1)
 s
@@ -108,8 +108,28 @@ s
 })
 
 test('map, array with empty entries', () => {
-  expect(compute(`new Array 2 map v (v == undefined)`))
-    .toStrictEqual([true, true]);
+    expect(compute(`new Array 2 map v (v == undefined)`))
+        .toStrictEqual([true, true]);
+});
+
+test('each, array, stop', () => {
+    expect(compute(`
+x = @
+@ 5 6 7 each v
+    x ~push (v + 10)
+    if (v == 6)
+        stop
+x
+`)).toStrictEqual([15, 16]);
+});
+
+test('map, array, stop', () => {
+    expect(compute(`
+@ 5 6 7 map v
+    if (v == 6)
+        stop
+    v + 10
+`)).toStrictEqual([15, 16]);
 });
 
 
@@ -179,5 +199,4 @@ x
 
 // ========== !! TO DO !! ==========: 
 //  -asyncEach, asyncMap. asyncDo loops
-//  -stop
 //  -yield and yieldFrom in loops
