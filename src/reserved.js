@@ -77,13 +77,13 @@ const reserved = {
 
     // other
     'array', 'getter', 'setter', 'chg', 'if', 'throw', 'debugger', 'reduce',
-    'some', 'every', 'filter', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
-    'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean',
-    'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation', 'arrObj',
-    'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export', 'import',
-    'importAs', 'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace',
-    'apply', 'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties',
-    'pick', 'mapAt', 'rank', 'quantile', 'median', 'truthy', 'falsy',
+    'some', 'every', 'filter', 'filterIndex', 'min', 'minIndex', 'max',
+    'maxIndex', 'sum', 'sumCumu', 'count', 'find', 'findIndex', 'order',
+    'orderIndex', 'mean', 'group', 'groupCount', 'bin', 'binCount', 'variance',
+    'deviation', 'arrObj', 'objArr', 'transpose', 'assign', 'attach', 'shuffle',
+    'export', 'import', 'importAs', 'importDefault', 'importAll', 'period',
+    'at', 'to', 'linSpace', 'apply', 'call', 'print', 'load', 'stop', 'ones',
+    'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
     'interpolate'
 
   ]),

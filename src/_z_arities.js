@@ -31,6 +31,7 @@ m.set('rank',       [1, 2]);
 m.set('some',       [2, 2]);
 m.set('every',      [2, 2]);
 m.set('filter',     [2, 2]);
+m.set('filterIndex',[2, 2]);
 m.set('count',      [2, 2]);
 m.set('findIndex',  [2, 2]);
 m.set('find',       [2, 2]);

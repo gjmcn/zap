@@ -506,6 +506,16 @@ export default {
     return r;
   },
 
+  filterIndex(i, f) {
+    let r = [],
+        j = 0;
+    for (let v of i) {
+      if (f(v, j, i)) r.push(j);
+      j++;
+    }
+    return r;
+  },
+
   count(i, f) {
     let c = 0,
         j = 0;
