@@ -35,6 +35,11 @@ export default {
       : e;
   },
 
+  _interpolate(s, e, t) {
+    s = +s, e = +e, t = +t;
+    return s * (1 - t) + e * t;
+  },
+
   _group(c, i, f, g) {
     let m = new Map(),
         j = 0;
@@ -49,6 +54,11 @@ export default {
       }
     }
     return m;
+  },
+
+  _orderIndex(i, f) {
+    i = Array.isArray(i) ? i : [...i];
+    return i.map((_, j) => j).sort((x, y) => f(i[x], i[y]));
   },
 
   _bin(c, i, z, f = (x, y) => x - y, g) {
@@ -397,6 +407,9 @@ export default {
   },
   mapAtUse: ['_at'],
 
+  interpolate(s, e, t) { return this._interpolate(s, e, t) },
+  interpolateUse: ['_interpolate'],
+
   group(i, f, g) { return this._group(false, i, f, g) },
   groupUse: ['_group'],
 
@@ -443,14 +456,30 @@ export default {
   deviation(i, f) { return this._varDev(true, i, f) },
   deviationUse: ['_varDev'],
 
-  orderIndex(i, f = (x, y) => x - y) {
-    i = [...i];
-    return i.map((_, j) => j).sort((x, y) => f(i[x], i[y]));
-  },
+  orderIndex(i, f = (x, y) => x - y) { return this._orderIndex(i, f) },
+  orderIndexUse: ['_orderIndex'],
 
   order(i, f = (x, y) => x - y) {
     return [...i].sort(f);
   },
+
+  rank(i, f = (x, y) => x - y) {
+    i = Array.isArray(i) ? i : [...i];
+    const o = this._orderIndex(i, f);
+    const n = i.length;
+    const r = new Array(n);
+    let c, y;
+    for (let j = 0; j < n; j++) {
+      let k = o[j];
+      if (j === 0 || f(i[k], y) !== 0) {
+        c = j;
+        y = i[k];
+      }
+      r[k] = c;
+    }
+    return r;
+  },
+  rankUse: ['_orderIndex'],
 
   some(i, f) {
     let j = 0;
