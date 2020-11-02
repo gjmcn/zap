@@ -9,6 +9,8 @@ m.set('setter',     [3, 3]);
 m.set('to',         [2, 3]);
 m.set('linSpace',   [3, 3]);
 m.set('reduce',     [3, 3]);
+m.set('pick',       [2, 2]);
+m.set('mapAt',      [2, 2]);
 m.set('group',      [2, 3]);
 m.set('groupCount', [2, 3]);
 m.set('bin',        [2, 4]);
@@ -112,7 +114,7 @@ m.set('toLowerCase', [1, 1]);
 m.set('trim',        [1, 1]);
 m.set('trimEnd',     [1, 1]);
 m.set('trimStart',   [1, 1]);
-m.set('neg', 	      [1, 1]);
+m.set('neg', 	   [1, 1]);
 m.set('boolean',   [1, 1]);
 m.set('number',    [1, 1]);
 m.set('string',    [1, 1]);
@@ -121,6 +123,15 @@ m.set('isInteger', [1, 1]);
 m.set('isFinite',  [1, 1]);
 m.set('isNaN',     [1, 1]);
 m.set('not',       [1, 1]);
+m.set('isBigInt',    [1, 1]);
+m.set('isBoolean',   [1, 1]);
+m.set('isFunction',  [1, 1]);
+m.set('isNull',      [1, 1]);
+m.set('isNullish',   [1, 1]);
+m.set('isNumber',    [1, 1]);
+m.set('isString',    [1, 1]);
+m.set('isSymbol',    [1, 1]);
+m.set('isUndefined', [1, 1]);
 
 // HTML convenience
 [ '$a', '$abbr', '$address', '$area', '$article', '$aside', '$audio', '$b',

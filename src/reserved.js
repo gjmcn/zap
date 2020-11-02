@@ -54,6 +54,10 @@ const reserved = {
     'log1p', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
     'trunc',
     
+    // entrywise is
+    'isBigInt', 'isBoolean', 'isFunction', 'isNull', 'isNullish', 'isNumber',
+    'isString', 'isSymbol', 'isUndefined',
+
     // entrywise other
     'toUpperCase', 'toLowerCase', 'trim', 'trimEnd', 'trimStart', 'neg',
     'boolean', 'number', 'string', 'date', 'isInteger', 'isFinite', 'isNaN',
@@ -78,7 +82,9 @@ const reserved = {
     'group', 'groupCount', 'bin', 'binCount', 'variance', 'deviation', 'arrObj',
     'objArr', 'transpose', 'assign', 'attach', 'shuffle', 'export', 'import',
     'importAs', 'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace',
-    'apply', 'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties'
+    'apply', 'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties',
+    'pick', 'mapAt', 'rank', 'quantile', 'median', 'truthy', 'falsy',
+    'interpolate'
 
   ]),
 

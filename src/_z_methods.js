@@ -4,6 +4,23 @@ export default {
 
   // ----- helpers -----
 
+  _at(o, p) {
+    let r;
+    if (typeof o === 'string') {
+      r = '';
+      for (let k of p) r += o[k]; 
+    }
+    else if (Array.isArray(o)) {
+      r = [];
+      for (let k of p) r.push(o[k]); 
+    }
+    else {
+      r = {};
+      for (let k of p) r[k] = o[k]; 
+    }
+    return r;
+  },
+
   _first(i) {
     return (typeof i === 'string')
       ? document.querySelector(i)
@@ -363,6 +380,23 @@ export default {
     return q;
   },
 
+  pick(x, p) {
+    let r = [];
+    for (let v of x) {
+      r.push(v[p]);
+    }
+    return r;
+  },
+
+  mapAt(x, p) {
+    let r = [];
+    for (let v of x) {
+      r.push(this._at(v, p));
+    }
+    return r;
+  },
+  mapAtUse: ['_at'],
+
   group(i, f, g) { return this._group(false, i, f, g) },
   groupUse: ['_group'],
 
@@ -568,22 +602,8 @@ export default {
     return new Promise(r => setTimeout(() => r(x), m));
   },
 
-  at(o, p) {
-    let r;
-    if (typeof o === 'string') {
-      r = '';
-      for (let k of p) r += o[k]; 
-    }
-    else if (Array.isArray(o)) {
-      r = [];
-      for (let k of p) r.push(o[k]); 
-    }
-    else {
-      r = {};
-      for (let k of p) r[k] = o[k]; 
-    }
-    return r;
-  },
+  at(o, p) { return this._at(o, p) },
+  atUse: ['_at'],
 
   ones(...d) { return this._mdArray(d, 1) },
   onesUse: ['_mdArray'],
@@ -1105,6 +1125,14 @@ export default {
   isInteger(x) {return this._ew(x, Number.isInteger)}, isIntegerUse: ['_ew'],
   isFinite(x) {return this._ew(x, Number.isFinite)}, isFiniteUse: ['_ew'],
   isNaN(x) {return this._ew(x, Number.isNaN)}, isNaNUse: ['_ew'],
-  not(x) {return this._ew(x, y => !y)}, notUse: ['_ew']
-
+  not(x) {return this._ew(x, y => !y)}, notUse: ['_ew'],
+  isBigInt(x) {return this._ew(x, y => typeof y === 'bigint')}, isBigIntUse: ['_ew'],
+  isBoolean(x) {return this._ew(x, y => typeof y === 'boolean')}, isBooleanUse: ['_ew'],
+  isFunction(x) {return this._ew(x, y => typeof y === 'function')}, isFunctionUse: ['_ew'],
+  isNull(x) {return this._ew(x, y => y === null)}, isNullUse: ['_ew'],
+  isNullish(x) {return this._ew(x, y => y === null || y === undefined)}, isNullishUse: ['_ew'],
+  isNumber(x) {return this._ew(x, y => typeof y === 'number')}, isNumberUse: ['_ew'],
+  isString(x) {return this._ew(x, y => typeof y === 'string')}, isStringUse: ['_ew'],
+  isSymbol(x) {return this._ew(x, y => typeof y === 'symbol')}, isSymbolUse: ['_ew'],
+  isUndefined(x) {return this._ew(x, y => y === undefined)}, isUndefinedUse: ['_ew'],
 };
