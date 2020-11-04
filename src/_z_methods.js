@@ -127,6 +127,28 @@ export default {
     return e;
   },
 
+  _quantile(i, q, f, o) {
+    i = i.map(v => +f(v));
+    if (!o) {
+      i.sort((x, y) => x - y);
+    }
+    const n = i.length;
+    if (n === 0) {
+      return NaN;
+    }
+    else if (n === 1) {
+      return i[0];
+    }
+    else {
+      q = Math.max(Math.min(q, 1), 0) * (n - 1);
+      const l = Math.floor(q);
+      const u = Math.ceil(q);
+      return l === u
+        ? i[l]
+        : i[l] * (u - q) + i[u] * (q - l);    
+    }
+  },
+
   _varDev(q, i, f) {
     let c = 0,
         m = 0,
@@ -455,6 +477,12 @@ export default {
 
   deviation(i, f) { return this._varDev(true, i, f) },
   deviationUse: ['_varDev'],
+
+  median(i, f = x => x, o) { return this._quantile(i, 0.5, f, o) },
+  medianUse: ['_quantile'],
+
+  quantile(i, q, f = x => x, o) { return this._quantile(i, q, f, o) },
+  quantileUse: ['_quantile'],
 
   orderIndex(i, f = (x, y) => x - y) { return this._orderIndex(i, f) },
   orderIndexUse: ['_orderIndex'],
