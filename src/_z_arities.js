@@ -25,7 +25,7 @@ m.set('max',        [1, 2]);
 m.set('variance',   [1, 2]);
 m.set('deviation',  [1, 2]);
 m.set('median',     [1, 3]);
-m.set('quantile',   [1, 4]);
+m.set('quantile',   [2, 4]);
 m.set('interpolate',[3, 3]);
 m.set('orderIndex', [1, 2]);
 m.set('order',      [1, 2]);

@@ -128,24 +128,28 @@ export default {
   },
 
   _quantile(i, q, f, o) {
-    i = i.map(v => +f(v));
-    if (!o) {
-      i.sort((x, y) => x - y);
+    const x = [];
+    let j = 0;
+    for (let v of i) {
+      x.push(+f(v, j++, i));
     }
-    const n = i.length;
+    if (!o) {
+      x.sort((u, v) => u - v);
+    }
+    const n = x.length;
     if (n === 0) {
       return NaN;
     }
     else if (n === 1) {
-      return i[0];
+      return x[0];
     }
     else {
       q = Math.max(Math.min(q, 1), 0) * (n - 1);
       const l = Math.floor(q);
       const u = Math.ceil(q);
       return l === u
-        ? i[l]
-        : i[l] * (u - q) + i[u] * (q - l);    
+        ? x[l]
+        : x[l] * (u - q) + x[u] * (q - l);    
     }
   },
 
