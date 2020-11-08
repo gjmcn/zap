@@ -55,13 +55,12 @@ const reserved = {
     'trunc',
     
     // entrywise is
-    'isBigInt', 'isBoolean', 'isFunction', 'isNull', 'isNullish', 'isNumber',
-    'isString', 'isSymbol', 'isUndefined',
+    'isBigInt', 'isBoolean', 'isFinite', 'isFunction', 'isInteger', 'isNaN',
+    'isNull', 'isNullish', 'isNumber', 'isString', 'isSymbol', 'isUndefined',
 
     // entrywise other
     'toUpperCase', 'toLowerCase', 'trim', 'trimEnd', 'trimStart', 'neg',
-    'boolean', 'number', 'string', 'date', 'isInteger', 'isFinite', 'isNaN',
-    'not',
+    'boolean', 'number', 'string', 'date', 'not',
     
     // random
     'random', 'randomInt', 'categorical', 'normal', 'logNormal', 'binomial',
