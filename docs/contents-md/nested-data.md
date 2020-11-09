@@ -115,7 +115,7 @@ data arrObj (@ 'Horsepower' 'Origin')
   // ]
 ```
 
-As shown in the final example, `arrObj` can take a second operand (an iterable) that specifies the properties to include in the returned data. When this argument is omitted (or falsy), all properties are included.
+As shown in the final example, `arrObj` can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), all properties are included.
 
 The iterables in the original data can have different lengths:
 

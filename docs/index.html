@@ -25,7 +25,7 @@
       <a href="playground.html" target="_blank">Playground</a>
       <a href="https://github.com/gjmcn/zap" target="_blank">GitHub</a>
       <hr>
-      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-syntax" class="side-link" href="#syntax">Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-nested-data" class="side-link" href="#nested-data">Nested Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
+      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-syntax" class="side-link" href="#syntax">Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-interpolate" class="side-link" href="#interpolate">Interpolate</a><a id="side-link-nested-data" class="side-link" href="#nested-data">Nested Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
       <br><br><br>
     </div>
     <div id="panel">
@@ -1795,7 +1795,12 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
 
 <span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
-</code></pre><h2 id="group">Group</h2>
+
+<span class="zap-comment">// filterIndex</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">filterIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [0, 2]</span>
+</code></pre>
+<p>As shown in the final example, <code>filterIndex</code> can be used to get the original indices of the filtered elements.</p>
+<h2 id="group">Group</h2>
 <hr>
 <p><code>group</code> takes an iterable and a callback function. The callback is applied to each element of the iterable (it is passed the element, index and iterable); the results are used to group the elements. <code>group</code> returns a map with arrays for values:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
@@ -1954,7 +1959,23 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span>             <span class="zap-comment">// [5, 7, 9]</span>
 
 <span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">4</span> <span class="zap-keyword">shuffle</span>   <span class="zap-comment">// possible result: [2, 4, 1, 3]</span>
-</code></pre><h2 id="nested-data">Nested Data</h2>
+</code></pre><h2 id="interpolate">Interpolate</h2>
+<hr>
+<p><code>interpolate</code> linearly interpolates between its first two operands. The third operand is the interpolation parameter:</p>
+<pre><code><span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-number">0</span>         <span class="zap-comment">// 5</span>
+<span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-number">1</span>         <span class="zap-comment">// 9</span>
+<span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-number">0.5</span>       <span class="zap-comment">// 7</span>
+<span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-punctuation">(</span><span class="zap-number">3</span> <span class="zap-operator">/</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 6.5</span>
+<span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-number">1.5</span>       <span class="zap-comment">// 11</span>
+<span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-keyword">interpolate</span> <span class="zap-punctuation">(</span><span class="zap-operator">-</span><span class="zap-number">0.5</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// 3</span>
+
+<span class="zap-number">20</span> <span class="zap-number">10</span> <span class="zap-keyword">interpolate</span> <span class="zap-number">0.7</span>     <span class="zap-comment">// 13</span>
+
+<span class="zap-comment">// interpolate multiple values</span>
+<span class="zap-operator">@</span> <span class="zap-number">0.2</span> <span class="zap-number">0.6</span> <span class="zap-number">0.9</span> <span class="zap-keyword">map</span> <span class="zap-identifier">x</span> <span class="zap-punctuation">(</span><span class="zap-number">10</span> <span class="zap-number">20</span> <span class="zap-keyword">interpolate</span> <span class="zap-identifier">x</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [12, 16, 19]</span>
+</code></pre>
+<p><code>interpolate</code> treats all operands as numbers.</p>
+<h2 id="nested-data">Nested Data</h2>
 <hr>
 <h4 id="pick"><code>pick</code></h4>
 <p><code>pick</code> gets a property from each element of an iterable. The first operand of <code>pick</code> is the iterable; the second operand is the property name/index. <code>pick</code> returns an array:</p>
@@ -2047,7 +2068,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   {Horsepower: 79, Origin: 'USA'}</span>
   <span class="zap-comment">// ]</span>
 </code></pre>
-<p>As shown in the final example, <code>arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the returned data. When this argument is omitted (or falsy), all properties are included.</p>
+<p>As shown in the final example, <code>arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), all properties are included.</p>
 <p>The iterables in the original data can have different lengths:</p>
 <pre><code><span class="zap-operator">#</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">u</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span><span class="zap-punctuation">)</span>

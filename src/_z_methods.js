@@ -35,11 +35,6 @@ export default {
       : e;
   },
 
-  _interpolate(s, e, t) {
-    s = +s, e = +e, t = +t;
-    return s * (1 - t) + e * t;
-  },
-
   _group(c, i, f, g) {
     let m = new Map(),
         j = 0;
@@ -433,8 +428,9 @@ export default {
   },
   mapAtUse: ['_at'],
 
-  interpolate(s, e, t) { return this._interpolate(s, e, t) },
-  interpolateUse: ['_interpolate'],
+  interpolate(s, e, t) {
+    return +s * (1 - t) + +e * t;
+  },
 
   group(i, f, g) { return this._group(false, i, f, g) },
   groupUse: ['_group'],

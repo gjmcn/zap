@@ -29,6 +29,7 @@ const sections = [
   ['order', 'Order'],
   ['bin', 'Bin'],
   ['random', 'Random'],
+  ['interpolate', 'Interpolate'],
   ['nested-data', 'Nested Data'],
   ['set-theory', 'Set Theory'],
   ['import-and-export', 'Import and Export'],
