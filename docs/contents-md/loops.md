@@ -2,7 +2,7 @@
 
 ---
 
-> Operators for working with iterables (including loop operators, but also see e.g. [Reduce](#reduce), [Filter](#filter), [Group](#group), [Order](#order), [Bin](#bin), [Backticks](#backticks) and [Tabular Data](#tabular-data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
+> Operators for working with iterables (including loop operators, but also see e.g. [Reduce](#reduce), [Filter](#filter), [Group](#group), [Order](#order), [Bin](#bin), [Backticks](#backticks) and [Nested Data](#nested-data)) treat empty array elements as normal elements (with value `undefined`). In contrast, some array methods ignore empty elements.
 
 ---
 

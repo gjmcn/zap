@@ -25,7 +25,7 @@
       <a href="playground.html" target="_blank">Playground</a>
       <a href="https://github.com/gjmcn/zap" target="_blank">GitHub</a>
       <hr>
-      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-syntax" class="side-link" href="#syntax">Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-tabular-data" class="side-link" href="#tabular-data">Tabular Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
+      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-syntax" class="side-link" href="#syntax">Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-nested-data" class="side-link" href="#nested-data">Nested Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
       <br><br><br>
     </div>
     <div id="panel">
@@ -52,7 +52,7 @@
 <span class="zap-operator">+</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">5</span>   <span class="zap-comment">// 12</span>
 </code></pre>
 <p>Many operators have names rather than symbols:</p>
-<pre><code><span class="zap-keyword">typeof</span> <span class="zap-number">5</span> <span class="zap-operator">==</span> <span class="zap-string">'number'</span> <span class="zap-keyword">print</span>   <span class="zap-comment">// prints (and returns) true</span>
+<pre><code><span class="zap-number">5</span> <span class="zap-keyword">isNumber</span> <span class="zap-keyword">print</span>   <span class="zap-comment">// prints (and returns) true</span>
 </code></pre>
 <p>Indented blocks or parentheses can be used for precedence:</p>
 <pre><code><span class="zap-number">3</span> <span class="zap-operator">*</span> <span class="zap-punctuation">(</span><span class="zap-number">4</span> <span class="zap-operator">+</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 27</span>
@@ -648,14 +648,17 @@
 <p><a href="#as"><code>as</code></a> <a href="#catch"><code>catch</code></a> <a href="#class"><code>class</code></a> <a href="#do"><code>do</code></a> <a href="#each"><code>each</code></a> <a href="#extends"><code>extends</code></a> <a href="#fun"><code>fun</code></a> <a href="#map"><code>map</code></a> <a href="#proc"><code>proc</code></a> <a href="#scope-op"><code>scope</code></a> <a href="#try"><code>try</code></a></p>
 <p><a href="#as"><code>asyncAs</code></a> <a href="#catch"><code>asyncCatch</code></a> <a href="#async-loops"><code>asyncDo</code></a> <a href="#async-loops"><code>asyncEach</code></a> <a href="#fun"><code>asyncFun</code></a> <a href="#async-loops"><code>asyncMap</code></a> <a href="#proc"><code>asyncProc</code></a> <a href="#scope-op"><code>asyncScope</code></a> <a href="#try"><code>asyncTry</code></a></p>
 <hr>
+<h4>Elementwise Is</h4>
+<p><a href="#elementwise"><code>isBigInt</code></a> <a href="#elementwise"><code>isBoolean</code></a> <a href="lementwise"><code>isFinite</code></a> <a href="#elementwise"><code>isFunction</code></a> <a href="#elementwise"><code>isInteger</code></a> <a href="#elementwise"><code>isNaN</code></a> <a href="#elementwise"><code>isNull</code></a> <a href="#elementwise"><code>isNullish</code></a> <a href="#elementwise"><code>isNumber</code></a> <a href="#elementwise"><code>isString</code></a> <a href="#elementwise"><code>isSymbol</code></a> <a href="#elementwise"><code>isUndefined </code></a></p>
+<hr>
 <h4>Elementwise Math</h4>
 <p><a href="#elementwise"><code>abs</code></a> <a href="#elementwise"><code>acos</code></a> <a href="#elementwise"><code>acosh</code></a> <a href="#elementwise"><code>asin</code></a> <a href="#elementwise"><code>asinh</code></a> <a href="#elementwise"><code>atan</code></a> <a href="#elementwise"><code>atanh</code></a> <a href="#elementwise"><code>cbrt</code></a> <a href="#elementwise"><code>ceil</code></a> <a href="#elementwise"><code>clz32</code></a> <a href="#elementwise"><code>cos</code></a> <a href="#elementwise"><code>cosh</code></a> <a href="#elementwise"><code>exp</code></a> <a href="#elementwise"><code>expm1</code></a> <a href="#elementwise"><code>floor</code></a> <a href="#elementwise"><code>fround</code></a> <a href="#elementwise"><code>log</code></a> <a href="#elementwise"><code>log10</code></a> <a href="#elementwise"><code>log1p</code></a>  <a href="#elementwise"><code>log2</code></a> <a href="#elementwise"><code>round</code></a> <a href="#elementwise"><code>sign</code></a> <a href="#elementwise"><code>sin</code></a> <a href="#elementwise"><code>sinh</code></a> <a href="#elementwise"><code>sqrt</code></a> <a href="#elementwise"><code>tan</code></a> <a href="#elementwise"><code>tanh</code></a> <a href="#elementwise"><code>trunc</code></a></p>
 <hr>
 <h4>Elementwise Other</h4>
-<p><a href="#elementwise"><code>boolean</code></a> <a href="#elementwise"><code>date</code></a> <a href="lementwise"><code>isFinite</code></a> <a href="#elementwise"><code>isInteger</code></a> <a href="#elementwise"><code>isNaN</code></a> <a href="#elementwise"><code>neg</code></a> <a href="#elementwise"><code>not</code></a> <a href="#elementwise"><code>number</code></a> <a href="#elementwise"><code>string</code></a> <a href="#elementwise"><code>toLowerCase</code></a> <a href="#elementwise"><code>toUpperCase</code></a> <a href="#elementwise"><code>trim</code></a> <a href="#elementwise"><code>trimEnd</code></a> <a href="#elementwise"><code>trimStart</code></a></p>
+<p><a href="#elementwise"><code>boolean</code></a> <a href="#elementwise"><code>date</code></a> <a href="#elementwise"><code>neg</code></a> <a href="#elementwise"><code>not</code></a> <a href="#elementwise"><code>number</code></a> <a href="#elementwise"><code>string</code></a> <a href="#elementwise"><code>toLowerCase</code></a> <a href="#elementwise"><code>toUpperCase</code></a> <a href="#elementwise"><code>trim</code></a> <a href="#elementwise"><code>trimEnd</code></a> <a href="#elementwise"><code>trimStart</code></a></p>
 <hr>
 <h4>Filter, Group, Reduce, Sort</h4>
-<p><a href="#bin"><code>bin</code></a>  <a href="#bin"><code>binCount</code></a> <a href="#count"><code>count</code></a> <a href="#sum"><code>deviation</code></a> <a href="#every"><code>every</code></a> <a href="#filter"><code>filter</code></a>  <a href="#find"><code>find</code></a> <a href="#find"><code>findIndex</code></a> <a href="#group"><code>group</code></a> <a href="#group"><code>groupCount</code></a> <a href="#min"><code>max</code></a> <a href="#min"><code>maxIndex</code></a> <a href="#sum"><code>mean</code></a> <a href="#min"><code>min</code></a> <a href="#min"><code>minIndex</code></a> <a href="#order"><code>order</code></a> <a href="#order"><code>orderIndex</code></a> <a href="#reduce-op"><code>reduce</code></a> <a href="#every"><code>some</code></a> <a href="#sum"><code>sum</code></a> <a href="#sum-cumu"><code>sumCumu</code></a> <a href="#sum"><code>variance</code></a></p>
+<p><a href="#bin"><code>bin</code></a>  <a href="#bin"><code>binCount</code></a> <a href="#count"><code>count</code></a> <a href="#sum"><code>deviation</code></a> <a href="#every"><code>every</code></a> <a href="#filter"><code>filter</code></a> <a href="#filter"><code>filterIndex</code></a> <a href="#find"><code>find</code></a> <a href="#find"><code>findIndex</code></a> <a href="#group"><code>group</code></a> <a href="#group"><code>groupCount</code></a> <a href="#min"><code>max</code></a> <a href="#min"><code>maxIndex</code></a> <a href="#sum"><code>mean</code></a> <a href="#median"><code>median</code></a> <a href="#min"><code>min</code></a> <a href="#min"><code>minIndex</code></a> <a href="#order"><code>order</code></a> <a href="#order"><code>orderIndex</code></a> <a href="#median"><code>quantile</code></a> <a href="#reduce-op"><code>reduce</code></a> <a href="#every"><code>some</code></a> <a href="#sum"><code>sum</code></a> <a href="#sum-cumu"><code>sumCumu</code></a> <a href="#order"><code>rank</code></a> <a href="#sum"><code>variance</code></a></p>
 <hr>
 <h4>Get/Set Property</h4>
 <p><a href="#copy-properties"><code>assign</code></a> <a href="#at"><code>at</code></a> <a href="#attach"><code>attach</code></a> <a href="#chg"><code>chg</code></a> <a href="#getter"><code>getter</code></a> <a href="#setter"><code>setter</code></a></p>
@@ -663,8 +666,11 @@
 <h4>Import and Export</h4>
 <p><a href="#export"><code>export</code></a> <a href="#import"><code>import</code></a> <a href="#import-all"><code>importAll</code></a> <a href="#import-as"><code>importAs</code></a> <a href="#import-default"><code>importDefault</code></a> <a href="#load"><code>load</code></a></p>
 <hr>
+<h4>Nested Data</h4>
+<p><a href="#array-of-objects"><code>arrObj</code></a> <a href="#map-at"><code>mapAt</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#pick"><code>pick</code></a> <a href="#transpose"><code>transpose</code></a></p>
+<hr>
 <h4>Other</h4>
-<p><a href="#arrays"><code>array</code></a> <a href="#array-of-objects"><code>arrObj</code></a> <a href="#call-and-apply"><code>apply</code></a> <a href="#call-and-apply"><code>call</code></a> <a href="#debugger"><code>debugger</code></a> <a href="#arrays"><code>empties</code></a> <a href="#if"><code>if</code></a> <a href="#lin-space"><code>linSpace</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#arrays"><code>ones</code></a> <a href="#period"><code>period</code></a> <a href="#print"><code>print</code></a> <a href="#throw"><code>throw</code></a> <a href="#to"><code>to</code></a> <a href="#transpose"><code>transpose</code></a> <a href="#arrays"><code>zeros</code></a></p>
+<p><a href="#arrays"><code>array</code></a> <a href="#call-and-apply"><code>apply</code></a> <a href="#call-and-apply"><code>call</code></a> <a href="#debugger"><code>debugger</code></a> <a href="#arrays"><code>empties</code></a> <a href="#if"><code>if</code></a> <a href="#lin-space"><code>linSpace</code></a> <a href="#arrays"><code>ones</code></a> <a href="#period"><code>period</code></a> <a href="#print"><code>print</code></a> <a href="#throw"><code>throw</code></a> <a href="#to"><code>to</code></a> <a href="#arrays"><code>zeros</code></a> <a href="#interpolate"><code>interpolate</code></a></p>
 <hr>
 <h4>Random and Shuffle</h4>
 <p><a href="#binomial"><code>binomial</code></a> <a href="#categorical"><code>categorical</code></a> <a href="#exponential"><code>exponential</code></a> <a href="#geometric"><code>geometric</code></a> <a href="#log-normal"><code>logNormal</code></a> <a href="#normal"><code>normal</code></a> <a href="#random-op"><code>random</code></a> <a href="#random-int"><code>randomInt</code></a> <a href="#shuffle"><code>shuffle</code></a></p>
@@ -1274,7 +1280,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre><h2 id="loops">Loops</h2>
 <hr>
 <blockquote>
-<p>Operators for working with iterables (including loop operators, but also see e.g. <a href="#reduce">Reduce</a>, <a href="#filter">Filter</a>, <a href="#group">Group</a>, <a href="#order">Order</a>, <a href="#bin">Bin</a>, <a href="#backticks">Backticks</a> and <a href="#tabular-data">Tabular Data</a>) treat empty array elements as normal elements (with value <code>undefined</code>). In contrast, some array methods ignore empty elements.</p>
+<p>Operators for working with iterables (including loop operators, but also see e.g. <a href="#reduce">Reduce</a>, <a href="#filter">Filter</a>, <a href="#group">Group</a>, <a href="#order">Order</a>, <a href="#bin">Bin</a>, <a href="#backticks">Backticks</a> and <a href="#nested-data">Nested Data</a>) treat empty array elements as normal elements (with value <code>undefined</code>). In contrast, some array methods ignore empty elements.</p>
 </blockquote>
 <hr>
 <h4 id="each"><code>each</code></h4>
@@ -1443,19 +1449,81 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <h2 id="elementwise">Elementwise</h2>
 <hr>
 <p>Elementwise operators take a single operand. If the operand is a non-string iterable, the operator acts on each element independently and returns the results as an array. Otherwise, the operator acts on the operand directly and returns the result:</p>
-<pre><code><span class="zap-number">4</span> <span class="zap-keyword">sqrt</span>        <span class="zap-comment">// 2</span>
+<pre><code><span class="zap-number">4</span> <span class="zap-keyword">isNumber</span>         <span class="zap-comment">// true</span>
+<span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-string">'5'</span> <span class="zap-keyword">isNumber</span>   <span class="zap-comment">// [true, false]</span>
+
+<span class="zap-number">4</span> <span class="zap-keyword">sqrt</span>        <span class="zap-comment">// 2</span>
 <span class="zap-operator">@</span> <span class="zap-number">9</span> <span class="zap-number">16</span> <span class="zap-keyword">sqrt</span>   <span class="zap-comment">// [3, 4]</span>
 
 <span class="zap-string">'ab'</span> <span class="zap-keyword">toUpperCase</span>          <span class="zap-comment">// 'AB'</span>
 <span class="zap-operator">@</span> <span class="zap-string">'cd'</span> <span class="zap-string">'ef'</span> <span class="zap-keyword">toUpperCase</span>   <span class="zap-comment">// ['CD', 'EF']</span>
 </code></pre>
 <hr>
-<h4 id="ew-math">Math</h4>
+<h4 id="ew-is">Elementwise Is</h4>
+<table class="table table-sm w500">
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isBigInt</code></td>
+<td>is bigint?</td>
+</tr>
+<tr>
+<td><code>isBoolean</code></td>
+<td>is boolean?</td>
+</tr>
+<tr>
+<td><code>isFinite</code></td>
+<td>is finite? (always <code>false</code> for non-number)</td>
+</tr>
+<tr>
+<td><code>isFunction</code></td>
+<td>is function?</td>
+</tr>
+<tr>
+<td><code>isInteger</code></td>
+<td>is integer? (always <code>false</code> for non-number)</td>
+</tr>
+<tr>
+<td><code>isNaN</code></td>
+<td>is <code>NaN</code>? (always <code>false</code> for non-number)</td>
+</tr>
+<tr>
+<td><code>isNull</code></td>
+<td>is <code>null</code>?</td>
+</tr>
+<tr>
+<td><code>isNullish</code></td>
+<td>is <code>null</code> or <code>undefined</code>?</td>
+</tr>
+<tr>
+<td><code>isNumber</code></td>
+<td>is number?</td>
+</tr>
+<tr>
+<td><code>isString</code></td>
+<td>is string?</td>
+</tr>
+<tr>
+<td><code>isSymbol</code></td>
+<td>is symbol?</td>
+</tr>
+<tr>
+<td><code>isUndefined</code></td>
+<td>is <code>undefined</code>?</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="ew-math">Elementwise Math</h4>
 <p>Elementwise math operators use the corresponding methods of the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math"><code>Math</code></a> object. The elementwise math operators are:</p>
 <p><code>abs</code> <code>acos</code> <code>acosh</code> <code>asin</code> <code>asinh</code> <code>atan</code> <code>atanh</code> <code>cbrt</code> <code>ceil</code> <code>clz32</code> <code>cos</code> <code>cosh</code> <code>exp</code> <code>expm1</code> <code>floor</code> <code>fround</code> <code>log</code> <code>log10</code> <code>log1p</code> <code>log2</code> <code>round</code> <code>sign</code> <code>sin</code> <code>sinh</code> <code>sqrt</code> <code>tan</code> <code>tanh</code> <code>trunc</code></p>
 <hr>
-<h4 id="ew-other">Other</h4>
-<p>The other elementwise operators are:</p>
+<h4 id="ew-other">Elementwise Other</h4>
 <table class="table table-sm w500">
 <thead>
 <tr>
@@ -1471,18 +1539,6 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <tr>
 <td><code>date</code></td>
 <td>convert to date</td>
-</tr>
-<tr>
-<td><code>isFinite</code></td>
-<td>is finite? (always <code>false</code> for non-number)</td>
-</tr>
-<tr>
-<td><code>isInteger</code></td>
-<td>is integer? (always <code>false</code> for non-number)</td>
-</tr>
-<tr>
-<td><code>isNaN</code></td>
-<td>is <code>NaN</code>? (always <code>false</code> for non-number)</td>
 </tr>
 <tr>
 <td><code>neg</code></td>
@@ -1647,8 +1703,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <hr>
 <h4 id="count"><code>count</code> <span class="small">(callback required)</span></h4>
 <p>Counts the number of times that the callback returns a truthy value:</p>
-<pre><code><span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">1</span> <span class="zap-string">'1'</span> <span class="zap-literal">true</span> <span class="zap-number">0</span>              <span class="zap-comment">// Set {1, "1", true, 0}</span>
-<span class="zap-identifier">s</span> <span class="zap-keyword">count</span> <span class="zap-punctuation">[</span><span class="zap-keyword">typeof</span> <span class="zap-identifier">a</span> <span class="zap-operator">==</span> <span class="zap-string">'number'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 2</span>
+<pre><code><span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">1</span> <span class="zap-string">'1'</span> <span class="zap-literal">true</span> <span class="zap-number">0</span>    <span class="zap-comment">// Set {1, "1", true, 0}</span>
+<span class="zap-identifier">s</span> <span class="zap-keyword">count</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">isNumber</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 2</span>
 </code></pre>
 <hr>
 <h4 id="every"><code>every</code>, <code>some</code> <span class="small">(callback required)</span></h4>
@@ -1898,12 +1954,54 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span>             <span class="zap-comment">// [5, 7, 9]</span>
 
 <span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">4</span> <span class="zap-keyword">shuffle</span>   <span class="zap-comment">// possible result: [2, 4, 1, 3]</span>
-</code></pre><h2 id="tabular-data">Tabular Data</h2>
+</code></pre><h2 id="nested-data">Nested Data</h2>
 <hr>
-<p>The operators in this section convert between common representations of tabular data. In all cases, we can think of the elements of the original 'table' as rows, and the elements of the returned table as columns (or vice versa).</p>
-<blockquote>
-<p>Empty array elements in the original table become normal elements/properties (with value <code>undefined</code>) in the returned table.</p>
-</blockquote>
+<h4 id="pick"><code>pick</code></h4>
+<p><code>pick</code> gets a property from each element of an iterable. The first operand of <code>pick</code> is the iterable; the second operand is the property name/index. <code>pick</code> returns an array:</p>
+<pre><code><span class="zap-comment">// pick from an array-of-arrays</span>
+<span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">8</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">pick</span> <span class="zap-number">1</span>   <span class="zap-comment">// [5, 8]</span>
+
+<span class="zap-comment">// pick from a set-of-objects</span>
+<span class="zap-operator">@@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">pick</span> <span class="zap-string">'v'</span>   <span class="zap-comment">// [undefined, 6, undefined]</span>
+
+<span class="zap-comment">// pick from an array-of-strings</span>
+<span class="zap-operator">@</span> <span class="zap-string">'abc'</span> <span class="zap-string">'def'</span> <span class="zap-keyword">pick</span> <span class="zap-number">0</span>   <span class="zap-comment">// ['a', 'd']</span>
+</code></pre>
+<hr>
+<h4 id="map-at"><code>mapAt</code></h4>
+<p><code>mapAt</code> applies <a href="#at"><code>at</code></a> to each element of an iterable. The first operand of <code>mapAt</code> is the iterable to extract values from; the second operand is an iterable of names/indices. <code>mapAt</code> returns an array:</p>
+<pre><code><span class="zap-comment">// apply mapAt to an array-of-arrays</span>
+<span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">8</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">0</span><span class="zap-punctuation">)</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   [6, 4],</span>
+  <span class="zap-comment">//   [9, 7]</span>
+  <span class="zap-comment">// ]</span>
+
+<span class="zap-comment">// apply mapAt to a set-of-objects</span>
+<span class="zap-operator">@@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">4</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">7</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">9</span> <span class="zap-identifier">w</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {u: 4, w: undefined},</span>
+  <span class="zap-comment">//   {u: 6, w: 8},</span>
+  <span class="zap-comment">//   {u: 9, w: 10}</span>
+  <span class="zap-comment">// ]</span>
+
+<span class="zap-comment">// apply mapAt to an array-of-strings</span>
+<span class="zap-operator">@</span> <span class="zap-string">'abc'</span> <span class="zap-string">'def'</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">0</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// ['ac', 'df']</span>
+</code></pre>
 <hr>
 <h4 id="transpose"><code>transpose</code></h4>
 <p><code>transpose</code> takes an iterable-of-iterables (typically an array-of-arrays) and returns an array-of-arrays:</p>
@@ -1913,12 +2011,18 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">x</span> <span class="zap-keyword">transpose</span>      <span class="zap-comment">// [[5, 10], [6, 20], [7, 30]] </span>
 </code></pre>
-<p>The result of <code>transpose</code> can have empty elements and inner arrays of different lengths:</p>
+<p>The result of <code>transpose</code> can have empty elements and inner arrays of different lengths. Empty array elements in the original data have value <code>undefined</code> in the transpose:</p>
 <pre><code><span class="zap-operator">@</span> 
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-keyword">new</span> <span class="zap-identifier">Array</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>  <span class="zap-comment">// [empty, empty]</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-keyword">transpose</span>   <span class="zap-comment">// [[1, 3, 6], [2 4], [empty, 5]] </span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">transpose</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   [1, undefined, 3, 6],</span>
+  <span class="zap-comment">//   [2, undefined, 4],</span>
+  <span class="zap-comment">//   [empty, empty, 5]</span>
+  <span class="zap-comment">// ] </span>
 </code></pre>
 <hr>
 <h4 id="array-of-objects"><code>arrObj</code></h4>
@@ -1943,8 +2047,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   {Horsepower: 79, Origin: 'USA'}</span>
   <span class="zap-comment">// ]</span>
 </code></pre>
-<p>As shown in the final example, <code>arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the returned table. When this argument is omitted (or falsy), all properties are included.</p>
-<p>The iterables in the original table can have different lengths:</p>
+<p>As shown in the final example, <code>arrObj</code> can take a second operand (an iterable) that specifies the properties to include in the returned data. When this argument is omitted (or falsy), all properties are included.</p>
+<p>The iterables in the original data can have different lengths:</p>
 <pre><code><span class="zap-operator">#</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">u</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">v</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">8</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>
@@ -1954,6 +2058,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
            <span class="zap-comment">//   {u: 7}</span>
            <span class="zap-comment">// ]</span>
 </code></pre>
+<p>Empty array elements in the original data will result in properties with value <code>undefined</code> in the result.</p>
 <hr>
 <h4 id="object-of-arrays"><code>objArr</code></h4>
 <p><code>objArr</code> takes an iterable-of-objects (typically an array-of-objects) and returns an object-of-arrays:</p>
@@ -1976,8 +2081,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   Origin: ['Europe', 'USA', 'USA']</span>
   <span class="zap-comment">// }</span>
 </code></pre>
-<p>As shown in the final example, <code>objArr</code> can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), the returned object has an array for each unique property name in the original table.</p>
-<p>When a second operand is used, the arrays in the result have no empty elements and have the same length as the orginal table. When a second operand is not used, the arrays of the result can have empty elements and different lengths:</p>
+<p>As shown in the final example, <code>objArr</code> can take a second operand (an iterable) that specifies the properties to include in the result. When this argument is omitted (or falsy), the returned object has an array for each unique property name in the original data.</p>
+<p>When a second operand is used, the arrays in the result have no empty elements and have the same length as the orginal data. When a second operand is not used, the arrays of the result can have empty elements and different lengths:</p>
 <pre><code><span class="zap-identifier">data</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span> <span class="zap-identifier">w</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>

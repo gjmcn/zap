@@ -79,6 +79,12 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 ---
 
+#### Elementwise Is
+
+[`isBigInt`](#elementwise) [`isBoolean`](#elementwise) [`isFinite`](lementwise) [`isFunction`](#elementwise) [`isInteger`](#elementwise) [`isNaN`](#elementwise) [`isNull`](#elementwise) [`isNullish`](#elementwise) [`isNumber`](#elementwise) [`isString`](#elementwise) [`isSymbol`](#elementwise) [`isUndefined `](#elementwise)
+
+---
+
 #### Elementwise Math
 
 [`abs`](#elementwise) [`acos`](#elementwise) [`acosh`](#elementwise) [`asin`](#elementwise) [`asinh`](#elementwise) [`atan`](#elementwise) [`atanh`](#elementwise) [`cbrt`](#elementwise) [`ceil`](#elementwise) [`clz32`](#elementwise) [`cos`](#elementwise) [`cosh`](#elementwise) [`exp`](#elementwise) [`expm1`](#elementwise) [`floor`](#elementwise) [`fround`](#elementwise) [`log`](#elementwise) [`log10`](#elementwise) [`log1p`](#elementwise)  [`log2`](#elementwise) [`round`](#elementwise) [`sign`](#elementwise) [`sin`](#elementwise) [`sinh`](#elementwise) [`sqrt`](#elementwise) [`tan`](#elementwise) [`tanh`](#elementwise) [`trunc`](#elementwise)
@@ -87,13 +93,13 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Elementwise Other
 
-[`boolean`](#elementwise) [`date`](#elementwise) [`isFinite`](lementwise) [`isInteger`](#elementwise) [`isNaN`](#elementwise) [`neg`](#elementwise) [`not`](#elementwise) [`number`](#elementwise) [`string`](#elementwise) [`toLowerCase`](#elementwise) [`toUpperCase`](#elementwise) [`trim`](#elementwise) [`trimEnd`](#elementwise) [`trimStart`](#elementwise)
+[`boolean`](#elementwise) [`date`](#elementwise) [`neg`](#elementwise) [`not`](#elementwise) [`number`](#elementwise) [`string`](#elementwise) [`toLowerCase`](#elementwise) [`toUpperCase`](#elementwise) [`trim`](#elementwise) [`trimEnd`](#elementwise) [`trimStart`](#elementwise)
 
 ---
 
 #### Filter, Group, Reduce, Sort
 
-[`bin`](#bin)  [`binCount`](#bin) [`count`](#count) [`deviation`](#sum) [`every`](#every) [`filter`](#filter)  [`find`](#find) [`findIndex`](#find) [`group`](#group) [`groupCount`](#group) [`max`](#min) [`maxIndex`](#min) [`mean`](#sum) [`min`](#min) [`minIndex`](#min) [`order`](#order) [`orderIndex`](#order) [`reduce`](#reduce-op) [`some`](#every) [`sum`](#sum) [`sumCumu`](#sum-cumu) [`variance`](#sum)
+[`bin`](#bin)  [`binCount`](#bin) [`count`](#count) [`deviation`](#sum) [`every`](#every) [`filter`](#filter) [`filterIndex`](#filter) [`find`](#find) [`findIndex`](#find) [`group`](#group) [`groupCount`](#group) [`max`](#min) [`maxIndex`](#min) [`mean`](#sum) [`median`](#median) [`min`](#min) [`minIndex`](#min) [`order`](#order) [`orderIndex`](#order) [`quantile`](#median) [`reduce`](#reduce-op) [`some`](#every) [`sum`](#sum) [`sumCumu`](#sum-cumu) [`rank`](#order) [`variance`](#sum)
 
 ---
 
@@ -108,9 +114,15 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 ---
 
+#### Nested Data
+
+[`arrObj`](#array-of-objects) [`mapAt`](#map-at) [`objArr`](#object-of-arrays) [`pick`](#pick) [`transpose`](#transpose)
+
+---
+
 #### Other
 
-[`array`](#arrays) [`arrObj`](#array-of-objects) [`apply`](#call-and-apply) [`call`](#call-and-apply) [`debugger`](#debugger) [`empties`](#arrays) [`if`](#if) [`linSpace`](#lin-space) [`objArr`](#object-of-arrays) [`ones`](#arrays) [`period`](#period) [`print`](#print) [`throw`](#throw) [`to`](#to) [`transpose`](#transpose) [`zeros`](#arrays)
+[`array`](#arrays) [`apply`](#call-and-apply) [`call`](#call-and-apply) [`debugger`](#debugger) [`empties`](#arrays) [`if`](#if) [`linSpace`](#lin-space) [`ones`](#arrays) [`period`](#period) [`print`](#print) [`throw`](#throw) [`to`](#to) [`zeros`](#arrays) [`interpolate`](#interpolate)
 
 ---
 

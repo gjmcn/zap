@@ -11,8 +11,8 @@ Except for [`reduce`](#reduce-op) itself, the operators in this section take an 
 Counts the number of times that the callback returns a truthy value:
 
 ```
-s = @@ 1 '1' true 0              // Set {1, "1", true, 0}
-s count [typeof a == 'number']   // 2
+s = @@ 1 '1' true 0    // Set {1, "1", true, 0}
+s count [a isNumber]   // 2
 ```
 
 ---

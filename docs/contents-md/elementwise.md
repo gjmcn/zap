@@ -5,6 +5,9 @@
 Elementwise operators take a single operand. If the operand is a non-string iterable, the operator acts on each element independently and returns the results as an array. Otherwise, the operator acts on the operand directly and returns the result:
 
 ```
+4 isNumber         // true
+@ 4 '5' isNumber   // [true, false]
+
 4 sqrt        // 2
 @ 9 16 sqrt   // [3, 4]
 
@@ -14,7 +17,26 @@ Elementwise operators take a single operand. If the operand is a non-string iter
 
 ---
 
-#### Math {#ew-math}
+#### Elementwise Is {#ew-is}
+
+| Operator      | Description |
+|---------------|-------------|
+| `isBigInt`    | is bigint? |
+| `isBoolean`   | is boolean?|
+| `isFinite`    | is finite? (always `false` for non-number) |
+| `isFunction`  | is function?|
+| `isInteger`   | is integer? (always `false` for non-number) |
+| `isNaN`       | is `NaN`? (always `false` for non-number) |
+| `isNull`      | is `null`? |
+| `isNullish`   | is `null` or `undefined`? |
+| `isNumber`    | is number? |
+| `isString`    | is string? |
+| `isSymbol`    | is symbol? |
+| `isUndefined` | is `undefined`? {.table .table-sm .w500} |
+
+---
+
+#### Elementwise Math {#ew-math}
 
 Elementwise math operators use the corresponding methods of the [`Math`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) object. The elementwise math operators are: 
 
@@ -22,17 +44,12 @@ Elementwise math operators use the corresponding methods of the [`Math`](https:/
 
 ---
 
-#### Other {#ew-other}
-
-The other elementwise operators are:
+#### Elementwise Other {#ew-other}
 
 | Operator        | Description |
 |-----------------|-------------|
 | `boolean`      | convert to boolean |
 | `date`         | convert to date |
-| `isFinite`     | is finite? (always `false` for non-number) |
-| `isInteger`    | is integer? (always `false` for non-number) |
-| `isNaN`        | is `NaN`? (always `false` for non-number) |
 | `neg`          | unary minus |
 | `not`          | logical not |
 | `number`       | convert to number |

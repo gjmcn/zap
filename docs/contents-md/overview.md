@@ -36,7 +36,7 @@ Basic operators such as `+` can take more the two operands:
 Many operators have names rather than symbols:
 
 ```
-typeof 5 == 'number' print   // prints (and returns) true
+5 isNumber print   // prints (and returns) true
 ```
 
 Indented blocks or parentheses can be used for precedence:
