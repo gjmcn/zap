@@ -122,16 +122,24 @@ export default {
     return e;
   },
 
-  _quantile(i, q, f, o) {
+  _quantile(i, q, f, o) { 
     const x = [];
     let j = 0;
     for (let v of i) {
-      x.push(+f(v, j++, i));
+      v = +f(v, j++, i);
+      if (Number.isNaN(v)) {
+          return NaN;
+      } 
+      x.push(v);
+    }
+    const n = x.length;
+    q = Math.max(Math.min(q, 1), 0) * (n - 1);
+    if (Number.isNaN(q)) {
+        return NaN;
     }
     if (!o) {
       x.sort((u, v) => u - v);
     }
-    const n = x.length;
     if (n === 0) {
       return NaN;
     }
@@ -139,7 +147,6 @@ export default {
       return x[0];
     }
     else {
-      q = Math.max(Math.min(q, 1), 0) * (n - 1);
       const l = Math.floor(q);
       const u = Math.ceil(q);
       return l === u

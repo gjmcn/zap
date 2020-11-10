@@ -1699,7 +1699,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-string">'ab'</span> <span class="zap-operator">`+`</span> <span class="zap-string">'XY'</span>   <span class="zap-comment">// ['aX', 'bY']</span>
 </code></pre><h2 id="reduce">Reduce</h2>
 <hr>
-<p>Except for <a href="#reduce-op"><code>reduce</code></a> itself, the operators in this section take an iterable and a callback function. The callback is applied to each element of the iterable and the returned values are used to compute the result. For some operators, the callback is optional — if omitted, elements of the iterable are used to compute the result:</p>
+<p>Unless otherwise stated, reduction operators take an iterable and a callback function. The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result. For some operators, the callback is optional — if omitted, elements of the iterable are used to compute the result:</p>
 <hr>
 <h4 id="count"><code>count</code> <span class="small">(callback required)</span></h4>
 <p>Counts the number of times that the callback returns a truthy value:</p>
@@ -1729,7 +1729,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
 <span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>        <span class="zap-comment">// {u: 6, v: 10}</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">findIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 1</span>
@@ -1740,7 +1740,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p><code>min</code>/<code>max</code> returns the element of the iterable corresponding to the minimum/maximum:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">3</span> <span class="zap-number">2</span> <span class="zap-number">5</span> <span class="zap-keyword">min</span>   <span class="zap-comment">// 2</span>
 
-<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of arrays</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">max</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-number">0</span><span class="zap-punctuation">]</span>                       <span class="zap-comment">// [7, 20]</span>
 </code></pre>
 <p>If multiple elements correspond to the minimum/maximum, the first such element is used.</p>
@@ -1760,7 +1760,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>     <span class="zap-comment">// 60</span>
 </code></pre>
 <p>The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to <code>NaN</code>, the reduction operator will return <code>NaN</code>.</p>
@@ -1776,6 +1776,32 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <blockquote>
 <p><code>sumCumu</code> is <em>not</em> a reduction operator, but is listed here due to its similarity to <code>sum</code>.</p>
 </blockquote>
+<hr>
+<h4 id="median"><code>median</code>, <code>quantile</code> <span class="small">(callback optional)</span></h4>
+<p><code>median</code> sorts the elements of the iterable (or results of the callback if used) in ascending order, then finds the median:</p>
+<pre><code><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> <span class="zap-keyword">median</span>   <span class="zap-comment">// 5.5</span>
+
+<span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">25</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// array-of-objects</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">median</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 25</span>
+</code></pre>
+<p>If the values are already sorted, use a third truthy operand with <code>median</code> to skip the sorting step.</p>
+<p><code>quantile</code> takes an iterable, a probability (bounded at 0 and 1) and an optional callback, and returns the corresponding quantile. A fourth truthy operand can be used to indicate that the values are already sorted.</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> 
+<span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0</span>         <span class="zap-comment">// 2</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-number">1</span>         <span class="zap-comment">// 10</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0.5</span>       <span class="zap-comment">// 5.5 (the median)</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-punctuation">(</span><span class="zap-number">2</span> <span class="zap-operator">/</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 7</span>
+
+<span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">25</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>           <span class="zap-comment">// array-of-objects</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0.25</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 17.5</span>
+</code></pre>
+<p><code>median</code> and <code>quantile</code> use linear interpolation and treat the elements of the iterable (or results of the callback) and the probability operand of <code>quantile</code> as numbers. If any of the numbers are <code>NaN</code> or if the iterable is empty, these operators return <code>NaN</code>.</p>
 <hr>
 <h4 id="reduce-op"><code>reduce</code></h4>
 <p>The <code>reduce</code> operator takes an iterable, a 'reducer function' and an initial result. The reducer function is called once for each element of the iterable; it is passed the 'current result', the element, the index and the iterable:</p>
@@ -1827,22 +1853,35 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {'cat' =&gt; 4, 'dog' =&gt; 2, 'hippo' =&gt; 1}</span>
 </code></pre><h2 id="order">Order</h2>
 <hr>
-<p><code>order</code> takes an iterable and a 'comparison function' (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>), and returns a new array containing the sorted elements of the iterable. The default comparison function is <code>[a - b]</code> which sorts (finite) numbers or dates in ascending order:</p>
-<pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-number">2</span> <span class="zap-keyword">order</span>   <span class="zap-comment">// [2, 5, 9]</span>
+<p><code>order</code> takes an iterable and a 'comparison function' (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>), and returns a new array containing the sorted elements of the iterable. The default comparison function is <code>[a - b]</code> which sorts (finite) numbers or dates in ascending order.</p>
+<p><code>orderIndex</code> and <code>rank</code> behave like <code>order</code> except that:</p>
+<ul>
+<li>
+<p><code>orderIndex</code> returns the original indices of the sorted elements.</p>
+</li>
+<li>
+<p><code>rank</code> returns the rank of each element.</p>
+</li>
+</ul>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-number">2</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">order</span>        <span class="zap-comment">// [2, 5, 9]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">orderIndex</span>   <span class="zap-comment">// [2, 0, 1] </span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">rank</span>         <span class="zap-comment">// [1, 2, 0]</span>
 
-<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
 
 <span class="zap-comment">// sort on property v, descending</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">order</span> <span class="zap-punctuation">[</span><span class="zap-identifier">b</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span> <span class="zap-operator">-</span> <span class="zap-punctuation">(</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">)</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]</span>
+<span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">b</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span> <span class="zap-operator">-</span> <span class="zap-punctuation">(</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">)</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">order</span> <span class="zap-identifier">f</span>        <span class="zap-comment">// [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">orderIndex</span> <span class="zap-identifier">f</span>   <span class="zap-comment">// [2, 0, 1]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">rank</span> <span class="zap-identifier">f</span>         <span class="zap-comment">// [1, 2, 0]</span>
 
-<span class="zap-comment">// orderIndex</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">orderIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">b</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span> <span class="zap-operator">-</span> <span class="zap-punctuation">(</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">)</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [2, 0, 1]</span>
-</code></pre>
-<p>As shown in the final example, <code>orderIndex</code> can be used to get the original indices of the sorted elements.</p>
-<h2 id="bin">Bin</h2>
+<span class="zap-comment">// tied values</span>
+<span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">3</span> <span class="zap-keyword">rank</span>   <span class="zap-comment">// [0, 1, 3, 1]</span>
+</code></pre><h2 id="bin">Bin</h2>
 <hr>
 <p><code>bin</code> takes an iterable to bin, an iterable of bin limits and a 'comparison function' (see <a href="#order"><code>order</code></a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>). The default comparison function is <code>[a - b]</code> which is suitable for binning (finite) numbers or dates. <code>bin</code> returns a map with arrays for values:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-number">12</span> <span class="zap-number">7</span> <span class="zap-keyword">bin</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// Map {10 =&gt; [5, 9, 7], 20 =&gt; [12]}</span>

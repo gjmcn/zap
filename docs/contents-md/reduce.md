@@ -2,7 +2,7 @@
 
 ---
 
-Except for [`reduce`](#reduce-op) itself, the operators in this section take an iterable and a callback function. The callback is applied to each element of the iterable and the returned values are used to compute the result. For some operators, the callback is optional &mdash; if omitted, elements of the iterable are used to compute the result:
+Unless otherwise stated, reduction operators take an iterable and a callback function. The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result. For some operators, the callback is optional &mdash; if omitted, elements of the iterable are used to compute the result:
 
 ---
  
@@ -48,7 +48,7 @@ If the iterable is empty, `every` returns `true`, `some` returns `false`.
 x = @
 | (# u 5 v 20)
 | (# u 6 v 10)
-| (# u 7 v 30)   // array of objects
+| (# u 7 v 30)   // array-of-objects
 
 x find [a :u > 5]        // {u: 6, v: 10}
 x findIndex [a :u > 5]   // 1
@@ -65,7 +65,7 @@ If the callback does not return a truthy value for any element, `find` returns `
 ```
 @ 7 3 2 5 min   // 2
 
-x = @ (@ 2 10) (@ 7 20) (@ 5 30)   // array of arrays
+x = @ (@ 2 10) (@ 7 20) (@ 5 30)   // array-of-arrays
 x max [a :0]                       // [7, 20]
 ```
 
@@ -95,7 +95,7 @@ x deviation   // 2
 x = @
 | (# u 5 v 10)
 | (# u 6 v 20)
-| (# u 7 v 30)   // array of objects
+| (# u 7 v 30)   // array-of-objects
 x sum [a :v]     // 60
 ```
 
@@ -118,6 +118,42 @@ x sumCumu   // [3, 11, 13, 23]
 ```
 
 > `sumCumu` is _not_ a reduction operator, but is listed here due to its similarity to `sum`.
+
+---
+
+#### `median`, `quantile` <span class="small">(callback optional)</span> {#median}
+
+`median` sorts the elements of the iterable (or results of the callback if used) in ascending order, then finds the median:
+
+```
+@ 4 2 7 10 median   // 5.5
+
+y = @ 
+| (# u 5 v 25)
+| (# u 6 v 10)
+| (# u 7 v 30)    // array-of-objects
+y median [a :v]   // 25
+```
+
+If the values are already sorted, use a third truthy operand with `median` to skip the sorting step.
+
+`quantile` takes an iterable, a probability (bounded at 0 and 1) and an optional callback, and returns the corresponding quantile. A fourth truthy operand can be used to indicate that the values are already sorted.
+
+```
+x = @ 4 2 7 10 
+x quantile 0         // 2
+x quantile 1         // 10
+x quantile 0.5       // 5.5 (the median)
+x quantile (2 / 3)   // 7
+
+y = @ 
+| (# u 5 v 25)
+| (# u 6 v 10)
+| (# u 7 v 30)           // array-of-objects
+y quantile 0.25 [a :v]   // 17.5
+```
+
+`median` and `quantile` use linear interpolation and treat the elements of the iterable (or results of the callback) and the probability operand of `quantile` as numbers. If any of the numbers are `NaN` or if the iterable is empty, these operators return `NaN`.
 
 ---
 
