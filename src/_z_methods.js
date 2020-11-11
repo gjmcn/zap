@@ -137,6 +137,10 @@ export default {
     if (Number.isNaN(q)) {
         return NaN;
     }
+    const r = Math.round(q);
+    if (Math.abs(r - q) < 1e-14) {
+        q = r;
+    }
     if (!o) {
       x.sort((u, v) => u - v);
     }
