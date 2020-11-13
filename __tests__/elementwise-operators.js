@@ -1,7 +1,21 @@
 const {testEach, simpleTest} = require('./test-helpers.js');
 
+// is
+simpleTest('isBigInt',    '10n isBigInt',        true);
+simpleTest('isBoolean',   '5 isBoolean',         false);
+simpleTest('isFinite',    '5 isFinite',          true);
+simpleTest('isFunction',  '[a + 5] isFunction',  true);
+simpleTest('isInteger',   '5 isInteger',         true);
+simpleTest('isNaN',       '5 isNaN',             false);
+simpleTest('isNull',      'null isNull',         true);
+simpleTest('isNullish',   'undefined isNullish', true);
+simpleTest('isNumber',    '"5" isNumber',        false);
+simpleTest('isString',    '"5" isString',        true);
+simpleTest('isSymbol',    '\\Symbol isSymbol',   true);
+simpleTest('isUndefined', 'null isUndefined',    false);
+
 // Math methods
-simpleTest('abs',    '- 5 abs',      5);
+simpleTest('abs',    '- 5 abs',     5);
 simpleTest('acos',   '1 acos',      0);
 simpleTest('acosh',  '1 acosh',     0);
 simpleTest('asin',   '0 asin',      0);
@@ -33,9 +47,6 @@ simpleTest('trunc',  '2.7 trunc',   2);
 // other
 simpleTest('boolean',      '0 boolean',           false);
 simpleTest('date',         '0 date ~getFullYear', 1970);
-simpleTest('isFinite',     '5 isFinite',          true);
-simpleTest('isInteger',    '5 isInteger',         true);
-simpleTest('isNaN',        '5 isNaN',             false);
 simpleTest('neg',          '5 neg',               -5);
 simpleTest('not',          '5 !',                 false);
 simpleTest('number',       '"5" number',          5);
@@ -52,11 +63,12 @@ simpleTest('boolean, prefix',  'boolean 0', false);
 
 // non-string iterables
 testEach('non-string iterables', [
-  ['@ 4 9 sqrt',              [2, 3]],
-  ["@@ 'a' 'bc' toUpperCase", ['A', 'BC']],
-  ["round (2.4 to 4.8 1.2)",  [2, 4, 5]],
-  ["@ 0 'a' boolean",         [false, true]],
-  ['number (@)',              []],
+  ['@ 4 9 sqrt',                [2, 3]],
+  ["@@ 'a' 'bc' toUpperCase",   ['A', 'BC']],
+  ["round (2.4 to 4.8 1.2)",    [2, 4, 5]],
+  ["@ 0 'a' boolean",           [false, true]],
+  ["@ 5 '5' NaN true isNumber", [true, false, true, false]],
+  ['number (@)',                []],
   [`
 f = fun
     yield false
