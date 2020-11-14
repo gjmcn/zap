@@ -1,6 +1,12 @@
 const {compute} = require('./test-helpers.js');
 
 
+// ========== !! TO DO !! ===========
+//  -asyncEach, asyncMap. asyncDo loops
+//  -yield and yieldFrom in loops
+// ==================================
+
+
 // ========== each, map ==========
 
 test('each, array, 0 callback args', () => {
@@ -195,8 +201,3 @@ n do i
 x
 `)).toStrictEqual([0, 1, 2]);
 });
-
-
-// ========== !! TO DO !! ==========: 
-//  -asyncEach, asyncMap. asyncDo loops
-//  -yield and yieldFrom in loops

@@ -138,7 +138,7 @@ export default {
         return NaN;
     }
     const r = Math.round(q);
-    if (Math.abs(r - q) < 1e-14) {
+    if (Math.abs(r - q) < (1e-14 * (n - 1))) {
         q = r;
     }
     if (!o) {
