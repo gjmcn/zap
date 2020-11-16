@@ -38,7 +38,7 @@ fun
     @ 4 5 6 yield
     @ 7 8 9 yield
 | call pick 0
-  `)).toStrictEqual([4, 77]);
+  `)).toStrictEqual([4, 7]);
 });
 
 test('empty array', () => {
