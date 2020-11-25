@@ -1881,7 +1881,28 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-comment">// tied values</span>
 <span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">3</span> <span class="zap-keyword">rank</span>   <span class="zap-comment">// [0, 1, 3, 1]</span>
-</code></pre><h2 id="bin">Bin</h2>
+</code></pre>
+<p>For convenience, the comparison function can be replaced with <code>'asc'</code> (ascending) or <code>'desc'</code> (descending):</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-number">2</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">order</span> <span class="zap-string">'desc'</span>        <span class="zap-comment">// [9, 5, 2]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">orderIndex</span> <span class="zap-string">'desc'</span>   <span class="zap-comment">// [1, 0, 2] </span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">rank</span> <span class="zap-string">'desc'</span>         <span class="zap-comment">// [1, 0, 2]</span>
+</code></pre>
+<p>To order an iterable of objects/arrays on an inner property/index, an additional operand can be used after <code>'asc'</code> or <code>'desc'</code> that specifies the property/index:</p>
+<pre><code><span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+
+<span class="zap-comment">// sort on property v, descending</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">order</span> <span class="zap-string">'desc'</span> <span class="zap-string">'v'</span>        <span class="zap-comment">// [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">orderIndex</span> <span class="zap-string">'desc'</span> <span class="zap-string">'v'</span>   <span class="zap-comment">// [2, 0, 1]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">rank</span> <span class="zap-string">'desc'</span> <span class="zap-string">'v'</span>         <span class="zap-comment">// [1, 2, 0]</span>
+</code></pre>
+<blockquote>
+<p><code>'asc'</code> or <code>'desc'</code> should only be used to sort (finite) numbers or dates.</p>
+</blockquote>
+<h2 id="bin">Bin</h2>
 <hr>
 <p><code>bin</code> takes an iterable to bin, an iterable of bin limits and a 'comparison function' (see <a href="#order"><code>order</code></a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>). The default comparison function is <code>[a - b]</code> which is suitable for binning (finite) numbers or dates. <code>bin</code> returns a map with arrays for values:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">9</span> <span class="zap-number">12</span> <span class="zap-number">7</span> <span class="zap-keyword">bin</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// Map {10 =&gt; [5, 9, 7], 20 =&gt; [12]}</span>

@@ -3,13 +3,22 @@ const {compute} = require('./test-helpers.js');
 test('order numeric array default', () => {
   expect(compute('@ 5 3 9 5 2 order')).toStrictEqual([2, 3, 5, 5, 9]);
 });
+test('order numeric array convenience', () => {
+  expect(compute('@ 5 3 9 5 2 order \'asc\'')).toStrictEqual([2, 3, 5, 5, 9]);
+});
 
 test('orderIndex numeric array default', () => {
   expect(compute('@ 5 3 9 2 orderIndex')).toStrictEqual([3, 1, 0, 2]);
 });
+test('orderIndex numeric array convenience', () => {
+  expect(compute('@ 5 3 9 2 orderIndex "asc"')).toStrictEqual([3, 1, 0, 2]);
+});
 
 test('rank numeric array default', () => {
   expect(compute('@ 5 3 9 2 rank')).toStrictEqual([2, 1, 3, 0]);
+});
+test('rank numeric array convenience', () => {
+  expect(compute('@ 5 3 9 2 rank "asc"')).toStrictEqual([2, 1, 3, 0]);
 });
 
 test('rank numeric array default - ties', () => {
@@ -19,13 +28,22 @@ test('rank numeric array default - ties', () => {
 test('order numeric array desc', () => {
   expect(compute('@ 5 3 9 5 2 order [b - a]')).toStrictEqual([9, 5, 5, 3, 2]);
 });
+test('order numeric array desc convenience', () => {
+  expect(compute('@ 5 3 9 5 2 order "desc"')).toStrictEqual([9, 5, 5, 3, 2]);
+});
 
 test('orderIndex numeric array desc', () => {
   expect(compute('@ 5 3 9 2 orderIndex [b - a]')).toStrictEqual([2, 0, 1, 3]);
 });
+test('orderIndex numeric array desc convenience', () => {
+  expect(compute('@ 5 3 9 2 orderIndex "desc"')).toStrictEqual([2, 0, 1, 3]);
+});
 
 test('rank numeric array desc - ties', () => {
   expect(compute('@ 5 3 9 5 2 rank [b - a]')).toStrictEqual([1, 3, 0, 1, 4]);
+});
+test('rank numeric array desc convenience - ties', () => {
+  expect(compute('@ 5 3 9 5 2 rank "desc"')).toStrictEqual([1, 3, 0, 1, 4]);
 });
 
 test('order array-of-objects', () => {
@@ -33,10 +51,20 @@ test('order array-of-objects', () => {
     `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) order [b :v - (a :v)]`
   )).toStrictEqual([{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]);
 });
+test('order array-of-objects convenience', () => {
+  expect(compute(
+    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) order "desc" "v"`
+  )).toStrictEqual([{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]);
+});
 
 test('rank array-of-objects', () => {
   expect(compute(
     `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) rank [b :v - (a :v)]`
+  )).toStrictEqual([1, 2, 0]);
+});
+test('rank array-of-objects convenience', () => {
+  expect(compute(
+    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) rank "desc" "v"` 
   )).toStrictEqual([1, 2, 0]);
 });
 
@@ -74,6 +102,16 @@ f = fun
     yield 1
     yield 6
 \\f orderIndex [b - a]`
+  )).toStrictEqual([0, 3, 1, 2]);
+});
+test('orderIndex generator convenience', () => {
+  expect(compute(`
+f = fun
+    yield 9
+    yield 4
+    yield 1
+    yield 6
+\\f orderIndex "desc"`
   )).toStrictEqual([0, 3, 1, 2]);
 });
 

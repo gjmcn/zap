@@ -10,7 +10,7 @@ module.exports = new Map([
 iris filter [a :petalLength > 6]
 
 // order by sepal length
-iris order [a :sepalLength - (b :sepalLength)]
+iris order 'asc' 'sepalLength'
 
 // count by species
 iris groupCount [a :species]

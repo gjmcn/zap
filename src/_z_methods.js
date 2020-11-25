@@ -51,6 +51,16 @@ export default {
     return m;
   },
 
+  _compare(f = (x, y) => x - y, p) {
+      if (f === 'asc') {
+        return p === undefined ? (x, y) => x - y : (x, y) => x[p] - y[p]; 
+      }
+      else if (f === 'desc') {
+        return p === undefined ? (x, y) => y - x : (x, y) => y[p] - x[p]; 
+      }
+      return f;
+  },
+
   _orderIndex(i, f) {
     i = Array.isArray(i) ? i : [...i];
     return i.map((_, j) => j).sort((x, y) => f(i[x], i[y]));
@@ -495,15 +505,19 @@ export default {
   quantile(i, q, f = x => x, o) { return this._quantile(i, q, f, o) },
   quantileUse: ['_quantile'],
 
-  orderIndex(i, f = (x, y) => x - y) { return this._orderIndex(i, f) },
-  orderIndexUse: ['_orderIndex'],
-
-  order(i, f = (x, y) => x - y) {
-    return [...i].sort(f);
+  orderIndex(i, f, p) {
+    return this._orderIndex(i, this._compare(f, p));
   },
+  orderIndexUse: ['_compare', '_orderIndex'],
 
-  rank(i, f = (x, y) => x - y) {
+  order(i, f, p) {
+    return [...i].sort(this._compare(f, p));
+  },
+  orderUse: ['_compare'],
+
+  rank(i, f, p) {
     i = Array.isArray(i) ? i : [...i];
+    f = this._compare(f, p);
     const o = this._orderIndex(i, f);
     const n = i.length;
     const r = new Array(n);
@@ -518,7 +532,7 @@ export default {
     }
     return r;
   },
-  rankUse: ['_orderIndex'],
+  rankUse: ['_compare', '_orderIndex'],
 
   some(i, f) {
     let j = 0;
