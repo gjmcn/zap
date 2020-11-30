@@ -35,6 +35,10 @@ export default {
       : e;
   },
 
+  _callback(f = x => x) {
+      return typeof f === 'function' ? f : y => y[f]; 
+  },
+
   _group(c, i, f, g) {
     let m = new Map(),
         j = 0;
@@ -93,7 +97,7 @@ export default {
     let s = 0,
         j = 0;
     for (let v of i) {
-      s += +(f === void 0 ? v : f(v, j, i));
+      s += +f(v, j, i);
       j++;
     }
     return m ? s / j : s;
@@ -105,7 +109,7 @@ export default {
         k = -1,
         g = x ? ((q, w) => q <= w) : ((q, w) => q >= w);
     for (let v of i) {
-      v = +(f === void 0 ? v : f(v, j, i));
+      v = +f(v, j, i);
       if (isNaN(v)) return -1;
       if (!g(v, s)) {
         s = v;
@@ -122,7 +126,7 @@ export default {
         g = x ? ((q, w) => q <= w) : ((q, w) => q >= w),
         e; 
     for (let v of i) {
-      let t = +(f === void 0 ? v : f(v, j++, i));
+      let t = +f(v, j++, i);
       if (isNaN(t)) return;
       if (!g(t, s)) {
         s = t; 
@@ -175,7 +179,7 @@ export default {
         s = 0,
         d;
     for (let v of i) {
-      v = +(f === void 0 ? v : f(v, c, i));
+      v = +f(v, c, i);
       d = v - m;
       m += d / ++c;
       s += d * (v - m);
@@ -453,11 +457,11 @@ export default {
     return +s * (1 - t) + +e * t;
   },
 
-  group(i, f, g) { return this._group(false, i, f, g) },
-  groupUse: ['_group'],
+  group(i, f, g) { return this._group(false, i, this._callback(f), g) },
+  groupUse: ['_callback', '_group'],
 
-  groupCount(i, f, g) { return this._group(true, i, f, g) },
-  groupCountUse: ['_group'],
+  groupCount(i, f, g) { return this._group(true, i, this._callback(f), g) },
+  groupCountUse: ['_callback', '_group'],
 
   bin(i, z, f, g) { return this._bin(false, i, z, f, g) },
   binUse: ['_bin'],
@@ -466,44 +470,46 @@ export default {
   binCountUse: ['_bin'],
 
   sumCumu(i, f) {
+    f = this._callback(f);
     let s = 0,
         r = [],
         j = 0;
     for (let v of i) {
-      r.push(s += +(f === void 0 ? v : f(v, j++, i)));
+      r.push(s += +f(v, j++, i));
     }
     return r;
   },
+  sumCumuUse: ['_callback'],
 
-  sum(i, f) { return this._sum(false, i, f) },
-  sumUse: ['_sum'],
+  sum(i, f) { return this._sum(false, i, this._callback(f)) },
+  sumUse: ['_callback', '_sum'],
 
-  mean(i, f) { return this._sum(true, i, f) },
-  meanUse: ['_sum'],
+  mean(i, f) { return this._sum(true, i, this._callback(f)) },
+  meanUse: ['_callback', '_sum'],
 
-  minIndex(i, f) { return this._minMaxIndex(false, i, f) },
-  minIndexUse: ['_minMaxIndex'],
+  minIndex(i, f) { return this._minMaxIndex(false, i, this._callback(f)) },
+  minIndexUse: ['_callback', '_minMaxIndex'],
 
-  maxIndex(i, f) { return this._minMaxIndex(true, i, f) },
-  maxIndexUse: ['_minMaxIndex'],
+  maxIndex(i, f) { return this._minMaxIndex(true, i, this._callback(f)) },
+  maxIndexUse: ['_callback', '_minMaxIndex'],
 
-  min(i, f) { return this._minMax(false, i, f) },
-  minUse: ['_minMax'],
+  min(i, f) { return this._minMax(false, i, this._callback(f)) },
+  minUse: ['_callback', '_minMax'],
 
-  max(i, f) { return this._minMax(true, i, f) },
-  maxUse: ['_minMax'],
+  max(i, f) { return this._minMax(true, i, this._callback(f)) },
+  maxUse: ['_callback', '_minMax'],
 
-  variance(i, f) { return this._varDev(false, i, f) },
-  varianceUse: ['_varDev'],
+  variance(i, f) { return this._varDev(false, i, this._callback(f)) },
+  varianceUse: ['_callback', '_varDev'],
 
-  deviation(i, f) { return this._varDev(true, i, f) },
-  deviationUse: ['_varDev'],
+  deviation(i, f) { return this._varDev(true, i, this._callback(f)) },
+  deviationUse: ['_callback', '_varDev'],
 
-  median(i, f = x => x, o) { return this._quantile(i, 0.5, f, o) },
-  medianUse: ['_quantile'],
+  median(i, f, o) { return this._quantile(i, 0.5, this._callback(f), o) },
+  medianUse: ['_callback', '_quantile'],
 
-  quantile(i, q, f = x => x, o) { return this._quantile(i, q, f, o) },
-  quantileUse: ['_quantile'],
+  quantile(i, q, f, o) { return this._quantile(i, q, this._callback(f), o) },
+  quantileUse: ['_callback', '_quantile'],
 
   orderIndex(i, f, p) {
     return this._orderIndex(i, this._compare(f, p));
@@ -535,22 +541,27 @@ export default {
   rankUse: ['_compare', '_orderIndex'],
 
   some(i, f) {
+    f = this._callback(f);
     let j = 0;
     for (let v of i) {
       if (f(v, j++, i)) return true;
     }
     return false;
   },
+  someUse: ['_callback'],
 
   every(i, f) { 
+    f = this._callback(f);
     let j = 0;
     for (let v of i) {
       if (!f(v, j++, i)) return false;
     }
     return true;
   },
+  everyUse: ['_callback'],
 
   filter(i, f) {
+    f = this._callback(f);
     let r = [],
         j = 0;
     for (let v of i) {
@@ -558,8 +569,10 @@ export default {
     }
     return r;
   },
+  filterUse: ['_callback'],
 
   filterIndex(i, f) {
+    f = this._callback(f);
     let r = [],
         j = 0;
     for (let v of i) {
@@ -568,8 +581,10 @@ export default {
     }
     return r;
   },
+  filterIndexUse: ['_callback'],
 
   count(i, f) {
+    f = this._callback(f);
     let c = 0,
         j = 0;
     for (let v of i) {
@@ -577,8 +592,10 @@ export default {
     }
     return c;
   },
+  countUse: ['_callback'],
 
   findIndex(i, f) {
+    f = this._callback(f);
     let j = 0;
     for (let v of i) {
       if (f(v, j, i)) return j;
@@ -586,13 +603,16 @@ export default {
     }
     return -1;
   },
+  findIndexUse: ['_callback'],
 
   find(i, f) {
+    f = this._callback(f);
     let j = 0;
     for (let v of i) {
       if (f(v, j++, i)) return v;
     }
   },
+  findUse: ['_callback'],
 
   arrObj(o, c) {
     let r = [];
