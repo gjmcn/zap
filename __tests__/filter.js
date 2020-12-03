@@ -9,6 +9,15 @@ test('filterIndex numeric array', () => {
     .toStrictEqual([1, 3]);
 });
 
+test('filter default callback', () => {
+  expect(compute('@ 3 null "a" undefined 0 filter'))
+    .toStrictEqual([3, 'a']);
+});
+test('filterIndex default callback', () => {
+  expect(compute('@ 3 null "a" undefined 0 filterIndex'))
+    .toStrictEqual([0, 2]);
+});
+
 test('filter array-of-objects', () => {
   expect(compute(`
 @
@@ -29,6 +38,49 @@ test('filterIndex array-of-objects', () => {
 | (# u 5 v 30)
 | filterIndex [a :u == 5]
   `)).toStrictEqual([0, 2]);
+});
+
+test('filter array-of-objects on property', () => {
+  expect(compute(`
+@
+| (# u 5 v null)
+| (# u 6 v 20)
+| (# u 5 v 30)
+| filter 'v'
+  `)).toStrictEqual([
+    {u: 6, v: 20},
+    {u: 5, v: 30}
+  ]);
+});
+test('filterIndex array-of-objects on property', () => {
+  expect(compute(`
+@
+| (# u 5 v null)
+| (# u 6 v 20)
+| (# u 5 v 30)
+| filterIndex 'v'
+  `)).toStrictEqual([1, 2]);
+});
+
+test('filter generator-of-arrays on index', () => {
+  expect(compute(`
+fun
+    @ 1 2 yield
+    @ 7 2 4 yield
+    @ 1 5 0 yield
+| call filter 2    
+  `)).toStrictEqual([
+    [7, 2, 4]
+  ]);
+});
+test('filterIndex generator-of-arrays on index', () => {
+  expect(compute(`
+fun
+    @ 1 2 yield
+    @ 7 2 4 yield
+    @ 1 5 0 yield
+| call filterIndex 2    
+  `)).toStrictEqual([1]);
 });
 
 test('filter set', () => {

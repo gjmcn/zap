@@ -10,6 +10,16 @@ test('groupCount array', () => {
     .toStrictEqual(new Map([[5, 3], [6, 1], [4, 2]]));
 });
 
+test('group array, default callback', () => {
+  expect(compute('@ 5 6 4 5 5 4 group'))
+    .toStrictEqual(new Map([[5, [5, 5, 5]], [6, [6]], [4, [4, 4]]]));
+});
+
+test('groupCount array, default callback', () => {
+  expect(compute('@ 5 6 4 5 5 4 groupCount'))
+    .toStrictEqual(new Map([[5, 3], [6, 1], [4, 2]]));
+});
+
 test('group empty array', () => {
   expect(compute('@ group [a]'))
     .toStrictEqual(new Map([]));
@@ -30,6 +40,22 @@ test('group array-of-objects', () => {
     ]));
 });
 
+test('group array-of-objects, property name', () => {
+  expect(compute(arrayOfObjects + 'group "u"'))
+    .toStrictEqual(new Map([
+      [5, [{u: 5, v: 10}, {u: 5, v: 50}]],
+      [6, [{u: 6, v: 20}]]
+    ]));
+});
+
+test('groupCount array-of-objects, property name', () => {
+  expect(compute(arrayOfObjects + 'groupCount "u"'))
+    .toStrictEqual(new Map([
+      [5, 2],
+      [6, 1]
+    ]));
+});
+
 test('group array-of-objects, use second callback', () => {
   expect(compute(arrayOfObjects + 'group [a :u] [a mean [a :v]]'))
     .toStrictEqual(new Map([[5, 30], [6, 20]]));
@@ -45,7 +71,7 @@ test('groupCount array-of-objects, use second callback', () => {
     .toStrictEqual(new Map([[5, '>1'], [6, '1']]));
 });
 
-test('group generator', () => {
+test('group generator-of-objects', () => {
   expect(compute(`
 f = fun
     # u 5 v 10 yield
@@ -55,6 +81,36 @@ f = fun
   .toStrictEqual(new Map([
     [5, [{u: 5, v: 10}, {u: 5, v: 50}]],
     [6, [{u: 6, v: 20}]]
+  ]));
+});
+
+test('group generator-of-arrays, use index and second callback', () => {
+  expect(compute(`
+f = fun
+    @ 1 2 3 yield 
+    @ 4 5 6 yield
+    @ 7 8 9 yield
+    @ 10 5 12 yield
+\\f group 1 [a sum 2]`))
+  .toStrictEqual(new Map([
+    [2, 3],
+    [5, 18],
+    [8, 9]
+  ]));
+});
+
+test('groupCount generator-of-arrays, use index and second callback', () => {
+  expect(compute(`
+f = fun
+    @ 1 2 3 yield 
+    @ 4 5 6 yield
+    @ 7 8 9 yield
+    @ 10 5 12 yield
+\\f groupCount 1 [a + '!']`))
+  .toStrictEqual(new Map([
+    [2, '1!'],
+    [5, '2!'],
+    [8, '1!']
   ]));
 });
 
