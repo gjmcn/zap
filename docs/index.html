@@ -1158,7 +1158,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">name</span> <span class="zap-string">'Cody'</span> <span class="zap-identifier">age</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>
 
 <span class="zap-comment">// returns 'The oldest dog Beth is 8'</span>
-<span class="zap-identifier">dogs</span> <span class="zap-keyword">max</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span><span class="zap-punctuation">]</span> <span class="zap-keyword">as</span> <span class="zap-identifier">oldest</span>
+<span class="zap-identifier">dogs</span> <span class="zap-keyword">max</span> <span class="zap-string">'age'</span> <span class="zap-keyword">as</span> <span class="zap-identifier">oldest</span>
     <span class="zap-operator">+</span> <span class="zap-string">'The oldest dog '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' is '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span><span class="zap-punctuation">)</span>
 </code></pre>
 <blockquote>
@@ -1699,17 +1699,36 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-string">'ab'</span> <span class="zap-operator">`+`</span> <span class="zap-string">'XY'</span>   <span class="zap-comment">// ['aX', 'bY']</span>
 </code></pre><h2 id="reduce">Reduce</h2>
 <hr>
-<p>Unless otherwise stated, reduction operators take an iterable and a callback function. The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result. For some operators, the callback is optional — if omitted, elements of the iterable are used to compute the result:</p>
+<p>Unless otherwise stated, reduction operators take an iterable and a callback function (default <code>[a]</code>). The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-number">6</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span>            <span class="zap-comment">// 15</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;&lt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 16 (&gt;&lt; is 'greatest')</span>
+</code></pre>
+<p>When 'reducing' an iterable of objects/arrays, an inner property/index can be used instead of a callback function:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 60</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-string">'v'</span>      <span class="zap-comment">// 60</span>
+</code></pre>
 <hr>
-<h4 id="count"><code>count</code> <span class="small">(callback required)</span></h4>
-<p>Counts the number of times that the callback returns a truthy value:</p>
+<h4><code id="count">count</code></h4>
+<p>Count the truthy values:</p>
 <pre><code><span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">1</span> <span class="zap-string">'1'</span> <span class="zap-literal">true</span> <span class="zap-number">0</span>    <span class="zap-comment">// Set {1, "1", true, 0}</span>
+<span class="zap-identifier">s</span> <span class="zap-keyword">count</span>                <span class="zap-comment">// 3</span>
 <span class="zap-identifier">s</span> <span class="zap-keyword">count</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">isNumber</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 2</span>
 </code></pre>
 <hr>
-<h4 id="every"><code>every</code>, <code>some</code> <span class="small">(callback required)</span></h4>
-<p><code>every</code> returns <code>true</code> if the callback returns a truthy value for every element and <code>false</code> otherwise. <code>some</code> returns <code>true</code> if the callback returns a truthy value for any element and <code>false</code> otherwise.</p>
-<pre><code><span class="zap-identifier">m</span> <span class="zap-operator">=</span> <span class="zap-operator">##</span>
+<h4><code>every</code>, <code id="every">some</code></h4>
+<p><code>every</code> returns <code>true</code> if all values are truthy; <code>some</code> returns <code>true</code> if any value is truthy:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-literal">null</span> <span class="zap-string">'abc'</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">every</span>            <span class="zap-comment">// false</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">some</span>             <span class="zap-comment">// true</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">some</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">==</span> <span class="zap-number">10</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// false</span>
+
+<span class="zap-identifier">m</span> <span class="zap-operator">=</span> <span class="zap-operator">##</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">apple</span> <span class="zap-string">'green'</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">banana</span> <span class="zap-string">'yellow'</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">cherry</span> <span class="zap-string">'red'</span>   <span class="zap-comment">// Map {'apple' =&gt; 'green', ...}</span>
@@ -1717,39 +1736,40 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-comment">// use values method of map</span>
 <span class="zap-identifier">m</span> <span class="zap-operator">~</span><span class="zap-identifier">values</span> <span class="zap-keyword">every</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">==</span> <span class="zap-string">'green'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// false </span>
 <span class="zap-identifier">m</span> <span class="zap-operator">~</span><span class="zap-identifier">values</span> <span class="zap-keyword">some</span>  <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">==</span> <span class="zap-string">'green'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// true</span>
-
-<span class="zap-comment">// use m directly (the callback is passed an array: [key value])</span>
-<span class="zap-identifier">m</span> <span class="zap-keyword">every</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">==</span> <span class="zap-string">'green'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// false </span>
-<span class="zap-identifier">m</span> <span class="zap-keyword">some</span>  <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">==</span> <span class="zap-string">'green'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// true</span>
 </code></pre>
 <p>If the iterable is empty, <code>every</code> returns <code>true</code>, <code>some</code> returns <code>false</code>.</p>
 <hr>
-<h4 id="find"><code>find</code>, <code>findIndex</code> <span class="small">(callback required)</span></h4>
-<p><code>find</code> returns the element corresponding to the first truthy result of the callback. <code>findIndex</code> is like <code>find</code>, but returns the index of the corresponding element:</p>
-<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<h4><code>find</code>, <code id="find">findIndex</code></h4>
+<p><code>find</code> returns the element corresponding to the first truthy value. <code>findIndex</code> is like <code>find</code>, but returns the index of the element:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">7</span> <span class="zap-number">2</span> <span class="zap-number">9</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>        <span class="zap-comment">// 7</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">findIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 1</span>
+
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>        <span class="zap-comment">// {u: 6, v: 10}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-string">'v'</span>               <span class="zap-comment">// {u: 6, v: 10}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">7</span><span class="zap-punctuation">]</span>       <span class="zap-comment">// {u: 7, v: 30}</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">findIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 1</span>
 </code></pre>
-<p>If the callback does not return a truthy value for any element, <code>find</code> returns <code>undefined</code>, <code>findIndex</code> returns <code>-1</code>.</p>
+<p>If there are no truthy values, <code>find</code> returns <code>undefined</code>, <code>findIndex</code> returns <code>-1</code>.</p>
 <hr>
-<h4 id="min"><code>min</code>, <code>max</code>, <code>minIndex</code>, <code>maxIndex</code> <span class="small">(callback optional)</span></h4>
-<p><code>min</code>/<code>max</code> returns the element of the iterable corresponding to the minimum/maximum:</p>
+<h4><code>min</code>, <code>max</code>, <code>minIndex</code>, <code id="min">maxIndex</code></h4>
+<p><code>min</code>/<code>max</code> returns the element corresponding to the minimum/maximum value:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">3</span> <span class="zap-number">2</span> <span class="zap-number">5</span> <span class="zap-keyword">min</span>   <span class="zap-comment">// 2</span>
 
 <span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">max</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-number">0</span><span class="zap-punctuation">]</span>                       <span class="zap-comment">// [7, 20]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">max</span> <span class="zap-number">0</span>                            <span class="zap-comment">// [7, 20]</span>
 </code></pre>
-<p>If multiple elements correspond to the minimum/maximum, the first such element is used.</p>
-<p><code>minIndex</code> and <code>maxIndex</code> are like <code>min</code> and <code>max</code> respectively, but return the index corresponding to the minimum/maximum:</p>
+<p>If multiple elements correspond to the minimum/maximum value, the first such element is returned.</p>
+<p><code>minIndex</code> and <code>maxIndex</code> are like <code>min</code> and <code>max</code> respectively, but return the index corresponding to the minimum/maximum value:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">9</span> <span class="zap-number">5</span> <span class="zap-keyword">maxIndex</span>   <span class="zap-comment">// 1</span>
 </code></pre>
-<p>The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to <code>NaN</code> or if the iterable is empty, <code>min</code> and <code>max</code> return <code>undefined</code>, <code>minIndex</code> and <code>maxIndex</code> return <code>-1</code>.</p>
+<p>Values are treated as numbers. If any value converts to <code>NaN</code> or if the iterable is empty, <code>min</code> and <code>max</code> return <code>undefined</code>, <code>minIndex</code> and <code>maxIndex</code> return <code>-1</code>.</p>
 <hr>
-<h4 id="sum"><code>sum</code>, <code>mean</code>, <code>variance</code>, <code>deviation</code> <span class="small">(callback optional)</span></h4>
+<h4><code>sum</code>, <code>mean</code>, <code>variance</code>, <code id="sum">deviation</code></h4>
 <p>Sum, mean, variance and standard deviation:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">6</span> <span class="zap-number">8</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sum</span>         <span class="zap-comment">// 18</span>
@@ -1761,34 +1781,41 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>     <span class="zap-comment">// 60</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-string">'v'</span>        <span class="zap-comment">// 60</span>
 </code></pre>
-<p>The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to <code>NaN</code>, the reduction operator will return <code>NaN</code>.</p>
+<p>Values are treated as numbers. If any value converts to <code>NaN</code>, the reduction operator will return <code>NaN</code>.</p>
 <p><code>sum</code> returns <code>0</code> if the iterable is empty, <code>mean</code> returns <code>NaN</code>. <code>variance</code> and <code>deviation</code> return <code>NaN</code> if the iterable has less than 2 elements.</p>
 <p><code>variance</code> calculates the unbiased sample variance: the sum of squared differences from the mean divided by <em>n</em> - 1, where <em>n</em> is the number of elements in the iterable. <code>deviation</code> is the square root of <code>variance</code>.</p>
 <hr>
-<h4 id="sum-cumu"><code>sumCumu</code> <span class="small">(callback optional)</span></h4>
+<h4><code id="sum-cumu">sumCumu</code></h4>
 <p><code>sumCumu</code> is like <a href="#sum"><code>sum</code></a>, but returns an array of cumulative sums rather than just the result:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">8</span> <span class="zap-number">2</span> <span class="zap-number">10</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sum</span>       <span class="zap-comment">// 23</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sumCumu</span>   <span class="zap-comment">// [3, 11, 13, 23]</span>
+
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>     <span class="zap-comment">// array-of-objects</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sumCumu</span> <span class="zap-string">'v'</span>      <span class="zap-comment">// [10, 30, 60]</span>
 </code></pre>
 <blockquote>
 <p><code>sumCumu</code> is <em>not</em> a reduction operator, but is listed here due to its similarity to <code>sum</code>.</p>
 </blockquote>
 <hr>
-<h4 id="median"><code>median</code>, <code>quantile</code> <span class="small">(callback optional)</span></h4>
-<p><code>median</code> sorts the elements of the iterable (or results of the callback if used) in ascending order, then finds the median:</p>
-<pre><code><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> <span class="zap-keyword">median</span>   <span class="zap-comment">// 5.5</span>
+<h4><code>median</code>, <code id="median">quantile</code></h4>
+<p>The median value:</p>
+<pre><code><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-keyword">median</span>      <span class="zap-comment">// 4</span>
+<span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> <span class="zap-keyword">median</span>   <span class="zap-comment">// 5.5</span>
 
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">25</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// array-of-objects</span>
-<span class="zap-identifier">y</span> <span class="zap-keyword">median</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 25</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">median</span> <span class="zap-string">'v'</span>      <span class="zap-comment">// 25</span>
 </code></pre>
 <p>If the values are already sorted, use a third truthy operand with <code>median</code> to skip the sorting step.</p>
-<p><code>quantile</code> takes an iterable, a probability (bounded at 0 and 1) and an optional callback, and returns the corresponding quantile. A fourth truthy operand can be used to indicate that the values are already sorted.</p>
+<p><code>quantile</code> is like <code>median</code>, but takes an extra operand — a probability bounded at 0 and 1 — after the iterable:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> 
 <span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0</span>         <span class="zap-comment">// 2</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">quantile</span> <span class="zap-number">1</span>         <span class="zap-comment">// 10</span>
@@ -1798,10 +1825,10 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">25</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>           <span class="zap-comment">// array-of-objects</span>
-<span class="zap-identifier">y</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0.25</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 17.5</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">quantile</span> <span class="zap-number">0.25</span> <span class="zap-string">'v'</span>   <span class="zap-comment">// 17.5</span>
 </code></pre>
-<p><code>median</code> and <code>quantile</code> use linear interpolation and treat the elements of the iterable (or results of the callback) and the probability operand of <code>quantile</code> as numbers. If any of the numbers are <code>NaN</code> or if the iterable is empty, these operators return <code>NaN</code>.</p>
+<p><code>median</code> and <code>quantile</code> use linear interpolation. Values (and the probability operand of <code>quantile</code>) are treated as numbers. If any of the numbers are <code>NaN</code> or if the iterable is empty, <code>median</code> and <code>quantile</code> return <code>NaN</code>.</p>
 <hr>
 <h4 id="reduce-op"><code>reduce</code></h4>
 <p>The <code>reduce</code> operator takes an iterable, a 'reducer function' and an initial result. The reducer function is called once for each element of the iterable; it is passed the 'current result', the element, the index and the iterable:</p>
@@ -1812,10 +1839,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </blockquote>
 <h2 id="filter">Filter</h2>
 <hr>
-<p><code>filter</code> takes an iterable and a callback function. The callback is applied to each element of the iterable (it is passed the element, index and iterable); if the result is truthy, the element is included in the array returned by <code>filter</code>:</p>
-<pre><code><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">7</span> <span class="zap-number">4</span> <span class="zap-number">9</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [7, 9]</span>
+<p><code>filter</code> takes an iterable and a callback function (default <code>[a]</code>). The callback is applied to each element of the iterable (it is passed the element, index and iterable); if the result is truthy, the element is included in the array returned by <code>filter</code>:</p>
+<pre><code><span class="zap-operator">@</span> <span class="zap-literal">true</span> <span class="zap-literal">false</span> <span class="zap-literal">null</span> <span class="zap-number">5</span> <span class="zap-keyword">filter</span>   <span class="zap-comment">// [true, 5]</span>
+<span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">7</span> <span class="zap-number">4</span> <span class="zap-number">9</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>     <span class="zap-comment">// [7, 9]</span>
 
-<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
@@ -1826,31 +1854,42 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span> <span class="zap-keyword">filterIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [0, 2]</span>
 </code></pre>
 <p>As shown in the final example, <code>filterIndex</code> can be used to get the original indices of the filtered elements.</p>
-<h2 id="group">Group</h2>
+<p>When filtering an iterable of objects/arrays, an inner property/index can be used instead of a callback function:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+
+<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>  <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-string">'v'</span>     <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
+</code></pre><h2 id="group">Group</h2>
 <hr>
-<p><code>group</code> takes an iterable and a callback function. The callback is applied to each element of the iterable (it is passed the element, index and iterable); the results are used to group the elements. <code>group</code> returns a map with arrays for values:</p>
+<p><code>group</code> takes an iterable and a callback function (default <code>[a]</code>). The callback is applied to each element of the iterable (it is passed the element, index and iterable); the results are used to group the elements. When grouping an iterable of objects/arrays, an inner property/index can be used instead of a callback function — for example, <code>'v'</code> can be used instead of the callback <code>[a :v]</code>.</p>
+<p><code>group</code> returns a map with arrays for values:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
   
-<span class="zap-identifier">x</span> <span class="zap-keyword">group</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {</span>
-                 <span class="zap-comment">//   5 =&gt; [{u: 5, v: 10}, {u: 5, v: 30}]</span>
-                 <span class="zap-comment">//   6 =&gt; [{u: 6, v: 20}]</span>
-                 <span class="zap-comment">// }</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">group</span> <span class="zap-string">'u'</span>   <span class="zap-comment">// Map {</span>
+              <span class="zap-comment">//   5 =&gt; [{u: 5, v: 10}, {u: 5, v: 30}]</span>
+              <span class="zap-comment">//   6 =&gt; [{u: 6, v: 20}]</span>
+              <span class="zap-comment">// }</span>
 
 <span class="zap-comment">// second callback</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">group</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">mean</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {5 =&gt; 20, 6 =&gt; 20}</span>
-
-<span class="zap-comment">// groupCount</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span>           <span class="zap-comment">// Map {5 =&gt; 2, 6 =&gt; 1}</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">1</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {5 =&gt; true, 6 =&gt; false}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">group</span> <span class="zap-string">'u'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">mean</span> <span class="zap-string">'v'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {5 =&gt; 20, 6 =&gt; 20}</span>
 </code></pre>
 <p>As shown in the example, <code>group</code> can take a second callback. This is applied to each group (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.</p>
-<p><code>groupCount</code> gets the size of each group — see the final examples above. While we could use <code>group</code> with a second callback for this, <code>groupCount</code> is more efficient and is easier to read.</p>
-<p>Use <code>groupCount</code> with the identity function for a frequency count:</p>
-<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'cat'</span> <span class="zap-string">'dog'</span> <span class="zap-string">'dog'</span> <span class="zap-string">'cat'</span> <span class="zap-string">'cat'</span> <span class="zap-string">'hippo'</span> <span class="zap-string">'cat'</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {'cat' =&gt; 4, 'dog' =&gt; 2, 'hippo' =&gt; 1}</span>
+<p><code>groupCount</code> gets the size of each group:</p>
+<pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">2</span> <span class="zap-number">5</span> <span class="zap-number">5</span> <span class="zap-number">7</span> <span class="zap-number">2</span> <span class="zap-keyword">groupCount</span>   <span class="zap-comment">// Map {5 =&gt; 3, 2 =&gt; 2, 7 =&gt; 1}</span>
+
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
+
+<span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-string">'u'</span>           <span class="zap-comment">// Map {5 =&gt; 2, 6 =&gt; 1}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">groupCount</span> <span class="zap-string">'u'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">&gt;</span> <span class="zap-number">1</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {5 =&gt; true, 6 =&gt; false}</span>
 </code></pre><h2 id="order">Order</h2>
 <hr>
 <p><code>order</code> takes an iterable and a 'comparison function' (see the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code> array method</a>), and returns a new array containing the sorted elements of the iterable. The default comparison function is <code>[a - b]</code> which sorts (finite) numbers or dates in ascending order.</p>
@@ -2036,6 +2075,10 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <p><code>interpolate</code> treats all operands as numbers.</p>
 <h2 id="nested-data">Nested Data</h2>
+<br>
+<blockquote>
+<p>See <a href="#reduce">Reduce</a>, <a href="#filter">Filter</a>, <a href="#group">Group</a>, <a href="#order">Order</a> and <a href="#bin">Bin</a> for other operators that can act directly on nested data.</p>
+</blockquote>
 <hr>
 <h4 id="pick"><code>pick</code></h4>
 <p><code>pick</code> gets a property from each element of an iterable. The first operand of <code>pick</code> is the iterable; the second operand is the property name/index. <code>pick</code> returns an array:</p>

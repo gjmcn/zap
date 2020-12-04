@@ -13,10 +13,10 @@ iris filter [a :petalLength > 6]
 iris order 'asc' 'sepalLength'
 
 // count by species
-iris groupCount [a :species]
+iris groupCount 'species'
 
 // mean petal width by species
-iris group [a :species] [a mean [a :petalWidth]]
+iris group 'species' [a mean 'petalWidth']
 
 // comment later code to print an earlier result`
 ], [
@@ -95,8 +95,8 @@ knn = fun data testPoint
     | orderIndex                 // indices of sorted dists
     | ~slice 0 k                 // top k
     | map i (data :(i) :label)   // corresponding labels
-    | groupCount [a]             // frequency count (a map)
-    | max [a :1] :0              // most frequent label
+    | groupCount                 // frequency count (a map)
+    | max 1 :0                   // most frequent label
 
 // training data
 training = 1 to nTrain map

@@ -172,7 +172,7 @@ dogs = @
 | (# name 'Cody' age 2)
 
 // returns 'The oldest dog Beth is 8'
-dogs max [a :age] as oldest
+dogs max 'age' as oldest
     + 'The oldest dog '(oldest :name)' is '(oldest :age)
 ```
 

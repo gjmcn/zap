@@ -2,26 +2,50 @@
 
 ---
 
-Unless otherwise stated, reduction operators take an iterable and a callback function. The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result. For some operators, the callback is optional &mdash; if omitted, elements of the iterable are used to compute the result:
+Unless otherwise stated, reduction operators take an iterable and a callback function (default `[a]`). The callback is applied to each element of the iterable (the callback is passed the element, index and iterable) and the returned values are used to compute the result:
+
+```
+x = @ 4 5 6
+x sum            // 15
+x sum [a >< 5]   // 16 (>< is 'greatest')
+```
+
+When 'reducing' an iterable of objects/arrays, an inner property/index can be used instead of a callback function:
+
+```
+x = @ 
+| (# u 5 v 10)
+| (# u 6 v 20)
+| (# u 5 v 30)   // array of objects
+
+x sum [a :v]   // 60
+x sum 'v'      // 60
+```
 
 ---
  
-#### `count` <span class="small">(callback required)</span> {#count}
+#### `count`{#count}
 
-Counts the number of times that the callback returns a truthy value:
+Count the truthy values:
 
 ```
 s = @@ 1 '1' true 0    // Set {1, "1", true, 0}
+s count                // 3
 s count [a isNumber]   // 2
 ```
 
 ---
 
-#### `every`, `some` <span class="small">(callback required)</span> {#every}
+#### `every`, `some`{#every}
 
-`every` returns `true` if the callback returns a truthy value for every element and `false` otherwise. `some` returns `true` if the callback returns a truthy value for any element and `false` otherwise.
+`every` returns `true` if all values are truthy; `some` returns `true` if any value is truthy:
 
 ```
+x = @ 5 null 'abc'
+x every            // false
+x some             // true
+x some [a == 10]   // false
+
 m = ##
 | apple 'green'
 | banana 'yellow'
@@ -30,58 +54,59 @@ m = ##
 // use values method of map
 m ~values every [a == 'green']   // false 
 m ~values some  [a == 'green']   // true
-
-// use m directly (the callback is passed an array: [key value])
-m every [a :1 == 'green']   // false 
-m some  [a :1 == 'green']   // true
 ```
 
 If the iterable is empty, `every` returns `true`, `some` returns `false`.
 
 ---
 
-#### `find`, `findIndex` <span class="small">(callback required)</span> {#find}
+#### `find`, `findIndex`{#find}
 
-`find` returns the element corresponding to the first truthy result of the callback. `findIndex` is like `find`, but returns the index of the corresponding element:
+`find` returns the element corresponding to the first truthy value. `findIndex` is like `find`, but returns the index of the element:
 
 ```
+x = @ 3 7 2 9
+x find [a > 5]        // 7
+x findIndex [a > 5]   // 1
+
 x = @
-| (# u 5 v 20)
+| (# u 5)
 | (# u 6 v 10)
 | (# u 7 v 30)   // array-of-objects
 
-x find [a :u > 5]        // {u: 6, v: 10}
+x find 'v'               // {u: 6, v: 10}
+x find [a :u == 7]       // {u: 7, v: 30}
 x findIndex [a :u > 5]   // 1
 ```
 
-If the callback does not return a truthy value for any element, `find` returns `undefined`, `findIndex` returns `-1`.
+If there are no truthy values, `find` returns `undefined`, `findIndex` returns `-1`.
 
 ---
 
-#### `min`, `max`, `minIndex`, `maxIndex` <span class="small">(callback optional)</span> {#min}
+#### `min`, `max`, `minIndex`, `maxIndex`{#min}
 
-`min`/`max` returns the element of the iterable corresponding to the minimum/maximum:
+`min`/`max` returns the element corresponding to the minimum/maximum value:
 
 ```
 @ 7 3 2 5 min   // 2
 
 x = @ (@ 2 10) (@ 7 20) (@ 5 30)   // array-of-arrays
-x max [a :0]                       // [7, 20]
+x max 0                            // [7, 20]
 ```
 
-If multiple elements correspond to the minimum/maximum, the first such element is used.
+If multiple elements correspond to the minimum/maximum value, the first such element is returned.
 
-`minIndex` and `maxIndex` are like `min` and `max` respectively, but return the index corresponding to the minimum/maximum:
+`minIndex` and `maxIndex` are like `min` and `max` respectively, but return the index corresponding to the minimum/maximum value:
 
 ```
 @ 3 9 5 maxIndex   // 1
 ```
 
-The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to `NaN` or if the iterable is empty, `min` and `max` return `undefined`, `minIndex` and `maxIndex` return `-1`.
+Values are treated as numbers. If any value converts to `NaN` or if the iterable is empty, `min` and `max` return `undefined`, `minIndex` and `maxIndex` return `-1`.
 
 ---
 
-#### `sum`, `mean`, `variance`, `deviation` <span class="small">(callback optional)</span> {#sum}
+#### `sum`, `mean`, `variance`, `deviation`{#sum}
 
 Sum, mean, variance and standard deviation:
 
@@ -96,10 +121,10 @@ x = @
 | (# u 5 v 10)
 | (# u 6 v 20)
 | (# u 7 v 30)   // array-of-objects
-x sum [a :v]     // 60
+x sum 'v'        // 60
 ```
 
-The elements of the iterable (or results of the callback if used) are treated as numbers. If any element converts to `NaN`, the reduction operator will return `NaN`.
+Values are treated as numbers. If any value converts to `NaN`, the reduction operator will return `NaN`.
 
 `sum` returns `0` if the iterable is empty, `mean` returns `NaN`. `variance` and `deviation` return `NaN` if the iterable has less than 2 elements.
 
@@ -107,7 +132,7 @@ The elements of the iterable (or results of the callback if used) are treated as
 
 ---
 
-#### `sumCumu` <span class="small">(callback optional)</span> {#sum-cumu} 
+#### `sumCumu`{#sum-cumu} 
 
 `sumCumu` is like [`sum`](#sum), but returns an array of cumulative sums rather than just the result:
 
@@ -115,29 +140,36 @@ The elements of the iterable (or results of the callback if used) are treated as
 x = @ 3 8 2 10
 x sum       // 23
 x sumCumu   // [3, 11, 13, 23]
+
+x = @
+| (# u 5 v 10)
+| (# u 6 v 20)
+| (# u 7 v 30)     // array-of-objects
+x sumCumu 'v'      // [10, 30, 60]
 ```
 
 > `sumCumu` is _not_ a reduction operator, but is listed here due to its similarity to `sum`.
 
 ---
 
-#### `median`, `quantile` <span class="small">(callback optional)</span> {#median}
+#### `median`, `quantile`{#median}
 
-`median` sorts the elements of the iterable (or results of the callback if used) in ascending order, then finds the median:
+The median value:
 
 ```
+@ 4 2 7 median      // 4
 @ 4 2 7 10 median   // 5.5
 
 y = @ 
 | (# u 5 v 25)
 | (# u 6 v 10)
 | (# u 7 v 30)    // array-of-objects
-y median [a :v]   // 25
+y median 'v'      // 25
 ```
 
 If the values are already sorted, use a third truthy operand with `median` to skip the sorting step.
 
-`quantile` takes an iterable, a probability (bounded at 0 and 1) and an optional callback, and returns the corresponding quantile. A fourth truthy operand can be used to indicate that the values are already sorted.
+`quantile` is like `median`, but takes an extra operand &mdash; a probability bounded at 0 and 1 &mdash; after the iterable:
 
 ```
 x = @ 4 2 7 10 
@@ -149,11 +181,11 @@ x quantile (2 / 3)   // 7
 y = @ 
 | (# u 5 v 25)
 | (# u 6 v 10)
-| (# u 7 v 30)           // array-of-objects
-y quantile 0.25 [a :v]   // 17.5
+| (# u 7 v 30)        // array-of-objects
+y quantile 0.25 'v'   // 17.5
 ```
 
-`median` and `quantile` use linear interpolation and treat the elements of the iterable (or results of the callback) and the probability operand of `quantile` as numbers. If any of the numbers are `NaN` or if the iterable is empty, these operators return `NaN`.
+`median` and `quantile` use linear interpolation. Values (and the probability operand of `quantile`) are treated as numbers. If any of the numbers are `NaN` or if the iterable is empty, `median` and `quantile` return `NaN`.
 
 ---
 

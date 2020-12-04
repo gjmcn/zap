@@ -1,9 +1,11 @@
 ## Nested Data {#nested-data}
+<br>
+
+> See [Reduce](#reduce), [Filter](#filter), [Group](#group), [Order](#order) and [Bin](#bin) for other operators that can act directly on nested data.
 
 ---
 
 #### `pick` {#pick}
-
 `pick` gets a property from each element of an iterable. The first operand of `pick` is the iterable; the second operand is the property name/index. `pick` returns an array:
 
 ```
