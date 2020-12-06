@@ -24,7 +24,7 @@ add = [a + b]         // function
 
 #### Methods {#calling-methods}
 
-`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](#right-operand-rule) and the [identifier-name rule](#identifier-name-rule):
+`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](#right-operand-rule) and [autoquoting](#autoquoting):
 
 ```
 x = @ 5 6 7 8

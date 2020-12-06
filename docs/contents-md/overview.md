@@ -102,31 +102,10 @@ Bracket functions can be used for 'one-liners'. Bracket functions have parameter
 add = [a + b]   // function
 ```
 
-`scope` and `as` are Zap's equivalent to blocks and IIFEs (immediately-invoked function expressions). `scope` takes no arguments, `as` takes one:
-
-```
-x = scope
-    y = 2 + 3
-    y ^ 2 + y   // 30
-x               // 30
-
-x = 2 + 3 as y (y ^ 2 + y)   // 30
-x                            // 30
-```
-
 The `~` operator calls a method:
 
 ```
 'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
-```
-
-`yield` and `yieldFrom` can be used in the body of functions, loops, `scope` and `as`:
-
-```
-g = 5 do i (yield i)   // generator (0 1 2 3 4)
-
-g ~next   // {value: 0, done: false}
-g ~next   // {value: 1, done: false}
 ```
 
 The range operators create generators:
@@ -177,8 +156,8 @@ Cat = class name ()
 
 // subclass with empty body: calls constructor of parent class
 Lion = extends Cat ()
-Lion ::speak = fun mood
-    + 'I am '(this :name)' the 'mood' lion'
+Lion :: 'speak' = fun mood
+    + 'I am 'this,name' the 'mood' lion'
 
 leo = new Lion 'Leo'   // Lion {name: "Leo"}
 leo ~speak 'hungry'    // 'I am Leo the hungry lion'
@@ -191,7 +170,7 @@ Except for `class` and `extends`, all operators that take a body operand have an
 // resolves to the length)
 asyncScope
     data = 'data.json' \fetch await ~json await
-    data :length print
+    data,length print
 ```
 
 DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:

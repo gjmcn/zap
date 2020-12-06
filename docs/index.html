@@ -102,23 +102,8 @@
 <p>Bracket functions can be used for 'one-liners'. Bracket functions have parameters <code>a</code>, <code>b</code> and <code>c</code>, and are comprised of a single expression:</p>
 <pre><code><span class="zap-identifier">add</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// function</span>
 </code></pre>
-<p><code>scope</code> and <code>as</code> are Zap's equivalent to blocks and IIFEs (immediately-invoked function expressions). <code>scope</code> takes no arguments, <code>as</code> takes one:</p>
-<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-keyword">scope</span>
-    <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-number">2</span> <span class="zap-operator">+</span> <span class="zap-number">3</span>
-    <span class="zap-identifier">y</span> <span class="zap-operator">^</span> <span class="zap-number">2</span> <span class="zap-operator">+</span> <span class="zap-identifier">y</span>   <span class="zap-comment">// 30</span>
-<span class="zap-identifier">x</span>               <span class="zap-comment">// 30</span>
-
-<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">2</span> <span class="zap-operator">+</span> <span class="zap-number">3</span> <span class="zap-keyword">as</span> <span class="zap-identifier">y</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> <span class="zap-operator">^</span> <span class="zap-number">2</span> <span class="zap-operator">+</span> <span class="zap-identifier">y</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 30</span>
-<span class="zap-identifier">x</span>                            <span class="zap-comment">// 30</span>
-</code></pre>
 <p>The <code>~</code> operator calls a method:</p>
 <pre><code><span class="zap-string">'abcd'</span> <span class="zap-operator">~</span><span class="zap-identifier">slice</span> <span class="zap-number">1</span> <span class="zap-number">3</span> <span class="zap-operator">~</span><span class="zap-identifier">repeat</span> <span class="zap-number">2</span>   <span class="zap-comment">// 'bcbc'</span>
-</code></pre>
-<p><code>yield</code> and <code>yieldFrom</code> can be used in the body of functions, loops, <code>scope</code> and <code>as</code>:</p>
-<pre><code><span class="zap-identifier">g</span> <span class="zap-operator">=</span> <span class="zap-number">5</span> <span class="zap-keyword">do</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-keyword">yield</span> <span class="zap-identifier">i</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// generator (0 1 2 3 4)</span>
-
-<span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>   <span class="zap-comment">// {value: 0, done: false}</span>
-<span class="zap-identifier">g</span> <span class="zap-operator">~</span><span class="zap-identifier">next</span>   <span class="zap-comment">// {value: 1, done: false}</span>
 </code></pre>
 <p>The range operators create generators:</p>
 <pre><code><span class="zap-number">1</span> <span class="zap-keyword">to</span> <span class="zap-number">3</span>           <span class="zap-comment">// generator (1 2 3)</span>
@@ -155,8 +140,8 @@
 
 <span class="zap-comment">// subclass with empty body: calls constructor of parent class</span>
 <span class="zap-identifier">Lion</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Cat</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
-<span class="zap-identifier">Lion</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">mood</span>
-    <span class="zap-operator">+</span> <span class="zap-string">'I am '</span><span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' the '</span><span class="zap-identifier">mood</span><span class="zap-string">' lion'</span>
+<span class="zap-identifier">Lion</span> <span class="zap-operator">::</span> <span class="zap-string">'speak'</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">mood</span>
+    <span class="zap-operator">+</span> <span class="zap-string">'I am '</span><span class="zap-variable">this</span><span class="zap-identifier">,name</span><span class="zap-string">' the '</span><span class="zap-identifier">mood</span><span class="zap-string">' lion'</span>
 
 <span class="zap-identifier">leo</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Lion</span> <span class="zap-string">'Leo'</span>   <span class="zap-comment">// Lion {name: "Leo"}</span>
 <span class="zap-identifier">leo</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span> <span class="zap-string">'hungry'</span>    <span class="zap-comment">// 'I am Leo the hungry lion'</span>
@@ -166,7 +151,7 @@
 <span class="zap-comment">// resolves to the length)</span>
 <span class="zap-keyword">asyncScope</span>
     <span class="zap-identifier">data</span> <span class="zap-operator">=</span> <span class="zap-string">'data.json'</span> <span class="zap-operator">\</span><span class="zap-identifier">fetch</span> <span class="zap-keyword">await</span> <span class="zap-operator">~</span><span class="zap-identifier">json</span> <span class="zap-keyword">await</span>
-    <span class="zap-identifier">data</span> <span class="zap-operator">:</span><span class="zap-identifier">length</span> <span class="zap-keyword">print</span>
+    <span class="zap-identifier">data,length</span> <span class="zap-keyword">print</span>
 </code></pre>
 <p>DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:</p>
 <pre><code><span class="zap-comment">// set color of each span with class danger to red</span>
@@ -405,19 +390,19 @@
 <h4>Special Cases</h4>
 <p>Additional rules apply to some operators:</p>
 <h6 id="right-operand-rule">The Right Operand Rule</h6>
-<p>The main <a href="#get-property">get property</a> and <a href="#calling-functions">call function/method</a> operators use the <em>right operand rule</em>: the first right operand is the property or function. We typically omit space to the right of operators that use this rule.</p>
+<p>The <a href="#calling-functions"><code>\</code></a>, <a href="#return-first"><code>&lt;\</code></a> operators (call function), and <a href="#calling-methods"><code>~</code></a>, <a href="#return-first"><code>&lt;~</code></a> operators (call method) use the <em>right operand rule</em>: the first right operand is the function/method. We typically omit space to the right of these operators:</p>
 <pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// function (adds its arguments)</span>
-<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">10</span>       <span class="zap-comment">// 15 (\ calls a function)</span>
+<span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">10</span>       <span class="zap-comment">// 15</span>
 <span class="zap-number">5</span> <span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">10</span>       <span class="zap-comment">// 15</span>
 <span class="zap-number">5</span> <span class="zap-number">10</span> <span class="zap-operator">\</span><span class="zap-identifier">f</span>       <span class="zap-comment">// 15</span>
 <span class="zap-number">5</span> <span class="zap-number">10</span> <span class="zap-identifier">f</span> <span class="zap-operator">\</span>      <span class="zap-comment">// syntax error</span>
 </code></pre>
-<h5 id="identifier-name-rule">The Identifier-Name Rule</h5>
-<p>The main <a href="#get-property">get property</a> and <a href="#calling-methods">call method</a> operators, as well as <a href="#objects-and-maps">object and map literals</a> use the <em>identifier-name rule</em>: property names that are <a href="#identifiers">identifiers</a> are treated as strings:</p>
+<h5 id="autoquoting">Autoquoting</h5>
+<p>The operators <a href="#calling-methods"><code>~</code></a> and <a href="#return-first"><code>&lt;~</code></a> (call method), <a href="#objects-and-maps"><code>#</code></a> (create object) and <a href="#objects-and-maps"><code>##</code></a> (create map) <em>autoquote</em> property names that are <a href="#identifiers">identifiers</a>:</p>
 <pre><code><span class="zap-operator">#</span> <span class="zap-string">'u'</span> <span class="zap-number">5</span> <span class="zap-string">'v'</span> <span class="zap-number">6</span>   <span class="zap-comment">// {u: 5, v: 6}</span>
 <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>       <span class="zap-comment">// {u: 5, v: 6}</span>
 </code></pre>
-<p>Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:</p>
+<p>Use the identifier as part of a larger expression (wrapping in parentheses suffices) to avoid autoquoting:</p>
 <pre><code><span class="zap-identifier">u</span> <span class="zap-operator">=</span> <span class="zap-string">'v'</span>
 
 <span class="zap-operator">#</span> 
@@ -425,9 +410,29 @@
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-identifier">u</span><span class="zap-punctuation">)</span> <span class="zap-number">6</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-identifier">u</span> <span class="zap-operator">+</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span> <span class="zap-number">7</span>   <span class="zap-comment">// {u: 5, v: 6, vw: 7}</span>
 </code></pre>
-<p>Reserved words must be quoted when the identifier-name rule applies:</p>
-<pre><code><span class="zap-operator">#</span> <span class="zap-string">'if'</span> <span class="zap-number">5</span>   <span class="zap-comment">// {if: 5}</span>
+<p>Reserved words are not autoquoted:</p>
+<pre><code><span class="zap-operator">#</span> <span class="zap-string">'if'</span> <span class="zap-number">5</span>   <span class="zap-comment">// {if: 5} (quotes required)</span>
 </code></pre>
+<p>The property getter <a href="#comma-getter"><code>,</code></a> always autoquotes the property name:</p>
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>   <span class="zap-comment">// {u: 5, v: 6}</span>
+<span class="zap-identifier">o,u</span>             <span class="zap-comment">// 5         </span>
+</code></pre>
+<p>Use <a href="#semicolon-getter"><code>;</code></a> or <a href="#colon-getter"><code>:</code></a> instead of <code>,</code> to avoid autoquoting.</p>
+<h5 id="getter-precedence">Property Getters</h5>
+<p>The <code>,</code> and <code>;</code> property getters have high precedence and are only used in subexpressions of the form:</p>
+<p>  <code><i>variableName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i> ...</code></p>
+<p>where <code><i>variableName</i></code> is an <a href="#identifiers">identifier</a> and each <code><i>propertyName</i></code> is an identifier or a number.</p>
+<p><code>,</code> <a href="#autoquoting">autoquotes</a> the property name whereas <code>;</code> does not:</p>
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// {u: 5, v: [6, 7, 8]}</span>
+<span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-string">'u'</span>
+
+<span class="zap-number">10</span> <span class="zap-operator">+</span> <span class="zap-identifier">o,u</span>     <span class="zap-comment">// 15</span>
+<span class="zap-number">10</span> <span class="zap-operator">+</span> <span class="zap-identifier">o;p</span>     <span class="zap-comment">// 15</span>
+<span class="zap-number">10</span> <span class="zap-operator">+</span> <span class="zap-identifier">o,v;2</span>   <span class="zap-comment">// 18</span>
+</code></pre>
+<blockquote>
+<p>No space is allowed on either side of <code>,</code> or <code>;</code>.</p>
+</blockquote>
 <h5 id="assignment-precedence">Assignment</h5>
 <p><a href="#assignment">Assignment</a> operators have low precedence and must be placed between their two operands:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">1</span> <span class="zap-operator">+</span> <span class="zap-number">2</span>     <span class="zap-comment">// 3</span>
@@ -708,7 +713,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-operator">##</span>            <span class="zap-comment">// empty map</span>
 <span class="zap-operator">##</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>    <span class="zap-comment">// Map {'u' =&gt; 5, 'v' =&gt; 6}</span>
 </code></pre>
-<p><code>#</code> and <code>##</code> use the <a href="#identifier-name-rule">identifier-name rule</a>, which is why the property names in the above examples need not be quoted.</p>
+<p><code>#</code> and <code>##</code> use <a href="#autoquoting">autoquoting</a>, which is why the property names in the above examples need not be quoted.</p>
 <hr>
 <h4 id="arrays">Arrays</h4>
 <p>Use the <code>@</code> operator for an array:</p>
@@ -760,7 +765,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <hr>
 <h4 id="calling-methods">Methods</h4>
-<p><code>\</code> can be used to call methods, but there is also a dedicated method call operator <code>~</code> which is often more convenient. <code>~</code> uses both the <a href="#right-operand-rule">right operand rule</a> and the <a href="#identifier-name-rule">identifier-name rule</a>:</p>
+<p><code>\</code> can be used to call methods, but there is also a dedicated method call operator <code>~</code> which is often more convenient. <code>~</code> uses both the <a href="#right-operand-rule">right operand rule</a> and <a href="#autoquoting">autoquoting</a>:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-number">8</span>
 <span class="zap-identifier">x</span> <span class="zap-operator">~</span><span class="zap-identifier">slice</span> <span class="zap-number">1</span> <span class="zap-number">3</span>      <span class="zap-comment">// [6, 7]</span>
 <span class="zap-operator">~</span><span class="zap-identifier">slice</span> <span class="zap-identifier">x</span> <span class="zap-number">1</span> <span class="zap-number">3</span>      <span class="zap-comment">// [6, 7]</span>
@@ -906,11 +911,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-string">'radius'</span>
 
-<span class="zap-identifier">circle</span> , <span class="zap-string">'radius'</span>          <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> , <span class="zap-identifier">r</span>                 <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> , <span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> , <span class="zap-string">'center'</span> , <span class="zap-number">1</span>      <span class="zap-comment">// 200   </span>
-<span class="zap-identifier">circle</span> , <span class="zap-string">'color'</span> , <span class="zap-number">2</span>       <span class="zap-comment">// 'd'</span>
+<span class="zap-identifier">circle</span> <span class="zap-identifier">,</span> <span class="zap-string">'radius'</span>          <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-identifier">,</span> <span class="zap-identifier">r</span>                 <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-identifier">,</span> <span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> <span class="zap-identifier">,</span> <span class="zap-string">'center'</span> <span class="zap-identifier">,</span> <span class="zap-number">1</span>      <span class="zap-comment">// 200   </span>
+<span class="zap-identifier">circle</span> <span class="zap-identifier">,</span> <span class="zap-string">'color'</span> <span class="zap-identifier">,</span> <span class="zap-number">2</span>       <span class="zap-comment">// 'd'</span>
 </code></pre>
 <hr>
 <h4 id="at"><code>at</code></h4>
@@ -1670,7 +1675,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span> <span class="zap-number">30</span>
 <span class="zap-identifier">x</span> <span class="zap-operator">`+`</span> <span class="zap-identifier">y</span>                     <span class="zap-comment">// [15, 26, 37]  </span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> , <span class="zap-identifier">i</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> <span class="zap-identifier">,</span> <span class="zap-identifier">i</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
 </code></pre>
 <p>Backticks can be used with the following operators: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>&amp;&amp;</code> <code>||</code> <code>??</code> <code>&lt;&gt;</code> <code>&gt;&lt;</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code>.</p>
 <blockquote>
@@ -2517,7 +2522,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 <pre><code><span class="zap-identifier">colors</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'red'</span> <span class="zap-string">'green'</span> <span class="zap-string">'blue'</span>
 
 <span class="zap-comment">// create 3 &lt;p&gt;, give each a different color</span>
-<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> , <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> <span class="zap-identifier">,</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
 <pre><code><span class="zap-comment">// use 'html' or document :documentElement to set globals</span>

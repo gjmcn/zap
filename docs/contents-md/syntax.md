@@ -94,26 +94,25 @@ Additional rules apply to some operators:
 
 ###### The Right Operand Rule {#right-operand-rule}
 
-The main [get property](#get-property) and [call function/method](#calling-functions) operators use the _right operand rule_: the first right operand is the property or function. We typically omit space to the right of operators that use this rule.
+The [`\`](#calling-functions), [`<\`](#return-first) operators (call function), and [`~`](#calling-methods), [`<~`](#return-first) operators (call method) use the _right operand rule_: the first right operand is the function/method. We typically omit space to the right of these operators:
 
 ```
 f = [a + b]   // function (adds its arguments)
-\f 5 10       // 15 (\ calls a function)
+\f 5 10       // 15
 5 \f 10       // 15
 5 10 \f       // 15
 5 10 f \      // syntax error
 ```
 
-##### The Identifier-Name Rule {#identifier-name-rule}
+##### Autoquoting {#autoquoting}
 
-The main [get property](#get-property) and [call method](#calling-methods) operators, as well as [object and map literals](#objects-and-maps) use the _identifier-name rule_: property names that are [identifiers](#identifiers) are treated as strings:
+The operators [`~`](#calling-methods) and [`<~`](#return-first) (call method), [`#`](#objects-and-maps) (create object) and [`##`](#objects-and-maps) (create map) _autoquote_ property names that are [identifiers](#identifiers):
 
 ```
 # 'u' 5 'v' 6   // {u: 5, v: 6}
 # u 5 v 6       // {u: 5, v: 6}
 ```
-
-Use an identifier as part of a larger expression (wrapping in parentheses suffices) to avoid this special behavior:
+Use the identifier as part of a larger expression (wrapping in parentheses suffices) to avoid autoquoting:
 
 ```
 u = 'v'
@@ -124,11 +123,41 @@ u = 'v'
 | (u + 'w') 7   // {u: 5, v: 6, vw: 7}
 ```
 
-Reserved words must be quoted when the identifier-name rule applies:
+Reserved words are not autoquoted:
 
 ```
-# 'if' 5   // {if: 5}
+# 'if' 5   // {if: 5} (quotes required)
 ```
+
+The property getter [`,`](#comma-getter) always autoquotes the property name:
+
+```
+o = # u 5 v 6   // {u: 5, v: 6}
+o,u             // 5         
+```
+
+Use [`;`](#semicolon-getter) or [`:`](#colon-getter) instead of `,` to avoid autoquoting.
+
+##### Property Getters{#getter-precedence}
+
+The `,` and `;` property getters have high precedence and are only used in subexpressions of the form:
+
+&emsp; <code><i>variableName</i>[`,` or `;`]<i>propertyName</i>[`,` or `;`]<i>propertyName</i> ...</code>
+
+where <code><i>variableName</i></code> is an [identifier](#identifiers) and each <code><i>propertyName</i></code> is an identifier or a number.
+
+`,` [autoquotes](#autoquoting) the property name whereas `;` does not:
+
+```
+o = # u 5 v (@ 6 7 8)   // {u: 5, v: [6, 7, 8]}
+p = 'u'
+
+10 + o,u     // 15
+10 + o;p     // 15
+10 + o,v;2   // 18
+```
+
+> No space is allowed on either side of `,` or `;`.
 
 ##### Assignment {#assignment-precedence}
 

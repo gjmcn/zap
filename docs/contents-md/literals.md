@@ -32,7 +32,7 @@ Use the `#` operator for an object, and `##` for a map:
 ## u 5 v 6    // Map {'u' => 5, 'v' => 6}
 ```
 
-`#` and `##` use the [identifier-name rule](#identifier-name-rule), which is why the property names in the above examples need not be quoted.
+`#` and `##` use [autoquoting](#autoquoting), which is why the property names in the above examples need not be quoted.
 
 ---
 
