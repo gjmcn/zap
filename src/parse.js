@@ -401,9 +401,6 @@ export default (tokens, options = {}) => {
 
     // property - i.e. identifier with shorthand getter(s)
     else if (type === 'property') {
-      if (reserved.commands.has(tkn.name) || reserved.invalid.has(tkn.name)) {
-        syntaxError(tkn, `cannot get property of reserved word ${tkn.name}`);
-      }
       const propsString = tkn.props.map(p => {
         return p[0] === ',' ? `["${p.slice(1)}"]` : `[${p.slice(1)}]`;
       }).join('');

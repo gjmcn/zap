@@ -10,7 +10,7 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
-  ['identifier', /[a-zA-Z_$][\w$,;]*/y],  // includes shorthand getters
+  ['identifier', /[a-zA-Z_$][\w$,;]*/y],  // includes , and ; properties
   ['function', /[\[{]/y],
   ['openParentheses', /\(/y],  
   ['closeBracket', /[)\]}]/y],
@@ -32,6 +32,16 @@ export default code => {
 
   // handle indent on first line as a special case
   const initIndent = regexps.get('space').exec(code);
+
+  // check if string is reserved-command or reserved-invalid
+  function commandOrInvalid(s) {
+    return reserved.commands.has(s) || reserved.invalid.has(s);
+  }
+
+  // zap syntax error
+  function zapSyntaxError(msg) {
+    throw Error(`Zap syntax at ${line}:${column + 1}, ${msg}`);
+  }
 
   // iterate over code
   codeLoop: while (index < code.length) {
@@ -56,8 +66,7 @@ export default code => {
           const lastToken = tokens[tokens.length - 1];
           if (!lastToken || lastToken.type !== 'newline' ||
               lastToken.lineCont) {
-            throw Error(`Zap syntax at ${line}:${
-              column + 1}, invalid line continue`);
+            zapSyntaxError('invalid line continue');
           }
           lastToken.lineCont = true;
           column++;
@@ -96,21 +105,29 @@ export default code => {
 
             // identifier
             if (type === 'identifier') {
-              if (reserved.commands.has(tkn.value)) {              
+              if (reserved.commands.has(tkn.value)) {  // command
                 tkn.type = 'operator';
               }
               else {
                 const parts = tkn.value.split(/(?=[,;])/);
-                if (parts.length > 1) {
-                  if (parts.some(p => p.length === 0)) {
-                    throw Error(`Zap syntax at ${line}:${
-                      column + 1}, missing property name`);
+                if (parts.length > 1) {  // property
+                  if (commandOrInvalid(parts[0])) {
+                    zapSyntaxError('reserved word');
+                  }
+                  const props = parts.slice(1);
+                  for (let p of props) {
+                    if (p.length < 2) {
+                      zapSyntaxError('missing property name');
+                    }
+                    if (p[0] === ';' && commandOrInvalid(p.slice(1))) {
+                      zapSyntaxError('reserved word');
+                    }
                   }
                   tkn.type = 'property';
                   tkn.name = parts[0];
-                  tkn.props = parts.slice(1);
+                  tkn.props = props;
                 }
-                else {
+                else {  // standard identifier
                   if (tkn.value === 'else') tkn.value = 'true';
                   tkn.name = tkn.value;
                 }
@@ -120,8 +137,7 @@ export default code => {
             // backticks
             else if (type === 'operator' && (match[1] || match[3])) {
               if (!canBacktick.has(match[2])) {
-                throw Error(`Zap syntax at ${line}:${
-                  column + 1}, cannot use backtick with ${match[2]}`);
+                zapSyntaxError(`cannot use backtick with ${match[2]}`);
               }
               tkn.value = match[2];
               if (match[1]) tkn.preTick = true;
@@ -143,8 +159,7 @@ export default code => {
     // throw if unrecognized token
     let snippet = code.slice(index, index + 30);
     if (code.length > index + 30) snippet += ' ...';
-    throw Error(`Zap syntax at ${line}:${
-      column + 1}, unrecognized token: ${snippet}`);
+    zapSyntaxError(`unrecognized token: ${snippet}`);
   }
 
   // error if indent on first line - unless it has no code
