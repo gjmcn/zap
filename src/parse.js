@@ -29,7 +29,7 @@ const updateOps = new Set([
   '+=', '-=', '*=', '/=', '%=', '^='
 ]);
 const lhsSetterOps = new Set([
-  ':', '::', ','
+  ':', '::'
 ]);
 
 function syntaxError(t, msg) {
@@ -399,6 +399,18 @@ export default (tokens, options = {}) => {
       block.operands.push(tkn);
     }
 
+    // property - i.e. identifier with shorthand getter(s)
+    else if (type === 'property') {
+      if (reserved.commands.has(tkn.name) || reserved.invalid.has(tkn.name)) {
+        syntaxError(tkn, `cannot get property of reserved word ${tkn.name}`);
+      }
+      const propsString = tkn.props.map(p => {
+        return p[0] === ',' ? `["${p.slice(1)}"]` : `[${p.slice(1)}]`;
+      }).join('');
+      tkn.js = `(${tkn.name}${propsString})`; 
+      block.operands.push(tkn);
+    }
+
     // one-liner function
     else if (type === 'function') {
       tkn.kind = (tkn.value === '{' ? 'proc' : 'fun');
@@ -624,7 +636,7 @@ export default (tokens, options = {}) => {
                 syntaxError(tkn, 'invalid left-hand side of assignment');
               }
             }
-            else {
+            else if (lhs.type !== 'property') {
               checkValidName(lhs, tkn, 'invalid left-hand side of assignment');
               settingVariable = true;
             }

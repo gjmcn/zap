@@ -10,11 +10,11 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|(?:\.\d+|\d+(?:\.\d*)?)(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /&\/(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
-  ['identifier', /[a-zA-Z_$][\w$]*/y],
+  ['identifier', /[a-zA-Z_$][\w$,;]*/y],  // includes shorthand getters
   ['function', /[\[{]/y],
   ['openParentheses', /\(/y],  
   ['closeBracket', /[)\]}]/y],
-  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|[+\-*/%\^\\!,~]|\|\||&&|<[>\-\\~]?|><|>|@{1,2}|#{1,2}|\?{1,2}|[?:]?:)(`)?(?![+\-*%<>=!?\\#@:|\^`~,]|\/(?:$|[^/])|&&)/y],
+  ['operator', /(`)?([+\-*/%\^?\\=@#<>!]?=|[+\-*/%\^\\!~]|\|\||&&|<[>\-\\~]?|><|>|@{1,2}|#{1,2}|\?{1,2}|[?:]?:)(`)?(?![+\-*%<>=!?\\#@:|\^`~]|\/(?:$|[^/])|&&)/y],
   ['lineCont', /\|/y],
 ]);
 
@@ -100,8 +100,20 @@ export default code => {
                 tkn.type = 'operator';
               }
               else {
-                if (tkn.value === 'else') tkn.value = 'true';
-                tkn.name = tkn.value;
+                const parts = tkn.value.split(/(?=[,;])/);
+                if (parts.length > 1) {
+                  if (parts.some(p => p.length === 0)) {
+                    throw Error(`Zap syntax at ${line}:${
+                      column + 1}, missing property name`);
+                  }
+                  tkn.type = 'property';
+                  tkn.name = parts[0];
+                  tkn.props = parts.slice(1);
+                }
+                else {
+                  if (tkn.value === 'else') tkn.value = 'true';
+                  tkn.name = tkn.value;
+                }
               }
             }
 

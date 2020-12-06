@@ -906,11 +906,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-string">'radius'</span>
 
-<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'radius'</span>          <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-identifier">r</span>                 <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'center'</span> <span class="zap-operator">,</span> <span class="zap-number">1</span>      <span class="zap-comment">// 200   </span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">,</span> <span class="zap-string">'color'</span> <span class="zap-operator">,</span> <span class="zap-number">2</span>       <span class="zap-comment">// 'd'</span>
+<span class="zap-identifier">circle</span> , <span class="zap-string">'radius'</span>          <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> , <span class="zap-identifier">r</span>                 <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> , <span class="zap-punctuation">(</span><span class="zap-string">'rad'</span> <span class="zap-operator">+</span> <span class="zap-string">'ius'</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 50</span>
+<span class="zap-identifier">circle</span> , <span class="zap-string">'center'</span> , <span class="zap-number">1</span>      <span class="zap-comment">// 200   </span>
+<span class="zap-identifier">circle</span> , <span class="zap-string">'color'</span> , <span class="zap-number">2</span>       <span class="zap-comment">// 'd'</span>
 </code></pre>
 <hr>
 <h4 id="at"><code>at</code></h4>
@@ -1670,7 +1670,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span> <span class="zap-number">30</span>
 <span class="zap-identifier">x</span> <span class="zap-operator">`+`</span> <span class="zap-identifier">y</span>                     <span class="zap-comment">// [15, 26, 37]  </span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> <span class="zap-operator">,</span> <span class="zap-identifier">i</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> , <span class="zap-identifier">i</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
 </code></pre>
 <p>Backticks can be used with the following operators: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>&amp;&amp;</code> <code>||</code> <code>??</code> <code>&lt;&gt;</code> <code>&gt;&lt;</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code>.</p>
 <blockquote>
@@ -2517,7 +2517,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 <pre><code><span class="zap-identifier">colors</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'red'</span> <span class="zap-string">'green'</span> <span class="zap-string">'blue'</span>
 
 <span class="zap-comment">// create 3 &lt;p&gt;, give each a different color</span>
-<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> <span class="zap-operator">,</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> , <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
 <pre><code><span class="zap-comment">// use 'html' or document :documentElement to set globals</span>

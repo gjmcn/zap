@@ -9,7 +9,7 @@ const repeatOps = new Set([
 ]);
 const binaryOps = new Set(['<', '<=', '>', '>=', '==', '!=']);
 const unquotedOps = new Set([  // not including method call ops
-  '#', '##', ':', '?:', '::'
+  '#', '##'
 ]);
 
 // errors
@@ -198,11 +198,18 @@ export default (block, _z_used) => {
     }
 
     // get property
-    else if (op === ',') {
+    else if (op.slice(-1) === ':') {
       if (nx !== 2) throw arityError(operator);
-      return [ x[0], opPosn('['), x[1], ']' ];
+      let extra = '';
+      if (op === '?:') {
+        extra = '?.'
+      }
+      else if (op === '::') {
+        extra = '["prototype"]';
+      }  
+      return [ x[0], opPosn(`${extra}[`), x[1], ']' ];
     }
-
+ 
     // ops that accept identifiers as property names
     else if (unquotedOps.has(op)) {
       
@@ -212,24 +219,8 @@ export default (block, _z_used) => {
         }
       }
 
-      // get property
-      if (op.slice(-1) === ':') {
-        if (nx !== 2) throw arityError(operator);
-        if (position > 1) throw rightOperandError(operator);
-        const iObj = (position === 0 ? 1 : 0);
-        checkNotReserved(iObj);
-        const extra = (op === '?:')
-          ? '?.'
-          : (op === '::'
-            ? '["prototype"]'
-            : '');
-        return xTypes[position] === 'identifier'
-          ? [ x[iObj], opPosn(`${extra}["`), x[position], '"]' ]
-          : [ x[iObj], opPosn(`${extra}[`),  x[position], ']'  ];
-      }
-
       // object literal
-      else if (op === '#') {
+      if (op === '#') {
         if (nx % 2) throw arityError(operator);
         const res = [ opPosn('({') ];
         for (let i = 0; i < nx; i += 2) {
