@@ -21,7 +21,8 @@
 | [`+=`](#update-assignment) [`-=`](#update-assignment) [`*=`](#update-assignment) [`/=`](#update-assignment) [`%=`](#update-assignment) [`^=`](#update-assignment) | 2 | update-assign |
 | [`#=`](#destructure-object) | 2+ | destructure object |
 | [`@=`](#destructure-iterable) | 2+ | destructure array |
-| [`,`](#comma-getter) | 2 | get property |
+| [`,`](#comma-getter) | 2 | get property (high precedence, autoquote) |
+| [`;`](#comma-getter) | 2 | get property (high precedence) |
 | [`:`](#colon-getter)  | 2 | get property |
 | [`::`](#colon-proto-getter) | 2 | get property of prototype |
 | [`?:`](#conditional-get) | 2 | conditional get property |
@@ -33,13 +34,6 @@
 | [`##`](#objects-and-maps) | 0+ | map literal |
 | [`@`](#arrays)  | 0+ | array literal |
 | [`@@`](#sets) | 0+ | set literal {.table .table-sm .w600} |
-
-The operators `+`, `-`, `*`, `/`, `%`, `^`, `&&`, `||`, `??`, `<>` and `><` can take more than two operands:
-
-```
-+ 1 2 3            // 6
-+ 'a' 'bc' 'def'   // 'abcdef'
-```
 
 The operators `&&`, `||`, `??`, `?`, `<-`, `?=` and `?:` use short-circuit evaluation.
 

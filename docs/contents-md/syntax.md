@@ -106,7 +106,7 @@ f = [a + b]   // function (adds its arguments)
 
 ##### Autoquoting {#autoquoting}
 
-The operators [`~`](#calling-methods) and [`<~`](#return-first) (call method), [`#`](#objects-and-maps) (create object) and [`##`](#objects-and-maps) (create map) _autoquote_ property names that are [identifiers](#identifiers):
+The operators [`~`](#calling-methods) and [`<~`](#return-first) (call method), [`#`](#objects-and-maps) (object literal) and [`##`](#objects-and-maps) (map literal) _autoquote_ property names that are [identifiers](#identifiers):
 
 ```
 # 'u' 5 'v' 6   // {u: 5, v: 6}

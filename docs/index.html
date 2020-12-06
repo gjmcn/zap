@@ -398,7 +398,7 @@
 <span class="zap-number">5</span> <span class="zap-number">10</span> <span class="zap-identifier">f</span> <span class="zap-operator">\</span>      <span class="zap-comment">// syntax error</span>
 </code></pre>
 <h5 id="autoquoting">Autoquoting</h5>
-<p>The operators <a href="#calling-methods"><code>~</code></a> and <a href="#return-first"><code>&lt;~</code></a> (call method), <a href="#objects-and-maps"><code>#</code></a> (create object) and <a href="#objects-and-maps"><code>##</code></a> (create map) <em>autoquote</em> property names that are <a href="#identifiers">identifiers</a>:</p>
+<p>The operators <a href="#calling-methods"><code>~</code></a> and <a href="#return-first"><code>&lt;~</code></a> (call method), <a href="#objects-and-maps"><code>#</code></a> (object literal) and <a href="#objects-and-maps"><code>##</code></a> (map literal) <em>autoquote</em> property names that are <a href="#identifiers">identifiers</a>:</p>
 <pre><code><span class="zap-operator">#</span> <span class="zap-string">'u'</span> <span class="zap-number">5</span> <span class="zap-string">'v'</span> <span class="zap-number">6</span>   <span class="zap-comment">// {u: 5, v: 6}</span>
 <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>       <span class="zap-comment">// {u: 5, v: 6}</span>
 </code></pre>
@@ -563,7 +563,12 @@
 <tr>
 <td><a href="#comma-getter"><code>,</code></a></td>
 <td>2</td>
-<td>get property</td>
+<td>get property (high precedence, autoquote)</td>
+</tr>
+<tr>
+<td><a href="#comma-getter"><code>;</code></a></td>
+<td>2</td>
+<td>get property (high precedence)</td>
 </tr>
 <tr>
 <td><a href="#colon-getter"><code>:</code></a></td>
@@ -622,10 +627,6 @@
 </tr>
 </tbody>
 </table>
-<p>The operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>&lt;&gt;</code> and <code>&gt;&lt;</code> can take more than two operands:</p>
-<pre><code><span class="zap-operator">+</span> <span class="zap-number">1</span> <span class="zap-number">2</span> <span class="zap-number">3</span>            <span class="zap-comment">// 6</span>
-<span class="zap-operator">+</span> <span class="zap-string">'a'</span> <span class="zap-string">'bc'</span> <span class="zap-string">'def'</span>   <span class="zap-comment">// 'abcdef'</span>
-</code></pre>
 <p>The operators <code>&amp;&amp;</code>, <code>||</code>, <code>??</code>, <code>?</code>, <code>&lt;-</code>, <code>?=</code> and <code>?:</code> use short-circuit evaluation.</p>
 <hr>
 <h4>JavaScript Operators</h4>
