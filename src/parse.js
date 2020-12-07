@@ -7,7 +7,6 @@ const {SourceNode} = sourceMapObject;
 
 // ===== helper functions and constants ===================
 
- // groups of operator
 const functionCreators = new Set([
   'fun', 'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
   'asyncFun', 'asyncProc', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap',

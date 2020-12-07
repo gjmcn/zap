@@ -24,18 +24,18 @@ add = [a + b]         // function
 
 #### Methods {#calling-methods}
 
-`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses both the [right operand rule](#right-operand-rule) and [autoquoting](#autoquoting):
+`\` can be used to call methods, but there is also a dedicated method call operator `~` which is often more convenient. `~` uses the [right operand rule](#right-operand-rule) and [autoquoting](#autoquoting):
 
 ```
 x = @ 5 6 7 8
-x ~slice 1 3      // [6, 7]
-~slice x 1 3      // [6, 7]
-x 1 3 ~slice      // [6, 7]
-\(x :slice) 1 3   // [6, 7]
+x ~slice 1 3   // [6, 7]
+~slice x 1 3   // [6, 7]
+x 1 3 ~slice   // [6, 7]
+\x,slice 1 3   // [6, 7]
 
-Array ~isArray x      // true
-\(Array :isArray) x   // true
-x \(Array :isArray)   // true
+Array ~isArray x   // true
+\Array,isArray x   // true
+x \Array,isArray   // true
 ```
 
 ---

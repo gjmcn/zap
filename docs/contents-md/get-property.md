@@ -2,9 +2,9 @@
 
 ---
 
-#### `:` {#colon-getter}
+#### `,`, `;` {#comma-getter}
 
-`:` gets an object/array property or a character from a string. `:` uses the [right operand rule](#right-operand-rule) and the [identifier-name rule](#identifier-name-rule):
+Get an object/array property or a character from a string. These operators have [special behavior](#getter-precedence) including high precedence. `,` [autoquotes](#autoquoting) the property name whereas `;` does not:
 
 ```
 circle = #
@@ -14,12 +14,31 @@ circle = #
 
 r = 'radius'
 
-circle :radius            // 50
-:radius circle            // 50
-circle :(r)               // 50
-circle :('rad' + 'ius')   // 50
-circle :center :1         // 200   
-circle :color :2          // 'd'
+circle,radius     // 50
+circle;r          // 50
+circle,center,1   // 200   
+circle,color,2    // 'd'
+```
+
+---
+
+#### `:` {#colon-getter}
+
+Get an object/array property or a character from a string:
+
+```
+circle = #
+| radius 50
+| center (@ 100 200)
+| color 'red'
+
+r = 'radius'
+
+circle : 'radius'          // 50
+circle : r                 // 50
+circle : ('rad' + 'ius')   // 50
+circle : 'center' : 1      // 200   
+circle : 'color' : 2       // 'd'
 ```
 
 ---
@@ -29,8 +48,8 @@ circle :color :2          // 'd'
 As [`:`](#colon-getter), but `::` gets a property from the object's prototype:
 
 ```
-Array :prototype :slice   // function
-Array ::slice             // same function
+Array : 'prototype' : 'slice'   // function
+Array :: 'slice'                // same function
 ```
 
 ---
@@ -42,30 +61,9 @@ As [`:`](#colon-getter), but `?:` short-circuits and returns `undefined` if the 
 ```
 o = # u 5 v (# x 10 y 20)   // {u: 5, v: {x: 10, y: 20}}
 
-o :q       // undefined
-o :q :y    // TypeError: Cannot read property 'y' of undefined
-o :q ?:y   // undefined
-```
-
----
-
-#### `,` {#comma-getter}
-
-As [`:`](#colon-getter), but `,` does not use the [right operand rule](#right-operand-rule) or the [identifier-name rule](#identifier-name-rule):
-
-```
-circle = #
-| radius 50
-| center (@ 100 200)
-| color 'red'
-
-r = 'radius'
-
-circle , 'radius'          // 50
-circle , r                 // 50
-circle , ('rad' + 'ius')   // 50
-circle , 'center' , 1      // 200   
-circle , 'color' , 2       // 'd'
+o : 'q'          // undefined
+o : 'q' : 'y'    // TypeError: Cannot read property 'y' of undefined
+o : 'q' ?: 'y'   // undefined
 ```
 
 ---
@@ -89,10 +87,10 @@ data at (@ 2 0)
     //   {Name: 'vw pickup', Horsepower: 52, Origin: 'Europe'}
     // ]
 
-data :2 at (@ 'Name' 'Origin')
+data,2 at (@ 'Name' 'Origin')
     // {Name: 'ford ranger', Origin: 'USA'}
 
-data :0 :Origin at (@ 1 3)   // 'uo'
+data,0,Origin at (@ 1 3)   // 'uo'
 ```
 
 The second operand of `at` can be any iterable. For example, a string or a [range](#ranges):
@@ -110,12 +108,12 @@ Use a custom getter function for a property:
 
 ```
 o = # celsius 10
-o 'fahrenheit' getter [this :celsius * 1.8 + 32]
+o 'fahrenheit' getter [this,celsius * 1.8 + 32]
 
-o :fahrenheit     // 50
+o,fahrenheit     // 50
 
-o :celsius = 20   // 20 (set celsius property to 20)
-o :fahrenheit     // 68
+o,celsius = 20   // 20 (set celsius property to 20)
+o,fahrenheit     // 68
 ```
 
 In general:

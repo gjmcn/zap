@@ -101,9 +101,9 @@ x            // 5 (outer x)
 Using the default compiler options (see [Use](#use)), variables created outside of a body are _not_ global &mdash; i.e. they are not visible to other files. [Set a property](#set-property) of the global object to create a global variable:
 
 ```
-globalThis :x = 5   // works in any JavaScript environment
-window :y = 6       // works in browsers
-global :z = 7       // works in Node.js
+globalThis,x = 5   // works in any JavaScript environment
+window,y = 6       // works in browsers
+global,z = 7       // works in Node.js
 ```
 
 Only [`=`](#standard-assignment), [`#=`](#destructure-object), [`@=`](#destructure-iterable) and [`<-`](#options) (discussed in [Writing Functions](#writing-functions)) trigger the creation of local variables. The other assignment operators change the value of an existing variable.

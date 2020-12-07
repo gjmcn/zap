@@ -136,7 +136,7 @@ o = # u 5 v 6   // {u: 5, v: 6}
 o,u             // 5         
 ```
 
-Use [`;`](#semicolon-getter) or [`:`](#colon-getter) instead of `,` to avoid autoquoting.
+Use [`;`](#comma-getter) or [`:`](#colon-getter) instead of `,` to avoid autoquoting.
 
 ##### Property Getters{#getter-precedence}
 
@@ -144,7 +144,7 @@ The `,` and `;` property getters have high precedence and are only used in subex
 
 &emsp; <code><i>variableName</i>[`,` or `;`]<i>propertyName</i>[`,` or `;`]<i>propertyName</i> ...</code>
 
-where <code><i>variableName</i></code> is an [identifier](#identifiers) and each <code><i>propertyName</i></code> is an identifier or a number.
+where <code><i>variableName</i></code> is an [identifier](#identifiers) and each <code><i>propertyName</i></code> is an identifier or an index.
 
 `,` [autoquotes](#autoquoting) the property name whereas `;` does not:
 
@@ -157,7 +157,9 @@ p = 'u'
 10 + o,v;2   // 18
 ```
 
-> No space is allowed on either side of `,` or `;`.
+Spaces and line breaks are not permitted on either side of `,` or `;`.
+
+> Since `,` always autoquotes the property name, `,` and `;` behave differently when the name is a number containing a non-digit. For example, `x,1e2` will get property `'1e2'` whereas `x;1e2` will get property `100`.
 
 ##### Assignment {#assignment-precedence}
 
