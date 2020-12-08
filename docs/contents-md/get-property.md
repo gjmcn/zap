@@ -132,6 +132,6 @@ Object ~defineProperty o 'x'
     | enumerable true
 ```
 
-See [`Object :defineProperty`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) for details.
+See [`Object,defineProperty`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) for details.
 
 `getter` returns the modified object.

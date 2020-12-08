@@ -10,8 +10,8 @@ We can use a regular function as a constructor:
 
 ```
 Animal = fun name age
-    this :name = name
-    this :age = age
+    this,name = name
+    this,age = age
 
 alex = new Animal 'Alex' 8   // Animal {name: "Alex", age: 8}
 ```
@@ -26,8 +26,8 @@ Animal = class name age ()
 // is equivalent to:
 
 Animal = class name age
-    this :name = name
-    this :age = age
+    this,name = name
+    this,age = age
 ```
 
 * The constructor always returns the new instance:
@@ -56,8 +56,8 @@ Use [`::`](#colon-proto-getter) to add a function to an object's prototype — i
 ```
 Animal = class name ()
 
-Animal ::speak = fun
-    + (this :name)' makes a noise'
+Animal :: 'speak' = fun
+    + this,name' makes a noise'
 
 alex = new Animal 'Alex'
 alex ~speak   // 'Alex makes a noise'
@@ -79,14 +79,14 @@ Create a subclass.
 Animal = class name ()
 
 Cat = extends Animal ()   // default constructor
-Cat ::speak = fun
-    + (this :name)' meows'
+Cat :: 'speak' = fun
+    + this,name' meows'
 
 Dog = extends Animal name breed
     \super name   // see below
-    this :breed = breed
-Dog ::speak = fun
-    + (this :name)' the '(this :breed)' barks'
+    this,breed = breed
+Dog :: 'speak' = fun
+    + this,name' the 'this,breed' barks'
 
 colin = new Cat 'Colin'
 colin ~speak   // 'Colin meows'

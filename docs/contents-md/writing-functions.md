@@ -3,7 +3,7 @@
 ---
 
 
-A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new :target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
+A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new,target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
 
 A function returns the value of the last expression evaluated.
 
@@ -173,7 +173,7 @@ dogs = @
 
 // returns 'The oldest dog Beth is 8'
 dogs max 'age' as oldest
-    + 'The oldest dog '(oldest :name)' is '(oldest :age)
+    + 'The oldest dog 'oldest,name' is 'oldest,age
 ```
 
 > The parameter of `as` can be [`ops`](#options), but not [`rest`](#rest).

@@ -963,7 +963,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
     <span class="zap-punctuation">|</span> <span class="zap-identifier">configurable</span> <span class="zap-literal">true</span>
     <span class="zap-punctuation">|</span> <span class="zap-identifier">enumerable</span> <span class="zap-literal">true</span>
 </code></pre>
-<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a> for details.</p>
+<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object,defineProperty</code></a> for details.</p>
 <p><code>getter</code> returns the modified object.</p>
 <h2 id="set-property">Set Property</h2>
 <hr>
@@ -971,9 +971,9 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p>The assignment operator <code>=</code> and the update-assignment operators <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>^=</code> can be used to set an object/array property:</p>
 <pre><code><span class="zap-identifier">circle</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">radius</span> <span class="zap-number">50</span> <span class="zap-identifier">center</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">100</span> <span class="zap-number">200</span><span class="zap-punctuation">)</span>
 
-<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">color</span> <span class="zap-operator">=</span> <span class="zap-string">'red'</span>    <span class="zap-comment">// 'red'</span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">radius</span> <span class="zap-operator">=</span> <span class="zap-number">60</span>      <span class="zap-comment">// 60</span>
-<span class="zap-identifier">circle</span> <span class="zap-operator">:</span><span class="zap-identifier">center</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">+=</span> <span class="zap-number">5</span>   <span class="zap-comment">// 205</span>
+<span class="zap-identifier">circle,color</span> <span class="zap-operator">=</span> <span class="zap-string">'red'</span>   <span class="zap-comment">// 'red'</span>
+<span class="zap-identifier">circle,radius</span> <span class="zap-operator">=</span> <span class="zap-number">60</span>     <span class="zap-comment">// 60</span>
+<span class="zap-identifier">circle,center,1</span> <span class="zap-operator">+=</span> <span class="zap-number">5</span>   <span class="zap-comment">// 205</span>
 
 <span class="zap-identifier">circle</span>   <span class="zap-comment">// {radius: 60, center: [100, 205], color: 'red'}</span>
 </code></pre>
@@ -986,7 +986,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-keyword">chg</span> <span class="zap-string">'w'</span> <span class="zap-number">20</span>   <span class="zap-comment">// {u: 10, v: 6, w: 20} </span>
 </code></pre>
 <blockquote>
-<p>Setting a property with <code>chg</code> is equivalent to using assignment; it is not equivalent to using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a>.</p>
+<p>Setting a property with <code>chg</code> is equivalent to using assignment; it is not equivalent to using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object,defineProperty</code></a>.</p>
 </blockquote>
 <hr>
 <h4 id="attach"><code>attach</code></h4>
@@ -1008,22 +1008,22 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-operator">#</span> <span class="zap-keyword">assign</span> <span class="zap-identifier">o</span> <span class="zap-identifier">p</span>   <span class="zap-comment">// {u: 5, v: 7, w: 8}</span>
 <span class="zap-identifier">o</span> <span class="zap-keyword">assign</span> <span class="zap-identifier">p</span>     <span class="zap-comment">// {u: 5, v: 7, w: 8}</span>
 </code></pre>
-<p><code>assign</code> is shorthand for calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"><code>Object :assign</code></a>.</p>
+<p><code>assign</code> is shorthand for calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign"><code>Object,assign</code></a>.</p>
 <hr>
 <h4 id="setter"><code>setter</code></h4>
 <p>Use a custom setter function for a property:</p>
 <pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">celsius</span> <span class="zap-number">10</span>
 
-<span class="zap-identifier">o</span> <span class="zap-string">'fahrenheit'</span> <span class="zap-keyword">getter</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span> <span class="zap-operator">*</span> <span class="zap-number">1.8</span> <span class="zap-operator">+</span> <span class="zap-number">32</span><span class="zap-punctuation">]</span>
-<span class="zap-identifier">o</span> <span class="zap-string">'fahrenheit'</span> <span class="zap-keyword">setter</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span> <span class="zap-operator">=</span> <span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-number">32</span> <span class="zap-operator">/</span> <span class="zap-number">1.8</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">o</span> <span class="zap-string">'fahrenheit'</span> <span class="zap-keyword">getter</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span><span class="zap-identifier">,celsius</span> <span class="zap-operator">*</span> <span class="zap-number">1.8</span> <span class="zap-operator">+</span> <span class="zap-number">32</span><span class="zap-punctuation">]</span>
+<span class="zap-identifier">o</span> <span class="zap-string">'fahrenheit'</span> <span class="zap-keyword">setter</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span><span class="zap-identifier">,celsius</span> <span class="zap-operator">=</span> <span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-number">32</span> <span class="zap-operator">/</span> <span class="zap-number">1.8</span><span class="zap-punctuation">]</span>
 
-<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">fahrenheit</span>   <span class="zap-comment">// 50</span>
+<span class="zap-identifier">o,fahrenheit</span>   <span class="zap-comment">// 50</span>
 
-<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span> <span class="zap-operator">=</span> <span class="zap-number">20</span>
-<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">fahrenheit</span>   <span class="zap-comment">// 68</span>
+<span class="zap-identifier">o,celsius</span> <span class="zap-operator">=</span> <span class="zap-number">20</span>
+<span class="zap-identifier">o,fahrenheit</span>   <span class="zap-comment">// 68</span>
 
-<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">fahrenheit</span> <span class="zap-operator">=</span> <span class="zap-number">86</span>
-<span class="zap-identifier">o</span> <span class="zap-operator">:</span><span class="zap-identifier">celsius</span>      <span class="zap-comment">// 30</span>
+<span class="zap-identifier">o,fahrenheit</span> <span class="zap-operator">=</span> <span class="zap-number">86</span>
+<span class="zap-identifier">o,celsius</span>      <span class="zap-comment">// 30</span>
 </code></pre>
 <p>In general:</p>
 <pre><code><span class="zap-identifier">o</span> <span class="zap-string">'x'</span> <span class="zap-keyword">setter</span> <span class="zap-identifier">f</span>
@@ -1035,11 +1035,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
     <span class="zap-punctuation">|</span> <span class="zap-identifier">configurable</span> <span class="zap-literal">true</span>
     <span class="zap-punctuation">|</span> <span class="zap-identifier">enumerable</span> <span class="zap-literal">true</span>
 </code></pre>
-<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object :defineProperty</code></a> for details.</p>
+<p>See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>Object,defineProperty</code></a> for details.</p>
 <p><code>setter</code> returns the modified object.</p>
 <h2 id="writing-functions">Writing Functions</h2>
 <hr>
-<p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new :target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
+<p>A function can be a <strong>regular function</strong> or a <strong>procedure</strong>: a function that does not have its own <code>this</code>, <code>arguments</code>, <code>super</code> or <code>new,target</code> (i.e. a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">JavaScript arrow function</a>).</p>
 <p>A function returns the value of the last expression evaluated.</p>
 <hr>
 <h4 id="fun"><code>fun</code>, <code>asyncFun</code></h4>
@@ -1164,7 +1164,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-comment">// returns 'The oldest dog Beth is 8'</span>
 <span class="zap-identifier">dogs</span> <span class="zap-keyword">max</span> <span class="zap-string">'age'</span> <span class="zap-keyword">as</span> <span class="zap-identifier">oldest</span>
-    <span class="zap-operator">+</span> <span class="zap-string">'The oldest dog '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' is '</span><span class="zap-punctuation">(</span><span class="zap-identifier">oldest</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span><span class="zap-punctuation">)</span>
+    <span class="zap-operator">+</span> <span class="zap-string">'The oldest dog '</span><span class="zap-identifier">oldest,name</span><span class="zap-string">' is '</span><span class="zap-identifier">oldest,age</span>
 </code></pre>
 <blockquote>
 <p>The parameter of <code>as</code> can be <a href="#options"><code>ops</code></a>, but not <a href="#rest"><code>rest</code></a>.</p>
@@ -1199,8 +1199,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p>Create a class.</p>
 <p>We can use a regular function as a constructor:</p>
 <pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span> <span class="zap-identifier">name</span> <span class="zap-identifier">age</span>
-    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
-    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
+    <span class="zap-variable">this</span><span class="zap-identifier">,name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
+    <span class="zap-variable">this</span><span class="zap-identifier">,age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
 
 <span class="zap-identifier">alex</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span> <span class="zap-number">8</span>   <span class="zap-comment">// Animal {name: "Alex", age: 8}</span>
 </code></pre>
@@ -1213,8 +1213,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-comment">// is equivalent to:</span>
 
 <span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-identifier">age</span>
-    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
-    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
+    <span class="zap-variable">this</span><span class="zap-identifier">,name</span> <span class="zap-operator">=</span> <span class="zap-identifier">name</span>
+    <span class="zap-variable">this</span><span class="zap-identifier">,age</span> <span class="zap-operator">=</span> <span class="zap-identifier">age</span>
 </code></pre>
 <ul>
 <li>The constructor always returns the new instance:</li>
@@ -1238,8 +1238,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p>Use <a href="#colon-proto-getter"><code>::</code></a> to add a function to an object's prototype — i.e. to add a method to a class:</p>
 <pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
 
-<span class="zap-identifier">Animal</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
-    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' makes a noise'</span>
+<span class="zap-identifier">Animal</span> <span class="zap-operator">::</span> <span class="zap-string">'speak'</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-variable">this</span><span class="zap-identifier">,name</span><span class="zap-string">' makes a noise'</span>
 
 <span class="zap-identifier">alex</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Animal</span> <span class="zap-string">'Alex'</span>
 <span class="zap-identifier">alex</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span>   <span class="zap-comment">// 'Alex makes a noise'</span>
@@ -1259,14 +1259,14 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <pre><code><span class="zap-identifier">Animal</span> <span class="zap-operator">=</span> <span class="zap-keyword">class</span> <span class="zap-identifier">name</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>
 
 <span class="zap-identifier">Cat</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Animal</span> <span class="zap-punctuation">(</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// default constructor</span>
-<span class="zap-identifier">Cat</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
-    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' meows'</span>
+<span class="zap-identifier">Cat</span> <span class="zap-operator">::</span> <span class="zap-string">'speak'</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-variable">this</span><span class="zap-identifier">,name</span><span class="zap-string">' meows'</span>
 
 <span class="zap-identifier">Dog</span> <span class="zap-operator">=</span> <span class="zap-keyword">extends</span> <span class="zap-identifier">Animal</span> <span class="zap-identifier">name</span> <span class="zap-identifier">breed</span>
     <span class="zap-operator">\</span><span class="zap-variable">super</span> <span class="zap-identifier">name</span>   <span class="zap-comment">// see below</span>
-    <span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">breed</span> <span class="zap-operator">=</span> <span class="zap-identifier">breed</span>
-<span class="zap-identifier">Dog</span> <span class="zap-operator">::</span><span class="zap-identifier">speak</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
-    <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">name</span><span class="zap-punctuation">)</span><span class="zap-string">' the '</span><span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">breed</span><span class="zap-punctuation">)</span><span class="zap-string">' barks'</span>
+    <span class="zap-variable">this</span><span class="zap-identifier">,breed</span> <span class="zap-operator">=</span> <span class="zap-identifier">breed</span>
+<span class="zap-identifier">Dog</span> <span class="zap-operator">::</span> <span class="zap-string">'speak'</span> <span class="zap-operator">=</span> <span class="zap-keyword">fun</span>
+    <span class="zap-operator">+</span> <span class="zap-variable">this</span><span class="zap-identifier">,name</span><span class="zap-string">' the '</span><span class="zap-variable">this</span><span class="zap-identifier">,breed</span><span class="zap-string">' barks'</span>
 
 <span class="zap-identifier">colin</span> <span class="zap-operator">=</span> <span class="zap-keyword">new</span> <span class="zap-identifier">Cat</span> <span class="zap-string">'Colin'</span>
 <span class="zap-identifier">colin</span> <span class="zap-operator">~</span><span class="zap-identifier">speak</span>   <span class="zap-comment">// 'Colin meows'</span>
