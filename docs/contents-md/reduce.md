@@ -18,8 +18,8 @@ x = @
 | (# u 6 v 20)
 | (# u 5 v 30)   // array of objects
 
-x sum [a :v]   // 60
-x sum 'v'      // 60
+x sum [a,v]   // 60
+x sum 'v'     // 60
 ```
 
 ---
@@ -74,9 +74,9 @@ x = @
 | (# u 6 v 10)
 | (# u 7 v 30)   // array-of-objects
 
-x find 'v'               // {u: 6, v: 10}
-x find [a :u == 7]       // {u: 7, v: 30}
-x findIndex [a :u > 5]   // 1
+x find 'v'              // {u: 6, v: 10}
+x find [a,u == 7]       // {u: 7, v: 30}
+x findIndex [a,u > 5]   // 1
 ```
 
 If there are no truthy values, `find` returns `undefined`, `findIndex` returns `-1`.
@@ -154,7 +154,7 @@ x sumCumu 'v'      // [10, 30, 60]
 
 #### `median`, `quantile`{#median}
 
-The median value:
+`median` returns the median:
 
 ```
 @ 4 2 7 median      // 4

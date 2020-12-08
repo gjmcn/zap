@@ -11,8 +11,8 @@ x `+ 10              // [15, 16, 17]
 x map xi (xi + 10)   // [15, 16, 17] (without backtick)
 
 y = @ 10 20 30
-x `+` y                     // [15, 26, 37]  
-x map xi i (xi + (y , i))   // [15, 26, 37] (without backticks)
+x `+` y                 // [15, 26, 37]  
+x map xi i (xi + y;i)   // [15, 26, 37] (without backticks)
 ```
 
 Backticks can be used with the following operators:&ensp;`+`&ensp;`-`&ensp;`*`&ensp;`/`&ensp;`%`&ensp;`^`&ensp;`&&`&ensp;`||`&ensp;`??`&ensp;`<>`&ensp;`><`&ensp;`<`&ensp;`<=`&ensp;`>`&ensp;`>=`&ensp;`==`&ensp;`!=`.
@@ -21,7 +21,7 @@ Backticks can be used with the following operators:&ensp;`+`&ensp;`-`&ensp;`*`&e
 
 > If any backticks are used with `&&`, `||` or `??`, short-circuit evaluation is _not_ used &mdash; both operands are always evaluated.
 
-Backticks can be used with any (synchronous) iterables; the result is always an array:
+Backticks can be used with any iterables; the result is always an array:
 
 ```
 r = 5 to 7     // generator (5 6 7)

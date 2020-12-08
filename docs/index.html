@@ -1403,7 +1403,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-keyword">array</span>                <span class="zap-comment">// [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']</span>
 </code></pre>
 <blockquote>
-<p><code>yield</code> and <code>yieldFrom</code> turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own <code>this</code>, <code>arguments</code>, <code>super</code> and <code>new :target</code>.</p>
+<p><code>yield</code> and <code>yieldFrom</code> turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own <code>this</code>, <code>arguments</code>, <code>super</code> and <code>new,target</code>.</p>
 </blockquote>
 <h2 id="exceptions">Exceptions</h2>
 <hr>
@@ -1438,7 +1438,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-keyword">try</span>
     <span class="zap-operator">\</span><span class="zap-identifier">Error</span> <span class="zap-string">'something went wrong'</span> <span class="zap-keyword">throw</span>
 <span class="zap-punctuation">|</span> <span class="zap-keyword">catch</span> <span class="zap-identifier">err</span>
-    <span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span> <span class="zap-keyword">print</span>
+    <span class="zap-identifier">err,message</span> <span class="zap-keyword">print</span>
 </code></pre>
 <p><code>catch</code> returns <code>undefined</code>.</p>
 <p>Here is an example of using <code>catch</code> with <a href="#try"><code>asyncTry</code></a>:</p>
@@ -1448,7 +1448,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
         <span class="zap-keyword">period</span> <span class="zap-number">1000</span> <span class="zap-keyword">await</span>
         <span class="zap-operator">\</span><span class="zap-identifier">Error</span> <span class="zap-string">'something went wrong'</span> <span class="zap-keyword">throw</span>
     <span class="zap-punctuation">|</span> <span class="zap-keyword">await</span> <span class="zap-keyword">catch</span> <span class="zap-identifier">err</span>
-        <span class="zap-identifier">err</span> <span class="zap-operator">:</span><span class="zap-identifier">message</span> <span class="zap-keyword">print</span>
+        <span class="zap-identifier">err,message</span> <span class="zap-keyword">print</span>
 </code></pre>
 <p><code>asyncCatch</code> is the asynchronous version of <code>catch</code>. <code>asyncCatch</code> returns a promise that resolves to <code>undefined</code>. <code>await</code> can be used in the body of <code>asyncCatch</code>.</p>
 <h2 id="elementwise">Elementwise</h2>
@@ -1674,8 +1674,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 16, 17] (without backtick)</span>
 
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span> <span class="zap-number">30</span>
-<span class="zap-identifier">x</span> <span class="zap-operator">`+`</span> <span class="zap-identifier">y</span>                     <span class="zap-comment">// [15, 26, 37]  </span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-identifier">y</span> <span class="zap-identifier">,</span> <span class="zap-identifier">i</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">`+`</span> <span class="zap-identifier">y</span>                 <span class="zap-comment">// [15, 26, 37]  </span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">map</span> <span class="zap-identifier">xi</span> <span class="zap-identifier">i</span> <span class="zap-punctuation">(</span><span class="zap-identifier">xi</span> <span class="zap-operator">+</span> <span class="zap-identifier">y;i</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [15, 26, 37] (without backticks)</span>
 </code></pre>
 <p>Backticks can be used with the following operators: <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>&amp;&amp;</code> <code>||</code> <code>??</code> <code>&lt;&gt;</code> <code>&gt;&lt;</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code>.</p>
 <blockquote>
@@ -1684,7 +1684,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <blockquote>
 <p>If any backticks are used with <code>&amp;&amp;</code>, <code>||</code> or <code>??</code>, short-circuit evaluation is <em>not</em> used — both operands are always evaluated.</p>
 </blockquote>
-<p>Backticks can be used with any (synchronous) iterables; the result is always an array:</p>
+<p>Backticks can be used with any iterables; the result is always an array:</p>
 <pre><code><span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-number">5</span> <span class="zap-keyword">to</span> <span class="zap-number">7</span>     <span class="zap-comment">// generator (5 6 7)</span>
 <span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">4</span> <span class="zap-number">6</span> <span class="zap-number">8</span>   <span class="zap-comment">// Set {4, 6, 8}</span>
 <span class="zap-identifier">r</span> <span class="zap-operator">`==`</span> <span class="zap-identifier">s</span>       <span class="zap-comment">// [false, true, false]</span>
@@ -1715,8 +1715,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 60</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-string">'v'</span>      <span class="zap-comment">// 60</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 60</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-string">'v'</span>     <span class="zap-comment">// 60</span>
 </code></pre>
 <hr>
 <h4><code id="count">count</code></h4>
@@ -1755,9 +1755,9 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-string">'v'</span>               <span class="zap-comment">// {u: 6, v: 10}</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">7</span><span class="zap-punctuation">]</span>       <span class="zap-comment">// {u: 7, v: 30}</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">findIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 1</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-string">'v'</span>              <span class="zap-comment">// {u: 6, v: 10}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">find</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,u</span> <span class="zap-operator">==</span> <span class="zap-number">7</span><span class="zap-punctuation">]</span>       <span class="zap-comment">// {u: 7, v: 30}</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">findIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,u</span> <span class="zap-operator">&gt;</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 1</span>
 </code></pre>
 <p>If there are no truthy values, <code>find</code> returns <code>undefined</code>, <code>findIndex</code> returns <code>-1</code>.</p>
 <hr>
@@ -1809,7 +1809,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </blockquote>
 <hr>
 <h4><code>median</code>, <code id="median">quantile</code></h4>
-<p>The median value:</p>
+<p><code>median</code> returns the median:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-keyword">median</span>      <span class="zap-comment">// 4</span>
 <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">2</span> <span class="zap-number">7</span> <span class="zap-number">10</span> <span class="zap-keyword">median</span>   <span class="zap-comment">// 5.5</span>
 
@@ -1853,10 +1853,10 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
 
 <span class="zap-comment">// filterIndex</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">filterIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [0, 2]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">filterIndex</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,u</span> <span class="zap-operator">==</span> <span class="zap-number">5</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [0, 2]</span>
 </code></pre>
 <p>As shown in the final example, <code>filterIndex</code> can be used to get the original indices of the filtered elements.</p>
 <p>When filtering an iterable of objects/arrays, an inner property/index can be used instead of a callback function:</p>
@@ -1865,7 +1865,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">:</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>  <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a,v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">filter</span> <span class="zap-string">'v'</span>     <span class="zap-comment">// [{u: 5, v: 10}, {u: 5, v: 30}]</span>
 </code></pre><h2 id="group">Group</h2>
 <hr>

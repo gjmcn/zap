@@ -51,7 +51,7 @@ The body is only executed if the `try` expression is truthy:
 try
     \Error 'something went wrong' throw
 | catch err
-    err :message print
+    err,message print
 ```
 
 `catch` returns `undefined`.
@@ -65,7 +65,7 @@ asyncScope
         period 1000 await
         \Error 'something went wrong' throw
     | await catch err
-        err :message print
+        err,message print
 ```
 
 `asyncCatch` is the asynchronous version of `catch`. `asyncCatch` returns a promise that resolves to `undefined`. `await` can be used in the body of `asyncCatch`.
