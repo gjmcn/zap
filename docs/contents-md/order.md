@@ -22,7 +22,7 @@ y = @
 | (# u 7 v 30)   // array of objects
 
 // sort on property v, descending
-f = [b :v - (a :v)]
+f = [b,v - a,v]
 y order f        // [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]
 y orderIndex f   // [2, 0, 1]
 y rank f         // [1, 2, 0]

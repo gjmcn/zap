@@ -13,30 +13,30 @@ x = @
 
 limits = @ 10 20 30 40
 
-x bin limits [a :0 - b]   // Map {
-                          //   10 => [[7, 1], [3, 4]],
-                          //   20 => [],
-                          //   30 => [[23, 0]],
-                          //   40 => [[32, 2], [38, 3], [34, 5]]
-                          // }
+x bin limits [a,0 - b]   // Map {
+                         //   10 => [[7, 1], [3, 4]],
+                         //   20 => [],
+                         //   30 => [[23, 0]],
+                         //   40 => [[32, 2], [38, 3], [34, 5]]
+                         // }
 
 // second callback
-x bin limits [a :0 - b] [a map v (v :1)]   // Map {
-                                           //   10 => [1, 4]
-                                           //   20 => []
-                                           //   30 => [0]
-                                           //   40 => [2, 3, 5]
-                                           // }
+x bin limits [a,0 - b] [a map v (v,1)]   // Map {
+                                         //   10 => [1, 4]
+                                         //   20 => []
+                                         //   30 => [0]
+                                         //   40 => [2, 3, 5]
+                                         // }
 
 // binCount
 @ 5 9 12 7 binCount (@ 10 20)   // Map {10 => 3, 20 => 1}
-x binCount limits [a :0 - b]    // Map {10 => 2, 20 => 0, 30 => 1, 40 => 3}
-x binCount limits [a :0 - b] [a > 1]   // Map {
-                                       //   10 => true,
-                                       //   20 => false,
-                                       //   30 => false,
-                                       //   40 => true
-                                       // }
+x binCount limits [a,0 - b]     // Map {10 => 2, 20 => 0, 30 => 1, 40 => 3}
+x binCount limits [a,0 - b] [a > 1]   // Map {
+                                      //   10 => true,
+                                      //   20 => false,
+                                      //   30 => false,
+                                      //   40 => true
+                                      // }
 ```
 
 As shown in the example, `bin` can take a second callback. This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.

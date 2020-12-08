@@ -2,7 +2,7 @@
 
 ---
 
-`group` takes an iterable and a callback function (default `[a]`). The callback is applied to each element of the iterable (it is passed the element, index and iterable); the results are used to group the elements. When grouping an iterable of objects/arrays, an inner property/index can be used instead of a callback function &mdash; for example, `'v'` can be used instead of the callback `[a :v]`.
+`group` takes an iterable and a callback function (default `[a]`). The callback is applied to each element of the iterable (it is passed the element, index and iterable); the results are used to group the elements. When grouping an iterable of objects/arrays, an inner property/index can be used instead of a callback function &mdash; for example, `'v'` can be used instead of the callback `[a,v]`.
 
 `group` returns a map with arrays for values:
 
