@@ -398,7 +398,7 @@ export default (tokens, options = {}) => {
       block.operands.push(tkn);
     }
 
-    // property - i.e. identifier with shorthand getter(s)
+    // property
     else if (type === 'property') {
       const propsString = tkn.props.map(p => {
         return p[0] === ',' ? `["${p.slice(1)}"]` : `[${p.slice(1)}]`;
@@ -632,7 +632,7 @@ export default (tokens, options = {}) => {
                 syntaxError(tkn, 'invalid left-hand side of assignment');
               }
             }
-            else if (lhs.type !== 'property') {
+            else if (!(!Array.isArray(lhs) && lhs.type === 'property')) {  // not a property
               checkValidName(lhs, tkn, 'invalid left-hand side of assignment');
               settingVariable = true;
             }
@@ -688,7 +688,7 @@ export default (tokens, options = {}) => {
       if (baseBlock.export.size) {
         addToStart.push(
           pointToStart(`export var ${[...baseBlock.export].join(', ')};\n`));
-        }
+      }
         
       // import statements
       if (baseBlock.import.length) {
