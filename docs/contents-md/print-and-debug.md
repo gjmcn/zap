@@ -13,7 +13,7 @@ x = 5 print + 10   // prints 5, returns 15
 x                  // 15
 ```
 
-> `print` uses [`console :log`](https://developer.mozilla.org/en-US/docs/Web/API/Console/log).
+> `print` uses [`console,log`](https://developer.mozilla.org/en-US/docs/Web/API/Console/log).
 
 ---
 

@@ -2305,7 +2305,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <h4 id="import-all"><code>importAll</code></h4>
 <p>Import all of a module's exports as an object:</p>
 <pre><code><span class="zap-keyword">importAll</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-identifier">arith</span>
-<span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
+<span class="zap-comment">// use arith,add and arith,subtract here</span>
 </code></pre>
 <hr>
 <h4 id="import-default"><code>importDefault</code></h4>
@@ -2320,7 +2320,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p><code>load</code> is not subject to the restrictions that apply to other import operators: <code>load</code> can be used anywhere and the module path/url can be any expression. <code>import</code> returns a promise that resolves to an object:</p>
 <pre><code><span class="zap-keyword">load</span> <span class="zap-string">'/modules/arithmetic.js'</span> <span class="zap-operator">~</span><span class="zap-identifier">then</span> 
     <span class="zap-keyword">fun</span> <span class="zap-identifier">arith</span>
-        <span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
+        <span class="zap-comment">// use arith,add and arith,subtract here</span>
 </code></pre>
 <p>Or using <code>await</code>:</p>
 <pre><code><span class="zap-keyword">asyncScope</span>
@@ -2331,7 +2331,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <h4>CommonJS Modules</h4>
 <p>CommonJS modules do not require dedicated operators or rules.</p>
 <p>The following export examples are equivalent:</p>
-<pre><code><span class="zap-identifier">module</span> <span class="zap-operator">:</span><span class="zap-identifier">exports</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span>
+<pre><code><span class="zap-identifier">module,exports</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">add</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">subtract</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">-</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
 </code></pre>
@@ -2345,7 +2345,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <p>Use the <code>require</code> function to load a module:</p>
 <pre><code><span class="zap-identifier">arith</span> <span class="zap-operator">=</span> <span class="zap-string">'arithmetic.js'</span> <span class="zap-operator">\</span><span class="zap-identifier">require</span>
-<span class="zap-comment">// use  arith :add  and  arith :subtract  here</span>
+<span class="zap-comment">// use arith,add and arith,subtract here</span>
 </code></pre>
 <p>Or with destructuring:</p>
 <pre><code><span class="zap-identifier">add</span> <span class="zap-identifier">subtract</span> <span class="zap-operator">#=</span> <span class="zap-string">'arithmetic.js'</span> <span class="zap-operator">\</span><span class="zap-identifier">require</span>
@@ -2360,7 +2360,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">x</span>                  <span class="zap-comment">// 15</span>
 </code></pre>
 <blockquote>
-<p><code>print</code> uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log"><code>console :log</code></a>.</p>
+<p><code>print</code> uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log"><code>console,log</code></a>.</p>
 </blockquote>
 <hr>
 <h4 id="debugger"><code>debugger</code></h4>
@@ -2445,14 +2445,14 @@ When used with one operand, <code>select</code> searches the document. If two op
 <h4 id="encode"><code>encode</code>, <code>encodeSVG</code></h4>
 <p><code>encode</code> takes an iterable (the 'data') and an HTML tag name. For each datum, an HTML element of the given tag name is created and the element's <code>__data__</code> property is set to the datum. The new elements are returned as an array:</p>
 <pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-keyword">encode</span> <span class="zap-string">'p'</span>   <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
-<span class="zap-identifier">p</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">:</span><span class="zap-identifier">__data__</span>           <span class="zap-comment">// 6</span>
+<span class="zap-identifier">p,1,__data__</span>             <span class="zap-comment">// 6</span>
 </code></pre>
 <p>Various DOM operators such as <a href="#insert"><code>insert</code></a>, <a href="#into"><code>into</code></a>, <a href="#insert-each"><code>insertEach</code></a>, <a href="#attr"><code>attr</code></a>, <a href="#attr"><code>prop</code></a>, <a href="#attr"><code>style</code></a>, <a href="#html"><code>html</code></a>, <a href="#html"><code>text</code></a>, <a href="#on"><code>on</code></a> and <a href="#on"><code>off</code></a> use the <code>__data__</code> property of elements — it is rare to use the <code>__data__</code> property explicitly.</p>
 <p>The optional third operand of <code>encode</code> specifies whether to set the <code>__data__</code> property of the new elements. This operand defaults to <code>true</code>.</p>
 <p>Use <code>encodeSVG</code> to encode data as SVG elements rather than HTML:</p>
 <pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>
 <span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-keyword">encodeSVG</span> <span class="zap-identifier">o</span> <span class="zap-string">'rect'</span>   <span class="zap-comment">// [&lt;rect&gt;, &lt;rect&gt;]</span>
-<span class="zap-identifier">r</span> <span class="zap-operator">:</span><span class="zap-number">1</span> <span class="zap-operator">:</span><span class="zap-identifier">__data__</span>           <span class="zap-comment">// {u: 7, v: 8}</span>
+<span class="zap-identifier">r,1,__data__</span>             <span class="zap-comment">// {u: 7, v: 8}</span>
 </code></pre>
 <hr>
 <h4 id="insert"><code>insert</code></h4>
@@ -2486,7 +2486,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 <span class="zap-identifier">ps</span> <span class="zap-operator">=</span> <span class="zap-identifier">divs</span> <span class="zap-keyword">insertEach</span>
     <span class="zap-keyword">fun</span> <span class="zap-identifier">data</span> <span class="zap-identifier">index</span>
         <span class="zap-keyword">$p</span> <span class="zap-keyword">text</span> 
-            <span class="zap-operator">+</span> <span class="zap-punctuation">(</span><span class="zap-variable">this</span> <span class="zap-operator">:</span><span class="zap-identifier">tagName</span><span class="zap-punctuation">)</span><span class="zap-string">' '</span><span class="zap-identifier">data</span><span class="zap-string">' '</span><span class="zap-identifier">index</span>
+            <span class="zap-operator">+</span> <span class="zap-variable">this</span><span class="zap-identifier">,tagName</span><span class="zap-string">' '</span><span class="zap-identifier">data</span><span class="zap-string">' '</span><span class="zap-identifier">index</span>
             
 <span class="zap-identifier">ps</span>        <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;]</span>
 <span class="zap-identifier">ps</span> <span class="zap-keyword">text</span>   <span class="zap-comment">// ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']</span>
@@ -2513,7 +2513,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 
 <span class="zap-identifier">divs</span> <span class="zap-keyword">style</span> <span class="zap-string">'background-color'</span>   <span class="zap-comment">// ["rgb(255, 0, 0)", "rgb(0, 0, 255)"]</span>
 <span class="zap-identifier">divs</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span>             <span class="zap-comment">// ['20px', '20px']</span>
-<span class="zap-identifier">divs</span> <span class="zap-operator">:</span><span class="zap-number">0</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span>          <span class="zap-comment">// '20px'</span>
+<span class="zap-identifier">divs,0</span> <span class="zap-keyword">style</span> <span class="zap-string">'height'</span>           <span class="zap-comment">// '20px'</span>
 
 <span class="zap-string">'div'</span> <span class="zap-keyword">style</span> <span class="zap-string">'width'</span> <span class="zap-string">'40px'</span>   <span class="zap-comment">// set width of all divs in document</span>
 <span class="zap-string">'div'</span> <span class="zap-keyword">style</span> <span class="zap-string">'width'</span>          <span class="zap-comment">// ['40px', '40px'] (if no preexisting divs)</span>
@@ -2522,10 +2522,10 @@ When used with one operand, <code>select</code> searches the document. If two op
 <pre><code><span class="zap-identifier">colors</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-string">'red'</span> <span class="zap-string">'green'</span> <span class="zap-string">'blue'</span>
 
 <span class="zap-comment">// create 3 &lt;p&gt;, give each a different color</span>
-<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors</span> <span class="zap-identifier">,</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>
+<span class="zap-number">3</span> <span class="zap-keyword">$p</span> <span class="zap-keyword">style</span> <span class="zap-string">'color'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">colors;b</span><span class="zap-punctuation">]</span>
 </code></pre>
 <p><code>style</code> can be used to get/set <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties">CSS variables</a>:</p>
-<pre><code><span class="zap-comment">// use 'html' or document :documentElement to set globals</span>
+<pre><code><span class="zap-comment">// use 'html' or document,documentElement to set globals</span>
 <span class="zap-comment">// (i.e. variables that would be set under :root in CSS)</span>
 <span class="zap-string">'html'</span> <span class="zap-keyword">style</span> <span class="zap-string">'--size'</span> <span class="zap-string">'24px'</span>
 
@@ -2580,8 +2580,8 @@ When used with one operand, <code>select</code> searches the document. If two op
 <span class="zap-punctuation">|</span> <span class="zap-keyword">text</span> <span class="zap-string">'show data'</span>
 <span class="zap-punctuation">|</span> <span class="zap-keyword">on</span> <span class="zap-string">'click'</span> <span class="zap-punctuation">[</span><span class="zap-variable">this</span> <span class="zap-keyword">text</span> <span class="zap-identifier">a</span><span class="zap-punctuation">]</span>    <span class="zap-comment">// [&lt;p&gt;, &lt;p&gt;, &lt;p&gt;] </span>
 </code></pre>
-<p>The optional fourth operand is an options object or a boolean indicating whether to use capture — see <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> for details. The fourth operand defaults to <code>false</code>.</p>
-<p>The behavior of <code>on</code> and <code>off</code> differs slightly from that of the native methods <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget :addEventListener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">EventTarget :removeEventListener</a>:</p>
+<p>The optional fourth operand is an options object or a boolean indicating whether to use capture — see <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget,addEventListener</a> for details. The fourth operand defaults to <code>false</code>.</p>
+<p>The behavior of <code>on</code> and <code>off</code> differs slightly from that of the native methods <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener">EventTarget,addEventListener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener">EventTarget,removeEventListener</a>:</p>
 <ul>
 <li>
 <p>The event handler <em>must</em> be a function when using <code>on</code> and <code>off</code>.</p>
@@ -2616,7 +2616,7 @@ When used with one operand, <code>select</code> searches the document. If two op
 <p>The canvas and context are returned as an array:</p>
 <pre><code><span class="zap-identifier">canvas</span> <span class="zap-identifier">ctx</span> <span class="zap-operator">@=</span> <span class="zap-keyword">sketch</span>
 
-<span class="zap-identifier">ctx</span> <span class="zap-operator">:</span><span class="zap-identifier">fillStyle</span> <span class="zap-operator">=</span> <span class="zap-string">'green'</span>
+<span class="zap-identifier">ctx,fillStyle</span> <span class="zap-operator">=</span> <span class="zap-string">'green'</span>
 <span class="zap-identifier">ctx</span> <span class="zap-operator">~</span><span class="zap-identifier">fillRect</span> <span class="zap-number">50</span> <span class="zap-number">20</span> <span class="zap-number">200</span> <span class="zap-number">100</span>
 </code></pre>
 <hr>

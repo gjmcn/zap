@@ -84,7 +84,7 @@ $rect 2   // [<rect>, <rect>]
 
 ```
 p = @ 5 6 7 encode 'p'   // [<p>, <p>, <p>]
-p :1 :__data__           // 6
+p,1,__data__             // 6
 ```
 
 Various DOM operators such as [`insert`](#insert), [`into`](#into), [`insertEach`](#insert-each), [`attr`](#attr), [`prop`](#attr), [`style`](#attr), [`html`](#html), [`text`](#html), [`on`](#on) and [`off`](#on) use the `__data__` property of elements &mdash; it is rare to use the `__data__` property explicitly.
@@ -96,7 +96,7 @@ Use `encodeSVG` to encode data as SVG elements rather than HTML:
 ```
 o = @ (# u 5 v 6) (# u 7 v 8)
 r = encodeSVG o 'rect'   // [<rect>, <rect>]
-r :1 :__data__           // {u: 7, v: 8}
+r,1,__data__             // {u: 7, v: 8}
 ```
 
 ---
@@ -148,7 +148,7 @@ divs = @ 5 6 7 encode 'div'   // [<div>, <div>, <div>]
 ps = divs insertEach
     fun data index
         $p text 
-            + (this :tagName)' 'data' 'index
+            + this,tagName' 'data' 'index
             
 ps        // [<p>, <p>, <p>]
 ps text   // ['DIV 5 0', 'DIV 6 1' 'DIV 7 2']
@@ -186,7 +186,7 @@ divs into 'body'
 
 divs style 'background-color'   // ["rgb(255, 0, 0)", "rgb(0, 0, 255)"]
 divs style 'height'             // ['20px', '20px']
-divs :0 style 'height'          // '20px'
+divs,0 style 'height'           // '20px'
 
 'div' style 'width' '40px'   // set width of all divs in document
 'div' style 'width'          // ['40px', '40px'] (if no preexisting divs)
@@ -198,13 +198,13 @@ A callback function can be used with any elements; they need not have their own 
 colors = @ 'red' 'green' 'blue'
 
 // create 3 <p>, give each a different color
-3 $p style 'color' [colors , b]
+3 $p style 'color' [colors;b]
 ```
 
 `style` can be used to get/set [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties):
 
 ```
-// use 'html' or document :documentElement to set globals
+// use 'html' or document,documentElement to set globals
 // (i.e. variables that would be set under :root in CSS)
 'html' style '--size' '24px'
 
@@ -287,9 +287,9 @@ Add/remove event listeners from [all elements](#all-elements) of the first opera
 | on 'click' [this text a]    // [<p>, <p>, <p>] 
 ```
 
-The optional fourth operand is an options object or a boolean indicating whether to use capture &mdash; see [EventTarget :addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) for details. The fourth operand defaults to `false`.
+The optional fourth operand is an options object or a boolean indicating whether to use capture &mdash; see [EventTarget,addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) for details. The fourth operand defaults to `false`.
 
-The behavior of `on` and `off` differs slightly from that of the native methods [EventTarget :addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) and [EventTarget :removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener):
+The behavior of `on` and `off` differs slightly from that of the native methods [EventTarget,addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) and [EventTarget,removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener):
 
 * The event handler _must_ be a function when using `on` and `off`.
 
@@ -322,7 +322,7 @@ The canvas and context are returned as an array:
 ```
 canvas ctx @= sketch
 
-ctx :fillStyle = 'green'
+ctx,fillStyle = 'green'
 ctx ~fillRect 50 20 200 100
 ```
 

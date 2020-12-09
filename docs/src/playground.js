@@ -87,10 +87,6 @@
   let runCode;
   {
     const zap = require('../../dist/zap.cjs');
-
-    // REMOVE!!!!!!!!!11
-    window.zap = zap;
-
     let runId;
     runCode = isHelp => {
       const thisRunId = runId = Symbol();

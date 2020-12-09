@@ -76,7 +76,7 @@ Import all of a module's exports as an object:
 
 ```
 importAll '/modules/arithmetic.js' arith
-// use  arith :add  and  arith :subtract  here
+// use arith,add and arith,subtract here
 ```
 
 ---
@@ -103,7 +103,7 @@ Dynamically import a module.
 ```
 load '/modules/arithmetic.js' ~then 
     fun arith
-        // use  arith :add  and  arith :subtract  here
+        // use arith,add and arith,subtract here
 ```
 
 Or using `await`:
@@ -123,7 +123,7 @@ CommonJS modules do not require dedicated operators or rules.
 The following export examples are equivalent:
 
 ```
-module :exports = #
+module,exports = #
 | add [a + b]
 | subtract [a - b]
 ```
@@ -144,7 +144,7 @@ Use the `require` function to load a module:
 
 ```
 arith = 'arithmetic.js' \require
-// use  arith :add  and  arith :subtract  here
+// use arith,add and arith,subtract here
 ```
 
 Or with destructuring:
