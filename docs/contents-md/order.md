@@ -19,7 +19,7 @@ x rank         // [1, 2, 0]
 y = @ 
 | (# u 5 v 20)
 | (# u 6 v 10)
-| (# u 7 v 30)   // array of objects
+| (# u 7 v 30)   // array-of-objects
 
 // sort on property v, descending
 f = [b,v - a,v]
@@ -46,7 +46,7 @@ To order an iterable of objects/arrays on an inner property/index, an additional
 y = @ 
 | (# u 5 v 20)
 | (# u 6 v 10)
-| (# u 7 v 30)   // array of objects
+| (# u 7 v 30)   // array-of-objects
 
 // sort on property v, descending
 y order 'desc' 'v'        // [{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]

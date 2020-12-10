@@ -16,7 +16,7 @@ When 'reducing' an iterable of objects/arrays, an inner property/index can be us
 x = @ 
 | (# u 5 v 10)
 | (# u 6 v 20)
-| (# u 5 v 30)   // array of objects
+| (# u 5 v 30)   // array-of-objects
 
 x sum [a,v]   // 60
 x sum 'v'     // 60

@@ -11,7 +11,7 @@
 x = @
 | (# u 5 v 10)
 | (# u 6 v 20)
-| (# u 5 v 30)   // array of objects
+| (# u 5 v 30)   // array-of-objects
 
 x filter [a,u == 5]   // [{u: 5, v: 10}, {u: 5, v: 30}]
 
@@ -27,7 +27,7 @@ When filtering an iterable of objects/arrays, an inner property/index can be use
 x = @ 
 | (# u 5 v 10)
 | (# u 6)
-| (# u 5 v 30)   // array of objects
+| (# u 5 v 30)   // array-of-objects
 
 x filter [a,v]   // [{u: 5, v: 10}, {u: 5, v: 30}]
 x filter 'v'     // [{u: 5, v: 10}, {u: 5, v: 30}]

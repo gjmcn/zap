@@ -171,4 +171,4 @@ g array                // [0, 1, 2, 3, 4]
 | array                // [5, 'a', 'b', 6, 'a', 'b', 7, 'a', 'b']
 ```
 
-> `yield` and `yieldFrom` turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own `this`, `arguments`, `super` and `new,target`.
+> `yield` and `yieldFrom` turn a loop into a generator function (which is automatically called to give the returned generator) so the loop will have its own `this`, `arguments` and `super`.

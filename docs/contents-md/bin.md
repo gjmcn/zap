@@ -21,12 +21,12 @@ x bin limits [a,0 - b]   // Map {
                          // }
 
 // second callback
-x bin limits [a,0 - b] [a map v (v,1)]   // Map {
-                                         //   10 => [1, 4]
-                                         //   20 => []
-                                         //   30 => [0]
-                                         //   40 => [2, 3, 5]
-                                         // }
+x bin limits [a,0 - b] [a pick 1]   // Map {
+                                    //   10 => [1, 4]
+                                    //   20 => []
+                                    //   30 => [0]
+                                    //   40 => [2, 3, 5]
+                                    // }
 
 // binCount
 @ 5 9 12 7 binCount (@ 10 20)   // Map {10 => 3, 20 => 1}
@@ -39,7 +39,7 @@ x binCount limits [a,0 - b] [a > 1]   // Map {
                                       // }
 ```
 
-As shown in the example, `bin` can take a second callback. This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.
+As shown in the example, `bin` can take a second callback (the example uses [pick](#pick)). This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.
 
 `binCount` gets the number of elements in each bin &mdash; see the final examples above. While we could use `bin` with a second callback for this, `binCount` is more efficient and is easier to read. 
 

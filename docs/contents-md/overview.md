@@ -64,7 +64,7 @@ Indented blocks can contain multiple expressions:
 An expression terminates at the end of a line unless the following line opens an indentated block or continues the line with `|`. 
 
 ```
-// array of objects
+// array-of-objects
 dogs = 
     @
         #

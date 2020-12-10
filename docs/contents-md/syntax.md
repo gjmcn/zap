@@ -64,10 +64,10 @@ Indentation can also be used for precedence. Indented blocks *can* contain multi
 
 Opening an indented block automatically continues an expression &mdash; do not use a `|`.
 
-We can close an indented block (or more than one) and continue the expression with `|`. The following example uses the [array literal](#arrays) operator `@`and the [object literal](#objects-and-maps) operator `#` to create an array of objects:
+We can close an indented block (or more than one) and continue the expression with `|`. The following example uses the [array literal](#arrays) operator `@`and the [object literal](#objects-and-maps) operator `#` to create an array-of-objects:
 
 ```
-// an array of objects
+// an array-of-objects
 @
     #
     | name 'Alex'

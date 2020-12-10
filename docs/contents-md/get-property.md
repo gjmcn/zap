@@ -75,7 +75,7 @@ o : 'q' ?: 'y'   // undefined
 `at` returns the same kind of object that it gets properties from. For example, when getting elements from an array, `at` returns an array.
 
 ```
-// array of objects
+// array-of-objects
 data = @
 | (# Name 'vw pickup'     Horsepower 52 Origin 'Europe')
 | (# Name 'dodge rampage' Horsepower 84 Origin 'USA')

@@ -6,7 +6,7 @@ The following terms are used in this section to describe the elements associated
 
 <b><i>first element</i></b>: {#first-element}
 
-  * CSS selector string &#8594; first matching element in the document.
+  * CSS selector string &#8594; first matching element.
 
   * non-string iterable &#8594; first element.
 
@@ -14,7 +14,7 @@ The following terms are used in this section to describe the elements associated
 
 <b><i>all elements</i></b>: {#all-elements}
 
-  * CSS selector string &#8594; all matching elements in the document; where relevant, the operator returns the elements as an array.
+  * CSS selector string &#8594; all matching elements; where relevant, the operator returns the elements as an array.
 
   * non-string iterable &#8594; all elements of the iterable; where relevant, the operator returns the iterable.
 
@@ -279,7 +279,7 @@ If the first operand is an iterable, these operators return an array of booleans
 
 #### `on`, `off` {#on}
 
-Add/remove event listeners from [all elements](#all-elements) of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler &mdash; a function. The handler is passed the 'firing' element's `__data__` property (see [`encode`](#encode)) and the event. The handler's `this` is set to the firing element.
+Add/remove event listeners from [all elements](#all-elements) of the first operand. The second operand is a string of space-separated event types. The third operand is the event handler &mdash; a function. The handler is passed the element's `__data__` property (see [`encode`](#encode)) and the event. The handler's `this` is set to the element:
 
 ```
 @ 5 6 7 encode 'p'

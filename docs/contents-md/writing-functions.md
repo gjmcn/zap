@@ -3,7 +3,7 @@
 ---
 
 
-A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments`, `super` or `new,target` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
+A function can be a __regular function__ or a __procedure__: a function that does not have its own `this`, `arguments` or `super` (i.e. a [JavaScript arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)).
 
 A function returns the value of the last expression evaluated.
 
@@ -165,7 +165,7 @@ asyncScope
 Like [`scope`](#scope-op) and [`asyncScope`](#scope-op), but the [body](#body-operands) is preceded by an expression and a parameter that represents the value of the expression. The following example uses the [`max`](#min) operator:
 
 ```
-// array of objects
+// array-of-objects
 dogs = @
 | (# name 'Alex' age 3) 
 | (# name 'Beth' age 8) 

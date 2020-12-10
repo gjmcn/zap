@@ -10,7 +10,7 @@
 x = @ 
 | (# u 5 v 10)
 | (# u 6 v 20)
-| (# u 5 v 30)   // array of objects
+| (# u 5 v 30)   // array-of-objects
   
 x group 'u'   // Map {
               //   5 => [{u: 5, v: 10}, {u: 5, v: 30}]
@@ -31,7 +31,7 @@ As shown in the example, `group` can take a second callback. This is applied to 
 x = @ 
 | (# u 5 v 10)
 | (# u 6 v 20)
-| (# u 5 v 30)   // array of objects
+| (# u 5 v 30)   // array-of-objects
 
 x groupCount 'u'           // Map {5 => 2, 6 => 1}
 x groupCount 'u' [a > 1]   // Map {5 => true, 6 => false}
