@@ -410,16 +410,17 @@
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-identifier">u</span><span class="zap-punctuation">)</span> <span class="zap-number">6</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-identifier">u</span> <span class="zap-operator">+</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span> <span class="zap-number">7</span>   <span class="zap-comment">// {u: 5, v: 6, vw: 7}</span>
 </code></pre>
-<p>Reserved words are not autoquoted:</p>
-<pre><code><span class="zap-operator">#</span> <span class="zap-string">'if'</span> <span class="zap-number">5</span>   <span class="zap-comment">// {if: 5} (quotes required)</span>
-</code></pre>
-<p>The property getter <a href="#comma-getter"><code>,</code></a> always autoquotes the property name:</p>
+<p>The property getter <a href="#comma-getter"><code>,</code></a> autoquotes the property name:</p>
 <pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>   <span class="zap-comment">// {u: 5, v: 6}</span>
 <span class="zap-identifier">o</span><span class="zap-operator">,</span><span class="zap-identifier">u</span>             <span class="zap-comment">// 5         </span>
 </code></pre>
-<p>Use <a href="#comma-getter"><code>;</code></a> or <a href="#colon-getter"><code>:</code></a> instead of <code>,</code> to avoid autoquoting.</p>
+<p>Operator names are not autoquoted:</p>
+<pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-string">'if'</span> <span class="zap-number">5</span>   <span class="zap-comment">// {if: 5} (quotes required)</span>
+<span class="zap-identifier">o</span><span class="zap-operator">,</span><span class="zap-keyword">if</span>           <span class="zap-comment">// syntax error</span>
+<span class="zap-identifier">o</span> <span class="zap-operator">:</span> <span class="zap-string">'if'</span>       <span class="zap-comment">// 5 (the : property getter has no special behavior)</span>
+</code></pre>
 <h5 id="getter-precedence">Property Getters</h5>
-<p>The <code>,</code> and <code>;</code> property getters have high precedence and are only used in subexpressions of the form:</p>
+<p>The <code>,</code> and <code>;</code> property getters have high precedence and can only be used in subexpressions of the form:</p>
 <p>  <code><i>variableName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i> ...</code></p>
 <p>where <code><i>variableName</i></code> is an <a href="#identifiers">identifier</a> and each <code><i>propertyName</i></code> is an identifier or an index.</p>
 <p><code>,</code> <a href="#autoquoting">autoquotes</a> the property name whereas <code>;</code> does not:</p>
@@ -432,7 +433,7 @@
 </code></pre>
 <p>Spaces and line breaks are not permitted on either side of <code>,</code> or <code>;</code>.</p>
 <blockquote>
-<p>Since <code>,</code> always autoquotes the property name, <code>,</code> and <code>;</code> behave differently when the name is a number containing a non-digit. For example, <code>x,1e2</code> will get property <code>'1e2'</code> whereas <code>x;1e2</code> will get property <code>100</code>.</p>
+<p>Since <code>,</code> autoquotes the property name, <code>,</code> and <code>;</code> behave differently when the name is a number containing a non-digit. For example, <code>x,1e2</code> will get property <code>'1e2'</code> whereas <code>x;1e2</code> will get property <code>100</code>.</p>
 </blockquote>
 <h5 id="assignment-precedence">Assignment</h5>
 <p><a href="#assignment">Assignment</a> operators have low precedence and must be placed between their two operands:</p>

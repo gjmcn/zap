@@ -123,24 +123,24 @@ u = 'v'
 | (u + 'w') 7   // {u: 5, v: 6, vw: 7}
 ```
 
-Reserved words are not autoquoted:
-
-```
-# 'if' 5   // {if: 5} (quotes required)
-```
-
-The property getter [`,`](#comma-getter) always autoquotes the property name:
+The property getter [`,`](#comma-getter) autoquotes the property name:
 
 ```
 o = # u 5 v 6   // {u: 5, v: 6}
 o,u             // 5         
 ```
 
-Use [`;`](#comma-getter) or [`:`](#colon-getter) instead of `,` to avoid autoquoting.
+Operator names are not autoquoted:
+
+```
+o = # 'if' 5   // {if: 5} (quotes required)
+o,if           // syntax error
+o : 'if'       // 5 (the : property getter has no special behavior)
+```
 
 ##### Property Getters{#getter-precedence}
 
-The `,` and `;` property getters have high precedence and are only used in subexpressions of the form:
+The `,` and `;` property getters have high precedence and can only be used in subexpressions of the form:
 
 &emsp; <code><i>variableName</i>[`,` or `;`]<i>propertyName</i>[`,` or `;`]<i>propertyName</i> ...</code>
 
@@ -159,7 +159,7 @@ p = 'u'
 
 Spaces and line breaks are not permitted on either side of `,` or `;`.
 
-> Since `,` always autoquotes the property name, `,` and `;` behave differently when the name is a number containing a non-digit. For example, `x,1e2` will get property `'1e2'` whereas `x;1e2` will get property `100`.
+> Since `,` autoquotes the property name, `,` and `;` behave differently when the name is a number containing a non-digit. For example, `x,1e2` will get property `'1e2'` whereas `x;1e2` will get property `100`.
 
 ##### Assignment {#assignment-precedence}
 

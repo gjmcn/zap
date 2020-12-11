@@ -33,11 +33,6 @@ export default code => {
   // handle indent on first line as a special case
   const initIndent = regexps.get('space').exec(code);
 
-  // check if string is reserved-command or reserved-invalid
-  function commandOrInvalid(s) {
-    return reserved.commands.has(s) || reserved.invalid.has(s);
-  }
-
   // zap syntax error
   function zapSyntaxError(msg) {
     throw Error(`Zap syntax at ${line}:${column + 1}, ${msg}`);
@@ -111,7 +106,8 @@ export default code => {
               else {
                 const parts = tkn.value.split(/(?=[,;])/);
                 if (parts.length > 1) {  // property
-                  if (commandOrInvalid(parts[0])) {
+                  if (reserved.commands.has(parts[0]) ||
+                      reserved.invalid.has(parts[0])) {
                     zapSyntaxError('reserved word');
                   }
                   const props = parts.slice(1);
@@ -119,7 +115,8 @@ export default code => {
                     if (p.length < 2) {
                       zapSyntaxError('missing property name');
                     }
-                    if (commandOrInvalid(p.slice(1))) {
+                    if (reserved.commands.has(p.slice(1)) ||
+                        (p[0] === ';' && reserved.invalid.has(p.slice(1)))) {
                       zapSyntaxError('reserved word');
                     }
                   }
