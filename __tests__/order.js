@@ -48,7 +48,7 @@ test('rank numeric array desc convenience - ties', () => {
 
 test('order array-of-objects', () => {
   expect(compute(
-    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) order [b :v - (a :v)]`
+    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) order [b,v - a,v]`
   )).toStrictEqual([{u: 7, v: 30}, {u: 5, v: 20}, {u: 6, v: 10}]);
 });
 test('order array-of-objects convenience', () => {
@@ -59,7 +59,7 @@ test('order array-of-objects convenience', () => {
 
 test('rank array-of-objects', () => {
   expect(compute(
-    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) rank [b :v - (a :v)]`
+    `@ (# u 5 v 20) (# u 6 v 10) (# u 7 v 30) rank [b,v - a,v]`
   )).toStrictEqual([1, 2, 0]);
 });
 test('rank array-of-objects convenience', () => {
@@ -84,13 +84,13 @@ test('rank string', () => {
 
 test('order map', () => {
   expect(compute(
-    `## u 5 true 3 null 10 2 6 order [a :1 - (b :1)]`
+    `## u 5 true 3 null 10 2 6 order [a,1 - b,1]`
   )).toStrictEqual([[true, 3], ['u', 5], [2, 6], [null, 10]]);
 });
 
 test('rank map', () => {
   expect(compute(
-    `## u 5 true 3 null 10 2 6 rank [a :1 - (b :1)]`
+    `## u 5 true 3 null 10 2 6 rank [a,1 - b,1]`
   )).toStrictEqual([1, 0, 3, 2]);
 });
 
