@@ -119,7 +119,7 @@ export default code => {
                     if (p.length < 2) {
                       zapSyntaxError('missing property name');
                     }
-                    if (p[0] === ';' && commandOrInvalid(p.slice(1))) {
+                    if (commandOrInvalid(p.slice(1))) {
                       zapSyntaxError('reserved word');
                     }
                   }
