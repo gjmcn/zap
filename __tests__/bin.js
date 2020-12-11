@@ -24,7 +24,7 @@ test('bin array-of-arrays', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x bin limits [a :0 - b]`)).toStrictEqual(new Map([
+x bin limits [a,0 - b]`)).toStrictEqual(new Map([
     [10, [ [7, 1], [3, 4] ]], 
     [20, []],
     [30, [ [23, 0] ]],
@@ -36,7 +36,7 @@ test('bin array-of-arrays, second callback', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x bin limits [a :0 - b] [a map v (v :1)]`)).toStrictEqual(new Map([
+x bin limits [a : 0 - b] [a map v (v : 1)]`)).toStrictEqual(new Map([
     [10, [1, 4]], 
     [20, []],
     [30, [0]],
@@ -48,7 +48,7 @@ test('binCount array-of-arrays', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x binCount limits [a :0 - b]`)).toStrictEqual(new Map([
+x binCount limits [a,0 - b]`)).toStrictEqual(new Map([
     [10, 2], 
     [20, 0],
     [30, 1],
@@ -60,7 +60,7 @@ test('binCount array-of-arrays, second callback', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x binCount limits [a :0 - b] [a > 1]`)).toStrictEqual(new Map([
+x binCount limits [a,0 - b] [a > 1]`)).toStrictEqual(new Map([
     [10, true], 
     [20, false],
     [30, false],
@@ -114,7 +114,7 @@ f = fun
     @ 5 9 yield
     @ 10 20 yield
 limits = \\f
-values bin limits [a :1 sum - (b sum)]`
+values bin limits [a,1 sum - (b sum)]`
   )).toStrictEqual(new Map([
     [[5, 9], [['w', [2, 11]]]],
     [[10, 20], [['u', [5, 10]], ['v', [15, 8]]]]

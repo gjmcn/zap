@@ -24,7 +24,7 @@ test('filter array-of-objects', () => {
 | (# u 5 v 10)
 | (# u 6 v 20)
 | (# u 5 v 30)
-| filter [a :u == 5]
+| filter [a,u == 5]
   `)).toStrictEqual([
     {u: 5, v: 10},
     {u: 5, v: 30}
@@ -36,7 +36,7 @@ test('filterIndex array-of-objects', () => {
 | (# u 5 v 10)
 | (# u 6 v 20)
 | (# u 5 v 30)
-| filterIndex [a :u == 5]
+| filterIndex [a,u == 5]
   `)).toStrictEqual([0, 2]);
 });
 
@@ -125,7 +125,7 @@ test('filter map', () => {
 | u (@ 3 18 6)
 | v (@ 4 8 2 5)
 | w (@ 12)
-| filter [a :1 max > 10]
+| filter [a,1 max > 10]
   `)).toStrictEqual([
     ['u', [3, 18, 6]],
     ['w', [12]]
@@ -137,7 +137,7 @@ test('filterIndex map', () => {
 | u (@ 3 18 6)
 | v (@ 4 8 2 5)
 | w (@ 12)
-| filterIndex [a :1 max > 10]
+| filterIndex [a,1 max > 10]
   `)).toStrictEqual([0, 2]);
 });
 
@@ -151,10 +151,10 @@ test('filterIndex, use index argument', () => {
 });
 
 test('filter, use iterable argument', () => {
-  expect(compute('@ 10 20 30 filter [c , b != 20]'))
+  expect(compute('@ 10 20 30 filter [c;b != 20]'))
     .toStrictEqual([10, 30]);
 });
 test('filterIndex, use iterable argument', () => {
-  expect(compute('@ 10 20 30 filterIndex [c , b != 20]'))
+  expect(compute('@ 10 20 30 filterIndex [c : b != 20]'))
     .toStrictEqual([0, 2]);
 });

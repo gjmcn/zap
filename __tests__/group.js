@@ -33,7 +33,7 @@ test('groupCount empty array', () => {
 const arrayOfObjects = `@ (# u 5 v 10) (# u 6 v 20) (# u 5 v 50) `;
 
 test('group array-of-objects', () => {
-  expect(compute(arrayOfObjects + 'group [a :u]'))
+  expect(compute(arrayOfObjects + 'group [a,u]'))
     .toStrictEqual(new Map([
       [5, [{u: 5, v: 10}, {u: 5, v: 50}]],
       [6, [{u: 6, v: 20}]]
@@ -57,17 +57,17 @@ test('groupCount array-of-objects, property name', () => {
 });
 
 test('group array-of-objects, use second callback', () => {
-  expect(compute(arrayOfObjects + 'group [a :u] [a mean [a :v]]'))
+  expect(compute(arrayOfObjects + 'group [a,u] [a mean [a,v]]'))
     .toStrictEqual(new Map([[5, 30], [6, 20]]));
 });
 
 test('groupCount array-of-objects', () => {
-  expect(compute(arrayOfObjects + 'groupCount [a :u]'))
+  expect(compute(arrayOfObjects + 'groupCount [a,u]'))
     .toStrictEqual(new Map([[5, 2], [6, 1]]))
 });
 
 test('groupCount array-of-objects, use second callback', () => {
-  expect(compute(arrayOfObjects + "groupCount [a :u] [a == 1 ? '1' '>1']"))
+  expect(compute(arrayOfObjects + "groupCount [a,u] [a == 1 ? '1' '>1']"))
     .toStrictEqual(new Map([[5, '>1'], [6, '1']]));
 });
 
@@ -77,7 +77,7 @@ f = fun
     # u 5 v 10 yield
     # u 6 v 20 yield
     # u 5 v 50 yield
-\\f group [a :u]`))
+\\f group [a,u]`))
   .toStrictEqual(new Map([
     [5, [{u: 5, v: 10}, {u: 5, v: 50}]],
     [6, [{u: 6, v: 20}]]
@@ -127,6 +127,6 @@ test('group, use index argument', () => {
 });
 
 test('groupCount, use iterable argument', () => {
-  expect(compute('@ 10 20 30 groupCount [c , b == 20]'))
+  expect(compute('@ 10 20 30 groupCount [c : b == 20]'))
     .toStrictEqual(new Map([[false, 2], [true, 1]]));
 });
