@@ -54,6 +54,13 @@ lexerTestEach('identifier', [
   'X5', 'AB$_x2'
 ]);
 
+// property
+lexerTestEach('property', [
+  'a,1', 'ob,pr', 'this,this', '_2,1e2', '$,5', 'true,false', 'null,break',
+  'a;1', 'ob;pr', 'this;this', '_2;1e2', '$;5', 'true;false', 'null;brk',
+  'x,1,2', 'ab;cd,5;6,qw'
+]);
+
 // openParentheses
 lexerTestEach('openParentheses', [
   '('
@@ -75,7 +82,7 @@ lexerTestEach('operator', [
   '<>', '><', '&&', '||', '??', '?', '!',
   '<', '<=', '>', '>=', '==', '!=',
   '=', '\\=', '<-', '?=', '+=', '-=', '*=', '/=', '%=', '^=', '#=', '@=',
-  ',', ':', '::', '?:',
+  ':', '::', '?:',
   '\\', '<\\', '~', '<~',
   '#', '##', '@', '@@'
 ]);
@@ -122,7 +129,12 @@ each([
     ['operator', 'number', 'number', 'number', 'operator', 'identifier']
   ],
 
-  ["'ab' + (x + 'cde') :length",
+  ['u : v,w : x;y;z : q',
+    ['identifier','operator', 'property', 'operator', 'property', 'operator',
+     'identifier']
+  ],
+
+  ["'ab' + (x + 'cde') : length",
     ['string', 'operator', 'openParentheses', 'identifier', 'operator',
      'string', 'closeBracket', 'operator', 'identifier']
   ],
@@ -178,10 +190,14 @@ add10 = [a \\add 10]`,
 each([
   '&//', '&//g',
   '+-', '-/', '=+', '&&!',
+  ',+', ';+', '+,', '+;',
   '->', '-->', '=>', '==>',
   '..', '...', '....',
   '"ab', "'ab", 'ab"', "ab'",
-  ';'
+  ',', ';', 'x,', 'x;', ',x', ';x',
+  'sum,x', 'x,sum', 'break,x', 
+  'sum;x', 'x;sum', 'break;x', 'x;break',
+  '5,x', '5;x' 
 ]).test('invalid, %s', value => {
   expect(isValidToken(value)).toBe(false);
 });
