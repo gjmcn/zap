@@ -25,7 +25,7 @@
       <a href="playground.html" target="_blank">Playground</a>
       <a href="https://github.com/gjmcn/zap" target="_blank">GitHub</a>
       <hr>
-      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-syntax" class="side-link" href="#syntax">Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-interpolate" class="side-link" href="#interpolate">Interpolate</a><a id="side-link-nested-data" class="side-link" href="#nested-data">Nested Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
+      <a id="side-link-overview" class="side-link" href="#overview">Overview</a><a id="side-link-use" class="side-link" href="#use">Use</a><a id="side-link-basic-syntax" class="side-link" href="#basic-syntax">Basic Syntax</a><a id="side-link-special-syntax" class="side-link" href="#special-syntax">Special Syntax</a><a id="side-link-operators" class="side-link" href="#operators">Operators</a><a id="side-link-literals" class="side-link" href="#literals">Literals</a><a id="side-link-calling-functions" class="side-link" href="#calling-functions">Calling Functions</a><a id="side-link-assignment" class="side-link" href="#assignment">Assignment</a><a id="side-link-get-property" class="side-link" href="#get-property">Get Property</a><a id="side-link-set-property" class="side-link" href="#set-property">Set Property</a><a id="side-link-writing-functions" class="side-link" href="#writing-functions">Writing Functions</a><a id="side-link-classes" class="side-link" href="#classes">Classes</a><a id="side-link-loops" class="side-link" href="#loops">Loops</a><a id="side-link-exceptions" class="side-link" href="#exceptions">Exceptions</a><a id="side-link-elementwise" class="side-link" href="#elementwise">Elementwise</a><a id="side-link-conditional" class="side-link" href="#conditional">Conditional</a><a id="side-link-ranges" class="side-link" href="#ranges">Ranges</a><a id="side-link-backticks" class="side-link" href="#backticks">Backticks</a><a id="side-link-reduce" class="side-link" href="#reduce">Reduce</a><a id="side-link-filter" class="side-link" href="#filter">Filter</a><a id="side-link-group" class="side-link" href="#group">Group</a><a id="side-link-order" class="side-link" href="#order">Order</a><a id="side-link-bin" class="side-link" href="#bin">Bin</a><a id="side-link-random" class="side-link" href="#random">Random</a><a id="side-link-interpolate" class="side-link" href="#interpolate">Interpolate</a><a id="side-link-nested-data" class="side-link" href="#nested-data">Nested Data</a><a id="side-link-set-theory" class="side-link" href="#set-theory">Set Theory</a><a id="side-link-import-and-export" class="side-link" href="#import-and-export">Import and Export</a><a id="side-link-print-and-debug" class="side-link" href="#print-and-debug">Print and Debug</a><a id="side-link-dom" class="side-link" href="#dom">DOM</a>
       <br><br><br>
     </div>
     <div id="panel">
@@ -327,7 +327,7 @@
 <h4>Code Editors</h4>
 <h5><a href="https://code.visualstudio.com/">VS Code</a></h5>
 <p>Use the <a href="https://github.com/gjmcn/zap-highlight-vscode">Zap Highlight</a> extension for syntax highlighting. Given the flexibility of operator positioning in Zap, and that only operators 'do things' (functions are called with operators and there are no keywords), a theme that highlights operators differently to all other language elements can help readability. The included <em>Solarized Dark</em> theme and the <em>One Dark Pro</em> extension theme are good examples of this.</p>
-<h2 id="syntax">Syntax</h2>
+<h2 id="basic-syntax">Basic Syntax</h2>
 <hr>
 <p>Operators are represented by symbols or reserved words. Each line is an expression that returns a value:</p>
 <pre><code><span class="zap-number">2</span> <span class="zap-operator">+</span> <span class="zap-number">3</span>    <span class="zap-comment">// 5</span>
@@ -387,9 +387,10 @@
 <h4 id="identifiers">Identifiers</h4>
 <p>The term <em>identifier</em> is used frequently in these docs. An identifier is any combination of letters (currently only <code>a</code>-<code>z</code>, <code>A</code>-<code>Z</code>), digits (<code>0</code>-<code>9</code>), <code>_</code> and <code>$</code>, but cannot start with a digit.</p>
 <hr>
-<h4>Special Cases</h4>
-<p>Additional rules apply to some operators:</p>
-<h6 id="right-operand-rule">The Right Operand Rule</h6>
+<h2 id="special-syntax">Special Syntax</h2>
+<hr>
+<p>Additional syntax rules apply to some operators:</p>
+<h4 id="right-operand-rule">The Right Operand Rule</h4>
 <p>The <a href="#calling-functions"><code>\</code></a>, <a href="#return-first"><code>&lt;\</code></a> operators (call function), and <a href="#calling-methods"><code>~</code></a>, <a href="#return-first"><code>&lt;~</code></a> operators (call method) use the <em>right operand rule</em>: the first right operand is the function/method. We typically omit space to the right of these operators:</p>
 <pre><code><span class="zap-identifier">f</span> <span class="zap-operator">=</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-operator">+</span> <span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// function (adds its arguments)</span>
 <span class="zap-operator">\</span><span class="zap-identifier">f</span> <span class="zap-number">5</span> <span class="zap-number">10</span>       <span class="zap-comment">// 15</span>
@@ -397,7 +398,7 @@
 <span class="zap-number">5</span> <span class="zap-number">10</span> <span class="zap-operator">\</span><span class="zap-identifier">f</span>       <span class="zap-comment">// 15</span>
 <span class="zap-number">5</span> <span class="zap-number">10</span> <span class="zap-identifier">f</span> <span class="zap-operator">\</span>      <span class="zap-comment">// syntax error</span>
 </code></pre>
-<h5 id="autoquoting">Autoquoting</h5>
+<h4 id="autoquoting">Autoquoting</h4>
 <p>The operators <a href="#calling-methods"><code>~</code></a> and <a href="#return-first"><code>&lt;~</code></a> (call method), <a href="#objects-and-maps"><code>#</code></a> (object literal) and <a href="#objects-and-maps"><code>##</code></a> (map literal) <em>autoquote</em> property names that are <a href="#identifiers">identifiers</a>:</p>
 <pre><code><span class="zap-operator">#</span> <span class="zap-string">'u'</span> <span class="zap-number">5</span> <span class="zap-string">'v'</span> <span class="zap-number">6</span>   <span class="zap-comment">// {u: 5, v: 6}</span>
 <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span>       <span class="zap-comment">// {u: 5, v: 6}</span>
@@ -419,11 +420,11 @@
 <span class="zap-identifier">o</span><span class="zap-operator">,</span><span class="zap-keyword">if</span>           <span class="zap-comment">// syntax error</span>
 <span class="zap-identifier">o</span> <span class="zap-operator">:</span> <span class="zap-string">'if'</span>       <span class="zap-comment">// 5 (the : property getter has no special behavior)</span>
 </code></pre>
-<h5 id="getter-precedence">Property Getters</h5>
+<h4 id="getter-precedence">Property Getters</h4>
 <p>The <code>,</code> and <code>;</code> property getters have high precedence and can only be used in subexpressions of the form:</p>
-<p>  <code><i>variableName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i>[<code>,</code> or <code>;</code>]<i>propertyName</i> ...</code></p>
-<p>where <code><i>variableName</i></code> is an <a href="#identifiers">identifier</a> and each <code><i>propertyName</i></code> is an identifier or an index.</p>
-<p><code>,</code> <a href="#autoquoting">autoquotes</a> the property name whereas <code>;</code> does not:</p>
+<p>  <code><i>variableName</i>[<code>,</code> or <code>;</code>]<i>propertyName1</i>[<code>,</code> or <code>;</code>]<i>propertyName2</i> ...</code></p>
+<p>The variable name must be an <a href="#identifiers">identifier</a>. The property name(s) must also follow the identifier rules except that property names <em>can</em> start with a digit.</p>
+<p><code>,</code> <a href="#autoquoting">autoquotes</a> the property name whereas <code>;</code> does not. Space and line breaks are not permitted on either side of <code>,</code> or <code>;</code>:</p>
 <pre><code><span class="zap-identifier">o</span> <span class="zap-operator">=</span> <span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">6</span> <span class="zap-number">7</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// {u: 5, v: [6, 7, 8]}</span>
 <span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-string">'u'</span>
 
@@ -431,11 +432,16 @@
 <span class="zap-number">10</span> <span class="zap-operator">+</span> <span class="zap-identifier">o</span><span class="zap-operator">;</span><span class="zap-identifier">p</span>     <span class="zap-comment">// 15</span>
 <span class="zap-number">10</span> <span class="zap-operator">+</span> <span class="zap-identifier">o</span><span class="zap-operator">,</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-number">2</span>   <span class="zap-comment">// 18</span>
 </code></pre>
-<p>Spaces and line breaks are not permitted on either side of <code>,</code> or <code>;</code>.</p>
-<blockquote>
-<p>Since <code>,</code> autoquotes the property name, <code>,</code> and <code>;</code> behave differently when the name is a number containing a non-digit. For example, <code>x,1e2</code> will get property <code>'1e2'</code> whereas <code>x;1e2</code> will get property <code>100</code>.</p>
-</blockquote>
-<h5 id="assignment-precedence">Assignment</h5>
+<p><code>,</code> or <code>;</code> can be used when the property name is an index (e.g. <code>x,100</code> or <code>x;100</code>), but be careful with scientific notation:</p>
+<ul>
+<li>
+<p>Since <code>,</code> autoquotes the property name, <code>x,1e2</code> will get property <code>'1e2'</code> whereas <code>x;1e2</code> will get property <code>100</code>.</p>
+</li>
+<li>
+<p>Do not include <code>+</code> or <code>-</code> in the index. These will not be recognized as part of the property name, so <code>x,1e+2</code> is effectively <code>x,1e + 2</code>, and <code>x;1e+2</code> will throw an error since <code>1e</code> is neither a number nor an <a href="#identifier">identifier</a>.</p>
+</li>
+</ul>
+<h4 id="assignment-precedence">Assignment</h4>
 <p><a href="#assignment">Assignment</a> operators have low precedence and must be placed between their two operands:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-number">1</span> <span class="zap-operator">+</span> <span class="zap-number">2</span>     <span class="zap-comment">// 3</span>
 <span class="zap-identifier">x</span> <span class="zap-operator">+=</span> <span class="zap-number">3</span> <span class="zap-operator">+</span> <span class="zap-number">4</span>    <span class="zap-comment">// 10</span>
@@ -446,7 +452,7 @@
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>
 <span class="zap-identifier">u</span> <span class="zap-identifier">v</span> <span class="zap-operator">@=</span> <span class="zap-identifier">x</span>   <span class="zap-comment">// [5, 6] (u is 5, v is 6)</span>
 </code></pre>
-<h5 id="body-operands">Body Operands</h5>
+<h4 id="body-operands">Body Operands</h4>
 <p>The following operators take a <strong>body</strong> operand:</p>
 <p><a href="#fun"><code>fun</code></a> <a href="#proc"><code>proc</code></a> <a href="#scope-op"><code>scope</code></a> <a href="#as"><code>as</code></a> <a href="#class"><code>class</code></a> <a href="#extends"><code>extends</code></a> <a href="#each"><code>each</code></a> <a href="#map"><code>map</code></a> <a href="#do"><code>do</code></a> <a href="#try"><code>try</code></a> <a href="#catch"><code>catch</code></a></p>
 <p><a href="#fun"><code>asyncFun</code></a> <a href="#proc"><code>asyncProc</code></a> <a href="#scope-op"><code>asyncScope</code></a> <a href="#as"><code>asyncAs</code></a> <a href="#async-loops"><code>asyncEach</code></a> <a href="#async-loops"><code>asyncMap</code></a> <a href="#async-loops"><code>asyncDo</code></a> <a href="#try"><code>asyncTry</code></a> <a href="#catch"><code>asyncCatch</code></a></p>

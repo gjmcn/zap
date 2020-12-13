@@ -1,98 +1,10 @@
-## Syntax {#syntax}
+## Special Syntax {#special-syntax}
 
 ---
 
-Operators are represented by symbols or reserved words. Each line is an expression that returns a value:
+Additional syntax rules apply to some operators:
 
-```
-2 + 3    // 5
-9 sqrt   // 3
-```
-
-Use `|` to continue an expression on a new line:
-
-```
-4 + 5
-| sqrt   // 3
-```
-
-In general, Zap does not use operator associativity, position or precedence rules. Code reads left to right and the 'current' operator is applied when the next operator or end of the expression is reached. The result returned by an operator is used as the first operand of the next operator:
-
-```
-+ 2 3   // 5
-2 + 3   // 5
-2 3 +   // 5
-
-+ 2 3 * 4   // 20
-2 + 3 * 4   // 20
-2 3 + * 4   // 20
-```
-
-> If adjacent operators are represented by symbols, they must be separated by whitespace.
-
----
-
-#### Parentheses and Indentation {#parenth-and-indent}
-
-Parentheses can be used for precedence:
-
-```
-2 + 3 * 4     // 20
-2 + (3 * 4)   // 14
-```
-
-Parentheses *cannot* span multiple expressions:
-
-```
-2 + (3 *
-| 4)      // 14 (this is a single expression)
-
-(2 + 3
-9 sqrt)   // syntax error   
-```
-
-Indentation can also be used for precedence. Indented blocks *can* contain multiple expressions:
-
-```
-2 + 
-    3 * 4   // 14
-
-2 + 
-    x = 3
-    x * 4   // 14    
-```
-
-Opening an indented block automatically continues an expression &mdash; do not use a `|`.
-
-We can close an indented block (or more than one) and continue the expression with `|`. The following example uses the [array literal](#arrays) operator `@`and the [object literal](#objects-and-maps) operator `#` to create an array-of-objects:
-
-```
-// an array-of-objects
-@
-    #
-    | name 'Alex'
-    | best (# score 143 level 2)
-| 
-    #
-    | name 'Cody'
-    | best (# score 201 level 3)
-```
-
-Four spaces must be used for indentation. Use 'soft tabs' in code editors so that tabs are converted to spaces.
-
----
-
-#### Identifiers {#identifiers}
-
-The term _identifier_ is used frequently in these docs. An identifier is any combination of letters (currently only `a`-`z`, `A`-`Z`), digits (`0`-`9`), `_` and `$`, but cannot start with a digit. 
-
----
-
-#### Special Cases
-
-Additional rules apply to some operators:
-
-###### The Right Operand Rule {#right-operand-rule}
+#### The Right Operand Rule {#right-operand-rule}
 
 The [`\`](#calling-functions), [`<\`](#return-first) operators (call function), and [`~`](#calling-methods), [`<~`](#return-first) operators (call method) use the _right operand rule_: the first right operand is the function/method. We typically omit space to the right of these operators:
 
@@ -104,7 +16,7 @@ f = [a + b]   // function (adds its arguments)
 5 10 f \      // syntax error
 ```
 
-##### Autoquoting {#autoquoting}
+#### Autoquoting {#autoquoting}
 
 The operators [`~`](#calling-methods) and [`<~`](#return-first) (call method), [`#`](#objects-and-maps) (object literal) and [`##`](#objects-and-maps) (map literal) _autoquote_ property names that are [identifiers](#identifiers):
 
@@ -138,15 +50,16 @@ o,if           // syntax error
 o : 'if'       // 5 (the : property getter has no special behavior)
 ```
 
-##### Property Getters{#getter-precedence}
+#### Property Getters{#getter-precedence}
 
 The `,` and `;` property getters have high precedence and can only be used in subexpressions of the form:
 
-&emsp; <code><i>variableName</i>[`,` or `;`]<i>propertyName</i>[`,` or `;`]<i>propertyName</i> ...</code>
+&emsp; <code><i>variableName</i>[`,` or `;`]<i>propertyName1</i>[`,` or `;`]<i>propertyName2</i> ...</code>
 
-where <code><i>variableName</i></code> is an [identifier](#identifiers) and each <code><i>propertyName</i></code> is an identifier or an index.
+The variable name must be an [identifier](#identifiers). The property name(s) must also follow the identifier rules except that property names _can_ start with a digit.
 
-`,` [autoquotes](#autoquoting) the property name whereas `;` does not:
+
+`,` [autoquotes](#autoquoting) the property name whereas `;` does not. Space and line breaks are not permitted on either side of `,` or `;`:
 
 ```
 o = # u 5 v (@ 6 7 8)   // {u: 5, v: [6, 7, 8]}
@@ -157,11 +70,13 @@ p = 'u'
 10 + o,v;2   // 18
 ```
 
-Spaces and line breaks are not permitted on either side of `,` or `;`.
+`,` or `;` can be used when the property name is an index (e.g. `x,100` or `x;100`), but be careful with scientific notation:
 
-> Since `,` autoquotes the property name, `,` and `;` behave differently when the name is a number containing a non-digit. For example, `x,1e2` will get property `'1e2'` whereas `x;1e2` will get property `100`.
+* Since `,` autoquotes the property name, `x,1e2` will get property `'1e2'` whereas `x;1e2` will get property `100`.
 
-##### Assignment {#assignment-precedence}
+* Do not include `+` or `-` in the index. These will not be recognized as part of the property name, so `x,1e+2` is effectively `x,1e + 2`, and `x;1e+2` will throw an error since `1e` is neither a number nor an [identifier](#identifier).
+
+#### Assignment {#assignment-precedence}
 
 [Assignment](#assignment) operators have low precedence and must be placed between their two operands:
 
@@ -179,7 +94,7 @@ x = @ 5 6
 u v @= x   // [5, 6] (u is 5, v is 6)
 ```
 
-##### Body Operands {#body-operands}
+#### Body Operands {#body-operands}
 
 The following operators take a __body__ operand:
 

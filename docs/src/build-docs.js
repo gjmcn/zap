@@ -8,7 +8,8 @@ const indexHighlight = require('./index-highlight.js');
 const sections = [
   ['overview', 'Overview'], 
   ['use', 'Use'],
-  ['syntax', 'Syntax'],
+  ['basic-syntax', 'Basic Syntax'],
+  ['special-syntax', 'Special Syntax'],
   ['operators', 'Operators'],
   ['literals', 'Literals'],
   ['calling-functions', 'Calling Functions'],
