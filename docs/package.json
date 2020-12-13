@@ -1,6 +1,6 @@
 {
   "name": "zap-docs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Zap Docs",
   "main": "index.js",
   "scripts": {
