@@ -197,7 +197,8 @@ each([
   ',', ';', 'x,', 'x;', ',x', ';x',
   'sum,x', 'x,sum', 'break,x', 
   'sum;x', 'x;sum', 'break;x', 'x;break',
-  '5,x', '5;x' 
+  '5,x', '5;x', 'x,1e+2', 'x;1e+2',
+  'x,,5', 'x;;5'
 ]).test('invalid, %s', value => {
   expect(isValidToken(value)).toBe(false);
 });
