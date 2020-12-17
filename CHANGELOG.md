@@ -1,3 +1,7 @@
+#### 0.3.1 &mdash; Dec 17, 2020
+
+* `at`, `mapAt`: accept third operand, if truthy put selected properties in array.
+
 #### 0.3.0 &mdash; Dec 13, 2020
 
 * Change colon property getters to standard operators &mdash; no special syntax rules.
