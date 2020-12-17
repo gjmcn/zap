@@ -4,15 +4,15 @@ export default {
 
   // ----- helpers -----
 
-  _at(o, p) {
+  _at(o, p, a) {
     let r;
-    if (typeof o === 'string') {
-      r = '';
-      for (let k of p) r += o[k]; 
-    }
-    else if (Array.isArray(o)) {
+    if (a || Array.isArray(o)) {
       r = [];
       for (let k of p) r.push(o[k]); 
+    }
+    else if (typeof o === 'string') {
+      r = '';
+      for (let k of p) r += o[k]; 
     }
     else {
       r = {};
@@ -444,10 +444,10 @@ export default {
     return r;
   },
 
-  mapAt(x, p) {
+  mapAt(x, p, a) {
     let r = [];
     for (let v of x) {
-      r.push(this._at(v, p));
+      r.push(this._at(v, p, a));
     }
     return r;
   },
@@ -714,7 +714,7 @@ export default {
     return new Promise(r => setTimeout(() => r(x), m));
   },
 
-  at(o, p) { return this._at(o, p) },
+  at(...q) { return this._at(...q) },
   atUse: ['_at'],
 
   ones(...d) { return this._mdArray(d, 1) },

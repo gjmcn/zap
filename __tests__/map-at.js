@@ -1,3 +1,4 @@
+const { check } = require('yargs');
 const {compute} = require('./test-helpers.js');
 
 test('array-of-arrays', () => {
@@ -51,4 +52,23 @@ test('throw: outer not iterable', () => {
 
 test('throw: cannot get property of inner', () => {
   expect(() => compute("@ (@ 5 6 7) null mapAt (@ 0 2)")).toThrow();
+});
+
+test('set-of-objects, to arrays', () => {
+  expect(compute(`
+@@
+| (# u 4 v 5)
+| (# u 6 v 7 w 8)
+| (# u 9 w 10)
+| mapAt (@ 'u' 'w') 'array'
+  `)).toStrictEqual([
+    [4, undefined],
+    [6, 8],
+    [9, 10]
+  ]);
+});
+
+test('array-of-strings, to arrays', () => {
+  expect(compute("@ 'abc' 'def' mapAt (@ 0 2) true"))
+    .toStrictEqual([['a', 'c'], ['d', 'f']]);
 });

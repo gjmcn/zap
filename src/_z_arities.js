@@ -2,7 +2,7 @@
 
 const m = new Map();
 
-m.set('at',         [2, 2]);
+m.set('at',         [2, 3]);
 m.set('chg',        [3, 3]);
 m.set('getter',     [3, 3]);
 m.set('setter',     [3, 3]);
@@ -10,7 +10,7 @@ m.set('to',         [2, 3]);
 m.set('linSpace',   [3, 3]);
 m.set('reduce',     [3, 3]);
 m.set('pick',       [2, 2]);
-m.set('mapAt',      [2, 2]);
+m.set('mapAt',      [2, 3]);
 m.set('group',      [1, 3]);
 m.set('groupCount', [1, 3]);
 m.set('bin',        [2, 4]);

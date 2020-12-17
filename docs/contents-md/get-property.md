@@ -72,7 +72,7 @@ o : 'q' ?: 'y'   // undefined
 
 `at` can get multiple properties or characters &mdash; the second operand of `at` must be an iterable.
 
-`at` returns the same kind of object that it gets properties from. For example, when getting elements from an array, `at` returns an array.
+`at` returns the same kind of object that it gets properties or characters from (string → string, array → array, object → object). Use a truthy third operand to force `at` to return an array:
 
 ```
 // array-of-objects
@@ -89,6 +89,9 @@ data at (@ 2 0)
 
 data,2 at (@ 'Name' 'Origin')
     // {Name: 'ford ranger', Origin: 'USA'}
+
+data,2 at (@ 'Name' 'Origin') 'array'
+    // ['ford ranger', 'USA']
 
 data,0,Origin at (@ 1 3)   // 'uo'
 ```

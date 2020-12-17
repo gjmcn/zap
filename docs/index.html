@@ -927,7 +927,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <hr>
 <h4 id="at"><code>at</code></h4>
 <p><code>at</code> can get multiple properties or characters — the second operand of <code>at</code> must be an iterable.</p>
-<p><code>at</code> returns the same kind of object that it gets properties from. For example, when getting elements from an array, <code>at</code> returns an array.</p>
+<p><code>at</code> returns the same kind of object that it gets properties or characters from (string → string, array → array, object → object). Use a truthy third operand to force <code>at</code> to return an array:</p>
 <pre><code><span class="zap-comment">// array-of-objects</span>
 <span class="zap-identifier">data</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">Name</span> <span class="zap-string">'vw pickup'</span>     <span class="zap-identifier">Horsepower</span> <span class="zap-number">52</span> <span class="zap-identifier">Origin</span> <span class="zap-string">'Europe'</span><span class="zap-punctuation">)</span>
@@ -942,6 +942,9 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">data</span><span class="zap-operator">,</span><span class="zap-number">2</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'Name'</span> <span class="zap-string">'Origin'</span><span class="zap-punctuation">)</span>
     <span class="zap-comment">// {Name: 'ford ranger', Origin: 'USA'}</span>
+
+<span class="zap-identifier">data</span><span class="zap-operator">,</span><span class="zap-number">2</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'Name'</span> <span class="zap-string">'Origin'</span><span class="zap-punctuation">)</span> <span class="zap-string">'array'</span>
+    <span class="zap-comment">// ['ford ranger', 'USA']</span>
 
 <span class="zap-identifier">data</span><span class="zap-operator">,</span><span class="zap-number">0</span><span class="zap-operator">,</span><span class="zap-identifier">Origin</span> <span class="zap-keyword">at</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// 'uo'</span>
 </code></pre>
@@ -2112,7 +2115,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <hr>
 <h4 id="map-at"><code>mapAt</code></h4>
-<p><code>mapAt</code> applies <a href="#at"><code>at</code></a> to each element of an iterable. The first operand of <code>mapAt</code> is the iterable to extract values from; the second operand is an iterable of names/indices. <code>mapAt</code> returns an array:</p>
+<p><code>mapAt</code> applies <a href="#at"><code>at</code></a> to each element of an iterable. The first operand is the iterable; the second and third operands are used as the second and third operands of <code>at</code>:</p>
 <pre><code><span class="zap-comment">// apply mapAt to an array-of-arrays</span>
 <span class="zap-operator">@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>
@@ -2123,20 +2126,28 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   [9, 7]</span>
   <span class="zap-comment">// ]</span>
 
-<span class="zap-comment">// apply mapAt to a set-of-objects</span>
-<span class="zap-operator">@@</span>
+<span class="zap-comment">// apply mapAt to an array-of-strings</span>
+<span class="zap-operator">@</span> <span class="zap-string">'abc'</span> <span class="zap-string">'def'</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">0</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// ['ac', 'df']</span>
+
+<span class="zap-comment">// set-of-objects</span>
+<span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">4</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">7</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">9</span> <span class="zap-identifier">w</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span>
+
+<span class="zap-identifier">s</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   {u: 4, w: undefined},</span>
   <span class="zap-comment">//   {u: 6, w: 8},</span>
   <span class="zap-comment">//   {u: 9, w: 10}</span>
   <span class="zap-comment">// ]</span>
 
-<span class="zap-comment">// apply mapAt to an array-of-strings</span>
-<span class="zap-operator">@</span> <span class="zap-string">'abc'</span> <span class="zap-string">'def'</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">0</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// ['ac', 'df']</span>
+<span class="zap-identifier">s</span> <span class="zap-keyword">mapAt</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'w'</span><span class="zap-punctuation">)</span> <span class="zap-string">'array'</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   [4, undefined],</span>
+  <span class="zap-comment">//   [6, 8],</span>
+  <span class="zap-comment">//   [9, 10]</span>
+  <span class="zap-comment">// ]</span>
 </code></pre>
 <hr>
 <h4 id="transpose"><code>transpose</code></h4>

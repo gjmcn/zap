@@ -30,7 +30,7 @@
 
 #### `mapAt` {#map-at}
 
-`mapAt` applies [`at`](#at) to each element of an iterable. The first operand of `mapAt` is the iterable to extract values from; the second operand is an iterable of names/indices. `mapAt` returns an array:
+`mapAt` applies [`at`](#at) to each element of an iterable. The first operand is the iterable; the second and third operands are used as the second and third operands of `at`:
 
 ```
 // apply mapAt to an array-of-arrays
@@ -43,20 +43,28 @@
   //   [9, 7]
   // ]
 
-// apply mapAt to a set-of-objects
-@@
+// apply mapAt to an array-of-strings
+@ 'abc' 'def' mapAt (@ 0 2)   // ['ac', 'df']
+
+// set-of-objects
+s = @@
 | (# u 4 v 5)
 | (# u 6 v 7 w 8)
 | (# u 9 w 10)
-| mapAt (@ 'u' 'w')
+
+s mapAt (@ 'u' 'w')
   // [
   //   {u: 4, w: undefined},
   //   {u: 6, w: 8},
   //   {u: 9, w: 10}
   // ]
 
-// apply mapAt to an array-of-strings
-@ 'abc' 'def' mapAt (@ 0 2)   // ['ac', 'df']
+s mapAt (@ 'u' 'w') 'array'
+  // [
+  //   [4, undefined],
+  //   [6, 8],
+  //   [9, 10]
+  // ]
 ```
 
 ---
