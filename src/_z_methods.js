@@ -189,6 +189,84 @@ export default {
     return q ? Math.sqrt(s) : s;
   },
 
+  _join(t, q) {
+    const f = this[`_${t}Join`](...q);
+    f._cake = {join: true};
+    return f;
+  },
+
+  *_innerJoin(x, y, f) {
+    for (let u of x) {
+      for (let v of y) {
+        if (f(u, v)) {
+          yield [u, v];
+        }
+      }
+    }
+  },
+
+  *_leftJoin(x, y, f) {
+    for (let u of x) {
+      let q;
+      for (let v of y) {
+        if (f(u, v)) {
+          q = true;
+          yield [u, v];
+        }
+      }
+      if (!q) {
+        yield [u, null];
+      }
+    }
+  },
+
+  *_rightJoin(x, y, f) {
+    let i = new Set();
+    let o = new Set();
+    for (let u of x) {
+      for (let v of y) {
+        if (f(u, v)) {
+          i.add(v);
+          yield [u, v];
+        }
+        else {
+          o.add(v);
+        }
+      }
+    }
+    for (let v of o) {
+      if (!i.has(v)) {
+        yield [null, v];
+      }
+    }
+  },
+
+  *_outerJoin(x, y, f) {
+    let i = new Set();
+    let o = new Set();
+    for (let u of x) {
+      let q;
+      for (let v of y) {
+        if (f(u, v)) {
+          q = true;
+          i.add(v);
+          yield [u, v];
+        }
+        else {
+          o.add(v);
+        }
+      }
+      if (!q) {
+        yield [u, null];
+      }
+    }
+    for (let v of o) {
+      if (!i.has(v)) {
+        yield [null, v];
+      }
+    }
+  },
+
   _random(j, k) {
     return Math.random() * (k - j) + j;
   },
@@ -613,6 +691,15 @@ export default {
     }
   },
   findUse: ['_callback'],
+
+  innerJoin(...q) { return  this._join('inner', q) },
+  innerJoinUse: ['_join', '_innerJoin'],
+  outerJoin(...q) { return  this._join('outer', q) },
+  outerJoinUse: ['_join', '_outerJoin'],
+  leftJoin(...q)  { return  this._join('left',  q) },
+  leftJoinUse:  ['_join', '_leftJoin'],
+  rightJoin(...q) { return  this._join('right', q) },
+  rightJoinUse: ['_join', '_rightJoin'],
 
   arrObj(o, c) {
     let r = [];
