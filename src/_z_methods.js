@@ -189,82 +189,74 @@ export default {
     return q ? Math.sqrt(s) : s;
   },
 
-  _join(t, q) {
-    const f = this[`_${t}Join`](...q);
-    f._cake = {join: true};
-    return f;
-  },
-
-  *_innerJoin(x, y, f) {
-    for (let u of x) {
-      for (let v of y) {
-        if (f(u, v)) {
-          yield [u, v];
+  _join(t, x, y, f) {
+    function* m() {
+      const L = (t === 'l' || t === 'o');
+      const R = (t === 'r' || t === 'o');
+      const us = x._cake.joinGen;
+      const vs = y._cake.joinGen;
+      const w = new Set();
+      y = Array.isArray(y) ? y : [...y];
+      for (let u of x) {
+        let q;
+        for (let v of y) {
+          if (f(u, v)) {
+            q = true;
+            if (R) {
+              w.add(v);
+            }
+            yield (us
+              ? (vs ? [...u, ...v] : [...u, v])
+              : (vs ? [u, ...v]    : [u, v])
+            );
+          }
+        }
+        if (L && !q) {
+          yield (us ? [...u, null] : [u, null]);
+        }
+      }
+      if (R) {
+        for (let v of y) {
+          if (!w.has(v)) {
+            yield (vs ? [null, ...v] : [null, v]);
+          }
         }
       }
     }
+    const g = m();
+    g._cake = {joinGen: true};
+    return g;
   },
 
-  *_leftJoin(x, y, f) {
-    for (let u of x) {
-      let q;
-      for (let v of y) {
-        if (f(u, v)) {
-          q = true;
-          yield [u, v];
-        }
-      }
-      if (!q) {
-        yield [u, null];
-      }
-    }
-  },
-
-  *_rightJoin(x, y, f) {
-    let i = new Set();
-    let o = new Set();
-    for (let u of x) {
-      for (let v of y) {
-        if (f(u, v)) {
-          i.add(v);
-          yield [u, v];
-        }
-        else {
-          o.add(v);
-        }
-      }
-    }
-    for (let v of o) {
-      if (!i.has(v)) {
-        yield [null, v];
-      }
-    }
-  },
-
-  *_outerJoin(x, y, f) {
-    let i = new Set();
-    let o = new Set();
+  _joinCount(t, x, y, f) {
+    const L = (t === 'l' || t === 'o');
+    const R = (t === 'r' || t === 'o');
+    const w = new Set();
+    let c = 0;
+    y = Array.isArray(y) ? y : [...y];
     for (let u of x) {
       let q;
       for (let v of y) {
         if (f(u, v)) {
           q = true;
-          i.add(v);
-          yield [u, v];
-        }
-        else {
-          o.add(v);
+          if (R) {
+            w.add(v);
+          }
+          c++;
         }
       }
-      if (!q) {
-        yield [u, null];
+      if (L && !q) {
+        c++;
       }
     }
-    for (let v of o) {
-      if (!i.has(v)) {
-        yield [null, v];
+    if (R) {
+      for (let v of y) {
+        if (!w.has(v)) {
+          c++;
+        }
       }
     }
+    return c;
   },
 
   _random(j, k) {
@@ -692,14 +684,23 @@ export default {
   },
   findUse: ['_callback'],
 
-  innerJoin(...q) { return  this._join('inner', q) },
-  innerJoinUse: ['_join', '_innerJoin'],
-  outerJoin(...q) { return  this._join('outer', q) },
-  outerJoinUse: ['_join', '_outerJoin'],
-  leftJoin(...q)  { return  this._join('left',  q) },
-  leftJoinUse:  ['_join', '_leftJoin'],
-  rightJoin(...q) { return  this._join('right', q) },
-  rightJoinUse: ['_join', '_rightJoin'],
+  innerJoin(...q) { return this._join('i', ...q) },
+  innerJoinUse: ['_join'],
+  outerJoin(...q) { return this._join('o', ...q) },
+  outerJoinUse: ['_join'],
+  leftJoin(...q)  { return this._join('l', ...q) },
+  leftJoinUse:  ['_join'],
+  rightJoin(...q) { return this._join('r', ...q) },
+  rightJoinUse: ['_join'],
+
+  innerJoinCount(...q) { return this._joinCount('i', ...q) },
+  innerJoinCountUse: ['_joinCount'],
+  outerJoinCount(...q) { return this._joinCount('o', ...q) },
+  outerJoinCountUse: ['_joinCount'],
+  leftJoinCount(...q)  { return this._joinCount('l', ...q) },
+  leftJoinCountUse:  ['_joinCount'],
+  rightJoinCount(...q) { return this._joinCount('r', ...q) },
+  rightJoinCountUse: ['_joinCount'],
 
   arrObj(o, c) {
     let r = [];
