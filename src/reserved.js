@@ -85,7 +85,7 @@ const reserved = {
     'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
     'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
     'innerJoinCount', 'outerJoinCount', 'leftJoinCount', 'rightJoinCount',
-    'cov', 'corr', 'autoType'
+    'flatten', 'cov', 'corr', 'autoType'
   ]),
 
   invalid: new Set([

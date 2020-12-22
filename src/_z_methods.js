@@ -189,13 +189,16 @@ export default {
     return q ? Math.sqrt(s) : s;
   },
 
-  _join(t, x, y, f) {
+  _join(t, x, y, f, z = Infinity) {
     function* m() {
+      z = Math.floor(z);
+      if (z < 1) return;
       const L = (t === 'l' || t === 'o');
       const R = (t === 'r' || t === 'o');
       const us = x._cake.joinGen;
       const vs = y._cake.joinGen;
       const w = new Set();
+      let c = 0;
       y = Array.isArray(y) ? y : [...y];
       for (let u of x) {
         let q;
@@ -209,16 +212,19 @@ export default {
               ? (vs ? [...u, ...v] : [...u, v])
               : (vs ? [u, ...v]    : [u, v])
             );
+            if (++c === z) return;
           }
         }
         if (L && !q) {
           yield (us ? [...u, null] : [u, null]);
+          if (++c === z) return;
         }
       }
       if (R) {
         for (let v of y) {
           if (!w.has(v)) {
             yield (vs ? [null, ...v] : [null, v]);
+            if (++c === z) return;
           }
         }
       }
@@ -702,6 +708,25 @@ export default {
   rightJoinCount(...q) { return this._joinCount('r', ...q) },
   rightJoinCountUse: ['_joinCount'],
 
+  flatten(j, ...p) {
+    let r = [];
+    p.map(q => q ?? '');
+    for (let u of j) {
+      let o = {};
+      let i = 0;
+      for (let v of u) {
+        if (v !== null && typeof v === 'object') {
+          for  (let k in v) {
+            if (v.hasOwnProperty(k)) {
+              o[p[i++]] = v[k];
+            }
+          }
+        }
+      }
+    }
+    return r;
+  },
+ 
   arrObj(o, c) {
     let r = [];
     for (let k of c || Object.keys(o)) {
