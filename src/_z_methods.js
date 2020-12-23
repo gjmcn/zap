@@ -195,8 +195,8 @@ export default {
       if (z < 1) return;
       const L = (t === 'l' || t === 'o');
       const R = (t === 'r' || t === 'o');
-      const us = x._cake.joinGen;
-      const vs = y._cake.joinGen;
+      const us = x._cakeJoinGen;
+      const vs = y._cakeJoinGen;
       const w = new Set();
       let c = 0;
       y = Array.isArray(y) ? y : [...y];
@@ -230,7 +230,7 @@ export default {
       }
     }
     const g = m();
-    g._cake = {joinGen: true};
+    g._cakeJoinGen = true;
     return g;
   },
 
@@ -708,21 +708,24 @@ export default {
   rightJoinCount(...q) { return this._joinCount('r', ...q) },
   rightJoinCountUse: ['_joinCount'],
 
-  flatten(j, ...p) {
+  flatten(j, p = []) {
     let r = [];
-    p.map(q => q ?? '');
+    p = Array.isArray(p) ? p : [...p];
     for (let u of j) {
       let o = {};
       let i = 0;
       for (let v of u) {
-        if (v !== null && typeof v === 'object') {
-          for  (let k in v) {
+        if (typeof v === 'object' && v !== null) {
+          const q = (p[i] === undefined ? '' : String(p[i]));
+          for (let k in v) {
             if (v.hasOwnProperty(k)) {
-              o[p[i++]] = v[k];
+              o[q + k] = v[k];
             }
           }
         }
+        i++;
       }
+      r.push(o);
     }
     return r;
   },

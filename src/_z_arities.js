@@ -42,7 +42,7 @@ m.set('innerJoinCount', [3, 3]);
 m.set('outerJoinCount', [3, 3]);
 m.set('leftJoinCount',  [3, 3]);
 m.set('rightJoinCount', [3, 3]);
-m.set('flatten',        [1, Infinity]);
+m.set('flatten',        [1, 2]);
 m.set('cov',            [2, 2]);
 m.set('corr',           [2, 2]);
 m.set('autoType',       [1, 1]);
