@@ -45,7 +45,6 @@ m.set('rightJoinCount', [3, 3]);
 m.set('flatten',        [1, Infinity]);
 m.set('cov',            [2, 2]);
 m.set('corr',           [2, 2]);
-m.set('autoType',       [1, 1]);
 m.set('count',      [1, 2]);
 m.set('findIndex',  [1, 2]);
 m.set('find',       [1, 2]);
