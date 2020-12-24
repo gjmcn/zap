@@ -708,18 +708,40 @@ export default {
   rightJoinCount(...q) { return this._joinCount('r', ...q) },
   rightJoinCountUse: ['_joinCount'],
 
-  flatten(j, p = []) {
+  flatten(j, ...o) {
     let r = [];
-    p = Array.isArray(p) ? p : [...p];
+    const p = [];
+    const c = [];
+    for (let q of o) {
+      if (q) {
+        let w = q.prefix;
+        p.push(w === undefined || w === null ? '' : String(w));
+        w = q.columns;
+        c.push(w ? (Array.isArray(w) ? w : [...w]) : null)
+      }
+      else {
+        p.push('');
+        c.push(null);
+      }
+    }
     for (let u of j) {
       let o = {};
       let i = 0;
       for (let v of u) {
         if (typeof v === 'object' && v !== null) {
-          const q = (p[i] === undefined ? '' : String(p[i]));
-          for (let k in v) {
-            if (v.hasOwnProperty(k)) {
-              o[q + k] = v[k];
+          let s = p[i] || '';
+          if (c[i]) {
+            for (let k of c[i]) {
+              if (v.hasOwnProperty(k)) {
+                o[s + k] = v[k];
+              }
+            }
+          }
+          else {
+            for (let k in v) {
+              if (v.hasOwnProperty(k)) {
+                o[s + k] = v[k];
+              }
             }
           }
         }
