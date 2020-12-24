@@ -84,8 +84,8 @@ const reserved = {
     'at', 'to', 'linSpace', 'apply', 'call', 'print', 'load', 'stop', 'ones',
     'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
     'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
-    'innerJoinCount', 'outerJoinCount', 'leftJoinCount', 'rightJoinCount',
-    'flatten', 'cov', 'corr'
+    'crossJoin', 'innerJoinCount', 'outerJoinCount', 'leftJoinCount',
+    'rightJoinCount', 'crossJoinCount', 'flatten', 'covariance', 'correlation'
   ]),
 
   invalid: new Set([

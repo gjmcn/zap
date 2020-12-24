@@ -698,6 +698,8 @@ export default {
   leftJoinUse:  ['_join'],
   rightJoin(...q) { return this._join('r', ...q) },
   rightJoinUse: ['_join'],
+  crossJoin(x, y, z) { return this._join('i', x, y, () => 1, z) },
+  crossJoinUse: ['_join'],
 
   innerJoinCount(...q) { return this._joinCount('i', ...q) },
   innerJoinCountUse: ['_joinCount'],
@@ -707,6 +709,8 @@ export default {
   leftJoinCountUse:  ['_joinCount'],
   rightJoinCount(...q) { return this._joinCount('r', ...q) },
   rightJoinCountUse: ['_joinCount'],
+  crossJoinCount(x, y) { return this._joinCount('i', x, y, () => 1) },
+  crossJoinCountUse: ['_joinCount'],
 
   flatten(j, ...o) {
     let r = [];
