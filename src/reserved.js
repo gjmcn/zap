@@ -79,13 +79,14 @@ const reserved = {
     'some', 'every', 'filter', 'filterIndex', 'min', 'minIndex', 'max',
     'maxIndex', 'sum', 'sumCumu', 'count', 'find', 'findIndex', 'order',
     'orderIndex', 'mean', 'group', 'groupCount', 'bin', 'binCount', 'variance',
-    'deviation', 'arrObj', 'objArr', 'transpose', 'assign', 'attach', 'shuffle',
-    'export', 'import', 'importAs', 'importDefault', 'importAll', 'period',
-    'at', 'to', 'linSpace', 'apply', 'call', 'print', 'load', 'stop', 'ones',
-    'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
-    'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
-    'crossJoin', 'innerJoinCount', 'outerJoinCount', 'leftJoinCount',
-    'rightJoinCount', 'crossJoinCount', 'flatten', 'covariance', 'correlation'
+    'variancePop', 'deviation', 'deviationPop', 'arrObj', 'objArr', 'transpose',
+    'assign', 'attach', 'shuffle', 'export', 'import', 'importAs',
+    'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace', 'apply',
+    'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties', 'pick',
+    'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
+    'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'innerJoinCount',
+    'outerJoinCount', 'leftJoinCount', 'rightJoinCount', 'crossJoinCount',
+    'flatten', 'covariance', 'covariancePop', 'correlation'
   ]),
 
   invalid: new Set([

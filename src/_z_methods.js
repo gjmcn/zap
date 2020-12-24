@@ -173,7 +173,7 @@ export default {
     }
   },
 
-  _varDev(q, i, f) {
+  _varDev(q, p, i, f) {
     let c = 0,
         m = 0,
         s = 0,
@@ -185,8 +185,30 @@ export default {
       s += d * (v - m);
     }
     if (c < 2) return NaN;
-    s = s / (c - 1);
+    s = s / (p ? c : c - 1);
     return q ? Math.sqrt(s) : s;
+  },
+
+  _covCorr(q, p, i, f, g) {
+    let mx = 0,
+        my = 0,
+        vx = 0,
+        vy = 0,
+        C  = 0;
+        n  = 0;
+    for (let u of i) {
+      xj = +f(u, n, i);
+      yj = +g(y, n, i);
+      const dx = xj - mx;
+      const dy = yj - my;
+      mx += dx / ++n;
+      my += dy / n;
+      C  += dx * (yj - my);
+      vx += dx * (xj - my);
+      vy += dy * (yj - my);
+    }
+    if (n < 2) return NaN;
+    !! RETURN !!
   },
 
   _join(t, x, y, f, z = Infinity) {
@@ -575,11 +597,32 @@ export default {
   max(i, f) { return this._minMax(true, i, this._callback(f)) },
   maxUse: ['_callback', '_minMax'],
 
-  variance(i, f) { return this._varDev(false, i, this._callback(f)) },
+  variance(i, f) { return this._varDev(false, false, i, this._callback(f)) },
   varianceUse: ['_callback', '_varDev'],
 
-  deviation(i, f) { return this._varDev(true, i, this._callback(f)) },
+  variancePop(i, f) { return this._varDev(false, true, i, this._callback(f)) },
+  variancePopUse: ['_callback', '_varDev'],
+
+  deviation(i, f) { return this._varDev(true, false, i, this._callback(f)) },
   deviationUse: ['_callback', '_varDev'],
+
+  deviationPop(i, f) { return this._varDev(true, true, i, this._callback(f)) },
+  deviationPopUse: ['_callback', '_varDev'],
+  
+  covariance(i, f, g) {
+    return this._covCorr(false, false, i, this._callback(f), this._callback(g));
+  },
+  covarianceUse: ['_callback', '_covCorr'],
+
+  covariancePop(i, f, g) {
+    return this._covCorr(false, true, i, this._callback(f), this._callback(g));
+  },
+  covariancePopUse: ['_callback', '_covCorr'],
+  
+  correlation(i, f, g) {
+    return this._covCorr(true, false, i, this._callback(f), this._callback(g));
+  },
+  correlationUse: ['_callback', '_covCorr'],
 
   median(i, f, o) { return this._quantile(i, 0.5, this._callback(f), o) },
   medianUse: ['_callback', '_quantile'],
