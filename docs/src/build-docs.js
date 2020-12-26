@@ -29,6 +29,7 @@ const sections = [
   ['group', 'Group'],
   ['order', 'Order'],
   ['bin', 'Bin'],
+  ['joins', 'Joins'],
   ['random', 'Random'],
   ['interpolate', 'Interpolate'],
   ['nested-data', 'Nested Data'],

@@ -108,6 +108,12 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 ---
 
+#### Joins
+
+[`crossJoin`](#joins) [`crossJoinCount`](#joins) [`flatten`](#joins) [`innerJoin`](#joins) [`innerJoinCount`](#joins) [`leftJoin`](#joins) [`leftJoinCount`](#joins)[`outerJoin`](#joins) [`outerJoinCount`](#joins) [`rightJoin`](#joins) [`rightJoinCount`](#joins)
+
+---
+
 #### Nested Data
 
 [`arrObj`](#array-of-objects) [`mapAt`](#map-at) [`objArr`](#object-of-arrays) [`pick`](#pick) [`transpose`](#transpose)
