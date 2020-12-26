@@ -132,6 +132,26 @@ Values are treated as numbers. If any value converts to `NaN`, these operators r
 
 ---
 
+#### `sumCumu`{#sum-cumu} 
+
+`sumCumu` is like [`sum`](#sum), but returns an array of cumulative sums rather than just the result:
+
+```
+x = @ 3 8 2 10
+x sum       // 23
+x sumCumu   // [3, 11, 13, 23]
+
+x = @
+| (# u 5 v 10)
+| (# u 6 v 20)
+| (# u 7 v 30)     // array-of-objects
+x sumCumu 'v'      // [10, 30, 60]
+```
+
+> `sumCumu` is _not_ a reduction operator, but is listed here due to its similarity to `sum`.
+
+---
+
 #### `correlation`, `covariance`, `covariancePop`{#correlation}
 
 Correlation and covariance. These operators take two callbacks (both are passed the element, index and iterable). As with other reduction operators, an inner property/index can be used instead of a callback:
@@ -158,26 +178,6 @@ u correlation [a] [v;b]   // 0.96
 `covariance` computes the sample covariance. Use `covariancePop` for the population covariance.
 
 Values are treated as numbers. If any value converts to `NaN` or if the iterable has less than 2 elements, these operators return `NaN`.
-
----
-
-#### `sumCumu`{#sum-cumu} 
-
-`sumCumu` is like [`sum`](#sum), but returns an array of cumulative sums rather than just the result:
-
-```
-x = @ 3 8 2 10
-x sum       // 23
-x sumCumu   // [3, 11, 13, 23]
-
-x = @
-| (# u 5 v 10)
-| (# u 6 v 20)
-| (# u 7 v 30)     // array-of-objects
-x sumCumu 'v'      // [10, 30, 60]
-```
-
-> `sumCumu` is _not_ a reduction operator, but is listed here due to its similarity to `sum`.
 
 ---
 
