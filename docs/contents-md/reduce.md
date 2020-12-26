@@ -106,7 +106,7 @@ Values are treated as numbers. If any value converts to `NaN` or if the iterable
 
 ---
 
-#### `sum`, `mean`, `variance`, `deviation`{#sum}
+#### `sum`, `mean`, `variance`, `variancePop`, `deviation`, `deviationPop`{#sum}
 
 Sum, mean, variance and standard deviation:
 
@@ -124,11 +124,40 @@ x = @
 x sum 'v'        // 60
 ```
 
-Values are treated as numbers. If any value converts to `NaN`, the reduction operator will return `NaN`.
+`variance` and `deviation` compute the sample variance and sample standard deviation. Use `variancePop` and `deviationPop` for the population variance and population standard deviation.
 
-`sum` returns `0` if the iterable is empty, `mean` returns `NaN`. `variance` and `deviation` return `NaN` if the iterable has less than 2 elements.
+Values are treated as numbers. If any value converts to `NaN`, these operators return `NaN`.
 
-`variance` calculates the unbiased sample variance: the sum of squared differences from the mean divided by _n_ - 1, where _n_ is the number of elements in the iterable. `deviation` is the square root of `variance`.
+`sum` returns `0` if the iterable is empty, `mean` returns `NaN`. The variance and standard deviation operators return `NaN` if the iterable has less than 2 elements.
+
+---
+
+#### `correlation`, `covariance`, `covariancePop`{#correlation}
+
+Correlation and covariance. These operators take two callbacks (both are passed the element, index and iterable). As with other reduction operators, an inner property/index can be used instead of a callback:
+
+```
+x = @
+| (# u 5 v 8)
+| (# u 6 v 9)
+| (# u 7 v 12)   // array-of-objects
+
+x correlation [a,u] [a,v]   // 0.96
+x correlation 'u' 'v'       // 0.96
+```
+
+If the data is in two separate iterables, refer to the second iterable explicitly in the second callback and use the index to get the element:
+
+```
+u = @ 5 6 7
+v = @ 8 9 12
+
+u correlation [a] [v;b]   // 0.96
+```
+
+`covariance` computes the sample covariance. Use `covariancePop` for the population covariance.
+
+Values are treated as numbers. If any value converts to `NaN` or if the iterable has less than 2 elements, these operators return `NaN`.
 
 ---
 

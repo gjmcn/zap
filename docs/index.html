@@ -672,7 +672,7 @@
 <p><a href="#elementwise"><code>boolean</code></a> <a href="#elementwise"><code>date</code></a> <a href="#elementwise"><code>neg</code></a> <a href="#elementwise"><code>not</code></a> <a href="#elementwise"><code>number</code></a> <a href="#elementwise"><code>string</code></a> <a href="#elementwise"><code>toLowerCase</code></a> <a href="#elementwise"><code>toUpperCase</code></a> <a href="#elementwise"><code>trim</code></a> <a href="#elementwise"><code>trimEnd</code></a> <a href="#elementwise"><code>trimStart</code></a></p>
 <hr>
 <h4>Filter, Group, Reduce, Sort</h4>
-<p><a href="#bin"><code>bin</code></a>  <a href="#bin"><code>binCount</code></a> <a href="#count"><code>count</code></a> <a href="#sum"><code>deviation</code></a> <a href="#every"><code>every</code></a> <a href="#filter"><code>filter</code></a> <a href="#filter"><code>filterIndex</code></a> <a href="#find"><code>find</code></a> <a href="#find"><code>findIndex</code></a> <a href="#group"><code>group</code></a> <a href="#group"><code>groupCount</code></a> <a href="#min"><code>max</code></a> <a href="#min"><code>maxIndex</code></a> <a href="#sum"><code>mean</code></a> <a href="#median"><code>median</code></a> <a href="#min"><code>min</code></a> <a href="#min"><code>minIndex</code></a> <a href="#order"><code>order</code></a> <a href="#order"><code>orderIndex</code></a> <a href="#median"><code>quantile</code></a> <a href="#reduce-op"><code>reduce</code></a> <a href="#every"><code>some</code></a> <a href="#sum"><code>sum</code></a> <a href="#sum-cumu"><code>sumCumu</code></a> <a href="#order"><code>rank</code></a> <a href="#sum"><code>variance</code></a></p>
+<p><a href="#bin"><code>bin</code></a>  <a href="#bin"><code>binCount</code></a> <a href="#count"><code>count</code></a> <a href="#correlation"><code>correlation</code></a> <a href="#correlation"><code>covariance</code></a> <a href="#correlation"><code>covariancePop</code></a> <a href="#sum"><code>deviation</code></a> <a href="#sum"><code>deviationPop</code></a> <a href="#every"><code>every</code></a> <a href="#filter"><code>filter</code></a> <a href="#filter"><code>filterIndex</code></a> <a href="#find"><code>find</code></a> <a href="#find"><code>findIndex</code></a> <a href="#group"><code>group</code></a> <a href="#group"><code>groupCount</code></a> <a href="#min"><code>max</code></a> <a href="#min"><code>maxIndex</code></a> <a href="#sum"><code>mean</code></a> <a href="#median"><code>median</code></a> <a href="#min"><code>min</code></a> <a href="#min"><code>minIndex</code></a> <a href="#order"><code>order</code></a> <a href="#order"><code>orderIndex</code></a> <a href="#median"><code>quantile</code></a> <a href="#reduce-op"><code>reduce</code></a> <a href="#every"><code>some</code></a> <a href="#sum"><code>sum</code></a> <a href="#sum-cumu"><code>sumCumu</code></a> <a href="#order"><code>rank</code></a> <a href="#sum"><code>variance</code></a> <a href="#sum"><code>variancePop</code></a></p>
 <hr>
 <h4>Get/Set Property</h4>
 <p><a href="#copy-properties"><code>assign</code></a> <a href="#at"><code>at</code></a> <a href="#attach"><code>attach</code></a> <a href="#chg"><code>chg</code></a> <a href="#getter"><code>getter</code></a> <a href="#setter"><code>setter</code></a></p>
@@ -1784,7 +1784,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <p>Values are treated as numbers. If any value converts to <code>NaN</code> or if the iterable is empty, <code>min</code> and <code>max</code> return <code>undefined</code>, <code>minIndex</code> and <code>maxIndex</code> return <code>-1</code>.</p>
 <hr>
-<h4><code>sum</code>, <code>mean</code>, <code>variance</code>, <code id="sum">deviation</code></h4>
+<h4><code>sum</code>, <code>mean</code>, <code>variance</code>, <code>variancePop</code>, <code>deviation</code>, <code id="sum">deviationPop</code></h4>
 <p>Sum, mean, variance and standard deviation:</p>
 <pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">4</span> <span class="zap-number">6</span> <span class="zap-number">8</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sum</span>         <span class="zap-comment">// 18</span>
@@ -1798,9 +1798,28 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">sum</span> <span class="zap-string">'v'</span>        <span class="zap-comment">// 60</span>
 </code></pre>
-<p>Values are treated as numbers. If any value converts to <code>NaN</code>, the reduction operator will return <code>NaN</code>.</p>
-<p><code>sum</code> returns <code>0</code> if the iterable is empty, <code>mean</code> returns <code>NaN</code>. <code>variance</code> and <code>deviation</code> return <code>NaN</code> if the iterable has less than 2 elements.</p>
-<p><code>variance</code> calculates the unbiased sample variance: the sum of squared differences from the mean divided by <em>n</em> - 1, where <em>n</em> is the number of elements in the iterable. <code>deviation</code> is the square root of <code>variance</code>.</p>
+<p><code>variance</code> and <code>deviation</code> compute the sample variance and sample standard deviation. Use <code>variancePop</code> and <code>deviationPop</code> for the population variance and population standard deviation.</p>
+<p>Values are treated as numbers. If any value converts to <code>NaN</code>, these operators return <code>NaN</code>.</p>
+<p><code>sum</code> returns <code>0</code> if the iterable is empty, <code>mean</code> returns <code>NaN</code>. The variance and standard deviation operators return <code>NaN</code> if the iterable has less than 2 elements.</p>
+<hr>
+<h4><code>correlation</code>, <code>covariance</code>, <code id="correlation">covariancePop</code></h4>
+<p>Correlation and covariance. These operators take two callbacks (both are passed the element, index and iterable). As with other reduction operators, an inner property/index can be used instead of a callback:</p>
+<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">5</span> <span class="zap-identifier">v</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">12</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">x</span> <span class="zap-identifier">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
+<span class="zap-identifier">x</span> <span class="zap-identifier">correlation</span> <span class="zap-string">'u'</span> <span class="zap-string">'v'</span>       <span class="zap-comment">// 0.96</span>
+</code></pre>
+<p>If the data is in two separate iterables, refer to the second iterable explicitly in the second callback and use the index to get the element:</p>
+<pre><code><span class="zap-identifier">u</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>
+<span class="zap-identifier">v</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">8</span> <span class="zap-number">9</span> <span class="zap-number">12</span>
+
+<span class="zap-identifier">u</span> <span class="zap-identifier">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
+</code></pre>
+<p><code>covariance</code> computes the sample covariance. Use <code>covariancePop</code> for the population covariance.</p>
+<p>Values are treated as numbers. If any value converts to <code>NaN</code> or if the iterable has less than 2 elements, these operators return <code>NaN</code>.</p>
 <hr>
 <h4><code id="sum-cumu">sumCumu</code></h4>
 <p><code>sumCumu</code> is like <a href="#sum"><code>sum</code></a>, but returns an array of cumulative sums rather than just the result:</p>

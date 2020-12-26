@@ -93,7 +93,7 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Filter, Group, Reduce, Sort
 
-[`bin`](#bin)  [`binCount`](#bin) [`count`](#count) [`deviation`](#sum) [`every`](#every) [`filter`](#filter) [`filterIndex`](#filter) [`find`](#find) [`findIndex`](#find) [`group`](#group) [`groupCount`](#group) [`max`](#min) [`maxIndex`](#min) [`mean`](#sum) [`median`](#median) [`min`](#min) [`minIndex`](#min) [`order`](#order) [`orderIndex`](#order) [`quantile`](#median) [`reduce`](#reduce-op) [`some`](#every) [`sum`](#sum) [`sumCumu`](#sum-cumu) [`rank`](#order) [`variance`](#sum)
+[`bin`](#bin)  [`binCount`](#bin) [`count`](#count) [`correlation`](#correlation) [`covariance`](#correlation) [`covariancePop`](#correlation) [`deviation`](#sum) [`deviationPop`](#sum) [`every`](#every) [`filter`](#filter) [`filterIndex`](#filter) [`find`](#find) [`findIndex`](#find) [`group`](#group) [`groupCount`](#group) [`max`](#min) [`maxIndex`](#min) [`mean`](#sum) [`median`](#median) [`min`](#min) [`minIndex`](#min) [`order`](#order) [`orderIndex`](#order) [`quantile`](#median) [`reduce`](#reduce-op) [`some`](#every) [`sum`](#sum) [`sumCumu`](#sum-cumu) [`rank`](#order) [`variance`](#sum) [`variancePop`](#sum)
 
 ---
 
