@@ -176,11 +176,10 @@ export default {
   _varDev(q, p, i, f) {
     let c = 0,
         m = 0,
-        s = 0,
-        d;
+        s = 0;
     for (let v of i) {
       v = +f(v, c, i);
-      d = v - m;
+      const d = v - m;
       m += d / ++c;
       s += d * (v - m);
     }
@@ -194,21 +193,23 @@ export default {
         my = 0,
         vx = 0,
         vy = 0,
-        C  = 0;
+        c  = 0,
         n  = 0;
     for (let u of i) {
-      xj = +f(u, n, i);
-      yj = +g(y, n, i);
-      const dx = xj - mx;
-      const dy = yj - my;
+      const x = +f(u, n, i),
+            y = +g(u, n, i),
+            dx = x - mx,
+            dy = y - my;
       mx += dx / ++n;
       my += dy / n;
-      C  += dx * (yj - my);
-      vx += dx * (xj - my);
-      vy += dy * (yj - my);
+      c  += dx * (y - my);
+      vx += dx * (x - mx);
+      vy += dy * (y - my);
     }
     if (n < 2) return NaN;
-    !! RETURN !!
+    return q
+      ? c / (Math.sqrt(vx) * Math.sqrt(vy))
+      : (c / (p ? n : n - 1));
   },
 
   _join(t, x, y, f, z = Infinity) {
