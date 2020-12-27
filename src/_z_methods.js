@@ -220,7 +220,8 @@ export default {
       const R = (t === 'r' || t === 'o');
       const us = x._cakeJoinGen;
       const vs = y._cakeJoinGen;
-      const w = new Set();
+      const a = new Set();
+      const b = new Set();
       let c = 0;
       y = Array.isArray(y) ? y : [...y];
       for (let u of x) {
@@ -229,7 +230,7 @@ export default {
           if (f(u, v)) {
             q = true;
             if (R) {
-              w.add(v);
+              b.add(v);
             }
             yield (us
               ? (vs ? [...u, ...v] : [...u, v])
@@ -239,13 +240,18 @@ export default {
           }
         }
         if (L && !q) {
+          a.add(u);
+        }
+      }
+      if (L) {
+        for (let u of a) {
           yield (us ? [...u, null] : [u, null]);
           if (++c === z) return;
         }
       }
       if (R) {
         for (let v of y) {
-          if (!w.has(v)) {
+          if (!b.has(v)) {
             yield (vs ? [null, ...v] : [null, v]);
             if (++c === z) return;
           }
