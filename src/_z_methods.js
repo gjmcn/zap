@@ -826,7 +826,7 @@ export default {
       if (q) {
         let w = q.prefix;
         p.push(w === undefined || w === null ? '' : String(w));
-        w = q.columns;
+        w = q.keep;
         c.push(w ? (Array.isArray(w) ? w : [...w]) : null)
       }
       else {
