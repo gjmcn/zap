@@ -213,7 +213,7 @@ export default {
   },
 
   _join(t, x, y, f, z = Infinity) {
-    function* m() {
+    const g = (function*() {
       z = Math.floor(z);
       if (z < 1) return;
       const L = (t === 'l' || t === 'o');
@@ -257,8 +257,7 @@ export default {
           }
         }
       }
-    }
-    const g = m();
+    })();
     g._cakeJoinGen = true;
     return g;
   },
@@ -289,6 +288,53 @@ export default {
         if (!w.has(v)) {
           c++;
         }
+      }
+    }
+    return c;
+  },
+
+  _semiJoin(a, x, y, f, z = Infinity) {
+    const g = (function*() {
+      z = Math.floor(z);
+      if (z < 1) return;
+      const s = x._cakeJoinGen;
+      let c = 0;
+      for (let u of x) {
+        let q = false;
+        for (let v of y) {
+          if (f(u, v)) {
+            if (a) {
+              q = true;
+            }
+            else {  
+              yield (s ? u : [u]); 
+              if (++c === z) return;
+            }
+            break;
+          }
+        }
+        if (a && !q) {
+          yield (s ? u : [u]);
+          if (++c === z) return;
+        }
+      }
+    })();
+    g._cakeJoinGen = true;
+    return g;
+  },
+
+  _semiJoinCount(a, x, y, f) {
+    let c = 0;
+    for (let u of x) {
+      let q = false;
+      for (let v of y) {
+        if (f(u, v)) {
+          a ? (q = true) : c++;
+          break;
+        }
+      }
+      if (a && !q) {
+        c++;
       }
     }
     return c;
@@ -761,6 +807,16 @@ export default {
   rightJoinCountUse: ['_joinCount'],
   crossJoinCount(x, y) { return this._joinCount('i', x, y, () => 1) },
   crossJoinCountUse: ['_joinCount'],
+  
+  semiJoin(...q) { return this._semiJoin(false, ...q) },
+  semiJoinUse: ['_semiJoin'],
+  antiJoin(...q) { return this._semiJoin(true, ...q) },
+  antiJoinUse: ['_semiJoin'],
+
+  semiJoinCount(...q) { return this._semiJoinCount(false, ...q) },
+  semiJoinCountUse: ['_semiJoinCount'],
+  antiJoinCount(...q) { return this._semiJoinCount(true, ...q) },
+  antiJoinCountUse: ['_semiJoinCount'],
 
   flatten(j, ...o) {
     let r = [];

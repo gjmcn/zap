@@ -110,7 +110,7 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Joins
 
-[`crossJoin`](#joins) [`crossJoinCount`](#joins) [`flatten`](#joins) [`innerJoin`](#joins) [`innerJoinCount`](#joins) [`leftJoin`](#joins) [`leftJoinCount`](#joins)[`outerJoin`](#joins) [`outerJoinCount`](#joins) [`rightJoin`](#joins) [`rightJoinCount`](#joins)
+[`antiJoin`](#semi-join) [`antiJoinCount`](#semi-join) [`crossJoin`](#cross-join) [`crossJoinCount`](#cross-join) [`flatten`](#flatten) [`innerJoin`](#inner-join) [`innerJoinCount`](#inner-join) [`leftJoin`](#inner-join) [`leftJoinCount`](#inner-join)[`outerJoin`](#inner-join) [`outerJoinCount`](#inner-join) [`rightJoin`](#inner-join) [`rightJoinCount`](#inner-join) [`semiJoin`](#semi-join) [`semiJoinCount`](#semi-join)
 
 ---
 

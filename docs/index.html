@@ -681,7 +681,7 @@
 <p><a href="#export"><code>export</code></a> <a href="#import"><code>import</code></a> <a href="#import-all"><code>importAll</code></a> <a href="#import-as"><code>importAs</code></a> <a href="#import-default"><code>importDefault</code></a> <a href="#load"><code>load</code></a></p>
 <hr>
 <h4>Joins</h4>
-<p><a href="#joins"><code>crossJoin</code></a> <a href="#joins"><code>crossJoinCount</code></a> <a href="#joins"><code>flatten</code></a> <a href="#joins"><code>innerJoin</code></a> <a href="#joins"><code>innerJoinCount</code></a> <a href="#joins"><code>leftJoin</code></a> <a href="#joins"><code>leftJoinCount</code></a><a href="#joins"><code>outerJoin</code></a> <a href="#joins"><code>outerJoinCount</code></a> <a href="#joins"><code>rightJoin</code></a> <a href="#joins"><code>rightJoinCount</code></a></p>
+<p><a href="#semi-join"><code>antiJoin</code></a> <a href="#semi-join"><code>antiJoinCount</code></a> <a href="#cross-join"><code>crossJoin</code></a> <a href="#cross-join"><code>crossJoinCount</code></a> <a href="#flatten"><code>flatten</code></a> <a href="#inner-join"><code>innerJoin</code></a> <a href="#inner-join"><code>innerJoinCount</code></a> <a href="#inner-join"><code>leftJoin</code></a> <a href="#inner-join"><code>leftJoinCount</code></a><a href="#inner-join"><code>outerJoin</code></a> <a href="#inner-join"><code>outerJoinCount</code></a> <a href="#inner-join"><code>rightJoin</code></a> <a href="#inner-join"><code>rightJoinCount</code></a> <a href="#semi-join"><code>semiJoin</code></a> <a href="#semi-join"><code>semiJoinCount</code></a></p>
 <hr>
 <h4>Nested Data</h4>
 <p><a href="#array-of-objects"><code>arrObj</code></a> <a href="#map-at"><code>mapAt</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#pick"><code>pick</code></a> <a href="#transpose"><code>transpose</code></a></p>
@@ -2025,6 +2025,44 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </blockquote>
 <h2 id="joins">Joins</h2>
 <hr>
+<p id="inner-join"><code>innerJoin</code>, <code>leftJoin</code>, <code>outerJoin</code>, <code>rightJoin</code></p>
+<p>These operators combine two iterables of objects (or arrays) and returns a generator. The first two operands are the iterables, the third is a callback that is called on each pair of elements; if the callback returns a truthy value, the returned generator will yield the pair of elements. The optional fourth operand is the maximum number of elements to include in the result.</p>
+<p>Join operators differ on how they treat elements that are not included in the returned array:</p>
+<ul>
+<li>
+<p><code>innerJoin</code>: unmatched elements not included.</p>
+</li>
+<li>
+<p><code>leftJoin</code>: unmatched elements from first iterable included.</p>
+</li>
+<li>
+<p><code>rightJoin</code>: unmatched elements from second iterable included.</p>
+</li>
+<li>
+<p><code>outerJoin</code>: unmatched elements from both iterables included.</p>
+</li>
+</ul>
+<p>The elements of the returned array are pairs of matched elements:</p>
+<pre><code><span class="zap-identifier">EXAMPLE</span> <span class="zap-identifier">HERE</span>!!!!!
+</code></pre>
+<blockquote>
+<p>Joins iterate over the iterables in a nested loop and this is reflected in the ordering of the result. Unmatched elements of the first iterable (if included) are added after the matched pairs, followed by unmatched elements of the second iterable (if included).</p>
+</blockquote>
+<hr>
+<p>Notes:</p>
+<ul>
+<li>returns objects , but typically flatten
+<ul>
+<li>returns generator</li>
+<li>joins can be joined again without flattening - as long as not used</li>
+</ul>
+</li>
+<li>order of returned rows</li>
+<li>example with arrays - make clear get objects back</li>
+<li>change op list links to be more specific if leave sub headings in</li>
+<li>Count ops - no limit operand</li>
+<li>crossJoin ops</li>
+</ul>
 <h2 id="random">Random</h2>
 <hr>
 <p>These operators (except for <a href="#shuffle"><code>shuffle</code></a>) generate a number from a given distribution. An optional extra operand can be used to specify how many numbers to generate — in this case, the operator returns an array rather than a number.</p>
