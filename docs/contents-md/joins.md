@@ -6,35 +6,78 @@
 
 Database-style joins.
 
-The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand is a callback [!! UPDATE TO ALLOW CALLBACK, NON-STRING ITERABLE OR COLUMN NAME/INDEX] that is called on each pair of elements from the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements. The optional fourth operand is the maximum number of results to yield.
+The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria; this can be a:
 
-Join operators differ on how they treat elements that are not included in the returned array:
+* function: called on each pair of elements of the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements.
+
+* non-string iterable: the inner property names/indices to join on &mdash; the first and second elements correspond to the first and second iterables.
+
+* string/number: the inner property name/index to join on &mdash; use this when the name/index is the same for both iterables.
+
+The optional fourth operand is the maximum number of results to yield.
+
+Join operators differ on how they treat elements ('rows') that are not matched:
 
 * `innerJoin`: unmatched elements not included.
 
-* `leftJoin`: unmatched elements from the first iterable are included.
+* `leftJoin`: unmatched elements of the first iterable are included.
 
-* `rightJoin`: unmatched elements from the second iterable are included.
+* `rightJoin`: unmatched elements of the second iterable are included.
 
-* `outerJoin`: unmatched elements from both iterables are included.
+* `outerJoin`: unmatched elements of both iterables are included.
 
 ```
-EXAMPLE
+p = 
+  @ 
+  | (# u 1 v 4)
+  | (# u 2 v 5)
+  | (# u 3 v 6)        // array-of-objects
+
+q = 
+  @
+  | (# u 0 w 7 x 10)
+  | (# u 3 w 8 x 20)
+  | (# u 1 w 9 x 30)   // array-of-objects
+
+p rightJoin q 'u'      // generator
+
+p rightJoin q 'u' array
+  // [
+  //   {u: 1, v: 4}, {u: 1, w: 9, x: 30}
+  //   {u: 3, v: 6}, {u: 3, w: 8, x: 20}
+  //   null,         {u: 0, w: 7, x: 10}
+  // ]
+
+p rightJoin q 'u' flatten
+  // [
+  //   {u: 1, v: 4, w: 9, x: 30}
+  //   {u: 3, v: 6, w: 8, x: 20}
+  //   {u: 0,       w: 7, x: 10}
+  // ]                 
+
+p rightJoin q 'u' flatten
+| (@ prefix '_p')
+| (@ prefix '_q' keep (@ 'u' 'x'))
+  // [
+  //   {p_u: 1, p_v: 4, q_u: 1  q_x: 30}
+  //   {p_u: 3, p_v: 6, q_u: 3  q_x: 20}
+  //   {                q_u: 0  q_x: 10}
+  // ] 
 ```
 
-Joins are efficient since they do not copy elements from the iterables being joined. However, working with the output of a join can be fiddly. Unless time or memory becomes an issue, we typically use [`flatten`](#flatten) on the returned generator to make the result of the join easier to work with.
+> Working with the output of a join can be fiddly. Unless time or memory becomes an issue, we typically use [`flatten`](#flatten) on the returned generator to make the result easier to work with.
 
-Joins can be chained &mdash; there is no need to `flatten` the intermediate join:
+Joins can be chained without being flattened &mdash; the result will not include any complicated nesting:
 
 ```
 EXAMPLE HERE
 ```
 
-> Joins iterate over the iterables in a nested loop and this is reflected in the ordering of the matched pairs. Unmatched elements of the first iterable (if included) are added after the matched pairs, followed by unmatched elements of the second iterable (if included).
+> When chaining unflattened joins, use the generator returned by a join operator &mdash; otherwise the operator will not know it is a join so will not clean up the result.  
 
 #### `crossJoin`{#cross-join}
 
-`crossJoin` returns all pairs or elements from two iterables. `crossJoin` is equivalent to `innerJoin` with a callback function that always returns `true`:
+All pairs or elements from two iterables. `crossJoin` is equivalent to `innerJoin` with a callback function that always returns `true`:
 
 * `x crossJoin y` is equivalent to `x innerJoin y [true]`
 
@@ -46,9 +89,9 @@ EXAMPLE
 
 #### `semiJoin`, `antiJoin`{#semi-join}
 
-`semiJoin` returns the elements of the first iterable that match an element of the second iterable. `antiJoin` returns the elements of the first iterable that do not match any elements in the second iterable.
+`semiJoin` yields elements of the first iterable that match an element of the second iterable. `antiJoin` yields elements of the first iterable that _do not_ match any elements of the second iterable.
 
-While `semiJoin` and `antiJoin` only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object in this case).
+While `semiJoin` and `antiJoin` only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object/array in this case).
 
 ```
 EXAMPLE
@@ -74,16 +117,15 @@ Notes:
 
 * If prefixes are not used and objects in the same row share a property name, the result will use the value from the last object in the row that has the property.
 
-* Use `null`, `undefined` or an empty object to skip an object, e.g. `theJoin flatten null (# prefix '_')`.
+* Use `null`, `undefined` or an empty object to skip an object, e.g. `aJoin flatten null (# prefix '_')`.
 
 * Do not use the new prefixes when listing property names with `keep`.
 
-* If `keep` is not used, all enumerable own properties of the correpsonding object are included in the result.
+* If `keep` is not used, all enumerable own properties of the corresponding object are included in the result.
 
 
 -----------------------------------
 
 Notes:
 * example with arrays - make clear get objects back
-* explain that uses naive nested loops
-* if have 'expanded' intermediate join, must flatten it before pass to another join (it will no longer have the `_cakeJoinGen` property)
+

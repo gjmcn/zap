@@ -681,7 +681,7 @@
 <p><a href="#export"><code>export</code></a> <a href="#import"><code>import</code></a> <a href="#import-all"><code>importAll</code></a> <a href="#import-as"><code>importAs</code></a> <a href="#import-default"><code>importDefault</code></a> <a href="#load"><code>load</code></a></p>
 <hr>
 <h4>Joins</h4>
-<p><a href="#semi-join"><code>antiJoin</code></a> <a href="#semi-join"><code>antiJoinCount</code></a> <a href="#cross-join"><code>crossJoin</code></a> <a href="#cross-join"><code>crossJoinCount</code></a> <a href="#flatten"><code>flatten</code></a> <a href="#inner-join"><code>innerJoin</code></a> <a href="#inner-join"><code>innerJoinCount</code></a> <a href="#inner-join"><code>leftJoin</code></a> <a href="#inner-join"><code>leftJoinCount</code></a><a href="#inner-join"><code>outerJoin</code></a> <a href="#inner-join"><code>outerJoinCount</code></a> <a href="#inner-join"><code>rightJoin</code></a> <a href="#inner-join"><code>rightJoinCount</code></a> <a href="#semi-join"><code>semiJoin</code></a> <a href="#semi-join"><code>semiJoinCount</code></a></p>
+<p><a href="#semi-join"><code>antiJoin</code></a> <a href="#cross-join"><code>crossJoin</code></a> <a href="#flatten"><code>flatten</code></a> <a href="#inner-join"><code>innerJoin</code></a> <a href="#inner-join"><code>leftJoin</code></a> <a href="#inner-join"><code>outerJoin</code></a> <a href="#inner-join"><code>rightJoin</code></a> <a href="#semi-join"><code>semiJoin</code></a></p>
 <hr>
 <h4>Nested Data</h4>
 <p><a href="#array-of-objects"><code>arrObj</code></a> <a href="#map-at"><code>mapAt</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#pick"><code>pick</code></a> <a href="#transpose"><code>transpose</code></a></p>
@@ -1985,7 +1985,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">23</span> <span class="zap-number">0</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">1</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">32</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span> 
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">38</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">34</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array of arrays</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">38</span> <span class="zap-number">3</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">34</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
 
 <span class="zap-identifier">limits</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">10</span> <span class="zap-number">20</span> <span class="zap-number">30</span> <span class="zap-number">40</span>
 
@@ -2025,43 +2025,128 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </blockquote>
 <h2 id="joins">Joins</h2>
 <hr>
-<p id="inner-join"><code>innerJoin</code>, <code>leftJoin</code>, <code>outerJoin</code>, <code>rightJoin</code></p>
-<p>These operators combine two iterables of objects (or arrays) and returns a generator. The first two operands are the iterables, the third is a callback that is called on each pair of elements; if the callback returns a truthy value, the returned generator will yield the pair of elements. The optional fourth operand is the maximum number of elements to include in the result.</p>
-<p>Join operators differ on how they treat elements that are not included in the returned array:</p>
+<p id="inner-join"><code>innerJoin</code>, <code>leftJoin</code>, <code>rightJoin</code>, <code>outerJoin</code></p>
+<p>Database-style joins.</p>
+<p>The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria; this can be a:</p>
+<ul>
+<li>
+<p>function: called on each pair of elements of the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements.</p>
+</li>
+<li>
+<p>non-string iterable: the inner property names/indices to join on — the first and second elements correspond to the first and second iterables.</p>
+</li>
+<li>
+<p>string/number: the inner property name/index to join on — use this when the name/index is the same for both iterables.</p>
+</li>
+</ul>
+<p>The optional fourth operand is the maximum number of results to yield.</p>
+<p>Join operators differ on how they treat elements ('rows') that are not matched:</p>
 <ul>
 <li>
 <p><code>innerJoin</code>: unmatched elements not included.</p>
 </li>
 <li>
-<p><code>leftJoin</code>: unmatched elements from first iterable included.</p>
+<p><code>leftJoin</code>: unmatched elements of the first iterable are included.</p>
 </li>
 <li>
-<p><code>rightJoin</code>: unmatched elements from second iterable included.</p>
+<p><code>rightJoin</code>: unmatched elements of the second iterable are included.</p>
 </li>
 <li>
-<p><code>outerJoin</code>: unmatched elements from both iterables included.</p>
+<p><code>outerJoin</code>: unmatched elements of both iterables are included.</p>
 </li>
 </ul>
-<p>The elements of the returned array are pairs of matched elements:</p>
-<pre><code><span class="zap-identifier">EXAMPLE</span> <span class="zap-identifier">HERE</span>!!!!!
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> 
+  <span class="zap-operator">@</span> 
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">q</span> <span class="zap-operator">=</span> 
+  <span class="zap-operator">@</span>
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">0</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>      <span class="zap-comment">// generator</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {u: 1, v: 4}, {u: 1, w: 9, x: 30}</span>
+  <span class="zap-comment">//   {u: 3, v: 6}, {u: 3, w: 8, x: 20}</span>
+  <span class="zap-comment">//   null,         {u: 0, w: 7, x: 10}</span>
+  <span class="zap-comment">// ]</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">flatten</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30}</span>
+  <span class="zap-comment">//   {u: 3, v: 6, w: 8, x: 20}</span>
+  <span class="zap-comment">//   {u: 0,       w: 7, x: 10}</span>
+  <span class="zap-comment">// ]                 </span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">flatten</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1  q_x: 30}</span>
+  <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3  q_x: 20}</span>
+  <span class="zap-comment">//   {                q_u: 0  q_x: 10}</span>
+  <span class="zap-comment">// ] </span>
 </code></pre>
 <blockquote>
-<p>Joins iterate over the iterables in a nested loop and this is reflected in the ordering of the result. Unmatched elements of the first iterable (if included) are added after the matched pairs, followed by unmatched elements of the second iterable (if included).</p>
+<p>Working with the output of a join can be fiddly. Unless time or memory becomes an issue, we typically use <a href="#flatten"><code>flatten</code></a> on the returned generator to make the result easier to work with.</p>
 </blockquote>
+<p>Joins can be chained without being flattened — the result will not include any complicated nesting:</p>
+<pre><code><span class="zap-identifier">EXAMPLE</span> <span class="zap-identifier">HERE</span>
+</code></pre>
+<blockquote>
+<p>When chaining unflattened joins, use the generator returned by a join operator — otherwise the operator will not know it is a join so will not clean up the result.</p>
+</blockquote>
+<h4><code id="cross-join">crossJoin</code></h4>
+<p>All pairs or elements from two iterables. <code>crossJoin</code> is equivalent to <code>innerJoin</code> with a callback function that always returns <code>true</code>:</p>
+<ul>
+<li>
+<p><code>x crossJoin y</code> is equivalent to <code>x innerJoin y [true]</code></p>
+</li>
+<li>
+<p><code>x crossJoin y 5</code> is equivalent to <code>x innerJoin y [true] 5</code></p>
+</li>
+</ul>
+<pre><code><span class="zap-identifier">EXAMPLE</span>
+</code></pre>
+<h4><code>semiJoin</code>, <code id="semi-join">antiJoin</code></h4>
+<p><code>semiJoin</code> yields elements of the first iterable that match an element of the second iterable. <code>antiJoin</code> yields elements of the first iterable that <em>do not</em> match any elements of the second iterable.</p>
+<p>While <code>semiJoin</code> and <code>antiJoin</code> only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object/array in this case).</p>
+<pre><code><span class="zap-identifier">EXAMPLE</span>
+</code></pre>
+<h4 id="flatten"><code>flatten</code></h4>
+<p>'Flatten' a join into an array of objects:</p>
+<pre><code><span class="zap-identifier">EXAMPLE</span>
+</code></pre>
+<p><code>flatten</code> can take additional objects that specify which properties to keep and whether to append a prefix to property names:</p>
+<pre><code><span class="zap-identifier">EXAMPLE</span>
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>
+<p>Any number of additional operands can be used with <code>flatten </code> — since joins can be chained, each 'row' of results can have more than two objects.</p>
+</li>
+<li>
+<p>If prefixes are not used and objects in the same row share a property name, the result will use the value from the last object in the row that has the property.</p>
+</li>
+<li>
+<p>Use <code>null</code>, <code>undefined</code> or an empty object to skip an object, e.g. <code>aJoin flatten null (# prefix '_')</code>.</p>
+</li>
+<li>
+<p>Do not use the new prefixes when listing property names with <code>keep</code>.</p>
+</li>
+<li>
+<p>If <code>keep</code> is not used, all enumerable own properties of the corresponding object are included in the result.</p>
+</li>
+</ul>
 <hr>
 <p>Notes:</p>
 <ul>
-<li>returns objects , but typically flatten
-<ul>
-<li>returns generator</li>
-<li>joins can be joined again without flattening - as long as not used</li>
-</ul>
-</li>
-<li>order of returned rows</li>
 <li>example with arrays - make clear get objects back</li>
-<li>change op list links to be more specific if leave sub headings in</li>
-<li>Count ops - no limit operand</li>
-<li>crossJoin ops</li>
 </ul>
 <h2 id="random">Random</h2>
 <hr>
