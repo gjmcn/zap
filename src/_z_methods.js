@@ -221,26 +221,58 @@ export default {
       const us = x._cakeJoinGen;
       const vs = y._cakeJoinGen;
       const a = new Set();
-      const b = new Set();
       let c = 0;
-      y = Array.isArray(y) ? y : [...y];
-      for (let u of x) {
-        let q;
-        for (let v of y) {
-          if (f(u, v)) {
-            q = true;
-            if (R) {
-              b.add(v);
+      let b, ym;
+      if (typeof f === 'function') {
+        y = Array.isArray(y) ? y : [...y];
+        b = new Set();
+        for (let u of x) {
+          let q;
+          for (let v of y) {
+            if (f(u, v)) {
+              q = true;
+              if (R) {
+                b.add(v);
+              }
+              yield (us
+                ? (vs ? [...u, ...v] : [...u, v])
+                : (vs ? [u, ...v]    : [u, v])
+              );
+              if (++c === z) return;
             }
-            yield (us
-              ? (vs ? [...u, ...v] : [...u, v])
-              : (vs ? [u, ...v]    : [u, v])
-            );
-            if (++c === z) return;
+          }
+          if (L && !q) {
+            a.add(u);
           }
         }
-        if (L && !q) {
-          a.add(u);
+      }
+      else {
+        let fx, fy;
+        f[Symbol.iterator] && typeof f !== 'string'
+          ? ([fx, fy] = f)
+          : (fx = fy = f);
+        ym = new Map();
+        for (let v of y) {
+          ym.has(v[fy])
+            ? ym.get(v[fy]).push(v)
+            : ym.set(v[fy], [v]);
+        }
+        for (let u of x) {
+          if (ym.has(u[fx])) {
+            for (let v of ym.get(u[fx])) {
+              yield (us
+                ? (vs ? [...u, ...v] : [...u, v])
+                : (vs ? [u, ...v]    : [u, v])
+              );
+              if (++c === z) return;
+            }
+            if (R) {
+              ym.get(u[fx])._cakeMatched = true;
+            }
+          }
+          else if (L) {
+            a.add(u);
+          }
         }
       }
       if (L) {
@@ -250,47 +282,28 @@ export default {
         }
       }
       if (R) {
-        for (let v of y) {
-          if (!b.has(v)) {
-            yield (vs ? [null, ...v] : [null, v]);
-            if (++c === z) return;
+        if (ym) {
+          for (let d of ym.values()) {
+            if (!d._cakeMatched) {
+              for (let v of d) {
+                yield (vs ? [null, ...v] : [null, v]);
+                if (++c === z) return;
+              }
+            }
+          }
+        }
+        else {
+          for (let v of y) {
+            if (!b.has(v)) {
+              yield (vs ? [null, ...v] : [null, v]);
+              if (++c === z) return;
+            }
           }
         }
       }
     })();
     g._cakeJoinGen = true;
     return g;
-  },
-
-  _joinCount(t, x, y, f) {
-    const L = (t === 'l' || t === 'o');
-    const R = (t === 'r' || t === 'o');
-    const w = new Set();
-    let c = 0;
-    y = Array.isArray(y) ? y : [...y];
-    for (let u of x) {
-      let q;
-      for (let v of y) {
-        if (f(u, v)) {
-          q = true;
-          if (R) {
-            w.add(v);
-          }
-          c++;
-        }
-      }
-      if (L && !q) {
-        c++;
-      }
-    }
-    if (R) {
-      for (let v of y) {
-        if (!w.has(v)) {
-          c++;
-        }
-      }
-    }
-    return c;
   },
 
   _semiJoin(a, x, y, f, z = Infinity) {
@@ -299,45 +312,42 @@ export default {
       if (z < 1) return;
       const s = x._cakeJoinGen;
       let c = 0;
-      for (let u of x) {
-        let q = false;
-        for (let v of y) {
-          if (f(u, v)) {
-            if (a) {
+      if (typeof f === 'function') {
+        y = Array.isArray(y) ? y : [...y];
+        for (let u of x) {
+          let q;
+          for (let v of y) {
+            if (f(u, v)) {
               q = true;
+              break;
             }
-            else {  
-              yield (s ? u : [u]); 
-              if (++c === z) return;
-            }
-            break;
+          }
+          if ((q && !a) || (!q && a)) {
+            yield (s ? u : [u]);
+            if (++c === z) return;
           }
         }
-        if (a && !q) {
-          yield (s ? u : [u]);
-          if (++c === z) return;
+      }
+      else {
+        let fx, fy;
+        f[Symbol.iterator] && typeof f !== 'string'
+          ? ([fx, fy] = f)
+          : (fx = fy = f);
+        const d = new Set();
+        for (let v of y) {
+          d.add(v[fy]);
+        }
+        for (let u of x) {
+          let k = d.has(u[fx]);
+          if ((k && !a) || (!k && a)) {
+            yield (s ? u : [u]);
+            if (++c === z) return;
+          }
         }
       }
     })();
     g._cakeJoinGen = true;
     return g;
-  },
-
-  _semiJoinCount(a, x, y, f) {
-    let c = 0;
-    for (let u of x) {
-      let q = false;
-      for (let v of y) {
-        if (f(u, v)) {
-          a ? (q = true) : c++;
-          break;
-        }
-      }
-      if (a && !q) {
-        c++;
-      }
-    }
-    return c;
   },
 
   _random(j, k) {
@@ -794,29 +804,14 @@ export default {
   leftJoinUse:  ['_join'],
   rightJoin(...q) { return this._join('r', ...q) },
   rightJoinUse: ['_join'],
+
   crossJoin(x, y, z) { return this._join('i', x, y, () => 1, z) },
   crossJoinUse: ['_join'],
-
-  innerJoinCount(...q) { return this._joinCount('i', ...q) },
-  innerJoinCountUse: ['_joinCount'],
-  outerJoinCount(...q) { return this._joinCount('o', ...q) },
-  outerJoinCountUse: ['_joinCount'],
-  leftJoinCount(...q)  { return this._joinCount('l', ...q) },
-  leftJoinCountUse:  ['_joinCount'],
-  rightJoinCount(...q) { return this._joinCount('r', ...q) },
-  rightJoinCountUse: ['_joinCount'],
-  crossJoinCount(x, y) { return this._joinCount('i', x, y, () => 1) },
-  crossJoinCountUse: ['_joinCount'],
   
   semiJoin(...q) { return this._semiJoin(false, ...q) },
   semiJoinUse: ['_semiJoin'],
   antiJoin(...q) { return this._semiJoin(true, ...q) },
   antiJoinUse: ['_semiJoin'],
-
-  semiJoinCount(...q) { return this._semiJoinCount(false, ...q) },
-  semiJoinCountUse: ['_semiJoinCount'],
-  antiJoinCount(...q) { return this._semiJoinCount(true, ...q) },
-  antiJoinCountUse: ['_semiJoinCount'],
 
   flatten(j, ...o) {
     let r = [];

@@ -6,7 +6,7 @@
 
 Database-style joins.
 
-The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand is a callback that is called on each pair of elements from the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements. The optional fourth operand is the maximum number of results to yield.
+The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand is a callback [!! UPDATE TO ALLOW CALLBACK, NON-STRING ITERABLE OR COLUMN NAME/INDEX] that is called on each pair of elements from the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements. The optional fourth operand is the maximum number of results to yield.
 
 Join operators differ on how they treat elements that are not included in the returned array:
 
@@ -21,8 +21,6 @@ Join operators differ on how they treat elements that are not included in the re
 ```
 EXAMPLE
 ```
-
-The `innerJoinCount`, `leftJoinCount`, `rightJoinCount` and `outerJoinCount` operators behave like the respective join operators, but return the number results in the join (see the final example above). The count operators do not take a fourth 'limit' operand.
 
 Joins are efficient since they do not copy elements from the iterables being joined. However, working with the output of a join can be fiddly. Unless time or memory becomes an issue, we typically use [`flatten`](#flatten) on the returned generator to make the result of the join easier to work with.
 
@@ -46,8 +44,6 @@ EXAMPLE HERE
 EXAMPLE
 ```
 
-As shown in the final example, `crossJoinCount` returns the number of results in a cross-join.
-
 #### `semiJoin`, `antiJoin`{#semi-join}
 
 `semiJoin` returns the elements of the first iterable that match an element of the second iterable. `antiJoin` returns the elements of the first iterable that do not match any elements in the second iterable.
@@ -57,8 +53,6 @@ While `semiJoin` and `antiJoin` only return the elements from one iterable, they
 ```
 EXAMPLE
 ```
-
-As shown in the final example, `semiJoinCount` returns the number of results in a semi-join (`antiJoinCount` can be used similalry).
 
 #### `flatten` {#flatten}
 
