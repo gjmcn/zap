@@ -43,7 +43,7 @@ m.set('rightJoin',      [3, 4]);
 m.set('semiJoin',       [3, 4]);
 m.set('antiJoin',       [3, 4]);
 m.set('crossJoin',      [2, 3]);
-m.set('flatten',        [1, Infinity]);
+m.set('crush',          [1, Infinity]);
 m.set('covariance',     [3, 3]);
 m.set('covariancePop',  [3, 3]);
 m.set('correlation',    [3, 3]);

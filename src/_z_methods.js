@@ -813,7 +813,7 @@ export default {
   antiJoin(...q) { return this._semiJoin(true, ...q) },
   antiJoinUse: ['_semiJoin'],
 
-  flatten(j, ...o) {
+  crush(j, ...o) {
     let r = [];
     const p = [];
     const c = [];

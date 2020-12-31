@@ -85,7 +85,7 @@ const reserved = {
     'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties', 'pick',
     'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
     'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
-    'flatten', 'covariance', 'covariancePop', 'correlation'
+    'crush', 'covariance', 'covariancePop', 'correlation'
   ]),
 
   invalid: new Set([

@@ -110,7 +110,7 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Joins
 
-[`antiJoin`](#semi-join) [`crossJoin`](#cross-join) [`flatten`](#flatten) [`innerJoin`](#inner-join) [`leftJoin`](#inner-join) [`outerJoin`](#inner-join) [`rightJoin`](#inner-join) [`semiJoin`](#semi-join)
+[`antiJoin`](#semi-join) [`crossJoin`](#cross-join) [`crush`](#crush) [`innerJoin`](#inner-join) [`leftJoin`](#inner-join) [`outerJoin`](#inner-join) [`rightJoin`](#inner-join) [`semiJoin`](#semi-join)
 
 ---
 

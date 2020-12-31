@@ -681,7 +681,7 @@
 <p><a href="#export"><code>export</code></a> <a href="#import"><code>import</code></a> <a href="#import-all"><code>importAll</code></a> <a href="#import-as"><code>importAs</code></a> <a href="#import-default"><code>importDefault</code></a> <a href="#load"><code>load</code></a></p>
 <hr>
 <h4>Joins</h4>
-<p><a href="#semi-join"><code>antiJoin</code></a> <a href="#cross-join"><code>crossJoin</code></a> <a href="#flatten"><code>flatten</code></a> <a href="#inner-join"><code>innerJoin</code></a> <a href="#inner-join"><code>leftJoin</code></a> <a href="#inner-join"><code>outerJoin</code></a> <a href="#inner-join"><code>rightJoin</code></a> <a href="#semi-join"><code>semiJoin</code></a></p>
+<p><a href="#semi-join"><code>antiJoin</code></a> <a href="#cross-join"><code>crossJoin</code></a> <a href="#crush"><code>crush</code></a> <a href="#inner-join"><code>innerJoin</code></a> <a href="#inner-join"><code>leftJoin</code></a> <a href="#inner-join"><code>outerJoin</code></a> <a href="#inner-join"><code>rightJoin</code></a> <a href="#semi-join"><code>semiJoin</code></a></p>
 <hr>
 <h4>Nested Data</h4>
 <p><a href="#array-of-objects"><code>arrObj</code></a> <a href="#map-at"><code>mapAt</code></a> <a href="#object-of-arrays"><code>objArr</code></a> <a href="#pick"><code>pick</code></a> <a href="#transpose"><code>transpose</code></a></p>
@@ -2026,8 +2026,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <h2 id="joins">Joins</h2>
 <hr>
 <p id="inner-join"><code>innerJoin</code>, <code>leftJoin</code>, <code>rightJoin</code>, <code>outerJoin</code></p>
-<p>Database-style joins.</p>
-<p>The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria; this can be a:</p>
+<p>Database-style joins. The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria which can be:</p>
 <ul>
 <li>
 <p>function: called on each pair of elements of the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements.</p>
@@ -2055,52 +2054,108 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p><code>outerJoin</code>: unmatched elements of both iterables are included.</p>
 </li>
 </ul>
-<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> 
-  <span class="zap-operator">@</span> 
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">q</span> <span class="zap-operator">=</span> 
-  <span class="zap-operator">@</span>
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">0</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
-  <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
+<span class="zap-identifier">q</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">0</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>      <span class="zap-comment">// generator</span>
+<span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span> <span class="zap-identifier">y</span> <span class="zap-number">11</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span> <span class="zap-identifier">y</span> <span class="zap-number">31</span><span class="zap-punctuation">)</span>      <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>
+<span class="zap-comment">// these are equivalent</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// generator</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'u'</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// generator</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>            <span class="zap-comment">// generator</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>
   <span class="zap-comment">// [</span>
-  <span class="zap-comment">//   {u: 1, v: 4}, {u: 1, w: 9, x: 30}</span>
-  <span class="zap-comment">//   {u: 3, v: 6}, {u: 3, w: 8, x: 20}</span>
-  <span class="zap-comment">//   null,         {u: 0, w: 7, x: 10}</span>
+  <span class="zap-comment">//   [{u: 1, v: 4}, {u: 1, w: 9, x: 30}],</span>
+  <span class="zap-comment">//   [{u: 3, v: 6}, {u: 3, w: 8, x: 20}],</span>
+  <span class="zap-comment">//   [{u: 2, v: 5}, null               ],</span>
+  <span class="zap-comment">//   [null,         {u: 0, w: 7, x: 10}]</span>
   <span class="zap-comment">// ]</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">flatten</span>
+<span class="zap-comment">// chained join - this is easier with crush (see below)</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-number">1</span> <span class="zap-operator">?:</span> <span class="zap-string">'x'</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">x</span><span class="zap-punctuation">]</span> <span class="zap-keyword">array</span>
   <span class="zap-comment">// [</span>
-  <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30}</span>
-  <span class="zap-comment">//   {u: 3, v: 6, w: 8, x: 20}</span>
+  <span class="zap-comment">//   [{u: 1, v: 4}, {u: 1, w: 9, x: 30}, {x: 30, y: 31}], </span>
+  <span class="zap-comment">//   [null,         {u: 0, w: 7, x: 10}, {x: 10, y: 11}], </span>
+  <span class="zap-comment">//   [{u: 3, v: 6}, {u: 3, w: 8, x: 20}, null          ], </span>
+  <span class="zap-comment">//   [{u: 2, v: 5}, null,                null          ]</span>
+  <span class="zap-comment">// ]</span>
+</code></pre>
+<p>Unless speed or memory usage is critical, we typically <a href="#crush"><code>crush</code></a> the generator returned by a join operator — the resulting array-of-objects is easier to work with.</p>
+<blockquote>
+<p>In the &quot;chained join&quot; example above, the result does not have deeper nesting — elements have the form <code>[{...}, {...}, {...}]</code>, not <code>[[{...}, {...}], {...}]</code>. When chaining joins, the intermediate join must be the returned generator or crushed to get this behavior.</p>
+</blockquote>
+<hr>
+<h4 id="crush"><code>crush</code></h4>
+<p>Flatten a join into an array-of-objects. The first operand is the join, additional objects specify which properties to keep and whether to append a prefix to property names:</p>
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">q</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">0</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">r</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span> <span class="zap-identifier">y</span> <span class="zap-number">11</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span> <span class="zap-identifier">y</span> <span class="zap-number">31</span><span class="zap-punctuation">)</span>      <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30},</span>
+  <span class="zap-comment">//   {u: 3, v: 6, w: 8, x: 20},</span>
+  <span class="zap-comment">//   {u: 2, v: 5             },</span>
   <span class="zap-comment">//   {u: 0,       w: 7, x: 10}</span>
   <span class="zap-comment">// ]                 </span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">rightJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">flatten</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span>
-<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>
+<span class="zap-punctuation">|</span> <span class="zap-identifier">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
   <span class="zap-comment">// [</span>
-  <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1  q_x: 30}</span>
-  <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3  q_x: 20}</span>
+  <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1  q_x: 30},</span>
+  <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3  q_x: 20},</span>
+  <span class="zap-comment">//   {p_u: 2, p_v: 5                 },</span>
   <span class="zap-comment">//   {                q_u: 0  q_x: 10}</span>
-  <span class="zap-comment">// ] </span>
+  <span class="zap-comment">// ]</span>
+
+<span class="zap-comment">// chained join</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-string">'x'</span> <span class="zap-identifier">crush</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30, y: 31}, </span>
+  <span class="zap-comment">//   {u: 0,       w: 7, x: 10, y: 11}, </span>
+  <span class="zap-comment">//   {u: 3, v: 6, w: 8, x: 20       }, </span>
+  <span class="zap-comment">//   {u: 2, v: 5                    }</span>
+  <span class="zap-comment">// ]</span>
 </code></pre>
-<blockquote>
-<p>Working with the output of a join can be fiddly. Unless time or memory becomes an issue, we typically use <a href="#flatten"><code>flatten</code></a> on the returned generator to make the result easier to work with.</p>
-</blockquote>
-<p>Joins can be chained without being flattened — the result will not include any complicated nesting:</p>
-<pre><code><span class="zap-identifier">EXAMPLE</span> <span class="zap-identifier">HERE</span>
-</code></pre>
-<blockquote>
-<p>When chaining unflattened joins, use the generator returned by a join operator — otherwise the operator will not know it is a join so will not clean up the result.</p>
-</blockquote>
+<p>Notes:</p>
+<ul>
+<li>
+<p>Any number of additional operands can be used with <code>crush </code> — since joins can be chained, each 'row' of results can have more than two objects.</p>
+</li>
+<li>
+<p>If prefixes are not used and objects in the same row share a property name, the result will use the value from the last object in the row that has the property.</p>
+</li>
+<li>
+<p>Use <code>null</code>, <code>undefined</code> or an empty object to skip an object, e.g. <code>aJoin crush null (# prefix '_')</code>.</p>
+</li>
+<li>
+<p>Do not use the new prefixes when listing property names with <code>keep</code>.</p>
+</li>
+<li>
+<p>If <code>keep</code> is not used, all enumerable own properties of the corresponding object are included in the result.</p>
+</li>
+</ul>
+<hr>
 <h4><code id="cross-join">crossJoin</code></h4>
 <p>All pairs or elements from two iterables. <code>crossJoin</code> is equivalent to <code>innerJoin</code> with a callback function that always returns <code>true</code>:</p>
 <ul>
@@ -2111,44 +2166,41 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p><code>x crossJoin y 5</code> is equivalent to <code>x innerJoin y [true] 5</code></p>
 </li>
 </ul>
-<pre><code><span class="zap-identifier">EXAMPLE</span>
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
+<span class="zap-identifier">q</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-keyword">array</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   [[1, 2], [5, 6]], </span>
+  <span class="zap-comment">//   [[1, 2], [7, 8]], </span>
+  <span class="zap-comment">//   [[3, 4], [5, 6]], </span>
+  <span class="zap-comment">//   [[3, 4], [7, 8]] </span>
+  <span class="zap-comment">// ]</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-identifier">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'p_'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'q_'</span><span class="zap-punctuation">)</span>
+  <span class="zap-comment">// [</span>
+  <span class="zap-comment">//   {p_0: 1, p_1: 2, q_0: 5, q_1: 6}, </span>
+  <span class="zap-comment">//   {p_0: 1, p_1: 2, q_0: 7, q_1: 8}, </span>
+  <span class="zap-comment">//   {p_0: 3, p_1: 4, q_0: 5, q_1: 6}, </span>
+  <span class="zap-comment">//   {p_0: 3, p_1: 4, q_0: 7, q_1: 8} </span>
+  <span class="zap-comment">// ]</span>
 </code></pre>
 <h4><code>semiJoin</code>, <code id="semi-join">antiJoin</code></h4>
 <p><code>semiJoin</code> yields elements of the first iterable that match an element of the second iterable. <code>antiJoin</code> yields elements of the first iterable that <em>do not</em> match any elements of the second iterable.</p>
-<p>While <code>semiJoin</code> and <code>antiJoin</code> only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object/array in this case).</p>
-<pre><code><span class="zap-identifier">EXAMPLE</span>
-</code></pre>
-<h4 id="flatten"><code>flatten</code></h4>
-<p>'Flatten' a join into an array of objects:</p>
-<pre><code><span class="zap-identifier">EXAMPLE</span>
-</code></pre>
-<p><code>flatten</code> can take additional objects that specify which properties to keep and whether to append a prefix to property names:</p>
-<pre><code><span class="zap-identifier">EXAMPLE</span>
-</code></pre>
-<p>Notes:</p>
-<ul>
-<li>
-<p>Any number of additional operands can be used with <code>flatten </code> — since joins can be chained, each 'row' of results can have more than two objects.</p>
-</li>
-<li>
-<p>If prefixes are not used and objects in the same row share a property name, the result will use the value from the last object in the row that has the property.</p>
-</li>
-<li>
-<p>Use <code>null</code>, <code>undefined</code> or an empty object to skip an object, e.g. <code>aJoin flatten null (# prefix '_')</code>.</p>
-</li>
-<li>
-<p>Do not use the new prefixes when listing property names with <code>keep</code>.</p>
-</li>
-<li>
-<p>If <code>keep</code> is not used, all enumerable own properties of the corresponding object are included in the result.</p>
-</li>
-</ul>
-<hr>
-<p>Notes:</p>
-<ul>
-<li>example with arrays - make clear get objects back</li>
-</ul>
-<h2 id="random">Random</h2>
+<p>While <code>semiJoin</code> and <code>antiJoin</code> only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object/array in this case):</p>
+<pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">v</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span>        <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">q</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">0</span> <span class="zap-identifier">w</span> <span class="zap-number">7</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
+<span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
+
+<span class="zap-identifier">p</span> <span class="zap-identifier">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 1, v: 4}, {u: 3, v: 6}]</span>
+<span class="zap-identifier">p</span> <span class="zap-identifier">antiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 2, v: 5}]</span>
+</code></pre><h2 id="random">Random</h2>
 <hr>
 <p>These operators (except for <a href="#shuffle"><code>shuffle</code></a>) generate a number from a given distribution. An optional extra operand can be used to specify how many numbers to generate — in this case, the operator returns an array rather than a number.</p>
 <hr>
