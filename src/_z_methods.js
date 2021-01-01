@@ -830,7 +830,7 @@ export default {
       }
     }
     for (let u of j) {
-      let o = {};
+      let z = {};
       let i = 0;
       for (let v of u) {
         if (typeof v === 'object' && v !== null) {
@@ -838,21 +838,21 @@ export default {
           if (c[i]) {
             for (let k of c[i]) {
               if (v.hasOwnProperty(k)) {
-                o[s + k] = v[k];
+                z[s + k] = v[k];
               }
             }
           }
           else {
             for (let k in v) {
               if (v.hasOwnProperty(k)) {
-                o[s + k] = v[k];
+                z[s + k] = v[k];
               }
             }
           }
         }
         i++;
       }
-      r.push(o);
+      r.push(z);
     }
     return r;
   },

@@ -2026,23 +2026,23 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <h2 id="joins">Joins</h2>
 <hr>
 <p id="inner-join"><code>innerJoin</code>, <code>leftJoin</code>, <code>rightJoin</code>, <code>outerJoin</code></p>
-<p>Database-style joins. The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria which can be:</p>
+<p>Database-style joins. The first two operands are iterables; the elements of each iterable should be objects or arrays. The third operand specifies the join criteria which can be a:</p>
 <ul>
 <li>
-<p>function: called on each pair of elements of the iterables; if the callback returns a truthy value, the returned generator yields the pair of elements.</p>
+<p>function: called on each pair of elements of the iterables; if the function returns a truthy value, the pair of elements is included in the join.</p>
 </li>
 <li>
-<p>non-string iterable: the inner property names/indices to join on — the first and second elements correspond to the first and second iterables.</p>
+<p>non-string iterable: the inner property names/indices to join on — the first element corresponds to the first iterable, the second element to the second iterable.</p>
 </li>
 <li>
 <p>string/number: the inner property name/index to join on — use this when the name/index is the same for both iterables.</p>
 </li>
 </ul>
 <p>The optional fourth operand is the maximum number of results to yield.</p>
-<p>Join operators differ on how they treat elements ('rows') that are not matched:</p>
+<p>Join operators return a generator that yields arrays; each array contains a pair of elements from the iterables. The operators differ on how they treat unmatched elements:</p>
 <ul>
 <li>
-<p><code>innerJoin</code>: unmatched elements not included.</p>
+<p><code>innerJoin</code>: unmatched elements are not included.</p>
 </li>
 <li>
 <p><code>leftJoin</code>: unmatched elements of the first iterable are included.</p>
@@ -2092,11 +2092,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 </code></pre>
 <p>Unless speed or memory usage is critical, we typically <a href="#crush"><code>crush</code></a> the generator returned by a join operator — the resulting array-of-objects is easier to work with.</p>
 <blockquote>
-<p>In the &quot;chained join&quot; example above, the result does not have deeper nesting — elements have the form <code>[{...}, {...}, {...}]</code>, not <code>[[{...}, {...}], {...}]</code>. When chaining joins, the intermediate join must be the returned generator or crushed to get this behavior.</p>
+<p>In the &quot;chained join&quot; example above, the depth of nesting does not increase — elements have the form <code>[{...}, {...}, {...}]</code>, not <code>[[{...}, {...}], {...}]</code>. When chaining joins, the intermediate join must be the returned generator or crushed to get this behavior.</p>
 </blockquote>
 <hr>
 <h4 id="crush"><code>crush</code></h4>
-<p>Flatten a join into an array-of-objects. The first operand is the join, additional objects specify which properties to keep and whether to append a prefix to property names:</p>
+<p>Flatten a join into an array-of-objects. The first operand is the join; additional operands are objects that specify which properties to keep and property name prefixes:</p>
 <pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
@@ -2122,10 +2122,10 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>
 <span class="zap-punctuation">|</span> <span class="zap-identifier">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
   <span class="zap-comment">// [</span>
-  <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1  q_x: 30},</span>
-  <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3  q_x: 20},</span>
+  <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1, q_x: 30},</span>
+  <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3, q_x: 20},</span>
   <span class="zap-comment">//   {p_u: 2, p_v: 5                 },</span>
-  <span class="zap-comment">//   {                q_u: 0  q_x: 10}</span>
+  <span class="zap-comment">//   {                q_u: 0, q_x: 10}</span>
   <span class="zap-comment">// ]</span>
 
 <span class="zap-comment">// chained join</span>
@@ -2140,24 +2140,27 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <p>Notes:</p>
 <ul>
 <li>
-<p>Any number of additional operands can be used with <code>crush </code> — since joins can be chained, each 'row' of results can have more than two objects.</p>
+<p>Any number of additional operands can be used with <code>crush</code> — since joins can be chained, each 'row' of results can have more than two objects.</p>
 </li>
 <li>
 <p>If prefixes are not used and objects in the same row share a property name, the result will use the value from the last object in the row that has the property.</p>
 </li>
 <li>
-<p>Use <code>null</code>, <code>undefined</code> or an empty object to skip an object, e.g. <code>aJoin crush null (# prefix '_')</code>.</p>
+<p>Use a falsy value to skip an optional operand, e.g. <code>someJoin crush null (# prefix '_')</code>.</p>
 </li>
 <li>
 <p>Do not use the new prefixes when listing property names with <code>keep</code>.</p>
 </li>
 <li>
-<p>If <code>keep</code> is not used, all enumerable own properties of the corresponding object are included in the result.</p>
+<p>If <code>keep</code> is not used, all enumerable own properties of the corresponding objects are included in the result.</p>
+</li>
+<li>
+<p><code>crush</code> can be applied to any iterable-of-iterables. Elements of the inner iterables that are (non-null) objects are used to construct the result; other elements are ignored.</p>
 </li>
 </ul>
 <hr>
 <h4><code id="cross-join">crossJoin</code></h4>
-<p>All pairs or elements from two iterables. <code>crossJoin</code> is equivalent to <code>innerJoin</code> with a callback function that always returns <code>true</code>:</p>
+<p>All pairs of elements from two iterables. <code>crossJoin</code> is equivalent to <code>innerJoin</code> with a callback function that always returns <code>true</code>:</p>
 <ul>
 <li>
 <p><code>x crossJoin y</code> is equivalent to <code>x innerJoin y [true]</code></p>
@@ -2185,9 +2188,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   {p_0: 3, p_1: 4, q_0: 7, q_1: 8} </span>
   <span class="zap-comment">// ]</span>
 </code></pre>
+<hr>
 <h4><code>semiJoin</code>, <code id="semi-join">antiJoin</code></h4>
+<p>These operators take the same operands as <a href="#inner-join"><code>innerJoin</code></a>.</p>
 <p><code>semiJoin</code> yields elements of the first iterable that match an element of the second iterable. <code>antiJoin</code> yields elements of the first iterable that <em>do not</em> match any elements of the second iterable.</p>
-<p>While <code>semiJoin</code> and <code>antiJoin</code> only return the elements from one iterable, they behave like other joins for consistency: they return a generator that yields arrays (each array containing a single object/array in this case):</p>
+<p>While <code>semiJoin</code> and <code>antiJoin</code> only yield elements from the first iterable, they behave like other join operators for consistency: they return a generator that yields arrays (each array containing a single object/array in this case):</p>
 <pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> 
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">v</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">2</span> <span class="zap-identifier">v</span> <span class="zap-number">5</span><span class="zap-punctuation">)</span>
@@ -2198,6 +2203,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
+<span class="zap-identifier">p</span> <span class="zap-identifier">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [[{u: 1, v: 4}], [{u: 3, v: 6}]]</span>
 <span class="zap-identifier">p</span> <span class="zap-identifier">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 1, v: 4}, {u: 3, v: 6}]</span>
 <span class="zap-identifier">p</span> <span class="zap-identifier">antiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 2, v: 5}]</span>
 </code></pre><h2 id="random">Random</h2>
