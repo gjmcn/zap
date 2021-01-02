@@ -1828,14 +1828,14 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">6</span> <span class="zap-identifier">v</span> <span class="zap-number">9</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">7</span> <span class="zap-identifier">v</span> <span class="zap-number">12</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">x</span> <span class="zap-identifier">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
-<span class="zap-identifier">x</span> <span class="zap-identifier">correlation</span> <span class="zap-string">'u'</span> <span class="zap-string">'v'</span>       <span class="zap-comment">// 0.96</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">v</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">correlation</span> <span class="zap-string">'u'</span> <span class="zap-string">'v'</span>       <span class="zap-comment">// 0.96</span>
 </code></pre>
 <p>If the data is in two separate iterables, refer to the second iterable explicitly in the second callback and use the index to get the element:</p>
 <pre><code><span class="zap-identifier">u</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>
 <span class="zap-identifier">v</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">8</span> <span class="zap-number">9</span> <span class="zap-number">12</span>
 
-<span class="zap-identifier">u</span> <span class="zap-identifier">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
+<span class="zap-identifier">u</span> <span class="zap-keyword">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
 </code></pre>
 <p><code>covariance</code> computes the sample covariance. Use <code>covariancePop</code> for the population covariance.</p>
 <p>Values are treated as numbers. If any value converts to <code>NaN</code> or if the iterable has less than 2 elements, these operators return <code>NaN</code>.</p>
@@ -2069,11 +2069,11 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span> <span class="zap-identifier">y</span> <span class="zap-number">31</span><span class="zap-punctuation">)</span>      <span class="zap-comment">// array-of-objects</span>
 
 <span class="zap-comment">// these are equivalent</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// generator</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'u'</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// generator</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>            <span class="zap-comment">// generator</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-identifier">u</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">u</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// generator</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'u'</span><span class="zap-punctuation">)</span>    <span class="zap-comment">// generator</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>            <span class="zap-comment">// generator</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   [{u: 1, v: 4}, {u: 1, w: 9, x: 30}],</span>
   <span class="zap-comment">//   [{u: 3, v: 6}, {u: 3, w: 8, x: 20}],</span>
@@ -2082,7 +2082,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">// ]</span>
 
 <span class="zap-comment">// chained join - this is easier with crush (see below)</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-number">1</span> <span class="zap-operator">?:</span> <span class="zap-string">'x'</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">x</span><span class="zap-punctuation">]</span> <span class="zap-keyword">array</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-operator">,</span><span class="zap-number">1</span> <span class="zap-operator">?:</span> <span class="zap-string">'x'</span> <span class="zap-operator">==</span> <span class="zap-identifier">b</span><span class="zap-operator">,</span><span class="zap-identifier">x</span><span class="zap-punctuation">]</span> <span class="zap-keyword">array</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   [{u: 1, v: 4}, {u: 1, w: 9, x: 30}, {x: 30, y: 31}], </span>
   <span class="zap-comment">//   [null,         {u: 0, w: 7, x: 10}, {x: 10, y: 11}], </span>
@@ -2111,7 +2111,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">10</span> <span class="zap-identifier">y</span> <span class="zap-number">11</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span> <span class="zap-identifier">y</span> <span class="zap-number">31</span><span class="zap-punctuation">)</span>      <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">crush</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30},</span>
   <span class="zap-comment">//   {u: 3, v: 6, w: 8, x: 20},</span>
@@ -2119,8 +2119,8 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   {u: 0,       w: 7, x: 10}</span>
   <span class="zap-comment">// ]                 </span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>
-<span class="zap-punctuation">|</span> <span class="zap-identifier">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span>
+<span class="zap-punctuation">|</span> <span class="zap-keyword">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_p'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'_q'</span> <span class="zap-identifier">keep</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-string">'u'</span> <span class="zap-string">'x'</span><span class="zap-punctuation">)</span><span class="zap-punctuation">)</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   {p_u: 1, p_v: 4, q_u: 1, q_x: 30},</span>
   <span class="zap-comment">//   {p_u: 3, p_v: 6, q_u: 3, q_x: 20},</span>
@@ -2129,7 +2129,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">// ]</span>
 
 <span class="zap-comment">// chained join</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span> <span class="zap-identifier">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-string">'x'</span> <span class="zap-identifier">crush</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">crush</span> <span class="zap-keyword">outerJoin</span> <span class="zap-identifier">r</span> <span class="zap-string">'x'</span> <span class="zap-keyword">crush</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   {u: 1, v: 4, w: 9, x: 30, y: 31}, </span>
   <span class="zap-comment">//   {u: 0,       w: 7, x: 10, y: 11}, </span>
@@ -2172,7 +2172,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <pre><code><span class="zap-identifier">p</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">1</span> <span class="zap-number">2</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
 <span class="zap-identifier">q</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">7</span> <span class="zap-number">8</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-arrays</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-keyword">array</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-keyword">array</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   [[1, 2], [5, 6]], </span>
   <span class="zap-comment">//   [[1, 2], [7, 8]], </span>
@@ -2180,7 +2180,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
   <span class="zap-comment">//   [[3, 4], [7, 8]] </span>
   <span class="zap-comment">// ]</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-identifier">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'p_'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'q_'</span><span class="zap-punctuation">)</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">crossJoin</span> <span class="zap-identifier">q</span> <span class="zap-keyword">crush</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'p_'</span><span class="zap-punctuation">)</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">prefix</span> <span class="zap-string">'q_'</span><span class="zap-punctuation">)</span>
   <span class="zap-comment">// [</span>
   <span class="zap-comment">//   {p_0: 1, p_1: 2, q_0: 5, q_1: 6}, </span>
   <span class="zap-comment">//   {p_0: 1, p_1: 2, q_0: 7, q_1: 8}, </span>
@@ -2203,9 +2203,9 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">3</span> <span class="zap-identifier">w</span> <span class="zap-number">8</span> <span class="zap-identifier">x</span> <span class="zap-number">20</span><span class="zap-punctuation">)</span>
 <span class="zap-punctuation">|</span> <span class="zap-punctuation">(</span><span class="zap-operator">#</span> <span class="zap-identifier">u</span> <span class="zap-number">1</span> <span class="zap-identifier">w</span> <span class="zap-number">9</span> <span class="zap-identifier">x</span> <span class="zap-number">30</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// array-of-objects</span>
 
-<span class="zap-identifier">p</span> <span class="zap-identifier">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [[{u: 1, v: 4}], [{u: 3, v: 6}]]</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 1, v: 4}, {u: 3, v: 6}]</span>
-<span class="zap-identifier">p</span> <span class="zap-identifier">antiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-identifier">crush</span>   <span class="zap-comment">// [{u: 2, v: 5}]</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [[{u: 1, v: 4}], [{u: 3, v: 6}]]</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">semiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">crush</span>   <span class="zap-comment">// [{u: 1, v: 4}, {u: 3, v: 6}]</span>
+<span class="zap-identifier">p</span> <span class="zap-keyword">antiJoin</span> <span class="zap-identifier">q</span> <span class="zap-string">'u'</span> <span class="zap-keyword">crush</span>   <span class="zap-comment">// [{u: 2, v: 5}]</span>
 </code></pre><h2 id="random">Random</h2>
 <hr>
 <p>These operators (except for <a href="#shuffle"><code>shuffle</code></a>) generate a number from a given distribution. An optional extra operand can be used to specify how many numbers to generate — in this case, the operator returns an array rather than a number.</p>
