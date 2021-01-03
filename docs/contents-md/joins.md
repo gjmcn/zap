@@ -96,7 +96,7 @@ p outerJoin q 'u' crush
   // ]                 
 
 p outerJoin q 'u'
-| crush (# prefix '_p') (# prefix '_q' keep (@ 'u' 'x'))
+| crush (# prefix 'p_') (# prefix 'q_' keep (@ 'u' 'x'))
   // [
   //   {p_u: 1, p_v: 4, q_u: 1, q_x: 30},
   //   {p_u: 3, p_v: 6, q_u: 3, q_x: 20},

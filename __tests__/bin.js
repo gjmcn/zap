@@ -10,7 +10,7 @@ test('binCount numeric array default', () => {
     .toStrictEqual(new Map([[10, 3], [20, 1]]));
 });
 
-xStr = `
+const xStr = `
 x = @ 
 | (@ 23 0)
 | (@  7 1)
