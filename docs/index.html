@@ -1837,6 +1837,15 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 
 <span class="zap-identifier">u</span> <span class="zap-keyword">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.96</span>
 </code></pre>
+<p><code>correlation</code> computes the Pearson correlation coefficient. To compute Spearman's rank correlation coefficient, use <a href="#order"><code>rank</code></a> then <code>correlation</code>:</p>
+<pre><code><span class="zap-identifier">u</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span> <span class="zap-number">5</span>
+<span class="zap-identifier">v</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">9</span> <span class="zap-number">5</span>
+<span class="zap-identifier">ru</span> <span class="zap-operator">=</span> <span class="zap-keyword">rank</span> <span class="zap-identifier">u</span>   <span class="zap-comment">// [0, 1, 2]</span>
+<span class="zap-identifier">rv</span> <span class="zap-operator">=</span> <span class="zap-keyword">rank</span> <span class="zap-identifier">v</span>   <span class="zap-comment">// [0, 2, 1]</span>
+
+<span class="zap-identifier">u</span> <span class="zap-keyword">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">v</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>     <span class="zap-comment">// 0.33</span>
+<span class="zap-identifier">ru</span> <span class="zap-keyword">correlation</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span><span class="zap-punctuation">]</span> <span class="zap-punctuation">[</span><span class="zap-identifier">rv</span><span class="zap-operator">;</span><span class="zap-identifier">b</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// 0.5</span>
+</code></pre>
 <p><code>covariance</code> computes the sample covariance. Use <code>covariancePop</code> for the population covariance.</p>
 <p>Values are treated as numbers. If any value converts to <code>NaN</code> or if the iterable has less than 2 elements, these operators return <code>NaN</code>.</p>
 <hr>

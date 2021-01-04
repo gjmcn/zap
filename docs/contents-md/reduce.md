@@ -175,6 +175,18 @@ v = @ 8 9 12
 u correlation [a] [v;b]   // 0.96
 ```
 
+`correlation` computes the Pearson correlation coefficient. To compute Spearman's rank correlation coefficient, use [`rank`](#order) then `correlation`:
+
+```
+u = @ 3 4 5
+v = @ 3 9 5
+ru = rank u   // [0, 1, 2]
+rv = rank v   // [0, 2, 1]
+
+u correlation [a] [v;b]     // 0.33
+ru correlation [a] [rv;b]   // 0.5
+```
+
 `covariance` computes the sample covariance. Use `covariancePop` for the population covariance.
 
 Values are treated as numbers. If any value converts to `NaN` or if the iterable has less than 2 elements, these operators return `NaN`.
