@@ -378,13 +378,6 @@ export default (block, _z_used) => {
       return [ opPosn('(_z_s = 1, void 0)') ];
     }
 
-    else if (op === 'array') {
-      let res = [ opPosn('[') ];
-      for (let xi of x) res.push(opPosn('...'), xi, ',');
-      res.push(opPosn(']'));
-      return res;
-    }
-
     else if (op === 'call') {
       if (!nx) throw arityError(operator);
       const res = [ x[0], opPosn('(') ];

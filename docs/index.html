@@ -732,17 +732,24 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <pre><code><span class="zap-operator">@</span>       <span class="zap-comment">// empty array</span>
 <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span>   <span class="zap-comment">// [5, 6]</span>
 </code></pre>
-<p>There is also an <code>array</code> operator that takes any number of iterables and returns a new array containing the elements of all of the iterables:</p>
-<pre><code><span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>   <span class="zap-comment">// [5, 6, 7]</span>
+<p>The <code>array</code> operator is like <code>@</code>, except that if an operand is a non-string iterable, <code>array</code> uses the elements of the iterable rather than the iterable itself:</p>
+<pre><code><span class="zap-identifier">i</span> <span class="zap-operator">=</span> <span class="zap-number">2</span>         <span class="zap-comment">// 2</span>
+<span class="zap-identifier">s</span> <span class="zap-operator">=</span> <span class="zap-string">'34'</span>      <span class="zap-comment">// '34'</span>
+<span class="zap-identifier">x</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">6</span> <span class="zap-number">7</span>   <span class="zap-comment">// [5, 6, 7] </span>
 <span class="zap-identifier">y</span> <span class="zap-operator">=</span> <span class="zap-operator">@@</span> <span class="zap-number">8</span> <span class="zap-number">9</span>    <span class="zap-comment">// Set {8, 9} (see below)</span>
-<span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-string">'abc'</span>     <span class="zap-comment">// 'abc'</span>
 
-<span class="zap-keyword">array</span>         <span class="zap-comment">// []</span>
-<span class="zap-identifier">x</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// [5, 6, 7] (shallow copy of x)  </span>
-<span class="zap-identifier">y</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// [8, 9]  </span>
-<span class="zap-identifier">z</span> <span class="zap-keyword">array</span>       <span class="zap-comment">// ['a', 'b', 'c']</span>
+<span class="zap-keyword">array</span>     <span class="zap-comment">// empty array</span>
+<span class="zap-identifier">i</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [2]   </span>
+<span class="zap-identifier">s</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// ['34']  </span>
+<span class="zap-identifier">x</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [5, 6, 7]</span>
+<span class="zap-identifier">y</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [8, 9]</span>
 
-<span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-identifier">z</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [5, 6, 7, 8, 9, 'a', 'b', 'c']</span>
+<span class="zap-identifier">i</span> <span class="zap-identifier">s</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-operator">@</span>       <span class="zap-comment">// [2, '34', [5, 6, 7], Set {8, 9}]</span>
+<span class="zap-identifier">i</span> <span class="zap-identifier">s</span> <span class="zap-identifier">x</span> <span class="zap-identifier">y</span> <span class="zap-keyword">array</span>   <span class="zap-comment">// [2, '34', 5, 6, 7, 8, 9]</span>
+
+<span class="zap-comment">// array does not 'flatten' iterables recursively</span>
+<span class="zap-identifier">z</span> <span class="zap-operator">=</span> <span class="zap-operator">@</span> <span class="zap-number">2</span> <span class="zap-punctuation">(</span><span class="zap-operator">@</span> <span class="zap-number">3</span> <span class="zap-number">4</span><span class="zap-punctuation">)</span>   <span class="zap-comment">// [2, [3, 4]]</span>
+<span class="zap-number">1</span> <span class="zap-identifier">z</span> <span class="zap-keyword">array</span>         <span class="zap-comment">// [1, 2, [3, 4]] </span>
 </code></pre>
 <p><code>empties</code>, <code>zeros</code> and <code>ones</code> create an array of a given length. <code>zeros</code> and <code>ones</code> set each entry to <code>0</code> or <code>1</code>. Include additional operands to create nested arrays:</p>
 <pre><code><span class="zap-number">3</span> <span class="zap-keyword">empties</span>    <span class="zap-comment">// [empty x 3]</span>

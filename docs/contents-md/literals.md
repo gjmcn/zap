@@ -45,19 +45,26 @@ Use the `@` operator for an array:
 @ 5 6   // [5, 6]
 ```
 
-There is also an `array` operator that takes any number of iterables and returns a new array containing the elements of all of the iterables:
+The `array` operator is like `@`, except that if an operand is a non-string iterable, `array` uses the elements of the iterable rather than the iterable itself:
 
 ```
-x = @ 5 6 7   // [5, 6, 7]
+i = 2         // 2
+s = '34'      // '34'
+x = @ 5 6 7   // [5, 6, 7] 
 y = @@ 8 9    // Set {8, 9} (see below)
-z = 'abc'     // 'abc'
 
-array         // []
-x array       // [5, 6, 7] (shallow copy of x)  
-y array       // [8, 9]  
-z array       // ['a', 'b', 'c']
+array     // empty array
+i array   // [2]   
+s array   // ['34']  
+x array   // [5, 6, 7]
+y array   // [8, 9]
 
-x y z array   // [5, 6, 7, 8, 9, 'a', 'b', 'c']
+i s x y @       // [2, '34', [5, 6, 7], Set {8, 9}]
+i s x y array   // [2, '34', 5, 6, 7, 8, 9]
+
+// array does not 'flatten' iterables recursively
+z = @ 2 (@ 3 4)   // [2, [3, 4]]
+1 z array         // [1, 2, [3, 4]] 
 ```
 
 `empties`, `zeros` and `ones` create an array of a given length. `zeros` and `ones` set each entry to `0` or `1`. Include additional operands to create nested arrays:

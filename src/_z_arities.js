@@ -2,6 +2,7 @@
 
 const m = new Map();
 
+m.set('array',      [0, Infinity]);
 m.set('at',         [2, 3]);
 m.set('chg',        [3, 3]);
 m.set('getter',     [3, 3]);

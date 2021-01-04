@@ -563,6 +563,21 @@ export default {
     }
   },
 
+  array(...q) {
+    const r = [];
+    for (let x of q) {
+      if (typeof x !== 'string' && x && x[Symbol.iterator]) {
+        for (let y of x) {
+          r.push(y);
+        }
+      }
+      else {
+        r.push(x);
+      }
+    }
+    return r;  
+  },
+
   print(v) {
     console.log(v);
     return v;
