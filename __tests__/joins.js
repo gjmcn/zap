@@ -1,18 +1,11 @@
 const {compute} = require('./test-helpers.js');
 
-
-///// TESTS STILL TO ADD /////
-// -repeated rows of in one or both tables
-// -non-array iterables
-// -join on different col names or using callback
-//////////////////////////////
-
-
 const pStr = `(@ (# u 1 v 4) (# u 2 v 5) (# u 3 v 6))`;
 const qStr = `(@ (# u 0 w 7 x 10) (# u 3 w 8 x 20) (# u 1 w 9 x 30))`;
 const rStr = `(@ (# x 10 y 11) (# x 30 y 31))`;
 const xStr = `(@ (@ 1 2) (@ 3 4))`;
 const yStr = `(@ (@ 1 6) (@ 7 8))`;
+const zStr = `(@@ (# a 2 b 10) (# a 2 b 11) (# a false b 12))`;
 
 test('innerJoin', () => {
   expect(compute(`${pStr} innerJoin ${qStr} 'u' array`)).toStrictEqual([
@@ -79,7 +72,7 @@ test('innerJoin, inner arrays', () => {
 test('leftJoin, inner arrays', () => {
   expect(compute(`${xStr} leftJoin ${yStr} 0 array`)).toStrictEqual([
     [[1, 2], [1, 6]], 
-    [[3, 4], null] 
+    [[3, 4], null  ] 
   ]);
 });
 
@@ -177,6 +170,18 @@ test('outerJoin, empty operands', () => {
   expect(compute(`@ outerJoin (@) 'u' array`)).toStrictEqual([]);
 });
 
+test('crossJoin, empty first operand', () => {
+  expect(compute(`@ crossJoin ${pStr} array`)).toStrictEqual([]);
+});
+
+test('crossJoin, empty second operand', () => {
+  expect(compute(`${pStr} crossJoin (@) array`)).toStrictEqual([]);
+});
+
+test('crossJoin, empty operands', () => {
+  expect(compute(`@ crossJoin (@) array`)).toStrictEqual([]);
+});
+
 test('crush, outerJoin', () => {
   expect(compute(`${pStr} outerJoin ${qStr} 'u' crush`)).toStrictEqual([
     {u: 1, v: 4, w: 9, x: 30},
@@ -207,4 +212,24 @@ test('crush, outerJoin, chained', () => {
     {u: 3, v: 6, w: 8, x: 20       }, 
     {u: 2, v: 5                    }
   ]);
+});
+
+test('innerJoin, set and array, repeats, different column names', () => {
+  expect(compute(
+    `${zStr} innerJoin ${pStr} (@ 'a' 'u') array`
+  )).toStrictEqual([
+    [{a: 2, b: 10}, {u: 2, v: 5}],
+    [{a: 2, b: 11}, {u: 2, v: 5}]
+  ])
+});
+
+test('innerJoin, array and set, repeats, callback', () => {
+  expect(compute(
+    `${pStr} innerJoin ${zStr} [a,v == 6 && (b,b == 11) || (b,a !)] array`
+  )).toStrictEqual([
+    [{u: 1, v: 4}, {a: false, b: 12}],
+    [{u: 2, v: 5}, {a: false, b: 12}],
+    [{u: 3, v: 6}, {a: 2    , b: 11}],
+    [{u: 3, v: 6}, {a: false, b: 12}],
+  ])
 });

@@ -18,7 +18,7 @@ x = @
 | (@ 38 3)
 | (@  3 4)
 | (@ 34 5)`;
-limitsStr = 'limits = @ 10 20 30 40';
+const limitsStr = 'limits = @ 10 20 30 40';
 
 test('bin array-of-arrays', () => {
   expect(compute(`
