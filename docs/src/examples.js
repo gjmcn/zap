@@ -6,6 +6,9 @@ module.exports = new Map([
 'data analysis',
 `iris = 'data/iris.json' \\fetch await ~json await
 
+// iris with max petal length
+iris max 'petalLength'
+
 // petal length > 6
 iris filter [a,petalLength > 6]
 
@@ -17,6 +20,12 @@ iris groupCount 'species'
 
 // mean petal width by species
 iris group 'species' [a mean 'petalWidth']
+
+// petal length, petal width correlation
+iris correlation 'petalLength' 'petalWidth'
+
+// petal length, petal width correlation by species
+iris group 'species' [a correlation 'petalLength' 'petalWidth']
 
 // comment later code to print an earlier result`
 ], [
