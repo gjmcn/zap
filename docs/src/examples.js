@@ -240,7 +240,7 @@ buttons = @ addPlayer removePlayer winLose start
 | style 'margin' '5px'
 
 addPlayer <~click <~click
-buttons ~concat list into (fragment)
+array buttons list into (fragment)
 `
 ],[
 'canvas - snow',
@@ -259,7 +259,7 @@ frames = 400
 y = random 0 height n
 s = random minSize maxSize n            
 t = random 0 (Math,PI * 2) n         // initial angle
-r = random 0 (width / 2 ^ 2) n sqrt   // radius of spiral
+r = random 0 (width / 2 ^ 2) n sqrt  // radius of spiral
 
 // canvas and context
 canvas ctx @= # attach width height sketch
