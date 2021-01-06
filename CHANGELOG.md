@@ -1,3 +1,11 @@
+#### 0.4.0 &mdash; Jan 6, 2021
+
+* Add: `innerJoin`, `outerJoin`, `leftJoin`, `rightJoin`, `crossJoin`, `semiJoin`, `antiJoin`, `crush`.
+* Add `covariance`, `covariancePop`, `correlation`.
+* Add `variancePop`, `deviationPop`.
+* Change `array` to allow non-iterables; strings are not flattened.
+* Remove UMD version. 
+
 #### 0.3.1 &mdash; Dec 17, 2020
 
 * `at`, `mapAt`: accept third operand, if truthy put selected properties in array.
@@ -18,16 +26,16 @@
 
 #### 0.2.4
 
-* Added: `pick`, `mapAt`, `interpolate`, `rank`, `filterIndex`, `quantile`, `median`.
-* Added: `isBigInt`, `isBoolean`, `isFunction`, `isNull`, `isNullish`, `isNumber`, `isString`, `isSymbol`, `isUndefined`.
+* Add: `pick`, `mapAt`, `interpolate`, `rank`, `filterIndex`, `quantile`, `median`.
+* Add: `isBigInt`, `isBoolean`, `isFunction`, `isNull`, `isNullish`, `isNumber`, `isString`, `isSymbol`, `isUndefined`.
 
 #### 0.2.3
 
-* Added: `difference`, `intersection`, `union`.
+* Add: `difference`, `intersection`, `union`.
 
 #### 0.2.2
 
-* Added: `zeros`, `ones`, `empties`.
+* Add: `zeros`, `ones`, `empties`.
 
 #### 0.2.1
 
