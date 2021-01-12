@@ -1,13 +1,16 @@
 {
   "name": "@gjmcn/zap",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Zap Language",
   "type": "module",
   "main": "./dist/zap.mjs",
   "module": "./dist/zap.mjs",
+  "unpkg": "./dist/zap.umd.js",
+  "jsdelivr": "./dist/zap.umd.js",
   "exports": {
     "import": "./dist/zap.mjs",
-    "require": "./dist/zap.cjs"
+    "require": "./dist/zap.cjs",
+    "browser": "./dist/zap.umd.js"
   },
   "bin": {
     "zap": "bin/zap.js"

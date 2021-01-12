@@ -1,3 +1,7 @@
+#### 0.4.1 &mdash; Jan 12, 2021
+
+* Add UMD version. 
+
 #### 0.4.0 &mdash; Jan 6, 2021
 
 * Add: `innerJoin`, `outerJoin`, `leftJoin`, `rightJoin`, `crossJoin`, `semiJoin`, `antiJoin`, `crush`.

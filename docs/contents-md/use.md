@@ -16,9 +16,17 @@
 
   <pre><code>import zap from '@gjmcn/zap';</code></pre>
 
-* CDN:
+* UMD: `dist/zap.umd.js`. This can be loaded with a `<script>` tag and will create a global `zap` function.
+
+Zap can be loaded from a CDN. Examples:
+
+* [Skypack](https://www.skypack.dev/), using `import`:
 
   <pre><code>import zap from 'https://cdn.skypack.dev/@gjmcn/zap';</code></pre>
+
+* [jsDelivr](https://www.jsdelivr.com/), using a `<script>`:
+
+  <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@gjmcn/zap"&gt;&lt;script&gt;</code></pre>
 
 The exported `zap` function compiles a string of Zap code to JavaScript. The optional second argument of `zap` is an options object that specifies which properties to include in the returned object:
 

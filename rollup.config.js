@@ -8,6 +8,11 @@ export default {
     input: 'src/index.js',
     external: ['source-map'],
     output: [
+        {
+			name: 'zap',
+			file: pkg.exports.browser,
+			format: 'umd'
+		},
         { 
             file: pkg.exports.require, 
             format: 'cjs',

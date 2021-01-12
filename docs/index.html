@@ -178,8 +178,18 @@
 <pre><code>import zap from '@gjmcn/zap';</code></pre>
 </li>
 <li>
-<p>CDN:</p>
+<p>UMD: <code>dist/zap.umd.js</code>. This can be loaded with a <code>&lt;script&gt;</code> tag and will create a global <code>zap</code> function.</p>
+</li>
+</ul>
+<p>Zap can be loaded from a CDN. Examples:</p>
+<ul>
+<li>
+<p><a href="https://www.skypack.dev/">Skypack</a>, using <code>import</code>:</p>
 <pre><code>import zap from 'https://cdn.skypack.dev/@gjmcn/zap';</code></pre>
+</li>
+<li>
+<p><a href="https://www.jsdelivr.com/">jsDelivr</a>, using a <code>&lt;script&gt;</code>:</p>
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@gjmcn/zap"&gt;&lt;script&gt;</code></pre>
 </li>
 </ul>
 <p>The exported <code>zap</code> function compiles a string of Zap code to JavaScript. The optional second argument of <code>zap</code> is an options object that specifies which properties to include in the returned object:</p>
