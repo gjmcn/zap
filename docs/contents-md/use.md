@@ -26,7 +26,7 @@ Zap can be loaded from a CDN. Examples:
 
 * [jsDelivr](https://www.jsdelivr.com/), using a `<script>`:
 
-  <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@gjmcn/zap"&gt;&lt;script&gt;</code></pre>
+  <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@gjmcn/zap"&gt;&lt;/script&gt;</code></pre>
 
 The exported `zap` function compiles a string of Zap code to JavaScript. The optional second argument of `zap` is an options object that specifies which properties to include in the returned object:
 
