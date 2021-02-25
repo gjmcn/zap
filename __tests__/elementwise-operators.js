@@ -1,19 +1,5 @@
 const {testEach, simpleTest} = require('./test-helpers.js');
 
-// is
-simpleTest('isBigInt',    '10n isBigInt',        true);
-simpleTest('isBoolean',   '5 isBoolean',         false);
-simpleTest('isFinite',    '5 isFinite',          true);
-simpleTest('isFunction',  '[a + 5] isFunction',  true);
-simpleTest('isInteger',   '5 isInteger',         true);
-simpleTest('isNaN',       '5 isNaN',             false);
-simpleTest('isNull',      'null isNull',         true);
-simpleTest('isNullish',   'undefined isNullish', true);
-simpleTest('isNumber',    '"5" isNumber',        false);
-simpleTest('isString',    '"5" isString',        true);
-simpleTest('isSymbol',    '\\Symbol isSymbol',   true);
-simpleTest('isUndefined', 'null isUndefined',    false);
-
 // Math methods
 simpleTest('abs',    '- 5 abs',     5);
 simpleTest('acos',   '1 acos',      0);
@@ -67,7 +53,6 @@ testEach('non-string iterables', [
   ["@@ 'a' 'bc' toUpperCase",   ['A', 'BC']],
   ["round (2.4 to 4.8 1.2)",    [2, 4, 5]],
   ["@ 0 'a' boolean",           [false, true]],
-  ["@ 5 '5' NaN true isNumber", [true, false, true, false]],
   ['number (@)',                []],
   [`
 f = fun

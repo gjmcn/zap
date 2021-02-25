@@ -20,6 +20,7 @@ const sections = [
   ['classes', 'Classes'],
   ['loops', 'Loops'],
   ['exceptions', 'Exceptions'],
+  ['is', 'Is'],
   ['elementwise', 'Elementwise'],
   ['conditional', 'Conditional'],
   ['ranges', 'Ranges'],

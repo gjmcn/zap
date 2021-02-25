@@ -138,19 +138,7 @@ m.set('boolean',   [1, 1]);
 m.set('number',    [1, 1]);
 m.set('string',    [1, 1]);
 m.set('date',      [1, 1]);
-m.set('isInteger', [1, 1]);
-m.set('isFinite',  [1, 1]);
-m.set('isNaN',     [1, 1]);
 m.set('not',       [1, 1]);
-m.set('isBigInt',    [1, 1]);
-m.set('isBoolean',   [1, 1]);
-m.set('isFunction',  [1, 1]);
-m.set('isNull',      [1, 1]);
-m.set('isNullish',   [1, 1]);
-m.set('isNumber',    [1, 1]);
-m.set('isString',    [1, 1]);
-m.set('isSymbol',    [1, 1]);
-m.set('isUndefined', [1, 1]);
 
 // HTML convenience
 [ '$a', '$abbr', '$address', '$area', '$article', '$aside', '$audio', '$b',

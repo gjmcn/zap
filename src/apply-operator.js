@@ -11,6 +11,9 @@ const binaryOps = new Set(['<', '<=', '>', '>=', '==', '!=']);
 const unquotedOps = new Set([  // not including method call ops
   '#', '##'
 ]);
+const isTypeofOps = new Set([
+  'isBigInt', 'isBoolean', 'isFunction', 'isNumber', 'isString', 'isSymbol'
+]);
 
 // errors
 function errorStem(operator) {
@@ -315,6 +318,34 @@ export default (block, _z_used) => {
       const [mn, mx] = _z_arities.get(op);
       if (nx < mn || nx > mx ) throw arityError(operator);
       return call_z_method(op);
+    }
+
+    else if (isTypeofOps.has(op)) {
+      if (nx !== 1) throw arityError(operator);
+      return [
+        '(', opPosn('typeof'), ' ', x[0],
+        ` === '${op.slice(2).toLowerCase()}')`
+      ];
+    }
+
+    else if (op === 'isArray') {
+      if (nx !== 1) throw arityError(operator);
+      return [opPosn('Array.isArray('), x[0], ')'];
+    }
+
+    else if (op === 'isInteger' || op === 'isFinite' || op === 'isNaN') {
+      if (nx !== 1) throw arityError(operator);
+      return [opPosn(`Number.${op}(`), x[0], ')'];
+    }
+
+    else if (op === 'isNull' || op === 'isUndefined') {
+      if (nx !== 1) throw arityError(operator);
+      return [opPosn('('), x[0], ` === ${op.slice(2).toLowerCase()})`];
+    }
+
+    else if (op === 'isNullish') {
+      if (nx !== 1) throw arityError(operator);
+      return [opPosn('(('), x[0], ' ?? null) === null)'];
     }
 
     else if (op === 'attach') {

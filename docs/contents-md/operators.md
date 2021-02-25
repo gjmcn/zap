@@ -73,12 +73,6 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 ---
 
-#### Elementwise Is
-
-[`isBigInt`](#elementwise) [`isBoolean`](#elementwise) [`isFinite`](lementwise) [`isFunction`](#elementwise) [`isInteger`](#elementwise) [`isNaN`](#elementwise) [`isNull`](#elementwise) [`isNullish`](#elementwise) [`isNumber`](#elementwise) [`isString`](#elementwise) [`isSymbol`](#elementwise) [`isUndefined `](#elementwise)
-
----
-
 #### Elementwise Math
 
 [`abs`](#elementwise) [`acos`](#elementwise) [`acosh`](#elementwise) [`asin`](#elementwise) [`asinh`](#elementwise) [`atan`](#elementwise) [`atanh`](#elementwise) [`cbrt`](#elementwise) [`ceil`](#elementwise) [`clz32`](#elementwise) [`cos`](#elementwise) [`cosh`](#elementwise) [`exp`](#elementwise) [`expm1`](#elementwise) [`floor`](#elementwise) [`fround`](#elementwise) [`log`](#elementwise) [`log10`](#elementwise) [`log1p`](#elementwise)  [`log2`](#elementwise) [`round`](#elementwise) [`sign`](#elementwise) [`sin`](#elementwise) [`sinh`](#elementwise) [`sqrt`](#elementwise) [`tan`](#elementwise) [`tanh`](#elementwise) [`trunc`](#elementwise)
@@ -105,6 +99,12 @@ new Date 2050 11   // 01 December, 2050, 00:00:00
 
 #### Import and Export
 [`export`](#export) [`import`](#import) [`importAll`](#import-all) [`importAs`](#import-as) [`importDefault`](#import-default) [`load`](#load)
+
+---
+
+#### Is
+
+[`isArray`](#is) [`isBigInt`](#is) [`isBoolean`](#is) [`isFinite`](#is) [`isFunction`](#is) [`isInteger`](#is) [`isNaN`](#is) [`isNull`](#is) [`isNullish`](#is) [`isNumber`](#is) [`isString`](#is) [`isSymbol`](#is) [`isUndefined `](#is)
 
 ---
 

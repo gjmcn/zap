@@ -1,3 +1,8 @@
+#### 0.4.2 &mdash; Feb 25, 2021
+
+* Add `isArray`.
+* Change 'is' operators to normal operators &mdash; not elementwise.
+
 #### 0.4.1 &mdash; Jan 12, 2021
 
 * Add UMD version. 

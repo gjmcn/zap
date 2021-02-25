@@ -54,9 +54,10 @@ const reserved = {
     'log1p', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
     'trunc',
     
-    // entrywise is
-    'isBigInt', 'isBoolean', 'isFinite', 'isFunction', 'isInteger', 'isNaN',
-    'isNull', 'isNullish', 'isNumber', 'isString', 'isSymbol', 'isUndefined',
+    // is
+    'isArray', 'isBigInt', 'isBoolean', 'isFinite', 'isFunction', 'isInteger',
+    'isNaN', 'isNull', 'isNullish', 'isNumber', 'isString', 'isSymbol',
+    'isUndefined',
 
     // entrywise other
     'toUpperCase', 'toLowerCase', 'trim', 'trimEnd', 'trimStart', 'neg',

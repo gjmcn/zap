@@ -33,9 +33,9 @@ x ~slice 1 3   // [6, 7]
 x 1 3 ~slice   // [6, 7]
 \x,slice 1 3   // [6, 7]
 
-Array ~isArray x   // true
-\Array,isArray x   // true
-x \Array,isArray   // true
+JSON ~stringify x   // '[5,6,7,8]'
+\JSON,stringify x   // '[5,6,7,8]'
+x \JSON,stringify   // '[5,6,7,8]'
 ```
 
 ---
