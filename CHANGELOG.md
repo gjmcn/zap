@@ -1,3 +1,7 @@
+#### 0.4.3 &mdash; May 11, 2021
+
+* `bin`, `binCount`, `group`, `groupCount`: second callback is passed index as third argument.
+
 #### 0.4.2 &mdash; Feb 25, 2021
 
 * Add `isArray`.

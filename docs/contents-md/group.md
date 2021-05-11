@@ -21,7 +21,7 @@ x group 'u'   // Map {
 x group 'u' [a mean 'v']   // Map {5 => 20, 6 => 20}
 ```
 
-As shown in the example, `group` can take a second callback. This is applied to each group (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.
+As shown in the example, `group` can take a second callback. This is applied to each group (it is passed a value and key of the map at each step, as well as the index) and the results are used as the values of the returned map.
 
 `groupCount` gets the size of each group: 
 

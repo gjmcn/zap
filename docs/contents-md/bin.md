@@ -39,7 +39,7 @@ x binCount limits [a,0 - b] [a > 1]   // Map {
                                       // }
 ```
 
-As shown in the example, `bin` can take a second callback (the example uses [pick](#pick)). This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.
+As shown in the example, `bin` can take a second callback (the example uses [pick](#pick)). This is applied to each bin (it is passed a value and key of the map at each step, as well as the index) and the results are used as the values of the returned map.
 
 `binCount` gets the number of elements in each bin &mdash; see the final examples above. While we could use `bin` with a second callback for this, `binCount` is more efficient and is easier to read. 
 

@@ -91,11 +91,11 @@ f = fun
     @ 4 5 6 yield
     @ 7 8 9 yield
     @ 10 5 12 yield
-\\f group 1 [a sum 2]`))
+\\f group 1 [+ (a sum 2)","b","c]`))
   .toStrictEqual(new Map([
-    [2, 3],
-    [5, 18],
-    [8, 9]
+    [2, '3,2,0'],
+    [5, '18,5,1'],
+    [8, '9,8,2']
   ]));
 });
 
@@ -106,11 +106,11 @@ f = fun
     @ 4 5 6 yield
     @ 7 8 9 yield
     @ 10 5 12 yield
-\\f groupCount 1 [a + '!']`))
+\\f groupCount 1 [+ a","b","c]`))
   .toStrictEqual(new Map([
-    [2, '1!'],
-    [5, '2!'],
-    [8, '1!']
+    [2, '1,2,0'],
+    [5, '2,5,1'],
+    [8, '1,8,2']
   ]));
 });
 

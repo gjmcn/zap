@@ -1953,7 +1953,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
 <span class="zap-comment">// second callback</span>
 <span class="zap-identifier">x</span> <span class="zap-keyword">group</span> <span class="zap-string">'u'</span> <span class="zap-punctuation">[</span><span class="zap-identifier">a</span> <span class="zap-keyword">mean</span> <span class="zap-string">'v'</span><span class="zap-punctuation">]</span>   <span class="zap-comment">// Map {5 =&gt; 20, 6 =&gt; 20}</span>
 </code></pre>
-<p>As shown in the example, <code>group</code> can take a second callback. This is applied to each group (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.</p>
+<p>As shown in the example, <code>group</code> can take a second callback. This is applied to each group (it is passed a value and key of the map at each step, as well as the index) and the results are used as the values of the returned map.</p>
 <p><code>groupCount</code> gets the size of each group:</p>
 <pre><code><span class="zap-operator">@</span> <span class="zap-number">5</span> <span class="zap-number">2</span> <span class="zap-number">5</span> <span class="zap-number">5</span> <span class="zap-number">7</span> <span class="zap-number">2</span> <span class="zap-keyword">groupCount</span>   <span class="zap-comment">// Map {5 =&gt; 3, 2 =&gt; 2, 7 =&gt; 1}</span>
 
@@ -2051,7 +2051,7 @@ bc"</span>         <span class="zap-comment">// 'a\nbc' ("..." strings can be mu
                                       <span class="zap-comment">//   40 =&gt; true</span>
                                       <span class="zap-comment">// }</span>
 </code></pre>
-<p>As shown in the example, <code>bin</code> can take a second callback (the example uses <a href="#pick">pick</a>). This is applied to each bin (it is passed a value and key of the map at each step) and the results are used as the values of the returned map.</p>
+<p>As shown in the example, <code>bin</code> can take a second callback (the example uses <a href="#pick">pick</a>). This is applied to each bin (it is passed a value and key of the map at each step, as well as the index) and the results are used as the values of the returned map.</p>
 <p><code>binCount</code> gets the number of elements in each bin — see the final examples above. While we could use <code>bin</code> with a second callback for this, <code>binCount</code> is more efficient and is easier to read.</p>
 <p>An element is assigned to a bin if the comparison function (which is passed the element and the bin limit) is less than or equal to 0. Using the default comparison function <code>[a - b]</code> is equivalent to specifying inclusive upper bin limits — use <code>[b - a]</code> to specify lower bin limits. Elements that are not assigned to any bin do not appear in the map returned by <code>bin</code> (or contribute to any value in <code>binCount</code>).</p>
 <blockquote>

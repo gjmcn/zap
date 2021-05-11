@@ -48,8 +48,9 @@ export default {
         : (m.has(k) ? m.get(k).push(v) : m.set(k, [v]));
     }
     if (g !== void 0) {
+      j = 0;
       for (let [k, v] of m) {
-        m.set(k, g(v, k));
+        m.set(k, g(v, k, j++));
       }
     }
     return m;
@@ -86,8 +87,9 @@ export default {
       }
     }
     if (g !== void 0) {
+      let j = 0;
       for (let [q, v] of m) {
-        m.set(q, g(v, q));
+        m.set(q, g(v, q, j++));
       }
     }
     return m;

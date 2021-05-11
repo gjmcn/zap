@@ -36,11 +36,11 @@ test('bin array-of-arrays, second callback', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x bin limits [a : 0 - b] [a map v (v : 1)]`)).toStrictEqual(new Map([
-    [10, [1, 4]], 
-    [20, []],
-    [30, [0]],
-    [40, [2, 3, 5]]
+x bin limits [a : 0 - b] [+ a,length","b","c]`)).toStrictEqual(new Map([
+    [10, '2,10,0'], 
+    [20, '0,20,1'],
+    [30, '1,30,2'],
+    [40, '3,40,3']
   ]));
 });
 
@@ -60,11 +60,11 @@ test('binCount array-of-arrays, second callback', () => {
   expect(compute(`
 ${xStr}
 ${limitsStr}
-x binCount limits [a,0 - b] [a > 1]`)).toStrictEqual(new Map([
-    [10, true], 
-    [20, false],
-    [30, false],
-    [40, true]
+x binCount limits [a,0 - b] [+ a","b","c]`)).toStrictEqual(new Map([
+    [10, '2,10,0'], 
+    [20, '0,20,1'],
+    [30, '1,30,2'],
+    [40, '3,40,3']
   ]));
 });
 
