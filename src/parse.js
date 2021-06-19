@@ -1,3 +1,23 @@
+
+const openBracket =
+new Set(['openParentheses',  'openProp',  'openFunction', 'quickFunction']);
+const closeBracket =
+new Set(['closeParentheses', 'closeProp', 'closeFunction', 'quickFunction']);
+const bracketPairs = { '(': ')', '[': ']', '{': '}', '|': '|' };
+
+
+            // brackets
+            else if (openBracket.has(type)) {
+              bracketStack.push(tkn.valuue);
+            }
+            else if (closeBracket.has(type)) {
+              if (bracketPairs[bracketStack.pop()] !== tkn.value) {
+                zapSyntaxError('bracket mismatch');
+              }
+            }
+
+----------------------
+
 import reserved from './reserved.js';
 import applyOperator from './apply-operator.js';
 import _z_methods from './_z_methods.js';
@@ -19,7 +39,7 @@ const loopKinds = new Set([
   'each', 'map', 'do'
 ]);
 const triggerApplyOp = new Set([
-  'closeSubexpr', 'closeBracket', 'operator'
+  'closeSubexpr', 'closeParentheses', 'closeFunction', 'closeBody', 'operator'
 ]);
 const assignmentOps = new Set([
   '=', '#=', '@=', '<-', '\\=', '?='
@@ -130,7 +150,7 @@ export default (tokens, options = {}) => {
     }
     
     // function
-    else if (block.token.type === 'function') {
+    else if (block.token.type === 'openFunction') {
 
       const kind = block.token.kind;
 

@@ -1,10 +1,19 @@
-const reserved = {
+export const reserved = {
 
   wordLiterals: new Set([
     'true', 'false', 'null', 'undefined', 'Infinity', 'NaN'
   ]),
 
-  commands: new Set([
+  keywords: new Set([
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'be', 'set', 'opt',
+    'to', 'def', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'loop',
+    'for', 'each', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
+    'asyncFun', 'asyncProc', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
+    '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
+    'from', 'as', 'debugger'
+  ]),
+
+  coreFunctions: new Set([
 
     // JavaScript operators with word-names
     'new', 'await', 'void', 'delete', 'typeof', 'in', 'instanceof', 'yield',
@@ -48,7 +57,7 @@ const reserved = {
     '$radialGradient', '$rect', '$set', '$solidcolor', '$stop', '$svg',
     '$switch', '$symbol', '$text','$textPath', '$tspan', '$use', '$view',
     
-    // entrywise math
+    // math
     'abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh', 'cbrt', 'ceil',
     'clz32', 'cos', 'cosh', 'exp', 'expm1', 'floor', 'fround', 'log', 'log10',
     'log1p', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh',
@@ -58,47 +67,31 @@ const reserved = {
     'isArray', 'isBigInt', 'isBoolean', 'isFinite', 'isFunction', 'isInteger',
     'isNaN', 'isNull', 'isNullish', 'isNumber', 'isString', 'isSymbol',
     'isUndefined',
-
-    // entrywise other
-    'toUpperCase', 'toLowerCase', 'trim', 'trimEnd', 'trimStart', 'neg',
-    'boolean', 'number', 'string', 'date', 'not',
     
     // random
     'random', 'randomInt', 'categorical', 'normal', 'logNormal', 'binomial',
     'exponential', 'geometric',
-    
-    // function
-    'fun', 'proc', 'scope', 'as', 'each', 'map', 'do', 'try', 'catch',
-    'asyncFun', 'asyncProc', 'asyncScope', 'asyncAs', 'asyncEach', 'asyncMap',
-    'asyncDo', 'asyncTry', 'asyncCatch', 'class', 'extends',
 
     // sets
     'difference', 'intersection', 'union',
 
     // other
-    'array', 'getter', 'setter', 'chg', 'if', 'throw', 'debugger', 'reduce',
-    'some', 'every', 'filter', 'filterIndex', 'min', 'minIndex', 'max',
-    'maxIndex', 'sum', 'sumCumu', 'count', 'find', 'findIndex', 'order',
-    'orderIndex', 'mean', 'group', 'groupCount', 'bin', 'binCount', 'variance',
-    'variancePop', 'deviation', 'deviationPop', 'arrObj', 'objArr', 'transpose',
-    'assign', 'attach', 'shuffle', 'export', 'import', 'importAs',
-    'importDefault', 'importAll', 'period', 'at', 'to', 'linSpace', 'apply',
-    'call', 'print', 'load', 'stop', 'ones', 'zeros', 'empties', 'pick',
-    'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
-    'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
-    'crush', 'covariance', 'covariancePop', 'correlation'
+    'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter',
+    'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
+    'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
+    'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
+    'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
+    'period', 'at', 'range', 'linSpace', 'apply', 'call', 'print', 'ones',
+    'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
+    'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
+    'crossJoin', 'semiJoin', 'antiJoin', 'crush', 'covariance', 'covariancePop',
+    'correlation'
   ]),
 
   invalid: new Set([
-    'break', 'const', 'continue', 'default', 'else', 'finally', 'for',
-    'function', 'let', 'return', 'switch', 'var', 'with', 'enum', 'implements',
-    'interface', 'package', 'private', 'protected', 'public', 'static', '_z_',
-    '_z_v', '_z_i', '_z_x', '_z_m', '_z_s', '_z_l'
+    'case', 'const', 'default', 'function', 'return', 'switch', 'var', 'with',
+    'enum', 'implements', 'interface', 'package', 'private', 'protected',
+    'public', 'static'
   ])
 
 };
-
-reserved.nonCommands =
-  new Set([...reserved.wordLiterals, ...reserved.invalid]);
-
-export default reserved;
