@@ -5,12 +5,12 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'be', 'set', 'opt',
-    'to', 'def', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'loop',
-    'for', 'each', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'var', 'val', 'set', 'opt',
+    'to', 'def', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'each',
+    'awaitEach', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
     'asyncFun', 'asyncProc', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
     '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
-    'from', 'as', 'debugger'
+    'from', 'as', 'all', 'default', 'debugger'
   ]),
 
   coreFunctions: new Set([
@@ -81,7 +81,7 @@ export const reserved = {
     'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
     'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
     'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
-    'period', 'at', 'range', 'linSpace', 'apply', 'call', 'print', 'ones',
+    'period', 'at', 'linSpace', 'apply', 'call', 'print', 'ones',
     'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
     'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
     'crossJoin', 'semiJoin', 'antiJoin', 'crush', 'covariance', 'covariancePop',
@@ -89,9 +89,9 @@ export const reserved = {
   ]),
 
   invalid: new Set([
-    'case', 'const', 'default', 'function', 'return', 'switch', 'var', 'with',
-    'enum', 'implements', 'interface', 'package', 'private', 'protected',
-    'public', 'static'
+    'case', 'const', 'for', 'function', 'let', 'return', 'switch',
+    'with', 'enum', 'implements', 'interface', 'package', 'private',
+    'protected', 'public', 'static'
   ])
 
 };

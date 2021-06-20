@@ -1,7 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Tokenize a string of Zap code. The exported function returns an array of
 // token objects. Comment and space (including newline) tokens are discarded.
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 const operators = new Set([
   '+', '-', '*', '/', '%', '**',
@@ -11,7 +11,7 @@ const operators = new Set([
   '=', '!=',
   '!', '?', '&&', '||', '??',
   '->', '=>', '-<', '=<', 
-  '>>',
+  '>>', '--',
   '.', ':', '::', ',',
   '?.', '?:', '?::', '?,',
 ]);
@@ -26,9 +26,9 @@ const regexps = new Map([
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],  
   ['closeParentheses', /\)/y],  
-  ['openSquare', /#?\[/y],
+  ['openSquare', /\[#?/y],
   ['closeSquare', /]/y],  
-  ['openCurly', /#?\{/y],
+  ['openCurly', /\{#?/y],
   ['closeCurly', /}/y],
   ['quickFunction', /\|(?!\|)/y],
   ['threeDots', /\.{3}(?!\.)/y],
