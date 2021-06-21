@@ -12,6 +12,8 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
+import { reserved } from "./reserved";
+
 export const statements = new Map();
   
 // debugger
@@ -44,25 +46,16 @@ statements.set('throw', [
   ]
 ]);
 
-// var, val
-statements.set(new Set(['var', 'val']), [
+// let
+statements.set('let', [
   [
     {type: 'name'},
-    {type: 'keyword', word: new Set('to', 'def')},
+    {type: 'keyword', word: 'be'},
     {type: 'expr'}
   ],
   [
     {type: 'destructure'},
-    {type: 'keyword', word: 'to'},
-    {type: 'expr'}
-  ]
-]);
-
-// opt
-statements.set('opt', [
-  [
-    {type: 'name'},
-    {type: 'keyword', word: 'def'},
+    {type: 'keyword', word: 'be'},
     {type: 'expr'}
   ]
 ]);
@@ -71,17 +64,31 @@ statements.set('opt', [
 statements.set('set', [
   [
     {type: 'name'},
-    {type: 'keyword', word: new Set('to', 'def')},
+    {type: 'keyword', word: 'to'},
     {type: 'expr'}
   ],
   [
     {type: 'destructure'},
     {type: 'keyword', word: 'to'},
     {type: 'expr'}
-  ]
+  ],
   [
     {type: 'getterExpr'},
-    {type: 'keyword', word: new Set('to', 'def')},
+    {type: 'keyword', word: 'to'},
+    {type: 'expr'}
+  ]
+]);
+
+// cet
+statements.set('cet', [
+  [
+    {type: 'name'},
+    {type: 'keyword', word: 'to'},
+    {type: 'expr'}
+  ],
+  [
+    {type: 'getterExpr'},
+    {type: 'keyword', word: 'to'},
     {type: 'expr'}
   ]
 ]);
@@ -105,7 +112,6 @@ statements.set('if', [
   [
     {type: 'expr'},
     {type: 'block'},
-    {type: 'expr'},
     {type: 'keyword', word: 'elif', optional: 3},
     {type: 'expr'},
     {type: 'block'},
@@ -153,7 +159,7 @@ statements.set('try', [
 statements.set(
   new Set(['fun', 'proc', 'gen', 'asyncFun', 'asyncProc', 'asyncGen']), [
   [
-    {type: 'name', optional: 1},
+    {type: 'name'},
     {type: 'keyword', word: 'par', optional: 2},
     {type: 'params',},
     {type: 'block'},
@@ -207,7 +213,7 @@ statements.set('import', [
     {type: 'string'}
   ],
   [
-    {type: 'namesAs', optional: 1},
+    {type: 'namesAs', optional: 2},
     {type: 'keyword', word: 'from'},
     {type: 'string'}
   ],

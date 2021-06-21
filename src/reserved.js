@@ -5,8 +5,8 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'var', 'val', 'set', 'opt',
-    'to', 'def', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'each',
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'set', 'cet', 'be',
+    'to', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'each',
     'awaitEach', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
     'asyncFun', 'asyncProc', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
     '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
@@ -89,9 +89,9 @@ export const reserved = {
   ]),
 
   invalid: new Set([
-    'case', 'const', 'for', 'function', 'let', 'return', 'switch',
-    'with', 'enum', 'implements', 'interface', 'package', 'private',
-    'protected', 'public', 'static'
+    'case', 'const', 'for', 'function', 'return', 'switch', 'with', 'enum',
+    'implements', 'interface', 'package', 'private', 'protected', 'public',
+    'static', 'var'
   ])
 
 };
