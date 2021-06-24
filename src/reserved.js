@@ -5,9 +5,9 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'set', 'cet', 'be',
-    'to', 'incr', 'decr', 'by', 'if', 'elif', 'else', 'while', 'each',
-    'awaitEach', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'set', 'cset',
+    'be', 'to', 'incr', 'decr', 'by', 'block', 'if', 'elif', 'else', 'while',
+    'each', 'awaitEach', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
     'asyncFun', 'asyncProc', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
     '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
     'from', 'as', 'all', 'default', 'debugger'
