@@ -8,12 +8,13 @@ const operators = new Set([
   '~',
   '<>', '><',
   '<', '<=', '>', '>=',
-  '=', '!=',
+  '==', '!=',
   '!', '?', '&&', '||', '??',
   '->', '=>', '-<', '=<', 
   '>>', '--',
   '.', ':', '::', ',',
   '?.', '?:', '?::', '?,',
+  '=', '?=', '+=', '-=', '*=', '/=', '%=', '**='
 ]);
 
 const regexps = new Map([
@@ -98,7 +99,7 @@ export default code => {
             // operator symbols: check valid operator  
             if (type === 'operator') {
               if (!operators.has(match[0])) {
-                zapSyntaxError(`invalid operator: ${match[0]}`);
+                zapSyntaxError(`unrecognized operator: ${match[0]}`);
               }
             }
 
@@ -119,7 +120,7 @@ export default code => {
     if (code.length > index + 30) {
       snippet += ' ...';
     }
-    zapSyntaxError(`invalid token: ${snippet}`);
+    zapSyntaxError(`unrecognized token: ${snippet}`);
   }
   
   // add endOfCode token

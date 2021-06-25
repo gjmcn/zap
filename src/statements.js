@@ -6,18 +6,16 @@
 //   component itself can be omitted, whereas 'optional: 3' indicates that the
 //   component and the 2 following components are included/omitted as a group.
 //
-// - Components of type 'keyword', 'name' and 'stringLit' have a compile
+// - Components of type 'keyword', 'name' and 'pathLit' have a compile
 //   function that is passed the corresponding token value and generates the JS.
-//   The compile function for all other components is defined with the component
-//   (in components.js).
+//   The compile function for other component types is defined with the
+//   component (in components.js).
 //
-// - Some statements have additional structure that are not included here. E.g.
+// - Some statements have additional structure that is not included here. E.g.
 //   an 'if' statement can have multiple 'elif's, and a 'try' statement requires
 //   at least one of 'catch' and 'finally'.
 // 
 ////////////////////////////////////////////////////////////////////////////////
-
-// import { components } from "./components";
 
 export const statements = new Map();
   
@@ -28,10 +26,14 @@ statements.set('debugger', [
   ]
 ]);
 
-// break
-statements.set('breakContinue', [
+// break, continue
+statements.set(new Set(['break', 'continue']), [
   [
-    {type: 'keyword', word: new Set('break', 'continue'), compile: word => word}
+    {
+      type: 'keyword',
+      word: new Set(['break', 'continue']),
+      compile: word => word
+    }
   ]
 ]);
 
@@ -39,14 +41,14 @@ statements.set('breakContinue', [
 statements.set('do', [
   [
     {type: 'keyword', word: 'do', compile: () => ''},
-    {type: 'expr', optional: 1}
+    {type: 'expr'}
   ]
 ]);
 
 // out
 statements.set('out', [
   [
-    {type: 'keyword', word: 'return', compile: () => 'return '},
+    {type: 'keyword', word: 'out', compile: () => 'return '},
     {type: 'expr', optional: 1}
   ]
 ]);
@@ -59,18 +61,26 @@ statements.set('throw', [
   ]
 ]);
 
-// let
-statements.set('let', [
+// const, let, var
+statements.set(new Set(['const', 'let', 'var']), [
   [
-    {type: 'keyword', word: 'let', compile: () => 'let '},
+    {
+      type: 'keyword',
+      word: new Set(['const', 'let', 'var']),
+      compile: word => `${word} `
+    },
     {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'be', compile: () => ' = '},
+    {type: 'assignOp', optional: 2},
     {type: 'expr'}
   ],
   [
-    {type: 'keyword', word: 'let', compile: () => 'let '},
+    {
+      type: 'keyword',
+      word: new Set(['const', 'let', 'var']),
+      compile: word => `${word} `
+    },
     {type: 'destructure'},
-    {type: 'keyword', word: 'be', compile: () => ' = '},
+    {type: 'assignOp'},
     {type: 'expr'}
   ]
 ]);
@@ -80,67 +90,19 @@ statements.set('set', [
   [
     {type: 'keyword', word: 'set', compile: () => ''},
     {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'to', compile: () => ' = '},
+    {type: 'anyAssignOp'},
     {type: 'expr'}
   ],
   [
     {type: 'keyword', word: 'set', compile: () => ''},
     {type: 'destructure'},
-    {type: 'keyword', word: 'to', compile: () => ' = '},
+    {type: 'assignOp'},
     {type: 'expr'}
   ],
   [
     {type: 'keyword', word: 'set', compile: () => ''},
     {type: 'getterExpr'},
-    {type: 'keyword', word: 'to', compile: () => ' = '},
-    {type: 'expr'}
-  ]
-]);
-
-// cset
-statements.set('cset', [
-  [
-    {type: 'keyword', word: 'cset', compile: () => ''},
-    {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'to', compile: () => ' ??= '},
-    {type: 'expr'}
-  ],
-  [
-    {type: 'keyword', word: 'cset', compile: () => ''},
-    {type: 'getterExpr'},
-    {type: 'keyword', word: 'to', compile: () => ' ??= '},
-    {type: 'expr'}
-  ]
-]);
-
-// incr
-statements.set('incr', [
-  [
-    {type: 'keyword', word: 'incr', compile: () => ''},
-    {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'by', compile: () => ' += '},
-    {type: 'expr'}
-  ],
-  [
-    {type: 'keyword', word: 'incr', compile: () => ''},
-    {type: 'getterExpr'},
-    {type: 'keyword', word: 'by', compile: () => ' += '},
-    {type: 'expr'}
-  ]
-]);
-
-// decr
-statements.set('decr', [
-  [
-    {type: 'keyword', word: 'decr', compile: () => ''},
-    {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'by', compile: () => ' -= '},
-    {type: 'expr'}
-  ],
-  [
-    {type: 'keyword', word: 'decr', compile: () => ''},
-    {type: 'getterExpr'},
-    {type: 'keyword', word: 'by', compile: () => ' -= '},
+    {type: 'anyAssignOp'},
     {type: 'expr'}
   ]
 ]);
@@ -178,10 +140,11 @@ statements.set('while', [
 ]);
 
 // each, awaitEach
-statements.set('each', [
+statements.set(new Set(['each', 'awaitEach']), [
   [
     {
-      type: 'keyword', word: new Set('each', 'awaitEach'),
+      type: 'keyword',
+      word: new Set(['each', 'awaitEach']),
       compile: word => `for ${word === 'each' ? '' : 'await '}(let `
     },
     {type: 'name', compile: name => name},
@@ -191,7 +154,8 @@ statements.set('each', [
   ],
   [
     {
-      type: 'keyword', word: new Set('each', 'awaitEach'),
+      type: 'keyword',
+      word: new Set(['each', 'awaitEach']),
       compile: word => `for ${word === 'each' ? '' : 'await '}(let `
     },
     {type: 'destructure'},
@@ -214,13 +178,13 @@ statements.set('try', [
   ]
 ]);
 
-// functions
-statements.set('function', [
+// function
+statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
   [
     {
       type: 'keyword',
-      word: new Set('fun', 'gen', 'asyncFun', 'asyncGen'),
-      compile: () => {
+      word: new Set(['fun', 'gen', 'asyncFun', 'asyncGen']),
+      compile: word => {
         switch (word) {
           case 'fun':       return 'function ';
           case 'gen':       return 'function* ';
@@ -230,18 +194,24 @@ statements.set('function', [
       }
     },
     {type: 'name', compile: name => name},
-    {type: 'keyword', word: 'par', optional: 2, ifOmitted: '()'},
+    {
+      type: 'keyword',
+      word: 'par',
+      compile: () => '',
+      optional: 2,
+      ifOmitted: '()'
+    },
     {type: 'params', },
     {type: 'block'},
   ],
   [
     {
       type: 'keyword',
-      word: new Set('fun', 'gen', 'asyncFun', 'asyncGen'),
+      word: new Set(['fun', 'gen', 'asyncFun', 'asyncGen']),
       compile: () => '{'
     },
-    {type: 'getterExpr', after: firstWord => {
-        switch (firstWord) {
+    {type: 'getterExpr', after: statementWord => {
+        switch (statementWord) {
           case 'fun':       return ' = (function ';
           case 'gen':       return ' = (function* ';
           case 'asyncFun':  return ' = (async function ';
@@ -249,7 +219,13 @@ statements.set('function', [
         }
       }
     },
-    {type: 'keyword', word: 'par', optional: 2, ifOmitted: '()'},
+    {
+      type: 'keyword',
+      word: 'par',
+      compile: () => '',
+      optional: 2,
+      ifOmitted: '()'
+    },
     {type: 'params',},
     {type: 'block', after: () => ')}'},
   ]
@@ -263,12 +239,18 @@ statements.set('class', [
     {
       type: 'keyword',
       word: 'extends',
-      compile: () => ' extends ',
+      compile: () => 'extends ',
       optional: 2,
       ifOmitted: '{ constructor'
     },
     {type: 'name', compile: name => `${name} { constructor`},
-    {type: 'keyword', word: 'par', optional: 2, ifOmitted: '()'},
+    {
+      type: 'keyword',
+      word: 'par',
+      compile: () => '',
+      optional: 2,
+      ifOmitted: '()'
+    },
     {type: 'params',},
     {type: 'block', after: () => '}'},
   ]
@@ -293,7 +275,7 @@ statements.set('import', [
     {type: 'keyword', word: 'import', compile: () => 'import '},
     {type: 'name', compile: name => name},
     {type: 'keyword', word: 'from', compile: ' from '},
-    {type: 'stringLit', compile: str => str}
+    {type: 'pathLit', compile: p => p}
   ],
   [
     {type: 'keyword', word: 'import', compile: () => 'import '},
@@ -301,24 +283,35 @@ statements.set('import', [
     {type: 'keyword', word: 'as', compile: ' as '},
     {type: 'name', compile: name => name},
     {type: 'keyword', word: 'from', compile: ' from '},
-    {type: 'stringLit', compile: str => str}
+    {type: 'pathLit', compile: p => p}
   ],
   [
     {type: 'keyword', word: 'import', compile: () => 'import '},
     {type: 'namesAs', optional: 2},
     {type: 'keyword', word: 'from', compile: ' from '},
-    {type: 'stringLit', compile: str => str}
+    {type: 'pathLit', compile: p => p}
   ],
 ]);
 
-export const simpleStatementsList = new Set();
-export const blockStatementsList  = new Set();
-statementLoop: for (let [name, structure] of statements) {
+// split statement-first-words into simple (no block components) and block
+export const simpleFirstWords = new Set();
+export const blockFirstWords  = new Set();
+function addToSet(list, value) {
+  if (typeof value === 'string') {
+    list.add(value);
+  }
+  else {
+    for (let v of value) {
+      list.add(v);
+    }
+  }
+}
+statementLoop: for (let [key, structure] of statements) {
   for (let branch of structure) {
     if (branch.some(obj => obj.type === 'block')) {
-      blockStatementsList.add(name);
+      addToSet(blockFirstWords, key);
       continue statementLoop;
     }
   }
-  simpleStatementsList.add(name);
+  addToSet(simpleFirstWords, key);
 }

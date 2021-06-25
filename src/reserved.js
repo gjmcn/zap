@@ -5,12 +5,12 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'let', 'set', 'cset',
-    'be', 'to', 'incr', 'decr', 'by', 'block', 'if', 'elif', 'else', 'while',
-    'each', 'awaitEach', 'of', 'try', 'catch', 'finally', 'fun', 'proc', 'gen',
-    'asyncFun', 'asyncProc', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
-    '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
-    'from', 'as', 'all', 'default', 'debugger'
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'const', 'let', 'var',
+    'set', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
+    'try', 'catch', 'finally', 'fun', 'proc', 'gen', 'asyncFun', 'asyncProc',
+    'asyncGen', '@fun', '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen',
+    'par', 'class', 'extends', 'export', 'import', 'from', 'as', 'all',
+    'default', 'debugger'
   ]),
 
   coreFunctions: new Set([
@@ -89,9 +89,9 @@ export const reserved = {
   ]),
 
   invalid: new Set([
-    'case', 'const', 'for', 'function', 'return', 'switch', 'with', 'enum',
+    'case', 'for', 'function', 'return', 'switch', 'with', 'enum',
     'implements', 'interface', 'package', 'private', 'protected', 'public',
-    'static', 'var'
+    'static'
   ])
 
 };
