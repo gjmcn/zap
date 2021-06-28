@@ -10,8 +10,7 @@ const operators = new Set([
   '<', '<=', '>', '>=',
   '==', '!=',
   '!', '?', '&&', '||', '??',
-  '->', '=>', '-<', '=<', 
-  '>>', '--',
+  '->', '=>', '-<', '=<',
   '.', ':', '::', ',',
   '?.', '?:', '?::', '?,',
   '=', '?=', '+=', '-=', '*=', '/=', '%=', '**='
@@ -34,11 +33,10 @@ const regexps = new Map([
   ['quickFunction', /\|(?!\|)/y],
   ['threeDots', /\.{3}(?!\.)/y],
   ['twoDots', /\.{2}(?!\.)/y],
-  ['caret', /\^/y],
   ['operator', /[+\-*/%~<>=!?&|.:,]+/y]
 ]);
 
-export default code => {
+export function lexer(code) {
   
   const tokens = [];
   let index = 0;      // position in code

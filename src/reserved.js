@@ -5,9 +5,9 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'const', 'let', 'var',
-    'set', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
-    'try', 'catch', 'finally', 'fun', 'proc', 'gen', 'asyncFun', 'asyncProc',
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'fix', 'let',
+    'set', 'mut', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach',
+    'of', 'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun',
     'asyncGen', '@fun', '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen',
     'par', 'class', 'extends', 'export', 'import', 'from', 'as', 'all',
     'default', 'debugger'
@@ -76,12 +76,12 @@ export const reserved = {
     'difference', 'intersection', 'union',
 
     // other
-    'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter',
+    'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter', 'map',
     'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
     'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
     'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
     'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
-    'period', 'at', 'linSpace', 'apply', 'call', 'print', 'ones',
+    'period', 'at', 'to', 'linSpace', 'apply', 'call', 'prt', 'ones',
     'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
     'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
     'crossJoin', 'semiJoin', 'antiJoin', 'crush', 'covariance', 'covariancePop',
@@ -89,9 +89,9 @@ export const reserved = {
   ]),
 
   invalid: new Set([
-    'case', 'for', 'function', 'return', 'switch', 'with', 'enum',
+    'case', 'const', 'for', 'function', 'return', 'switch', 'with', 'enum',
     'implements', 'interface', 'package', 'private', 'protected', 'public',
-    'static'
+    'static', 'var'
   ])
 
 };
