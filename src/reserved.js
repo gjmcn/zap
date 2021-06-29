@@ -81,11 +81,10 @@ export const reserved = {
     'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
     'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
     'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
-    'period', 'at', 'to', 'linSpace', 'apply', 'call', 'prt', 'ones',
-    'zeros', 'empties', 'pick', 'mapAt', 'rank', 'quantile', 'median',
-    'interpolate', 'innerJoin', 'outerJoin', 'leftJoin', 'rightJoin',
-    'crossJoin', 'semiJoin', 'antiJoin', 'crush', 'covariance', 'covariancePop',
-    'correlation'
+    'period', 'at', 'to', 'linSpace', 'prt', 'ones', 'zeros', 'empties',
+    'pick', 'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
+    'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
+    'crush', 'covariance', 'covariancePop', 'correlation'
   ]),
 
   invalid: new Set([
