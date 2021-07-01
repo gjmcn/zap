@@ -5,9 +5,9 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'fix', 'let',
-    'set', 'mut', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach',
-    'of', 'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun',
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'fix', 'var',
+    'set', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
+    'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun',
     'asyncGen', '@fun', '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen',
     'par', 'class', 'extends', 'export', 'import', 'from', 'as', 'all',
     'default', 'debugger'
@@ -88,9 +88,9 @@ export const reserved = {
   ]),
 
   invalid: new Set([
-    'case', 'const', 'for', 'function', 'return', 'switch', 'with', 'enum',
-    'implements', 'interface', 'package', 'private', 'protected', 'public',
-    'static', 'var'
+    'case', 'const', 'for', 'function', 'let', 'return', 'switch', 'with',
+    'enum', 'implements', 'interface', 'package', 'private', 'protected',
+    'public', 'static'
   ])
 
 };

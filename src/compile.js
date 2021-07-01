@@ -13,7 +13,11 @@ export function compile(zapCode, options) {
   const tokens = lexer(zapCode).reverse();
   
   function addJS(js, line, column) {
-    sourceMap.add(new SourceNode(line, column, options.sourceFile, js));
+    sourceMap.add(
+      line === undefined
+        ? js
+        : new SourceNode(line, column, options.sourceFile, js)
+    );
   }
 
   // loop over tokens

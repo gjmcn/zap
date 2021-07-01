@@ -17,8 +17,10 @@
 // 
 // - When a statement has multiple branches (i.e. versions):
 //    - the first components of the branches are always identical
-//    - the second components of the branches can be used to identify which
-//      branch is in use
+//    - the second components of the branches uniquely identify the branch
+//      !! HACKY BUT IMPORTANT !!: The way parse-statements.js resolves
+//      multibranch statements is currently hard coded, so when add or change a
+//      statement below, must update parse-statements.js accordingly.
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -79,14 +81,14 @@ statements.set('print', [
   ]
 ]);
 
-// let
+// var
 {
   const firstComponent = {
     type: 'keyword',
-    word: 'let',
+    word: 'var',
     compile: () => 'let '
   };
-  statements.set('let', [
+  statements.set('var', [
     [
       firstComponent,
       {type: 'name', compile: name => name},
@@ -127,7 +129,7 @@ statements.set('print', [
 
 // set
 {
-  const firstComponent =  {type: 'keyword', word: 'set', compile: () => ''};
+  const firstComponent = {type: 'keyword', word: 'set', compile: () => ''};
   statements.set('set', [
     [
       firstComponent,
@@ -140,19 +142,15 @@ statements.set('print', [
       {type: 'destructure'},
       {type: 'assignOp'},
       {type: 'expr'}
+    ],
+    [
+      firstComponent,
+      {type: 'getterExpr'},
+      {type: 'anyAssignOp'},
+      {type: 'expr'}
     ]
   ]);
 }
-
-// mut
-statements.set('mut', [
-  [
-    {type: 'keyword', word: 'mut', compile: () => ''},
-    {type: 'getterExpr'},
-    {type: 'anyAssignOp'},
-    {type: 'expr'}
-  ]
-]);
 
 // export
 {
@@ -164,7 +162,7 @@ statements.set('mut', [
   statements.set('export', [
     [
       firstComponent,
-      {type: 'default', word: 'default', compile: () => 'default '},
+      {type: 'keyword', word: 'default', compile: () => 'default '},
       {type: 'expr'},
     ],
     [
