@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 import { operators } from "./operators.js";
-import { reserved } from "./reserved.js";
+import { keywords } from "./reserved.js";
 import { allFirstWords } from "./statements.js";
 
 const regexps = new Map([
@@ -14,7 +14,7 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
-  ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
+  ['keyword', new RegExp([...keywords].join('|'), 'y')],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],  
   ['closeParentheses', /\)/y],  

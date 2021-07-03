@@ -2,6 +2,9 @@
 // Parse component of statement.
 ////////////////////////////////////////////////////////////////////////////////
 
+import { nonKeywords } from './reserved.js';
+
+
 function tokenPeek() {
   return tokens[tokens.length - 1];
 }
@@ -15,15 +18,13 @@ export function resolveBranch(tokens, struc) {
   }
 
   // loop over branches until can resolve
+  const nextTkn = tokenPeek();
   for (let branch of struc) {
-    secondComp = branch[1];
-    const nextTkn = tokenPeek();
-    
-    !!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
+    const secondComp = branch[1];  
     if (secondComp.type === 'name') {
-      if (nextTkn.type === 'identifier' && !nextTkn.keyword
-      
+      if (nextTkn.type === 'identifier')
+        !!!!!!!!HERE!!!!!!!!! do not allow name to be nonKeyword reserved
+         -but should throw rather than skipping branch?
       
       )
     }
