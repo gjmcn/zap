@@ -18,9 +18,6 @@
 // - When a statement has multiple branches (i.e. versions):
 //    - the first components of the branches are always identical
 //    - the second components of the branches uniquely identify the branch
-//      !! HACKY BUT IMPORTANT !!: The way parse-statements.js resolves
-//      multibranch statements is currently hard coded, so when add or change a
-//      statement below, must update parse-statements.js accordingly.
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +50,7 @@ statements.set(new Set(['break', 'continue']), [
 statements.set('do', [
   [
     {type: 'keyword', word: 'do', compile: () => ''},
-    {type: 'expr'}
+    {type: 'expression'}
   ]
 ]);
 
@@ -61,7 +58,7 @@ statements.set('do', [
 statements.set('out', [
   [
     {type: 'keyword', word: 'out', compile: () => 'return '},
-    {type: 'expr', optional: 1}
+    {type: 'expression', optional: 1}
   ]
 ]);
 
@@ -69,7 +66,7 @@ statements.set('out', [
 statements.set('throw', [
   [
     {type: 'keyword', word: 'throw', compile: () => 'throw '},
-    {type: 'expr'}
+    {type: 'expression'}
   ]
 ]);
 
@@ -77,52 +74,29 @@ statements.set('throw', [
 statements.set('print', [
   [
     {type: 'keyword', word: 'print', compile: () => 'console.log('},
-    {type: 'expr', after: ')'}
+    {type: 'expression', after: ')'}
   ]
 ]);
 
-// var
+// let
 {
   const firstComponent = {
     type: 'keyword',
-    word: 'var',
+    word: 'let',
     compile: () => 'let '
   };
-  statements.set('var', [
+  statements.set('let', [
     [
       firstComponent,
       {type: 'name', compile: name => name},
-      {type: 'assignOp', optional: 2},
-      {type: 'expr'}
+      {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
+      {type: 'expression'}
     ],
     [
       firstComponent,
       {type: 'destructure'},
-      {type: 'assignOp'},
-      {type: 'expr'}
-    ]
-  ]);
-}
-
-// fix
-{
-  const firstComponent = {
-    type: 'keyword',
-    word: 'fix',
-    compile: () => 'const '
-  };
-  statements.set('fix', [
-    [
-      firstComponent,
-      {type: 'name', compile: name => name},
-      {type: 'assignOp'},
-      {type: 'expr'}
-    ],
-    [
-      firstComponent,
-      {type: 'destructure'},
-      {type: 'assignOp'},
-      {type: 'expr'}
+      {type: 'keyword', word: 'be', compile: () => ' = '},
+      {type: 'expression'}
     ]
   ]);
 }
@@ -134,20 +108,58 @@ statements.set('print', [
     [
       firstComponent,
       {type: 'name', compile: name => name},
-      {type: 'anyAssignOp'},
-      {type: 'expr'}
+      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'expression'}
     ],
     [
       firstComponent,
       {type: 'destructure'},
-      {type: 'assignOp'},
-      {type: 'expr'}
+      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'expression'}
     ],
     [
       firstComponent,
-      {type: 'getterExpr'},
-      {type: 'anyAssignOp'},
-      {type: 'expr'}
+      {type: 'getterExpression'},
+      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'expression'}
+    ]
+  ]);
+}
+
+// inc
+{
+  const firstComponent = {type: 'keyword', word: 'inc', compile: () => ''};
+  statements.set('inc', [
+    [
+      firstComponent,
+      {type: 'name', compile: name => name},
+      {type: 'keyword', word: 'by', compile: () => ' += '},
+      {type: 'expression'}
+    ],
+    [
+      firstComponent,
+      {type: 'getterExpression'},
+      {type: 'keyword', word: 'by', compile: () => ' += '},
+      {type: 'expression'}
+    ]
+  ]);
+}
+
+// dec
+{
+  const firstComponent = {type: 'keyword', word: 'dec', compile: () => ''};
+  statements.set('dec', [
+    [
+      firstComponent,
+      {type: 'name', compile: name => name},
+      {type: 'keyword', word: 'by', compile: () => ' -= '},
+      {type: 'expression'}
+    ],
+    [
+      firstComponent,
+      {type: 'getterExpression'},
+      {type: 'keyword', word: 'by', compile: () => ' -= '},
+      {type: 'expression'}
     ]
   ]);
 }
@@ -163,7 +175,7 @@ statements.set('print', [
     [
       firstComponent,
       {type: 'keyword', word: 'default', compile: () => 'default '},
-      {type: 'expr'},
+      {type: 'expression'},
     ],
     [
       firstComponent,
@@ -220,13 +232,13 @@ statements.set('block', [
 statements.set('if', [
   [
     {type: 'keyword', word: 'if', compile: () => 'if '},
-    {type: 'expr'},
+    {type: 'expression'},
     {type: 'block'},
     {type: 'keyword', word: 'elif', compile: () => 'else if ', optional: 3},
-    {type: 'expr'},
+    {type: 'expression'},
     {type: 'block'},
     {type: 'keyword', word: 'else', compile: () => 'else ', optional: 3},
-    {type: 'expr'},
+    {type: 'expression'},
     {type: 'block'},
   ]
 ]);
@@ -235,7 +247,7 @@ statements.set('if', [
 statements.set('while', [
   [
     {type: 'keyword', word: 'while', compile: () => 'while '},
-    {type: 'expr'},
+    {type: 'expression'},
     {type: 'block'}
   ]
 ]);
@@ -252,14 +264,14 @@ statements.set('while', [
       firstComponent,
       {type: 'name', compile: name => name},
       {type: 'keyword', word: 'of', compile: () => ' of '},
-      {type: 'expr', after: ')'},
+      {type: 'expression', after: ')'},
       {type: 'block'}
     ],
     [
       firstComponent,
       {type: 'destructure'},
       {type: 'keyword', word: 'of', compile: () => ' of '},
-      {type: 'expr', after: ')'},
+      {type: 'expression', after: ')'},
       {type: 'block'}
     ]
   ]);
@@ -269,7 +281,7 @@ statements.set('while', [
 statements.set('loop', [
   [
     {type: 'keyword', word: 'loop', compile: () => 'for (let _limit_ = '},
-    {type: 'expr', optional: 1, ifOmitted: 'Infinity'},
+    {type: 'expression', optional: 1, ifOmitted: 'Infinity'},
     {
       type: 'keyword',
       word: 'index',

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Operators and assignment symbols.
+// Operators.
 ////////////////////////////////////////////////////////////////////////////////
 
 export const operators = {
@@ -31,7 +31,7 @@ export const operators = {
   '<=':  {prec: 3, type: 'infix',  arity: 2},         // less than or equal
   '>':   {prec: 3, type: 'infix',  arity: 2},         // greater than
   '>=':  {prec: 3, type: 'infix',  arity: 2},         // greater than or equal
-  '==':  {prec: 4, type: 'infix',  arity: 2},         // strict equality 
+  '=':   {prec: 4, type: 'infix',  arity: 2},         // strict equality 
   '!=':  {prec: 4, type: 'infix',  arity: 2},         // strict inequality
   '&&':  {prec: 5, type: 'infix',  arity: 2},         // logical and
   '||':  {prec: 5, type: 'infix',  arity: 2},         // logical or
@@ -39,8 +39,3 @@ export const operators = {
   '?!':  {prec: 6, type: 'infix',  arity: 3},         // conditional
   ',':   {prec: 7, type: 'infix',  arity: 2},         // comma
 };
-
-// assignment 'symbols' are not true operators
-export const assignmentSymbols = new Set([
-  '=', '?=', '+=', '-=', '*=', '/=', '%=', '**='
-]);

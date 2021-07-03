@@ -5,12 +5,12 @@ export const reserved = {
   ]),
 
   keywords: new Set([
-    'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'fix', 'var',
-    'set', 'block', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
-    'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun',
-    'asyncGen', '@fun', '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen',
-    'par', 'class', 'extends', 'export', 'import', 'from', 'as', 'all',
-    'default', 'debugger'
+    'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'let', 'be',
+    'set', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while',
+    'each', 'awaitEach', 'of', 'loop', 'index', 'try', 'catch', 'finally',
+    'fun', 'gen', 'asyncFun', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
+    '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
+    'from', 'as', 'all', 'default', 'debugger'
   ]),
 
   coreFunctions: new Set([
@@ -81,16 +81,16 @@ export const reserved = {
     'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
     'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
     'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
-    'period', 'at', 'to', 'linSpace', 'prt', 'ones', 'zeros', 'empties',
+    'period', 'at', 'range', 'linSpace', 'prt', 'ones', 'zeros', 'empties',
     'pick', 'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
     'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
     'crush', 'covariance', 'covariancePop', 'correlation'
   ]),
 
   invalid: new Set([
-    'case', 'const', 'for', 'function', 'let', 'return', 'switch', 'with',
+    'case', 'const', 'for', 'function', 'return', 'switch', 'with',
     'enum', 'implements', 'interface', 'package', 'private', 'protected',
-    'public', 'static'
+    'public', 'static', 'var'
   ])
 
 };

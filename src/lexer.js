@@ -3,7 +3,9 @@
 // token objects. Comment and space (including newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { operators, assignmentSymbols } from "./operators.js";
+import { operators } from "./operators.js";
+import { reserved } from "./reserved.js";
+import { allFirstWords } from "./statements.js";
 
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],  // same-line whitespace
@@ -12,6 +14,7 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
+  ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],  
   ['closeParentheses', /\)/y],  
@@ -33,7 +36,7 @@ export function lexer(code) {
   let column = 0;     // current column
 
   // zap syntax error
-  function zapSyntaxError(msg) {
+  function lexerError(msg) {
     throw Error(`Zap syntax at ${line}:${column + 1}, ${msg}`);
   }
 
@@ -83,14 +86,17 @@ export function lexer(code) {
           // no other tokens can be multiline
           else {
 
-            // operator symbols: check valid operator  
-            if (type === 'operator') {
-              const assignmentSym = assignmentSymbols.has(match[0]);
-              if (!assignmentSym && !operators.has(match[0])) {
-                zapSyntaxError(`unrecognized operator: ${match[0]}`);
+            // keyword: check if starts statement
+            if (type === 'keyword') {
+              if (allFirstWords.has(match[0])) {
+                tkn.opensStatement = true;
               }
-              if (assignmentSym) {
-                tkn.assignmentSymbol = true;
+            }
+
+            // operator symbols: check valid operator  
+            else if (type === 'operator') {
+              if (!operators[match[0]]) {
+                lexerError(`unrecognized operator: ${match[0]}`);
               }
             }
 
@@ -111,7 +117,7 @@ export function lexer(code) {
     if (code.length > index + 30) {
       snippet += ' ...';
     }
-    zapSyntaxError(`unrecognized token: ${snippet}`);
+    lexerError(`unrecognized token: ${snippet}`);
   }
   
   // add endOfCode token
