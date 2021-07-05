@@ -2,20 +2,22 @@
 // Reserved words.
 ////////////////////////////////////////////////////////////////////////////////
 
-export const wordLiterals = new Set([
+export const reserved = {};
+
+reserved.wordLiterals = new Set([
   'true', 'false', 'null', 'undefined', 'Infinity', 'NaN'
 ]);
 
-export const keywords = new Set([
-  'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'let', 'be',
-  'set', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while',
-  'each', 'awaitEach', 'of', 'loop', 'index', 'try', 'catch', 'finally',
-  'fun', 'gen', 'asyncFun', 'asyncGen', '@fun', '@proc', '@gen', '@asyncFun',
-  '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export', 'import',
-  'from', 'as', 'all', 'default', 'debugger'
+reserved.keywords = new Set([
+  'end', '@end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'let',
+  'be', 'set', 'to', 'use', 'or', 'inc', 'dec', 'by', 'block', 'if', 'elif',
+  'else', 'while', 'each', 'awaitEach', 'of', 'loop', 'index', 'try', 'catch',
+  'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun', '@proc', '@gen',
+  '@asyncFun', '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export',
+  'import', 'from', 'as', 'all', 'default', 'debugger'
 ]);
 
-export const coreFunctions = new Set([
+reserved.coreFunctions = new Set([
 
   // JavaScript operators with word-names
   'new', 'await', 'void', 'delete', 'typeof', 'in', 'instanceof', 'yield',
@@ -89,14 +91,14 @@ export const coreFunctions = new Set([
   'crush', 'covariance', 'covariancePop', 'correlation'
 ]);
 
-export const invalid = new Set([
+reserved.invalid = new Set([
   'case', 'const', 'for', 'function', 'return', 'switch', 'with',
   'enum', 'implements', 'interface', 'package', 'private', 'protected',
   'public', 'static', 'var'
 ]);
 
-export const nonKeywords = new Set([
-  ...wordLiterals,
-  ...coreFunctions,
-  ...invalid
+reserved.nonKeywords = new Set([
+  ...reserved.wordLiterals,
+  ...reserved.coreFunctions,
+  ...reserved.invalid
 ]);

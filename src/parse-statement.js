@@ -8,11 +8,12 @@ import { resolveBranch, parseComponent } from './components.js';
 
 // tokens: array of tokens (reversed)
 // addJS: function to add JavaScript (parameters: js, line, column)
+// returns first word of statement
 export function parseStatement(tokens, addJS) {
 
   // first component: opening keyword
   const tkn = tokens.pop();
-  if (tkn.type !== 'keyword' || !tkn.opensStatement) {
+  if (Array.isArray(tkn) || !tkn.opensStatement) {
     syntaxError(tkn, 'expected a keyword that starts a new statement');
   }
   const firstWord = tkn.value;
@@ -51,4 +52,5 @@ export function parseStatement(tokens, addJS) {
     }
   }
 
+  return firstWord;
 }

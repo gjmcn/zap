@@ -88,7 +88,7 @@ statements.set('print', [
   statements.set('let', [
     [
       firstComponent,
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
       {type: 'expression'}
     ],
@@ -107,7 +107,7 @@ statements.set('print', [
   statements.set('set', [
     [
       firstComponent,
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'to', compile: () => ' = '},
       {type: 'expression'}
     ],
@@ -126,13 +126,32 @@ statements.set('print', [
   ]);
 }
 
+// use
+{
+  const firstComponent = {type: 'keyword', word: 'use', compile: () => ''};
+  statements.set('use', [
+    [
+      firstComponent,
+      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: 'or', compile: () => ' ??= '},
+      {type: 'expression'}
+    ],
+    [
+      firstComponent,
+      {type: 'getterExpression'},
+      {type: 'keyword', word: 'or', compile: () => ' ??= '},
+      {type: 'expression'}
+    ]
+  ]);
+}
+
 // inc
 {
   const firstComponent = {type: 'keyword', word: 'inc', compile: () => ''};
   statements.set('inc', [
     [
       firstComponent,
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'by', compile: () => ' += '},
       {type: 'expression'}
     ],
@@ -151,7 +170,7 @@ statements.set('print', [
   statements.set('dec', [
     [
       firstComponent,
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'by', compile: () => ' -= '},
       {type: 'expression'}
     ],
@@ -196,7 +215,7 @@ statements.set('print', [
       firstComponent,
       {type: 'keyword', word: 'default', compile: () => ''},
       {type: 'keyword', word: 'as', compile: () => ''},
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'from', compile: () => ' from '},
       {type: 'pathLit', compile: p => p}
     ],
@@ -204,7 +223,7 @@ statements.set('print', [
       firstComponent,
       {type: 'keyword', word: 'all', compile: () => '*'},
       {type: 'keyword', word: 'as', compile: () => ' as '},
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'from', compile: () => ' from '},
       {type: 'pathLit', compile: p => p}
     ],
@@ -262,7 +281,7 @@ statements.set('while', [
   statements.set(new Set(['each', 'awaitEach']), [
     [
       firstComponent,
-      {type: 'name', compile: name => name},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'of', compile: () => ' of '},
       {type: 'expression', after: ')'},
       {type: 'block'}
@@ -290,7 +309,7 @@ statements.set('loop', [
       ifOmitted: `, _index_ = 0; _index_ < _limit_; _index_++)`
     },
     {
-      type: 'name',
+      type: 'unreservedName',
       compile: name => `, ${name} = 0; ${name} < _limit_; ${name}++)`
     },
     {type: 'block'}
@@ -303,7 +322,7 @@ statements.set('try', [
     {type: 'keyword', word: 'try', compile: () => 'try '},
     {type: 'block'},
     {type: 'keyword', word: 'catch', compile: () => 'catch (', optional: 3},
-    {type: 'name', compile: name => `${name})`},
+    {type: 'unreservedName', compile: name => `${name})`},
     {type: 'block'},
     {type: 'keyword', word: 'finally', compile: () => 'finally ', optional: 2},
     {type: 'block'}
@@ -325,7 +344,7 @@ statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
         }
       }
     },
-    {type: 'name', compile: name => name},
+    {type: 'unreservedName', compile: name => name},
     {
       type: 'keyword',
       word: 'par',
@@ -342,7 +361,7 @@ statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
 statements.set('class', [
   [
     {type: 'keyword', word: 'class', compile: () => 'class '},
-    {type: 'name', compile: name => name},
+    {type: 'unreservedName', compile: name => name},
     {
       type: 'keyword',
       word: 'extends',
@@ -350,7 +369,7 @@ statements.set('class', [
       optional: 2,
       ifOmitted: '{ constructor'
     },
-    {type: 'name', compile: name => `${name} { constructor`},
+    {type: 'unreservedName', compile: name => `${name} { constructor`},
     {
       type: 'keyword',
       word: 'par',

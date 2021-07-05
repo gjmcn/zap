@@ -2,11 +2,60 @@
 // Parse component of statement.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { nonKeywords } from './reserved.js';
+import { reserved } from './reserved.js';
+import { syntaxError } from './syntax-error.js';
+
+// last element of array
+function last(arr) {
+  return arr[arr.length - 1];
+}
+
+// check if any tokens in arr are reserved non-keywords
+function containsReservedWord(arr) {
+  return arr.some(elm => reserved.nonKeywords.has(elm.value));
+}
+
+// bracket pairs
+const bracketPairs = { '(': ')', '[': ']', '{': '}', '|': '|' };
+
+// check if tokensElement is given component type
+// - elm parameter will be an element of the tokens array, so can be a single
+//   keywork token or an array of non-keyword tokens
+const componentIs = {
+
+  reservedName: (elm, isArray) => {
+    if (isArray && elm.length === 1 && elm[0].type === 'identifier') {
+      if (containsReservedWord(elm)) {
+        syntaxError(elm[0], `${elm[0].value} is a reserved word`);
+      }
+      return true;
+    }
+  },
+
+!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!
+
+  destructure: (elm, isArray) => {
+    if (isArray && elm.length > 3) {
+      const k = elm.length - 1;
+      if (elm[0].type === 'openCurly'  || elm[0] === 'openSquare') ||
+          (elm[0].type === 'openSquare' && elm[k] === 'closeSquare'))
 
 
-function tokenPeek() {
-  return tokens[tokens.length - 1];
+    } 
+        ()
+      
+      
+      ) {
+      
+    
+    
+    // SPREAD, INVALID, ...
+      return false;
+    }
+  }
+
+
+
 }
 
 // Resolve branch of statement (struc object) that on
@@ -18,13 +67,27 @@ export function resolveBranch(tokens, struc) {
   }
 
   // loop over branches until can resolve
-  const nextTkn = tokenPeek();
+  const nextTokens = last(tokens);
+  const nextTokensIsArray = Array.isArray(nextToknes);
   for (let branch of struc) {
-    const secondComp = branch[1];  
-    if (secondComp.type === 'name') {
-      if (nextTkn.type === 'identifier')
-        !!!!!!!!HERE!!!!!!!!! do not allow name to be nonKeyword reserved
-         -but should throw rather than skipping branch?
+    const secondComp = branch[1];
+    switch (secondComp.type) {  // uses fall-through intentionally!
+      case 'reservedName':
+        if (nextTokensIsArray && 
+            nextTokensIsArray.length === 1 &&
+            nextTokens[0].type === 'identifier' &&
+            !reserved.nonKeywords.has(nextTokens[0])) {
+          return branch;
+        }
+      case 'destructure':
+        if (componentIs)  !!!!!!!!!!!!!!!!!!!!! CREATE componentsIs  and even add reservedName to it!
+
+        
+
+
+
+      if (nextTkn.type !== identif)
+
       
       )
     }

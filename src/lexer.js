@@ -1,10 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Tokenize a string of Zap code. The exported function returns an array of
-// token objects. Comment and space (including newline) tokens are discarded.
+// Tokenize a string of Zap code. The exported function returns an array where
+// each element is a keyword token, or an array of non-keyword tokens. Comment
+// and space (including newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
 import { operators } from "./operators.js";
-import { keywords } from "./reserved.js";
+import { reserved } from "./reserved.js";
 import { allFirstWords } from "./statements.js";
 
 const regexps = new Map([
@@ -14,7 +15,7 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
-  ['keyword', new RegExp([...keywords].join('|'), 'y')],
+  ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],  
   ['closeParentheses', /\)/y],  
@@ -31,9 +32,10 @@ const regexps = new Map([
 export function lexer(code) {
   
   const tokens = [];
-  let index = 0;      // position in code
-  let line = 1;       // current line
-  let column = 0;     // current column
+  let group = null;  // contiguous non-keyword tokens
+  let index = 0;     // position in code
+  let line = 1;      // current line
+  let column = 0;    // current column
 
   // zap syntax error
   function lexerError(msg) {
@@ -53,57 +55,71 @@ export function lexer(code) {
 
         const tkn = { type, value: match[0], line, column };
 
-        // comment or same-line whitespace: discard token
-        if (type === 'comment' || type === 'space') {
-          column += match[0].length;
-        }
-        
-        // newline: discard token
-        else if (type === 'newline') {
-          line++;
-          column = 0;
+        // keyword
+        if (type === 'keyword') {
+          if (group) {
+            tokens.push(group);
+            group = null;
+          }
+          if (allFirstWords.has(match[0])) {
+            tkn.opensStatement = true;
+          }
+          tokens.push(tkn);
         }
 
-        // add token
+        // non-keywords
         else {
 
-          // (potentially) multiline string
-          if (type === 'string' && match[0][0] === '"') {
-            let hasNewline;
-            tkn.value = tkn.value.replace(/\r?\n/g, () => {
-              line++;
-              hasNewline = true;
-              return '\\n';
-            });
-            if (hasNewline) {
-              column = match[0].length - match[0].lastIndexOf('\n') - 1;
-            }
-            else {
-              column += match[0].length;
-            }
+          if (!group) {
+            group = [];
           }
 
-          // no other tokens can be multiline
-          else {
-
-            // keyword: check if starts statement
-            if (type === 'keyword') {
-              if (allFirstWords.has(match[0])) {
-                tkn.opensStatement = true;
-              }
-            }
-
-            // operator symbols: check valid operator  
-            else if (type === 'operator') {
-              if (!operators[match[0]]) {
-                lexerError(`unrecognized operator: ${match[0]}`);
-              }
-            }
-
+          // comment or same-line whitespace: discard token
+          if (type === 'comment' || type === 'space') {
             column += match[0].length;
           }
+          
+          // newline: discard token
+          else if (type === 'newline') {
+            line++;
+            column = 0;
+          }
 
-          tokens.push(tkn);
+          // add token
+          else {
+
+            // (potentially) multiline string
+            if (type === 'string' && match[0][0] === '"') {
+              let hasNewline;
+              tkn.value = tkn.value.replace(/\r?\n/g, () => {
+                line++;
+                hasNewline = true;
+                return '\\n';
+              });
+              if (hasNewline) {
+                column = match[0].length - match[0].lastIndexOf('\n') - 1;
+              }
+              else {
+                column += match[0].length;
+              }
+            }
+
+            // no other tokens can be multiline
+            else {
+
+              // operator symbols: check valid operator  
+              if (type === 'operator') {
+                if (!operators[match[0]]) {
+                  lexerError(`unrecognized operator: ${match[0]}`);
+                }
+              }
+
+              column += match[0].length;
+            }
+
+            tokens.push(tkn);
+          }
+        
         }
 
         index = reg.lastIndex;
@@ -119,15 +135,12 @@ export function lexer(code) {
     }
     lexerError(`unrecognized token: ${snippet}`);
   }
-  
-  // add endOfCode token
-  tokens.push({
-    type: 'endOfCode',
-    value: '(end of code)',
-    line,
-    column
-  })
 
+  // possibly an open group of non-keyword tokens
+  if (group) {
+    tokens.push(group);
+  }
+  
   return tokens;
 
 };
