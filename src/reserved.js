@@ -10,11 +10,12 @@ reserved.wordLiterals = new Set([
 
 reserved.keywords = new Set([
   'end', '@end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'let',
-  'be', 'set', 'to', 'use', 'or', 'inc', 'dec', 'by', 'block', 'if', 'elif',
-  'else', 'while', 'each', 'awaitEach', 'of', 'loop', 'index', 'try', 'catch',
-  'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun', '@proc', '@gen',
-  '@asyncFun', '@asyncProc', '@asyncGen', 'par', 'class', 'extends', 'export',
-  'import', 'from', 'as', 'all', 'default', 'debugger'
+  'let_', 'let__', 'be', 'set', 'set_', 'set__', 'to', 'use', 'or', 'inc',
+  'dec', 'by', 'block', 'if', 'elif', 'else', 'while', 'each', 'each_',
+  'each__', 'awaitEach', 'awaitEach_', 'awaitEach__', 'of', 'loop', 'index',
+  'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun',
+  '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen', 'par', 'class',
+  'extends', 'export', 'import', 'from', 'as', 'all', 'default', 'debugger'
 ]);
 
 reserved.coreFunctions = new Set([
@@ -80,15 +81,15 @@ reserved.coreFunctions = new Set([
   'difference', 'intersection', 'union',
 
   // other
-  'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter', 'map',
-  'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
+  'call', 'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter',
+  'map', 'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
   'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
   'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
-  'deviationPop', 'arrObj', 'objArr', 'transpose', 'assign', 'shuffle',
-  'period', 'at', 'range', 'linSpace', 'prt', 'ones', 'zeros', 'empties',
-  'pick', 'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
-  'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
-  'crush', 'covariance', 'covariancePop', 'correlation'
+  'deviationPop', 'arrObj', 'objArr', 'transpose', 'shuffle', 'period', 'at',
+  'range', 'linSpace', 'prt', 'ones', 'zeros', 'empties', 'pick', 'mapAt',
+  'rank', 'quantile', 'median', 'interpolate', 'innerJoin', 'outerJoin',
+  'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin', 'crush',
+  'covariance', 'covariancePop', 'correlation'
 ]);
 
 reserved.invalid = new Set([

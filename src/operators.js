@@ -13,14 +13,13 @@ export const operators = {
   '~':   {prec: 1, type: 'prefix', arity: 1},         // unary minus
   '::':  {prec: 2, type: 'infix',  arity: 2},         // get property
   '?::': {prec: 2, type: 'infix',  arity: 2},         // optional chaining ::
-  '=>':  {prec: 2, type: 'right',  arity: Infinity},  // call function on right
-  '=<':  {prec: 2, type: 'left',   arity: Infinity},  // call function on left
-  '->':  {prec: 2, type: 'right',  arity: Infinity},  // call method on right 
-  '>>':  {prec: 2, type: 'right',  arity: Infinity},  // call function on right with new
-  '?=>': {prec: 2, type: 'right',  arity: Infinity},  // optional chaining =>
-  '?=<': {prec: 2, type: 'left',   arity: Infinity},  // optional chaining =<
-  '?->': {prec: 2, type: 'right',  arity: Infinity},  // optional chaining ->
-  '?>>': {prec: 2, type: 'right',  arity: Infinity},  // optional chaining >>
+  '=>':  {prec: 2, type: 'call',   arity: Infinity},  // call function on rhs
+  '->':  {prec: 2, type: 'call',   arity: Infinity},  // call method on rhs
+  '==>': {prec: 2, type: 'call',   arity: Infinity},  // as => but spread array arguments
+  '-->': {prec: 2, type: 'call',   arity: Infinity},  // as -> but spread array arguments (except first)
+  '&':   {prec: 2, type: 'infix',  arity: Infinity},  // add properties using variables
+  '<<':  {prec: 2, type: 'infix',  arity: 2},         // copy properties from rhs to lhs
+  '>>':  {prec: 2, type: 'infix',  arity: 2},         // copy properties from lhs to rhs
   '**':  {prec: 2, type: 'infix',  arity: 2},         // exponentiation
   '*':   {prec: 2, type: 'infix',  arity: 2},         // multiplication
   '/':   {prec: 2, type: 'infix',  arity: 2},         // division

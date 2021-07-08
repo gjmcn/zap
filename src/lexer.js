@@ -24,14 +24,12 @@ const regexps = new Map([
   ['openCurly', /\{#?/y],
   ['closeCurly', /}/y],
   ['quickFunction', /\|(?!\|)/y],
-  ['threeDots', /\.{3}(?!\.)/y],
-  ['caret', /\^/y],
   ['operator', /[+\-*/%~<>=!?&|.:,]+/y]
 ]);
 
 export function lexer(code) {
   
-  const tokens = [];
+  const tokenGroups = [];
   let group = null;  // contiguous non-keyword tokens
   let index = 0;     // position in code
   let line = 1;      // current line
@@ -58,13 +56,13 @@ export function lexer(code) {
         // keyword
         if (type === 'keyword') {
           if (group) {
-            tokens.push(group);
+            tokenGroups.push(group);
             group = null;
           }
           if (allFirstWords.has(match[0])) {
             tkn.opensStatement = true;
           }
-          tokens.push(tkn);
+          tokenGroups.push(tkn);
         }
 
         // non-keywords
@@ -117,7 +115,7 @@ export function lexer(code) {
               column += match[0].length;
             }
 
-            tokens.push(tkn);
+            group.push(tkn);
           }
         
         }
@@ -138,9 +136,9 @@ export function lexer(code) {
 
   // possibly an open group of non-keyword tokens
   if (group) {
-    tokens.push(group);
+    tokenGroups.push(group);
   }
   
-  return tokens;
+  return tokenGroups;
 
 };

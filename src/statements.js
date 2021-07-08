@@ -79,27 +79,34 @@ statements.set('print', [
 ]);
 
 // let
-{
-  const firstComponent = {
-    type: 'keyword',
-    word: 'let',
-    compile: () => 'let '
-  };
-  statements.set('let', [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      {type: 'destructure'},
-      {type: 'keyword', word: 'be', compile: () => ' = '},
-      {type: 'expression'}
-    ]
-  ]);
-}
+statements.set('let', [
+  [
+    {type: 'keyword', word: 'let', compile: () => 'let '},
+    {type: 'unreservedName', compile: name => name},
+    {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
+    {type: 'expression'}
+  ]
+]);
+
+// let_
+statements.set('let_', [
+  [
+    {type: 'keyword', word: 'let_', compile: () => 'let ['},
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'be', compile: () => '] = '},
+    {type: 'expression'}
+  ]
+]);
+
+// let__
+statements.set('let__', [
+  [
+    {type: 'keyword', word: 'let__', compile: () => 'let {'},
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'be', compile: () => '} = '},
+    {type: 'expression'}
+  ]
+]);
 
 // set
 {
@@ -113,18 +120,32 @@ statements.set('print', [
     ],
     [
       firstComponent,
-      {type: 'destructure'},
-      {type: 'keyword', word: 'to', compile: () => ' = '},
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
       {type: 'getterExpression'},
       {type: 'keyword', word: 'to', compile: () => ' = '},
       {type: 'expression'}
     ]
   ]);
 }
+
+// set_
+statements.set('set_', [
+  [
+    {type: 'keyword', word: 'set_', compile: () => '['},
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'to', compile: () => '] = '},
+    {type: 'expression'}
+  ]
+]);
+
+// set__
+statements.set('set__', [
+  [
+    {type: 'keyword', word: 'set__', compile: () => '({'},
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'to', compile: () => '} = '},
+    {type: 'expression', after: ')'}
+  ]
+]);
 
 // use
 {
@@ -272,29 +293,49 @@ statements.set('while', [
 ]);
 
 // each, awaitEach
-{
-  const firstComponent = {
-    type: 'keyword',
-    word: new Set(['each', 'awaitEach']),
-    compile: word => `for ${word === 'each' ? '' : 'await '}(let `
-  }
-  statements.set(new Set(['each', 'awaitEach']), [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'of', compile: () => ' of '},
-      {type: 'expression', after: ')'},
-      {type: 'block'}
-    ],
-    [
-      firstComponent,
-      {type: 'destructure'},
-      {type: 'keyword', word: 'of', compile: () => ' of '},
-      {type: 'expression', after: ')'},
-      {type: 'block'}
-    ]
-  ]);
-}
+statements.set(new Set(['each', 'awaitEach']), [
+  [
+    {
+      type: 'keyword',
+      word: new Set(['each', 'awaitEach']),
+      compile: word => `for ${word === 'each' ? '' : 'await '}(let `
+    },
+    {type: 'unreservedName', compile: name => name},
+    {type: 'keyword', word: 'of', compile: () => ' of '},
+    {type: 'expression', after: ')'},
+    {type: 'block'}
+  ]
+]);
+
+// each_, awaitEach_
+statements.set(new Set(['each_', 'awaitEach_']), [
+  [
+    {
+      type: 'keyword',
+      word: new Set(['each_', 'awaitEach_']),
+      compile: word => `for ${word === 'each_' ? '' : 'await '}(let [`
+    },
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'of', compile: () => '] of '},
+    {type: 'expression', after: ')'},
+    {type: 'block'}
+  ]
+]);
+
+// each__, awaitEach__
+statements.set(new Set(['each__', 'awaitEach__']), [
+  [
+    {
+      type: 'keyword',
+      word: new Set(['each__', 'awaitEach__']),
+      compile: word => `for ${word === 'each__' ? '' : 'await '}(let {`
+    },
+    {type: 'unreservedNames'},
+    {type: 'keyword', word: 'of', compile: () => '} of '},
+    {type: 'expression', after: ')'},
+    {type: 'block'}
+  ]
+]);
 
 // loop
 statements.set('loop', [
