@@ -10,7 +10,7 @@ import { parseStatement } from './parse-statement.js';
 export function compile(zapCode, options) {
 
   const sourceMap = new SourceNode(1, 0, options.sourceFile, '');
-  const tokenGroups = lexer(zapCode).reverse();
+  const components = lexer(zapCode).reverse();
   
   function addJS(js, line, column) {
     sourceMap.add(
@@ -18,11 +18,11 @@ export function compile(zapCode, options) {
         ? js
         : new SourceNode(line, column, options.sourceFile, js)
     );
-  }
+  }z
 
-  // loop over token groups
-  while (tokenGroups.length) {
-    parseStatement(tokenGroups, addJS);
+  // loop over components
+  while (components.length) {
+    parseStatement(components, addJS);
   }
 
   // return 

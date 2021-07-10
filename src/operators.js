@@ -17,6 +17,7 @@ export const operators = {
   '->':  {prec: 2, type: 'call',   arity: Infinity},  // call method on rhs
   '==>': {prec: 2, type: 'call',   arity: Infinity},  // as => but spread array arguments
   '-->': {prec: 2, type: 'call',   arity: Infinity},  // as -> but spread array arguments (except first)
+  '<>':  {prec: 2, type: 'call',   arity: Infinity},  // as -> but return calling object
   '&':   {prec: 2, type: 'infix',  arity: Infinity},  // add properties using variables
   '<<':  {prec: 2, type: 'infix',  arity: 2},         // copy properties from rhs to lhs
   '>>':  {prec: 2, type: 'infix',  arity: 2},         // copy properties from lhs to rhs

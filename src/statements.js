@@ -1,24 +1,28 @@
 ////////////////////////////////////////////////////////////////////////////////
 // The 'component' structure of each statement. Notes:
 // 
-// - The optional property indicates if a component can be omitted and if so,
+// - The 'optional' property indicates if a component can be omitted and if so,
 //   the number of components in the group. So 'optional: 1' indicates that the
 //   component itself can be omitted, whereas 'optional: 3' indicates that the
 //   component and the 2 following components are included/omitted as a group.
+//
+// - Components with an 'optional' property can have one (or none) of:
+//     - 'ifOmitted': code to add if optional group omitted 
+//     - 'repeat': whether the optional group can be repeated
 //
 // - Components of type 'keyword', 'name' and 'pathLit' have a compile
 //   function that is passed the corresponding token value and generates the JS.
 //   The compile function for other component types is defined with the
 //   component (in components.js).
 //
-// - Some statements have additional structure that is not included here. E.g.
-//   an 'if' statement can have multiple 'elif's, and a 'try' statement requires
-//   at least one of 'catch' and 'finally'.
+// - The requirement that try statements have at least one of 'catch' and
+//   'finally' is not encoded here.
 // 
 // - When a statement has multiple branches (i.e. versions):
-//    - the first components of the branches are always identical
-//    - the second components of the branches uniquely identify the branch
-// 
+//    - the first component of each branch is identical
+//    - the second component of each branch uniquely identifies the branch (and
+//      unless on the last branch, should not be optional)
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 export const structures, allFirstWords, simpleFirstWords, blockFirstWords;
@@ -26,7 +30,7 @@ export const structures, allFirstWords, simpleFirstWords, blockFirstWords;
 const statements = new Map();
   
 
-// ========== simple statements (i.e. no block) ==========
+// ========= simple statements (i.e. do not contain a block component) =========
 
 // debugger
 statements.set('debugger', [
@@ -258,7 +262,7 @@ statements.set('set__', [
 }
 
 
-// ========== block statements ==========
+// ========== block statements (i.e. contain a 'block' component) ==========
 
 // block
 statements.set('block', [
@@ -274,7 +278,13 @@ statements.set('if', [
     {type: 'keyword', word: 'if', compile: () => 'if '},
     {type: 'expression'},
     {type: 'block'},
-    {type: 'keyword', word: 'elif', compile: () => 'else if ', optional: 3},
+    {
+      type: 'keyword',
+      word: 'elif',
+      compile: () => 'else if ',
+      optional: 3,
+      repeat: true
+    },
     {type: 'expression'},
     {type: 'block'},
     {type: 'keyword', word: 'else', compile: () => 'else ', optional: 3},

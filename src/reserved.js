@@ -81,15 +81,15 @@ reserved.coreFunctions = new Set([
   'difference', 'intersection', 'union',
 
   // other
-  'call', 'getter', 'setter', 'reduce', 'load', 'some', 'every', 'filter',
-  'map', 'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum', 'sumCumu',
-  'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean', 'group',
-  'groupCount', 'bin', 'binCount', 'variance', 'variancePop', 'deviation',
-  'deviationPop', 'arrObj', 'objArr', 'transpose', 'shuffle', 'period', 'at',
-  'range', 'linSpace', 'prt', 'ones', 'zeros', 'empties', 'pick', 'mapAt',
-  'rank', 'quantile', 'median', 'interpolate', 'innerJoin', 'outerJoin',
-  'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin', 'crush',
-  'covariance', 'covariancePop', 'correlation'
+  'array', 'call', 'getter', 'setter', 'reduce', 'load', 'some', 'every',
+  'filter', 'map', 'filterIndex', 'min', 'minIndex', 'max', 'maxIndex', 'sum',
+  'sumCumu', 'count', 'find', 'findIndex', 'order', 'orderIndex', 'mean',
+  'group', 'groupCount', 'bin', 'binCount', 'variance', 'variancePop',
+  'deviation', 'deviationPop', 'arrObj', 'objArr', 'transpose', 'shuffle',
+  'period', 'at', 'range', 'linSpace', 'prt', 'ones', 'zeros', 'empties',
+  'pick', 'mapAt', 'rank', 'quantile', 'median', 'interpolate', 'innerJoin',
+  'outerJoin', 'leftJoin', 'rightJoin', 'crossJoin', 'semiJoin', 'antiJoin',
+  'crush', 'covariance', 'covariancePop', 'correlation'
 ]);
 
 reserved.invalid = new Set([

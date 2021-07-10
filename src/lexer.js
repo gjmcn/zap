@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Tokenize a string of Zap code. The exported function returns an array where
-// each element is a keyword token, or an array of non-keyword tokens. Comment
-// and space (including newline) tokens are discarded.
+// Tokenize a string of Zap code. The exported function returns an array of
+// 'components': each element is a keyword token, or an array of non-keyword
+// tokens. Comment and space (including newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
 import { operators } from "./operators.js";
@@ -29,7 +29,7 @@ const regexps = new Map([
 
 export function lexer(code) {
   
-  const tokenGroups = [];
+  const components = [];
   let group = null;  // contiguous non-keyword tokens
   let index = 0;     // position in code
   let line = 1;      // current line
@@ -56,13 +56,13 @@ export function lexer(code) {
         // keyword
         if (type === 'keyword') {
           if (group) {
-            tokenGroups.push(group);
+            components.push(group);
             group = null;
           }
           if (allFirstWords.has(match[0])) {
             tkn.opensStatement = true;
           }
-          tokenGroups.push(tkn);
+          components.push(tkn);
         }
 
         // non-keywords
@@ -136,9 +136,9 @@ export function lexer(code) {
 
   // possibly an open group of non-keyword tokens
   if (group) {
-    tokenGroups.push(group);
+    components.push(group);
   }
   
-  return tokenGroups;
+  return components;
 
 };
