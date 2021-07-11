@@ -18,7 +18,7 @@ export function compile(zapCode, options) {
         ? js
         : new SourceNode(line, column, options.sourceFile, js)
     );
-  }z
+  }
 
   // loop over components
   while (components.length) {

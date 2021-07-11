@@ -15,7 +15,7 @@ reserved.keywords = new Set([
   'each__', 'awaitEach', 'awaitEach_', 'awaitEach__', 'of', 'loop', 'index',
   'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun',
   '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen', 'par', 'class',
-  'extends', 'export', 'import', 'from', 'as', 'all', 'default', 'debugger'
+  'extends', 'export', 'import', 'from', 'all', 'default', 'debugger'
 ]);
 
 reserved.coreFunctions = new Set([
@@ -95,7 +95,8 @@ reserved.coreFunctions = new Set([
 reserved.invalid = new Set([
   'case', 'const', 'for', 'function', 'return', 'switch', 'with',
   'enum', 'implements', 'interface', 'package', 'private', 'protected',
-  'public', 'static', 'var'
+  'public', 'static', 'var',
+  'as'  // pseudokeyword
 ]);
 
 reserved.nonKeywords = new Set([

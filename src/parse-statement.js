@@ -11,7 +11,7 @@ export function parseStatement(codeComponents, addJS) {
 
   // first component: keyword that opens statement
   const firstTkn = last(codeComponents);
-  if (Array.isArray(firstTkn) || !firstTkn.opensStatement) {
+  if (Array.isArray(firstTkn) || !firstTkn.openStatement) {
     syntaxError(
       Array.isArray(firstTkn) ? firstTkn[0] : firstTkn,
       'expected a keyword that starts a new statement'

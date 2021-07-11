@@ -60,7 +60,7 @@ export function lexer(code) {
             group = null;
           }
           if (allFirstWords.has(match[0])) {
-            tkn.opensStatement = true;
+            tkn.openStatement = true;
           }
           components.push(tkn);
         }

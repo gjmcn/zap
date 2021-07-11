@@ -10,10 +10,9 @@
 //     - 'ifOmitted': code to add if optional group omitted 
 //     - 'repeat': whether the optional group can be repeated
 //
-// - Components of type 'keyword', 'name' and 'pathLit' have a compile
-//   function that is passed the corresponding token value and generates the JS.
-//   The compile function for other component types is defined with the
-//   component (in components.js).
+// - Components of type 'keyword' and 'unreservedName' have a compile function
+//   that is passed the corresponding token value and generates the JS. The
+//   JS for other component types is handled in components.js.
 //
 // - The requirement that try statements have at least one of 'catch' and
 //   'finally' is not encoded here.
@@ -242,7 +241,7 @@ statements.set('set__', [
       {type: 'keyword', word: 'as', compile: () => ''},
       {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit', compile: p => p}
+      {type: 'pathLit'}
     ],
     [
       firstComponent,
@@ -250,13 +249,13 @@ statements.set('set__', [
       {type: 'keyword', word: 'as', compile: () => ' as '},
       {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit', compile: p => p}
+      {type: 'pathLit'}
     ],
     [
       firstComponent,
       {type: 'namesAs', optional: 2},
       {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit', compile: p => p}
+      {type: 'pathLit'}
     ],
   ]);
 }
@@ -403,7 +402,7 @@ statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
       optional: 2,
       ifOmitted: '()'
     },
-    {type: 'params', },
+    {type: 'params'},
     {type: 'block'},
   ]
 ]);
@@ -428,7 +427,7 @@ statements.set('class', [
       optional: 2,
       ifOmitted: '()'
     },
-    {type: 'params',},
+    {type: 'params'},
     {type: 'block', after: '}'},
   ]
 ]);

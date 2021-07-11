@@ -14,8 +14,3 @@ export function syntaxError(t, msg) {
 export function last(arr) {
   return arr[arr.length - 1];
 }
-
-// check if any tokens in array are reserved non-keywords
-export function containsReservedWord(arr) {
-  return arr.some(elm => reserved.nonKeywords.has(elm.value));
-}
