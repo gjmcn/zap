@@ -64,7 +64,7 @@ const isComponent = {
           if (reserved.nonKeywords.has(codeComp[i].value)) {
             syntaxError(codeComp[i], `${codeComp[i].value} is a reserved word`);
           }
-          names.push(codeComp[i]);
+          names.push(codeComp[i].value);
           i++;
         }
         else if (i <= codeComp.length - 5 && 
@@ -198,10 +198,10 @@ export const parseComponent = {
     const codeComp = last(codeComponents);
     const names = isComponent.namesAs(codeComp);
     if (names) {
-      const js = names.map(nm => {
-        return Array.isArray(nm) ? `${nm[0]} as ${nm[1]}` : nm[0];
+      const jsStr = names.map(nm => {
+        return Array.isArray(nm) ? `${nm[0]} as ${nm[1]}` : nm;
       }).join();
-      addJS(`{${js}}`, codeComp[0].line, codeComp[0].column);
+      addJS(`{${jsStr}}`, codeComp[0].line, codeComp[0].column);
       return parseSuccessful(codeComponents, stComp);
     }
   }

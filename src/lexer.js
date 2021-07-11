@@ -19,12 +19,12 @@ const regexps = new Map([
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],  
   ['closeParentheses', /\)/y],  
-  ['openSquare', /\[#?/y],
+  ['openSquare', /\[\^?/y],
   ['closeSquare', /]/y],  
-  ['openCurly', /\{#?/y],
+  ['openCurly', /\{\^?/y],
   ['closeCurly', /}/y],
   ['quickFunction', /\|(?!\|)/y],
-  ['operator', /[+\-*/%~<>=!?&|.:,]+/y]
+  ['operator', /[+\-*/%~<>=!?&|.:,#]+/y]
 ]);
 
 export function lexer(code) {

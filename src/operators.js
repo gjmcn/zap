@@ -9,6 +9,7 @@ export const operators = {
   '?.':  {prec: 0, type: 'infix',  arity: 2},         // optional chaining .
   '?..': {prec: 0, type: 'infix',  arity: 2},         // optional chaining ..
   '?:':  {prec: 0, type: 'infix',  arity: 2},         // optional chaining :
+  '#':   {prec: 1, type: 'prefix', arity: Infinity},  // sum/concatenate
   '!':   {prec: 1, type: 'prefix', arity: 1},         // logical not
   '~':   {prec: 1, type: 'prefix', arity: 1},         // unary minus
   '::':  {prec: 2, type: 'infix',  arity: 2},         // get property
