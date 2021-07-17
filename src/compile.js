@@ -14,7 +14,7 @@ export function compile(zapCode, options) {
   
   function addJS(js, line, column) {
     sourceMap.add(
-      line === undefined
+      js.$$$isSourceNode$$$ || line === undefined  // already a source node or no line and column info
         ? js
         : new SourceNode(line, column, options.sourceFile, js)
     );

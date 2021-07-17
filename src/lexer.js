@@ -51,7 +51,13 @@ export function lexer(code) {
 
       if (match) {
 
-        const tkn = { type, value: match[0], line, column };
+        const tkn = {
+          type,
+          value: match[0],
+          line,
+          column,
+          $$$zapToken$$$: true
+        };
 
         // keyword
         if (type === 'keyword') {

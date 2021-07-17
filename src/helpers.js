@@ -2,8 +2,6 @@
 // Helper functions.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { reserved } from './reserved.js';
-
 // throw syntax error, t can be a string or a token object
 export function syntaxError(t, msg) {
   throw Error(`Zap syntax at ${

@@ -4,11 +4,13 @@
 
 import { syntaxError, last } from './helpers.js';
 import { reserved } from './reserved.js';
+import { parseExpression } from './parse-expression.js';
 
 // check if code component is of given component type
+// - all component types except expression, getterExpression and block
 const isComponent = {
 
-  // check the code component is a single keyword token and that its keyword
+  // true if the code component is a single keyword token and its keyword
   // matches the keyword(s) of the statement component
   keyword: (codeComp, stComp) => {
     return !Array.isArray(codeComp) &&
@@ -93,7 +95,7 @@ const isComponent = {
       }
       return names;
     }
-  },
+  }
 
 };
 
@@ -204,11 +206,15 @@ export const parseComponent = {
       addJS(`{${jsStr}}`, codeComp[0].line, codeComp[0].column);
       return parseSuccessful(codeComponents, stComp);
     }
+  },
+
+  expression: codeComp => {
+    if (Array.isArray(codeComp)) {
+      HERE!!!!!!!! pass 
+      
+      const  parseExpression(codeComp);
+    }
   }
-
-
-  // !!!!!!! HERE: add new isComponents and parseComponents functions
-
 
 
 
