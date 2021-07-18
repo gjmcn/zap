@@ -17,18 +17,16 @@ function fakeToken(js, tkn) {
   };
 }
 
-// argument list for block, do not include operands with indices in notArgs
-function argumentList(block, notArgs) {
+// argument list for block, do not include operands with indices in omit
+function argumentList(block, omit) {
   const {operands} = block;
   const r = [];
-  if (operands.length - notArgs.size > 0) {
-    for (let i = 0; i < operands.length; i++) {
-      if (!notArgs.has(i)) {
-        r.push(operands[i], ',');
-      }
+  for (let i = 0; i < operands.length; i++) {
+    if (!omit || !omit.has(i)) {
+      r.push(operands[i], ',');
     }
-    r.pop();
   }
+  r.pop();
   return r;
 }
 
@@ -43,18 +41,14 @@ function compileDotGetter(block) {
   if (!isIdentifier(operands[1])) {
     syntaxError(operator, 'identifier expected')
   }
-  operator.js = operator.value === '..'
-    ? '.prototype.'
-    : operator.value;
+  operator.js = operator.value === '..' ? '.prototype.' : operator.value;
   block.operands = [[operands[0], operator, operands[1]]];
 }
 
 // compile colon getter
 function compileColonGetter(block) {
   const {operands, operator} = block;
-  operator.js = operator.values === '?:' || operator.values === '?::'
-    ? '?.['
-    : '[' ;
+  operator.js = operator.value[0] === '?' ? '?.[' : '[' ;
   block.operands = [[operands[0], operator, operands[1], ']']];
 }
 
@@ -97,8 +91,8 @@ export const operators = {
           compile: block => {
             const {operands, operator} = block;
             const r = [fakeToken('`', operator)];
-            for (o of operands) {
-              r.push(fakeToken('${', operator), o, '}');
+            for (let o of operands) {
+              r.push('${', o, '}');
             }
             r.push(fakeToken('`', operator));
             block.operands = [r];
@@ -120,7 +114,7 @@ export const operators = {
   // call function on rhs
   '=>': {prec: 2, type: 'call', arity: [1, Infinity],   
           compile: block => {
-            const {operands, position} = block;
+            const {operands, operator, position} = block;
             operator.js = '(';
             block.operands = [[
               operands[position],
@@ -134,7 +128,7 @@ export const operators = {
   // as => but spread array arguments
   '==>': {prec: 2, type: 'call', arity: [1, Infinity],   
             compile: block => {
-              const {operands, operator} = block;
+              const {operands, operator, position} = block;
               block.operands = [[
                 operands[position],
                 fakeToken('(...[', operator),
@@ -161,7 +155,7 @@ export const operators = {
         },
 
   // as -> but spread array arguments (except first)
-  '-->': {prec: 2, type: 'call', arity: [2, Infinity],   
+  '-->': {prec: 2, type: 'call', arity: [2, Infinity],
             compile: block => {
               const {operands, operator} = block;
               const method = operands[1];
@@ -177,11 +171,11 @@ export const operators = {
          },
 
   // as -> but return calling object
-  '<>': {prec: 2, type: 'call', arity: [2, Infinity],   
+  '<>': {prec: 2, type: 'call', arity: [2, Infinity],
           compile: block => {
             const {operands, operator} = block;
             const method = operands[1];
-            operator.js = '((o, m, ...z) => {o[m](...z); return z})('
+            operator.js = '((o, m, ...z) => (o[m](...z), o))(';
             block.operands = [[
               operator,
               operands[0],
@@ -196,36 +190,41 @@ export const operators = {
   '&': {prec: 2, type: 'infix', arity: 2,  
           compile: block => {
             const {operator, operands} = block;
-            if (!isIdentifier(operands[1])) {
+            const vble = operands[1]
+            if (!isIdentifier(vble)) {
               syntaxError(operator, 'identifier expected');
             }
-            if (reserved.nonKeywords.has(operands[1].value)) {
-              syntaxError(operands[1], `${operands[1].value} is a reserved word`);
+            if (reserved.nonKeywords.has(vble.value)) {
+              syntaxError(vble, `${vble.value} is a reserved word`);
             }
-            operator.js = '((o, m) => {o[m] = m; return o})(';
+            operator.js = '((o, p, v) => (o[p] = v, o))(';
             block.operands = [[
               operator,
-              argumentList(block, new Set()),
+              operands[0],
+              ",'",
+              vble.value,
+              "',",
+              vble,
               ')'
             ]]
           }
        },
 
   // copy properties from rhs to lhs
-  '<<': {prec: 2, type: 'infix', arity: 2,      
+  '<<': {prec: 2, type: 'infix', arity: 2,
           compile: block => {
             const {operator} = block;
             operator.js = 'Object.assign(';
             block.operands = [[
               operator,
-              argumentList(block, new Set()),
+              argumentList(block),
               ')'
             ]]
           }
         },
 
   // copy properties from lhs to rhs
-  '>>': {prec: 2, type: 'infix', arity: 2,      
+  '>>': {prec: 2, type: 'infix', arity: 2,
           compile: block => {
             const {operator, operands} = block;
             operator.js = 'Object.assign(';
@@ -263,8 +262,8 @@ export const operators = {
   // less than or equal
   '<=': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
 
-
-  '>': {prec: 3, type: 'infix',  arity: 2, compile: compileBasicInfix},
+  // greater than
+  '>': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
 
   // greater than or equal
   '>=': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
@@ -273,7 +272,7 @@ export const operators = {
   '=': {prec: 4, type: 'infix', arity: 2, compile: compileBasicInfix},
 
   // strict inequality
-  '!=': {prec: 4, type: 'infix',  arity: 2, compile: compileBasicInfix},
+  '!=': {prec: 4, type: 'infix', arity: 2, compile: compileBasicInfix},
 
    // logical and
   '&&': {prec: 5, type: 'infix', arity: 2, compile: compileBasicInfix},
@@ -283,9 +282,6 @@ export const operators = {
 
   // nullish coalescing
   '??': {prec: 5, type: 'infix', arity: 2, compile: compileBasicInfix},
-
-  // comma
-  ',': {prec: 7, type: 'infix', arity: 2, compile: compileBasicInfix},
 
   // conditional
   '?': {prec: 6, type: 'infix', arity: [2, 3], 
@@ -297,10 +293,13 @@ export const operators = {
               fakeToken('?', operator),
               operands[1],
               fakeToken(':', operator),
-              operands.length === 2 ? 'undefined' : operands[2],
+              operands[2] ?? 'undefined',
               ')'
             ]]
           }
-       }
-  
+       },
+
+  // comma
+  ',': {prec: 7, type: 'infix', arity: 2, compile: compileBasicInfix}
+
 };
