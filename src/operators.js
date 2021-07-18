@@ -66,6 +66,84 @@ function compileBasicInfix(block) {
   block.operands = [['(', operands[0], operator, operands[1], ')']];
 }
 
+// compile unary JS word 
+function compileUnaryJSWord(block) {
+  const {operands, position} = block;
+  const jsWord = operands[position];
+  if (operands.length > 2) {
+    syntaxError(jsWord, 'too many arguments');
+  }
+  const firstTkn = fakeToken(
+    `(${jsWord.value === 'yieldFrom' ? 'yield*' : jsWord.value} `, jsWord);
+  if (operands.length === 2) {
+    block.operands = [[
+      firstTkn,
+      operands[position === 0 ? 1 : 0],
+      ')'
+    ]];
+  }
+  else {
+    if (jsWord.value !== 'yield') {
+      syntaxError(jsWord, 'missing argument');
+    }
+    block.operands = [[ firstTkn, ')' ]];
+  }
+}
+
+// compile two parameter JS word
+function compileTwoParamJSWord(block) {
+  const {operands, position} = block;
+  const jsWord = operands[position];
+  if (operands.length !== 3) {
+    syntaxError(jsWord, 'unexpected number of arguments');
+  }
+  const argsInds = position === 0 ? [1, 2] : (position === 1 ? [0, 2] : [0, 1]); 
+  block.operands = [[
+    '(',
+    operands[argsInds[0]],
+    ' ',
+    jsWord,
+    ' ',
+    operands[argsInds[1]],
+    ')'
+  ]];
+}
+
+// JavaScript 'word operators'
+const compileJSWords = new Map([
+
+  ['new', (block, spread) => {
+    const {operands, position} = block;
+    const newWord = operands[position];
+    if (operands.length < 2) {
+      syntaxError(newWord, 'missing constructor');
+    }
+    const constructorIndex = position === 0 ? 1 : 0;
+    const constructor = operands[constructorIndex];
+    block.operands = [[
+      fakeToken('(new ', newWord),
+      constructor,
+      fakeToken(spread ? '(...[' : '(', constructor),
+      argumentList(block, new Set(position, constructorIndex)),
+      fakeToken(spread ? '].flat()))' : '))', constructor)
+    ]]
+  }],
+
+  ['await', compileUnaryJSWord],
+
+  ['void', compileUnaryJSWord],
+
+  ['typeof', compileUnaryJSWord],
+
+  ['in', compileTwoParamJSWord],
+
+  ['instanceof', compileTwoParamJSWord],
+
+  ['yield', compileUnaryJSWord],
+
+  ['yieldFrom', compileUnaryJSWord]
+
+]);
 
 // ========== operators ==========
 
@@ -115,13 +193,20 @@ export const operators = {
   '=>': {prec: 2, type: 'call', arity: [1, Infinity],   
           compile: block => {
             const {operands, operator, position} = block;
-            operator.js = '(';
-            block.operands = [[
-              operands[position],
-              operator,
-              argumentList(block, new Set(position)),
-              ')'
-            ]];
+            const func = operands[position];
+            if (isIdentifier(func) &&
+                compileJSWords.has(func.value)) {
+              compileJSWords.get(func.value)(block);
+            }
+            else {
+              operator.js = '(';
+              block.operands = [[
+                func,
+                operator,
+                argumentList(block, new Set(position)),
+                ')'
+              ]];
+            }
           }
         },
 
@@ -129,12 +214,18 @@ export const operators = {
   '==>': {prec: 2, type: 'call', arity: [1, Infinity],   
             compile: block => {
               const {operands, operator, position} = block;
-              block.operands = [[
-                operands[position],
-                fakeToken('(...[', operator),
-                argumentList(block, new Set(position)),
-                fakeToken('].flat())', operator)
-              ]];
+              const func = operands[position];
+              if (isIdentifier(func) && func.value === 'new') {
+                compileJSWords.get('new')(block, true);
+              }
+              else {
+                block.operands = [[
+                  func,
+                  fakeToken('(...[', operator),
+                  argumentList(block, new Set(position)),
+                  fakeToken('].flat())', operator)
+                ]];
+              }
             }
          },
 
