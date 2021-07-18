@@ -6,7 +6,7 @@ Zap is a compile-to-JavaScript language with a clean, concise syntax and powerfu
 
 Literals are particularly simple:
 
-```
+```zap
 # u 5 v 6    // Object {u: 5, v: 6}
 ## u 5 v 6   // Map {'u' => 5, 'v' => 6}
 @ 5 6        // Array [5, 6]
@@ -15,7 +15,7 @@ Literals are particularly simple:
 
 Everything in Zap is an expression &mdash; no blocks, statements or keywords. Except for a few special cases, code reads left to right and the 'current' operator is applied when the next operator or the end of the expression is reached:
 
-```
+```zap
 @ 3 4 5     // [3, 4, 5]
 3 @ 4 5     // [3, 4, 5]
 3 4 5 @     // [3, 4, 5]
@@ -27,7 +27,7 @@ Everything in Zap is an expression &mdash; no blocks, statements or keywords. Ex
 
 Basic operators such as `+` can take more the two operands: 
 
-```
+```zap
 3 4 5 +   // 12
 + 3 4 5   // 12
 ```
@@ -35,13 +35,13 @@ Basic operators such as `+` can take more the two operands:
 
 Many operators have names rather than symbols:
 
-```
+```zap
 5 isNumber print   // prints (and returns) true
 ```
 
 Indented blocks or parentheses can be used for precedence:
 
-```
+```zap
 3 * (4 + 5)   // 27
 3 * 
     4 + 5     // 27
@@ -54,7 +54,7 @@ x each v
 
 Indented blocks can contain multiple expressions:
 
-```
+```zap
 // prints 12 30 56
 @ 3 4 5 each value index
     z = value + index
@@ -63,7 +63,7 @@ Indented blocks can contain multiple expressions:
 
 An expression terminates at the end of a line unless the following line opens an indentated block or continues the line with `|`. 
 
-```
+```zap
 // array-of-objects
 dogs = 
     @
@@ -85,7 +85,7 @@ dogs = @
 
 `fun` creates a function; `\` calls a function. `\` has special behavior: the first right operand is always the function:
 
-```
+```zap
 double = fun x (2 * x)   // body in parentheses
 
 add = fun x y
@@ -98,19 +98,19 @@ add = fun x y
 
 Bracket functions can be used for 'one-liners'. Bracket functions have parameters `a`, `b` and `c`, and are comprised of a single expression:
 
-```
+```zap
 add = [a + b]   // function
 ```
 
 The `~` operator calls a method:
 
-```
+```zap
 'abcd' ~slice 1 3 ~repeat 2   // 'bcbc'
 ```
 
 The range operators create generators:
 
-```
+```zap
 1 to 3           // generator (1 2 3)
 1 to 7 2         // generator (1 3 5 7)
 1 7 linSpace 4   // generator (1 3 5 7)
@@ -118,7 +118,7 @@ The range operators create generators:
 
 There are lots of operators for working with iterables (arrays, sets, generators etc.). For example:
 
-```
+```zap
 s = @@ 5 6 7              // Set {5, 6, 7}
 s array                   // [5, 6, 7]
 s each x (x + 10 print)   // prints 15 16 17
@@ -131,7 +131,7 @@ s group [a > 5]           // Map {false => [5], true => [6, 7]}
 
 Backticks tell an arithmetic, logical or comparison operator to iterate over an operand:
 
-```
+```zap
 x = @ 5 6 7     // [5, 6, 7]
 x  `+  10       // [15, 16, 17]       
 10  +` x        // [15, 16, 17]
@@ -144,13 +144,13 @@ x  `+` x        // [10, 12, 14]
 
 The many elementwise operators can be used with iterables or non-iterables:
 
-```
+```zap
 @ 4 9 16 sqrt   // [2, 3, 4]
 4 sqrt          // 2
 ```
 
 Use `class` to write a constructor and `extends` to write a subclass constructor. `::` gets a property from the prototype of an object so can be used to add methods:
-```
+```zap
 // class with empty body: parameters become properties of 'this'
 Cat = class name ()
 
@@ -165,7 +165,7 @@ leo ~speak 'hungry'    // 'I am Leo the hungry lion'
 
 Except for `class` and `extends`, all operators that take a body operand have an asynchronous version:
 
-```
+```zap
 // prints the length of the data (and returns a promise that
 // resolves to the length)
 asyncScope
@@ -175,14 +175,14 @@ asyncScope
 
 DOM operators work with individual HTML/SVG elements, iterables of elements and CSS selector strings:
 
-```
+```zap
 // set color of each span with class danger to red
 'span.danger' style 'color' 'red'
 ```
 
 Data can be encoded as (and is automatically attached to) elements: 
 
-```
+```zap
 // add 3 buttons to body, click a button to see its data
 @ 3 4 5 encode 'button' 
 | text 'show data'

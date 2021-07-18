@@ -1,9 +1,21 @@
 'use strict';
 
 const fs = require('fs');
-const md = require('markdown-it')({ html: true })
-  .use(require('markdown-it-attrs'));
-const indexHighlight = require('./index-highlight.js');
+
+const hljs = require('highlight.js');
+hljs.registerLanguage('zap', require('./highlightjs-zap.js'));
+
+const md = require('markdown-it')({
+  html: true,
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+    return ''; // use external default escaping
+  }
+}).use(require('markdown-it-attrs'));
 
 const sections = [
   ['overview', 'Overview'], 
@@ -46,15 +58,7 @@ let panelHtml = '';
 for (let [anchor, heading] of sections) {
   sidebarHtml += `<a id="side-link-${anchor}" class="side-link" href="#${
     anchor}">${heading}</a>`
-  const mdText = fs.readFileSync(`./contents-md/${anchor}.md`, 'utf8')
-    .replace(
-      /```(\{\.indent\})?[\n\r]*([\s\S]*?)```/g,
-      (m, m1, m2) => {
-        return `<pre${m1 ? ' class="indent"' : ''}><code>${
-          indexHighlight(m2)}</code></pre>`;
-      }
-    );
-  panelHtml += md.render(mdText);
+  panelHtml += md.render(fs.readFileSync(`./contents-md/${anchor}.md`, 'utf8'));
 }
 
 let finalHtml = fs.readFileSync('./src/index-template.html', 'utf8')

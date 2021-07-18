@@ -1,7 +1,6 @@
 'use strict';
 
-const scrollama = require("scrollama");
-
+import scrollama from "scrollama";
 const scroller = scrollama();
 
 const sideLinks = [...document.querySelectorAll('.side-link')];

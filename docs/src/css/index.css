@@ -196,16 +196,3 @@ pre > code {
 }
 
 
-/* ----- Zap highlighting, colors matched to Zap playground ----- */
-
-.zap-javascript  { color: #abb2bf }
-.zap-comment     { color: #7f848e; font-style: italic }
-.zap-number      { color: #d19a66 }
-.zap-literal     { color: #d19a66 }
-.zap-string      { color: #98c379 } 
-.zap-regexp      { color: #56b6c2 } 
-.zap-variable    { color: #e5c07b }
-.zap-keyword     { color: #c678dd } 
-.zap-operator    { color: #c678dd } 
-.zap-punctuation { color: #abb2bf }
-.zap-identifier  { color: #e06c75 }

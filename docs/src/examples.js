@@ -1,4 +1,4 @@
-module.exports = new Map([
+export const examples = new Map([
 [
 '',
 ''

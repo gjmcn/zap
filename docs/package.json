@@ -1,25 +1,23 @@
 {
   "name": "zap-docs",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Zap Docs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-docs": "node ./src/build-docs.js && browserify src/index.js | terser -o index-bundle.js",
-    "build-playground": "browserify src/playground.js | terser -o playground-bundle.js"
+    "build-docs": "node ./src/build-docs.js && esbuild src/index.js --bundle --outfile=index.min.js",
+    "build-playground": "esbuild src/playground.js --bundle --sourcemap --outfile=playground.min.js"
   },
   "author": "Graham McNeill",
   "license": "MIT",
   "dependencies": {
-    "@observablehq/inspector": "^3.2.1",
-    "d3-require": "^1.2.4",
-    "intersection-observer": "^0.11.0",
-    "scrollama": "^2.2.1"
+    "@observablehq/inspector": "^3.2.2",
+    "scrollama": "^2.2.2"
   },
   "devDependencies": {
-    "browserify": "^16.5.1",
-    "markdown-it": "^10.0.0",
-    "markdown-it-attrs": "^3.0.2",
-    "terser": "^4.6.10"
+    "esbuild": "^0.12.15",
+    "highlight.js": "^11.1.0",
+    "markdown-it": "^12.1.0",
+    "markdown-it-attrs": "^4.0.0"
   }
 }
