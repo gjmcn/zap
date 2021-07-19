@@ -190,7 +190,7 @@ export const operators = {
   '?::': {prec: 2, type: 'infix', arity: 2, compile: compileColonGetter},
 
   // call function on rhs
-  '=>': {prec: 2, type: 'call', arity: [1, Infinity],   
+  '=>': {prec: 2, type: 'call', arity: [1, Infinity],
           compile: block => {
             const {operands, operator, position} = block;
             const func = operands[position];
@@ -211,7 +211,7 @@ export const operators = {
         },
 
   // as => but spread array arguments
-  '==>': {prec: 2, type: 'call', arity: [1, Infinity],   
+  '==>': {prec: 2, type: 'call', arity: [1, Infinity],
             compile: block => {
               const {operands, operator, position} = block;
               const func = operands[position];

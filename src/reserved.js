@@ -9,9 +9,9 @@ reserved.wordLiterals = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', '@end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'let',
-  'let_', 'let__', 'be', 'set', 'set_', 'set__', 'to', 'use', 'or', 'inc',
-  'dec', 'by', 'block', 'if', 'elif', 'else', 'while', 'each', 'each_',
+  'end', '@end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'delete',
+  'let', 'let_', 'let__', 'be', 'set', 'set_', 'set__', 'to', 'use', 'or',
+  'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while', 'each', 'each_',
   'each__', 'awaitEach', 'awaitEach_', 'awaitEach__', 'of', 'loop', 'index',
   'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun',
   '@proc', '@gen', '@asyncFun', '@asyncProc', '@asyncGen', 'par', 'class',
@@ -21,8 +21,7 @@ reserved.keywords = new Set([
 reserved.coreFunctions = new Set([
 
   // JavaScript operators with word-names
-  'new', 'await', 'void', 'delete', 'typeof', 'in', 'instanceof', 'yield',
-  'yieldFrom',
+  'new', 'await', 'void', 'typeof', 'in', 'instanceof', 'yield', 'yieldFrom',
   
   // HTML/SVG
   'select', 'selectAll', 'insert', 'insertEach', 'into', 'encode',

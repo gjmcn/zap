@@ -81,6 +81,14 @@ statements.set('print', [
   ]
 ]);
 
+// delete
+statements.set('delete', [
+  [
+    {type: 'keyword', word: 'delete', compile: () => 'delete '},
+    {type: 'getterExpression'}
+  ]
+]);
+
 // let
 statements.set('let', [
   [
