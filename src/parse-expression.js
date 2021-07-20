@@ -11,7 +11,7 @@
 // import sourceMapObject from '../node_modules/source-map/dist/source-map.js';
 // const { SourceNode } = sourceMapObject;
 import { syntaxError } from "./helpers.js";
-import { operators } from "./operators.js";
+import { operatorDetails, applyOperator} from "./operators.js";
 
 export function parseExpression(tokens) {
   
@@ -66,23 +66,6 @@ export function parseExpression(tokens) {
     }
   }
 
-
-!!!!!!!!!!!!!!!!!DOING: ADDING COMPILE FUNCTIONS TO OPERATORS IN operators.js
-
-!!!!!!!!!!!!! TO DO:
-(ONLY CHECKS IN OPERATOR COMPILE FUNCTIONS ARE WHETHER IDENTIFIERS - AND IF NOT RESERVED WHEN SHOULDN'T BE)
-- ADD COMPILE FUNCTIONS TO OPERATORS
-- HOW PARSE ALL TYPES OF BRACKETS - ADD NEW FILE FOR THESE?
-- CHECKS, INC:
-  - OPERATOR EXISTS IF TRY TO APPLY IT
-  - POSITIONS OF OPERANDS IS VALID - inc if arrow-call that have function on right
-  - NUMBER OF OPERANDS IS VALID
-- NEED SIMPLE FUNCTIONS FOR HANDLING OTHER (NON-OPERATOR, NON-BRACKET) TOKEN
-  TYPES: NUMBERS, STRINGS, ...
-
-
-
-
   // ========== loop over tokens ==========
 
   for (let tkn of tokens) {
@@ -94,20 +77,7 @@ export function parseExpression(tokens) {
     if (type === 'operator') {
       const {prec, type: opType, arity} = operators[value];
       
-      // checks
-      if (operands.length < arity[0] || operands.length > arity[1]) {
-        syntaxError(tkn, 'invalid number of operands');
-      }
-      if (opType === 'prefix') {
-        if (position !== 0) {
-          syntaxError(tkn, 'prefix operator must appear before operand(s)');
-        }
-      }
-      else if (opType === 'call') {
-       if (position > operands.length) {
-          
-       }
-      }
+      
 
       else if (opType === 'infix') {
         if (stack.length !== 1) {

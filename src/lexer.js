@@ -4,7 +4,7 @@
 // tokens. Comment and space (including newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { operators } from "./operators.js";
+import { operatorDetails } from "./operators.js";
 import { reserved } from "./reserved.js";
 import { allFirstWords } from "./statements.js";
 
@@ -113,7 +113,7 @@ export function lexer(code) {
 
               // operator symbols: check valid operator  
               if (type === 'operator') {
-                if (!operators[match[0]]) {
+                if (!operatorDetails[match[0]]) {
                   lexerError(`unrecognized operator: ${match[0]}`);
                 }
               }

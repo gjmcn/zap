@@ -42,28 +42,28 @@ function compileDotGetter(block) {
     syntaxError(operator, 'identifier expected')
   }
   operator.js = operator.value === '..' ? '.prototype.' : operator.value;
-  block.operands = [[operands[0], operator, operands[1]]];
+  return [operands[0], operator, operands[1]];
 }
 
 // compile colon getter
 function compileColonGetter(block) {
   const {operands, operator} = block;
   operator.js = operator.value[0] === '?' ? '?.[' : '[' ;
-  block.operands = [[operands[0], operator, operands[1], ']']];
+  return [operands[0], operator, operands[1], ']'];
 }
 
 // compile unary postfix
 function compileUnaryPostfix(block) {
   const {operands, operator} = block;
   operator.js = operator.value === '~' ? '-' : operator.value; 
-  block.operands = [['(', operator, operands[0], ')']];
+  return ['(', operator, operands[0], ')'];
 }
 
 // compile basic infix
 function compileBasicInfix(block) {
   const {operands, operator} = block;
   operator.js = operator.value; 
-  block.operands = [['(', operands[0], operator, operands[1], ')']];
+  return ['(', operands[0], operator, operands[1], ')'];
 }
 
 // compile unary JS word 
@@ -76,17 +76,13 @@ function compileUnaryJSWord(block) {
   const firstTkn = fakeToken(
     `(${jsWord.value === 'yieldFrom' ? 'yield*' : jsWord.value} `, jsWord);
   if (operands.length === 2) {
-    block.operands = [[
-      firstTkn,
-      operands[position === 0 ? 1 : 0],
-      ')'
-    ]];
+    return [firstTkn, operands[position === 0 ? 1 : 0], ')'];
   }
   else {
     if (jsWord.value !== 'yield') {
       syntaxError(jsWord, 'missing argument');
     }
-    block.operands = [[ firstTkn, ')' ]];
+    return [firstTkn, ')'];
   }
 }
 
@@ -97,16 +93,8 @@ function compileTwoParamJSWord(block) {
   if (operands.length !== 3) {
     syntaxError(jsWord, 'unexpected number of arguments');
   }
-  const argsInds = position === 0 ? [1, 2] : (position === 1 ? [0, 2] : [0, 1]); 
-  block.operands = [[
-    '(',
-    operands[argsInds[0]],
-    ' ',
-    jsWord,
-    ' ',
-    operands[argsInds[1]],
-    ')'
-  ]];
+  const firstArg = operands[position === 0 ? 1 : 0]; 
+  return ['(', firstArg, ' ', jsWord, ' ', operands[2], ')'];
 }
 
 // JavaScript 'word operators'
@@ -118,15 +106,14 @@ const compileJSWords = new Map([
     if (operands.length < 2) {
       syntaxError(newWord, 'missing constructor');
     }
-    const constructorIndex = position === 0 ? 1 : 0;
-    const constructor = operands[constructorIndex];
-    block.operands = [[
+    const constructor = operands[position === 0 ? 1 : 0];
+    return [
       fakeToken('(new ', newWord),
       constructor,
       fakeToken(spread ? '(...[' : '(', constructor),
-      argumentList(block, new Set(position, constructorIndex)),
+      argumentList(block, new Set(0, 1)),
       fakeToken(spread ? '].flat()))' : '))', constructor)
-    ]]
+    ];
   }],
 
   ['await', compileUnaryJSWord],
@@ -145,9 +132,10 @@ const compileJSWords = new Map([
 
 ]);
 
-// ========== operators ==========
 
-export const operators = {
+// ========== operator details ==========
+
+export const operatorDetails = {
 
   // get property (unquoted)
   '.': {prec: 0, type: 'infix', arity: [2, 2], compile: compileDotGetter},
@@ -173,91 +161,91 @@ export const operators = {
   // optional chaining ::
   '?::': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
-  // call function on rhs
-  '=>': {prec: 2, type: 'call', arity: [1, Infinity],
+  // call function
+  '=>': {prec: 2, type: 'function-call', arity: [1, Infinity],
           compile: block => {
             const {operands, operator, position} = block;
             const func = operands[position];
             if (isIdentifier(func) &&
                 compileJSWords.has(func.value)) {
-              compileJSWords.get(func.value)(block);
+              return compileJSWords.get(func.value)(block);
             }
             else {
               operator.js = '(';
-              block.operands = [[
+              return [
                 func,
                 operator,
                 argumentList(block, new Set(position)),
                 ')'
-              ]];
+              ];
             }
           }
         },
 
   // as => but spread array arguments
-  '==>': {prec: 2, type: 'call', arity: [1, Infinity],
+  '==>': {prec: 2, type: 'function-call', arity: [1, Infinity],
             compile: block => {
               const {operands, operator, position} = block;
               const func = operands[position];
               if (isIdentifier(func) && func.value === 'new') {
-                compileJSWords.get('new')(block, true);
+                return compileJSWords.get('new')(block, true);
               }
               else {
-                block.operands = [[
+                return [
                   func,
                   fakeToken('(...[', operator),
                   argumentList(block, new Set(position)),
                   fakeToken('].flat())', operator)
-                ]];
+                ];
               }
             }
          },
 
   // call method
-  '->': {prec: 2, type: 'call', arity: [2, Infinity],   
+  '->': {prec: 2, type: 'method-call', arity: [2, Infinity],   
           compile: block => {
             const {operands, operator} = block;
             const method = operands[1];
-            block.operands = [[
+            return [
               operands[0],
               fakeToken('[', operator),
               isIdentifier(method) ? ["'", method, "'"] : method,
               fakeToken('](', operator),
               argumentList(block, new Set(0, 1)),
               ')'
-            ]];
+            ];
           }
         },
 
   // as -> but spread array arguments (except first)
-  '-->': {prec: 2, type: 'call', arity: [2, Infinity],
+  '-->': {prec: 2, type: 'method-call', arity: [2, Infinity],
             compile: block => {
               const {operands, operator} = block;
               const method = operands[1];
-              block.operands = [[
+              return [
                 operands[0],
                 fakeToken('[', operator),
                 isIdentifier(method) ? ["'", method, "'"] : method,
                 fakeToken('](...[', operator),
                 argumentList(block, new Set(0, 1)),
                 fakeToken('].flat())', operator)
-              ]];
+              ];
             }
          },
 
   // as -> but return calling object
-  '<>': {prec: 2, type: 'call', arity: [2, Infinity],
+  '<>': {prec: 2, type: 'method-call', arity: [2, Infinity],
           compile: block => {
             const {operands, operator} = block;
             const method = operands[1];
             operator.js = '((o, m, ...z) => (o[m](...z), o))(';
-            block.operands = [[
+            return [
               operator,
               operands[0],
               isIdentifier(method) ? [",'", method, "',"] : [',', method, ','],
               argumentList(block, new Set(0, 1)),
               ')'
-            ]];
+            ];
           }
         },
 
@@ -273,7 +261,7 @@ export const operators = {
               syntaxError(vble, `${vble.value} is a reserved word`);
             }
             operator.js = '((o, p, v) => (o[p] = v, o))(';
-            block.operands = [[
+            return [
               operator,
               operands[0],
               ",'",
@@ -281,7 +269,7 @@ export const operators = {
               "',",
               vble,
               ')'
-            ]]
+            ];
           }
        },
 
@@ -290,11 +278,7 @@ export const operators = {
           compile: block => {
             const {operator} = block;
             operator.js = 'Object.assign(';
-            block.operands = [[
-              operator,
-              argumentList(block),
-              ')'
-            ]]
+            return [operator, argumentList(block), ')'];
           }
         },
 
@@ -303,13 +287,7 @@ export const operators = {
           compile: block => {
             const {operator, operands} = block;
             operator.js = 'Object.assign(';
-            block.operands = [[
-              operator,
-              operands[1],
-              ',',
-              operands[0],
-              ')'
-            ]]
+            return [operator, operands[1], ',', operands[0], ')'];
           }
         },
 
@@ -365,7 +343,7 @@ export const operators = {
   '?': {prec: 7, type: 'infix', arity: [2, 3], 
           compile: block => {
             const {operator, operands} = block;
-            block.operands = [[
+            return [
               '(',
               operands[0],
               fakeToken('?', operator),
@@ -373,7 +351,7 @@ export const operators = {
               fakeToken(':', operator),
               operands[2] ?? 'undefined',
               ')'
-            ]]
+            ];
           }
        },
 
@@ -381,3 +359,42 @@ export const operators = {
   ',': {prec: 8, type: 'infix', arity: [2, 2], compile: compileBasicInfix}
 
 };
+
+
+// ========== apply operator ==========
+
+// returns an array representing the result of the applied operator
+export function applyOperator(block) {
+
+  const {operator, operands, position} = block;
+  const {arity, type, compile} = operatorDetails[operator.value];
+
+  // check arity
+  if (operands.length < arity[0] || operands.length > arity[1]) {
+    syntaxError(operator, 'invalid number of operands');
+  }
+
+  // check position
+  if (type === 'postfix') {
+    if (position !== 1) {
+      syntaxError(operator, `${type} operator must be after its operand`);
+    }
+  }
+  else if (type === 'infix' || type === 'method-call') {
+    if (position !== 1) {
+      syntaxError(operator, `${type} operator must be after its first operand`);
+    }
+  }
+  else {  // function-call
+    if (position > 1) {
+      syntaxError(
+        operator,
+        `${type} operator must be before or after its first operand`
+      );
+    }
+  }
+
+  // 'apply' operator
+  return compile(block);
+
+} 
