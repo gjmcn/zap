@@ -52,8 +52,8 @@ function compileColonGetter(block) {
   block.operands = [[operands[0], operator, operands[1], ']']];
 }
 
-// compile unary prefix
-function compileUnaryPrefix(block) {
+// compile unary postfix
+function compileUnaryPostfix(block) {
   const {operands, operator} = block;
   operator.js = operator.value === '~' ? '-' : operator.value; 
   block.operands = [['(', operator, operands[0], ')']];
@@ -150,44 +150,28 @@ const compileJSWords = new Map([
 export const operators = {
 
   // get property (unquoted)
-  '.': {prec: 0, type: 'infix', arity: 2, compile: compileDotGetter},
+  '.': {prec: 0, type: 'infix', arity: [2, 2], compile: compileDotGetter},
 
   // optional chaining .
-  '?.': {prec: 0, type: 'infix', arity: 2, compile: compileDotGetter},
+  '?.': {prec: 0, type: 'infix', arity: [2, 2], compile: compileDotGetter},
 
   // get property of prototype (unquoted)
-  '..': {prec: 0, type: 'infix', arity: 2, compile: compileDotGetter},
+  '..': {prec: 0, type: 'infix', arity: [2, 2], compile: compileDotGetter},
 
   // get property
-  ':': {prec: 0, type: 'infix', arity: 2, compile: compileColonGetter},
+  ':': {prec: 0, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // optional chaining :
-  '?:': {prec: 0, type: 'infix', arity: 2, compile: compileColonGetter},
-
-  // sum/concatenate
-  '#': {prec: 1, type: 'prefix', arity: [2, Infinity],  
-          compile: block => {
-            const {operands, operator} = block;
-            const r = [fakeToken('`', operator)];
-            for (let o of operands) {
-              r.push('${', o, '}');
-            }
-            r.push(fakeToken('`', operator));
-            block.operands = [r];
-          }
-       },
-
-  // logical not
-  '!': {prec: 1, type: 'prefix', arity: 1, compile: compileUnaryPrefix},
+  '?:': {prec: 0, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // unary minus
-  '~': {prec: 1, type: 'prefix', arity: 1, compile: compileUnaryPrefix},
+  '~': {prec: 1, type: 'postfix', arity: [1, 1], compile: compileUnaryPostfix},
 
   // get property
-  '::': {prec: 2, type: 'infix', arity: 2, compile: compileColonGetter},
+  '::': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // optional chaining ::
-  '?::': {prec: 2, type: 'infix', arity: 2, compile: compileColonGetter},
+  '?::': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // call function on rhs
   '=>': {prec: 2, type: 'call', arity: [1, Infinity],
@@ -278,7 +262,7 @@ export const operators = {
         },
 
   // set property with variable
-  '&': {prec: 2, type: 'infix', arity: 2,  
+  '&': {prec: 2, type: 'infix', arity: [2, 2],  
           compile: block => {
             const {operator, operands} = block;
             const vble = operands[1]
@@ -302,7 +286,7 @@ export const operators = {
        },
 
   // copy properties from rhs to lhs
-  '<<': {prec: 2, type: 'infix', arity: 2,
+  '<<': {prec: 2, type: 'infix', arity: [2, 2],
           compile: block => {
             const {operator} = block;
             operator.js = 'Object.assign(';
@@ -315,7 +299,7 @@ export const operators = {
         },
 
   // copy properties from lhs to rhs
-  '>>': {prec: 2, type: 'infix', arity: 2,
+  '>>': {prec: 2, type: 'infix', arity: [2, 2],
           compile: block => {
             const {operator, operands} = block;
             operator.js = 'Object.assign(';
@@ -330,52 +314,55 @@ export const operators = {
         },
 
   // exponentiation
-  '**': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '**': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // multiplication
-  '*': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '*': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // division
-  '/': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '/': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // remainder
-  '%': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '%': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // addition
-  '+': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '+': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // subtraction
-  '-': {prec: 2, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '-': {prec: 2, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // less than
-  '<': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '<': {prec: 3, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // less than or equal
-  '<=': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '<=': {prec: 3, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // greater than
-  '>': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '>': {prec: 3, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // greater than or equal
-  '>=': {prec: 3, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '>=': {prec: 3, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // strict equality 
-  '=': {prec: 4, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '=': {prec: 4, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // strict inequality
-  '!=': {prec: 4, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '!=': {prec: 4, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
-   // logical and
-  '&&': {prec: 5, type: 'infix', arity: 2, compile: compileBasicInfix},
+  // logical not
+  '!': {prec: 5, type: 'postfix', arity: [1, 1], compile: compileUnaryPostfix},
+   
+  // logical and
+  '&&': {prec: 6, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // logical or
-  '||': {prec: 5, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '||': {prec: 6, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // nullish coalescing
-  '??': {prec: 5, type: 'infix', arity: 2, compile: compileBasicInfix},
+  '??': {prec: 6, type: 'infix', arity: [2, 2], compile: compileBasicInfix},
 
   // conditional
-  '?': {prec: 6, type: 'infix', arity: [2, 3], 
+  '?': {prec: 7, type: 'infix', arity: [2, 3], 
           compile: block => {
             const {operator, operands} = block;
             block.operands = [[
@@ -391,6 +378,6 @@ export const operators = {
        },
 
   // comma
-  ',': {prec: 7, type: 'infix', arity: 2, compile: compileBasicInfix}
+  ',': {prec: 8, type: 'infix', arity: [2, 2], compile: compileBasicInfix}
 
 };

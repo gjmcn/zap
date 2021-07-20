@@ -88,16 +88,25 @@ export function parseExpression(tokens) {
   for (let tkn of tokens) {
 
     const {type, value} = tkn;
+    const {operands, position} = block
 
+    // operator
     if (type === 'operator') {
-      
       const {prec, type: opType, arity} = operators[value];
       
-      if (prec)
-
-
+      // checks
+      if (operands.length < arity[0] || operands.length > arity[1]) {
+        syntaxError(tkn, 'invalid number of operands');
+      }
       if (opType === 'prefix') {
-        newStack(tkn);
+        if (position !== 0) {
+          syntaxError(tkn, 'prefix operator must appear before operand(s)');
+        }
+      }
+      else if (opType === 'call') {
+       if (position > operands.length) {
+          
+       }
       }
 
       else if (opType === 'infix') {
@@ -119,3 +128,50 @@ export function parseExpression(tokens) {
   }
 
 }
+
+
+// BRACKETS!!!!!!!!!!!!!!!!
+
+const bracketPairs = { '(': ')', '[': ']', '{': '}', '|': '|' };
+
+function checkMatch(tkn, block) {
+  if (tkn.value !== bracketPairs[block.openedWith]) {
+    syntaxError(tkn, 'bracket mismatch');
+  }
+}
+
+export const brackets = {
+
+  '{': (tkn, block, stack) => {
+
+  },
+
+  '}': (tkn, block, stack) => {
+    checkMatch(tkn, block);
+
+  },
+
+  '[': (tkn, block, stack) => {
+
+  },
+
+  ']': (tkn, block, stack) => {
+    checkMatch(tkn, block);
+    
+  },
+
+  '(': (tkn, block, stack) => {
+
+  },
+
+  ')': (tkn, block, stack) => {
+    checkMatch(tkn, block);
+    
+  },
+
+  '|': (tkn, block, stack) => {
+    
+    
+  },
+
+};

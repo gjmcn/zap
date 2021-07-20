@@ -17,14 +17,14 @@ const regexps = new Map([
   ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
   ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
-  ['openParentheses', /\(/y],  
+  ['openParentheses', /\(/y],
   ['closeParentheses', /\)/y],  
-  ['openSquare', /\[\^?/y],
+  ['openSquare', /\[[#\^]?/y],
   ['closeSquare', /]/y],  
   ['openCurly', /\{\^?/y],
   ['closeCurly', /}/y],
   ['quickFunction', /\|(?!\|)/y],
-  ['operator', /[+\-*/%~<>=!?&|.:,#]+/y]
+  ['operator', /[+\-*/%~<>=!?&|.:,]+/y]
 ]);
 
 export function lexer(code) {
