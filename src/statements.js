@@ -57,10 +57,10 @@ statements.set('do', [
   ]
 ]);
 
-// out
-statements.set('out', [
+// output
+statements.set('output', [
   [
-    {type: 'keyword', word: 'out', compile: () => 'return '},
+    {type: 'keyword', word: 'output', compile: () => 'return '},
     {type: 'expression', optional: 1}
   ]
 ]);
@@ -405,7 +405,7 @@ statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
     {type: 'unreservedName', compile: name => name},
     {
       type: 'keyword',
-      word: 'par',
+      word: 'input',
       compile: () => '',
       optional: 2,
       ifOmitted: '()'
@@ -430,7 +430,7 @@ statements.set('class', [
     {type: 'unreservedName', compile: name => `${name} { constructor`},
     {
       type: 'keyword',
-      word: 'par',
+      word: 'input',
       compile: () => '',
       optional: 2,
       ifOmitted: '()'
