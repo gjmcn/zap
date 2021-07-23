@@ -89,33 +89,47 @@ statements.set('delete', [
   ]
 ]);
 
-// let
-statements.set('let', [
+// var
+statements.set('var', [
   [
-    {type: 'keyword', word: 'let', compile: () => 'let '},
+    {type: 'keyword', word: 'var', compile: () => 'let '},
     {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
+    {type: 'keyword', word: 'to', compile: () => ' = ', optional: 2},
     {type: 'expression'}
   ]
 ]);
 
-// let_
-statements.set('let_', [
+// var_
+statements.set('var_', [
   [
-    {type: 'keyword', word: 'let_', compile: () => 'let ['},
+    {type: 'keyword', word: 'var_', compile: () => 'let ['},
     {type: 'unreservedNames'},
-    {type: 'keyword', word: 'be', compile: () => '] = '},
+    {type: 'keyword', word: 'to', compile: () => '] = '},
     {type: 'expression'}
   ]
 ]);
 
-// let__
-statements.set('let__', [
+// var__
+statements.set('var__', [
   [
-    {type: 'keyword', word: 'let__', compile: () => 'let {'},
+    {type: 'keyword', word: 'var__', compile: () => 'let {'},
     {type: 'unreservedNames'},
-    {type: 'keyword', word: 'be', compile: () => '} = '},
+    {type: 'keyword', word: 'to', compile: () => '} = '},
     {type: 'expression'}
+  ]
+]);
+
+// def
+statements.set('def', [
+  [
+    {type: 'keyword', word: 'def', compile: () => ''},
+    {
+      type: 'unreservedName',
+      compile: name => `let ${name} = options?.[${name}] ?? `,
+      optional : 2,
+      repeat: true
+    },
+    {type: 'expr', after: ';'}
   ]
 ]);
 
@@ -158,20 +172,20 @@ statements.set('set__', [
   ]
 ]);
 
-// use
+// cet
 {
-  const firstComponent = {type: 'keyword', word: 'use', compile: () => ''};
-  statements.set('use', [
+  const firstComponent = {type: 'keyword', word: 'cet', compile: () => ''};
+  statements.set('cet', [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'or', compile: () => ' ??= '},
+      {type: 'keyword', word: 'to', compile: () => ' ??= '},
       {type: 'expression'}
     ],
     [
       firstComponent,
       {type: 'getterExpression'},
-      {type: 'keyword', word: 'or', compile: () => ' ??= '},
+      {type: 'keyword', word: 'to', compile: () => ' ??= '},
       {type: 'expression'}
     ]
   ]);
@@ -184,13 +198,25 @@ statements.set('set__', [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'by', compile: () => ' += '},
+      {
+        type: 'keyword',
+        word: 'by',
+        compile: () => ' += ',
+        optional: 2,
+        ifOmitted: '++'
+      },
       {type: 'expression'}
     ],
     [
       firstComponent,
       {type: 'getterExpression'},
-      {type: 'keyword', word: 'by', compile: () => ' += '},
+      {
+        type: 'keyword',
+        word: 'by',
+        compile: () => ' += ',
+        optional: 2,
+        ifOmitted: '++'
+      },
       {type: 'expression'}
     ]
   ]);
@@ -203,13 +229,25 @@ statements.set('set__', [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'by', compile: () => ' -= '},
+      {
+        type: 'keyword',
+        word: 'by',
+        compile: () => ' -= ',
+        optional: 2,
+        ifOmitted: '--'
+      },
       {type: 'expression'}
     ],
     [
       firstComponent,
       {type: 'getterExpression'},
-      {type: 'keyword', word: 'by', compile: () => ' -= '},
+      {
+        type: 'keyword',
+        word: 'by',
+        compile: () => ' -= ',
+        optional: 2,
+        ifOmitted: '--'
+      },
       {type: 'expression'}
     ]
   ]);

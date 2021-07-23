@@ -9,8 +9,8 @@ reserved.wordLiterals = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', '@end', 'break', 'continue', 'do', 'output', 'throw', 'print', 'delete',
-  'let', 'let_', 'let__', 'be', 'set', 'set_', 'set__', 'to', 'use', 'or',
+  'end', '@end', 'break', 'continue', 'do', 'output', 'throw', 'print',
+  'delete', 'var', 'var_', 'var__', 'set', 'set_', 'set__', 'to', 'cet', 'def',
   'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while', 'each', 'each_',
   'each__', 'awaitEach', 'awaitEach_', 'awaitEach__', 'of', 'loop', 'index',
   'try', 'catch', 'finally', 'fun', 'gen', 'asyncFun', 'asyncGen', '@fun',
@@ -19,9 +19,9 @@ reserved.keywords = new Set([
 ]);
 
 reserved.invalid = new Set([
-  'case', 'const', 'for', 'function', 'return', 'switch', 'with',
+  'case', 'const', 'for', 'function', 'let', 'return', 'switch', 'with',
   'enum', 'implements', 'interface', 'package', 'private', 'protected',
-  'public', 'static', 'var',
+  'public', 'static',
   'as'  // pseudokeyword
 ]);
 
