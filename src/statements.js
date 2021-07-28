@@ -14,7 +14,7 @@
 //   that is passed the corresponding token value and generates the JS. The
 //   JS for other component types is handled in components.js.
 //
-// - The requirement that try statements have at least one of 'catch' and
+// - The requirement that try statements have at least one of 'catch' or
 //   'finally' is not encoded here.
 // 
 // - When a statement has multiple branches (i.e. versions):
@@ -31,19 +31,12 @@ const statements = new Map();
 
 // ========= simple statements (i.e. do not contain a block component) =========
 
-// debugger
-statements.set('debugger', [
-  [
-    {type: 'keyword', word: 'debugger', compile: () => 'debugger'}
-  ]
-]);
-
-// break, continue
-statements.set(new Set(['break', 'continue']), [
+// break, continue, debugger
+statements.set(new Set(['break', 'continue', 'debugger']), [
   [
     {
       type: 'keyword',
-      word: new Set(['break', 'continue']),
+      word: new Set(['break', 'continue', 'debugger']),
       compile: word => word
     }
   ]
@@ -57,10 +50,10 @@ statements.set('do', [
   ]
 ]);
 
-// output
-statements.set('output', [
+// out
+statements.set('out', [
   [
-    {type: 'keyword', word: 'output', compile: () => 'return '},
+    {type: 'keyword', word: 'out', compile: () => 'return '},
     {type: 'expression', optional: 1}
   ]
 ]);
@@ -89,47 +82,33 @@ statements.set('delete', [
   ]
 ]);
 
-// var
-statements.set('var', [
+// let
+statements.set('let', [
   [
-    {type: 'keyword', word: 'var', compile: () => 'let '},
+    {type: 'keyword', word: 'let', compile: () => 'let '},
     {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'to', compile: () => ' = ', optional: 2},
+    {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
     {type: 'expression'}
   ]
 ]);
 
-// var_
-statements.set('var_', [
+// let_
+statements.set('let_', [
   [
-    {type: 'keyword', word: 'var_', compile: () => 'let ['},
+    {type: 'keyword', word: 'let_', compile: () => 'let ['},
     {type: 'unreservedNames'},
-    {type: 'keyword', word: 'to', compile: () => '] = '},
+    {type: 'keyword', word: 'be', compile: () => '] = '},
     {type: 'expression'}
   ]
 ]);
 
-// var__
-statements.set('var__', [
+// let__
+statements.set('let__', [
   [
-    {type: 'keyword', word: 'var__', compile: () => 'let {'},
+    {type: 'keyword', word: 'let__', compile: () => 'let {'},
     {type: 'unreservedNames'},
-    {type: 'keyword', word: 'to', compile: () => '} = '},
+    {type: 'keyword', word: 'be', compile: () => '} = '},
     {type: 'expression'}
-  ]
-]);
-
-// def
-statements.set('def', [
-  [
-    {type: 'keyword', word: 'def', compile: () => ''},
-    {
-      type: 'unreservedName',
-      compile: name => `let ${name} = options?.[${name}] ?? `,
-      optional : 2,
-      repeat: true
-    },
-    {type: 'expr', after: ';'}
   ]
 ]);
 
@@ -263,7 +242,7 @@ statements.set('set__', [
   statements.set('export', [
     [
       firstComponent,
-      {type: 'keyword', word: 'default', compile: () => 'default '},
+      {type: 'keyword', word: 'def', compile: () => 'default '},
       {type: 'expression'},
     ],
     [
@@ -283,7 +262,7 @@ statements.set('set__', [
   statements.set('import', [
     [
       firstComponent,
-      {type: 'keyword', word: 'default', compile: () => ''},
+      {type: 'keyword', word: 'def', compile: () => ''},
       {type: 'keyword', word: 'as', compile: () => ''},
       {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'from', compile: () => ' from '},
@@ -425,6 +404,18 @@ statements.set('try', [
   ]
 ]);
 
+// parameter components, used by function and class statements
+const parameterComponents = [
+  {type: 'keyword', word: 'par', compile: () => '', optional: 2},
+  {type: 'unreservedNames', after: ','},
+  {type: 'keyword', word: 'def', compile: () => '', optional: 2},
+  {type: 'defObjectExpression', after: ','},
+  {type: 'keyword', word: 'ops', compile: () => '', optional: 2},
+  {type: 'opsObjectExpression', after: ','},
+  {type: 'keyword', word: 'rem', compile: () => '', optional: 2},
+  {type: 'unreservedName', compile: name => `...${name}`},
+];
+
 // function
 statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
   [
@@ -440,16 +431,9 @@ statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
         }
       }
     },
-    {type: 'unreservedName', compile: name => name},
-    {
-      type: 'keyword',
-      word: 'input',
-      compile: () => '',
-      optional: 2,
-      ifOmitted: '()'
-    },
-    {type: 'params'},
-    {type: 'block'},
+    {type: 'unreservedName', compile: name => `${name}(`},
+    ...parameterComponents,
+    {type: 'functionBlock'},
   ]
 ]);
 
@@ -461,20 +445,13 @@ statements.set('class', [
     {
       type: 'keyword',
       word: 'extends',
-      compile: () => 'extends ',
+      compile: () => ' extends ',
       optional: 2,
-      ifOmitted: '{ constructor'
+      ifOmitted: ' { constructor('
     },
-    {type: 'unreservedName', compile: name => `${name} { constructor`},
-    {
-      type: 'keyword',
-      word: 'input',
-      compile: () => '',
-      optional: 2,
-      ifOmitted: '()'
-    },
-    {type: 'params'},
-    {type: 'block', after: '}'},
+    {type: 'unreservedName', compile: name => `${name} { constructor(`},
+    ...parameterComponents,
+    {type: 'functionBlock', after: '}'},
   ]
 ]);
 

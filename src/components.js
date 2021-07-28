@@ -7,7 +7,7 @@ import { reserved } from './reserved.js';
 import { parseExpression } from './parse-expression.js';
 
 // check if code component is of given component type
-// - all component types except expression, getterExpression and block
+// (not all component types are included here)
 const isComponent = {
 
   // true if the code component is a single keyword token and its keyword
@@ -164,29 +164,6 @@ export const parseComponent = {
     }
   },
 
-  params: (codeComponents, stComp, addJS) => {
-    const codeComp = last(codeComponents);
-    if (isComponent.unreservedNames(codeComp)) {
-      const restIndex = codeComp.findIndex(tkn => tkn.value === 'rest');
-      if (restIndex > -1 && restIndex < codeComp.length - 1) {
-        syntaxError(
-          codeComp[restIndex],
-          'rest parameter must be the final parameter'
-        );
-      }
-      addJS(
-        '(' +
-          codeComp.map(tkn => {
-            return (tkn.value === 'rest' ? '...rest' : tkn.value).join();
-          }) + 
-          ')',
-        codeComp[0].line,
-        codeComp[0].column
-      );
-      return parseSuccessful(codeComponents, stComp);
-    }
-  },
-
   pathLit: (codeComponents, stComp, addJS) => {
     const codeComp = last(codeComponents);
     if (isComponent.pathLit(codeComp)) {
@@ -216,9 +193,13 @@ export const parseComponent = {
     }
   }
 
-
+  ///// ALSO TO DO //////////////////////
+  // - defObjectExpression - an expression that is an object wordLiteral
+  // - opsObjectExpression - an expression that is an object wordLiteral
+  //    - when parsing to destructured param, remember to add  '= {}' to end 
+  //      so works when the arg is not passed
+  // - block
+  // - functionBlock - ablock with closing ')' at the start to close the
+  //   function signature
 
 };
-
-
-
