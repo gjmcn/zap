@@ -8,6 +8,13 @@ reserved.wordLiterals = new Set([
   'true', 'false', 'null', 'undefined', 'Infinity', 'NaN'
 ]);
 
+reserved.operators = new Set([
+  // JS word operators
+  'new', 'await', 'void', 'typeOf', 'in', 'instanceOf', 'yield', 'yieldFrom',
+  // new word operators
+  'and', 'or', 'un', 'not', 'is', 'isnt'
+]);
+
 reserved.keywords = new Set([
   'end', '@end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'delete',
   'let', 'let_', 'let__', 'be', 'set', 'set_', 'set__', 'cet', 'to', 'inc',
@@ -27,5 +34,6 @@ reserved.invalid = new Set([
 
 reserved.nonKeywords = new Set([
   ...reserved.wordLiterals,
+  ...reserved.operators,
   ...reserved.invalid
 ]);

@@ -16,6 +16,7 @@ const regexps = new Map([
   ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
   ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
+  ['wordOperator', new RegExp([...reserved.operators].join('|'), 'y')],
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],
   ['closeParentheses', /\)/y],  
@@ -23,8 +24,8 @@ const regexps = new Map([
   ['closeSquare', /]/y],  
   ['openCurly', /\{\^?/y],
   ['closeCurly', /}/y],
-  ['quickFunction', /\|(?!\|)/y],
-  ['operator', /[+\-*/%~<>=!?&|.:,]+/y]
+  ['quickFunction', /\|/y],
+  ['symbolOperator', /[+\-*/%~<>=!?&.:,]+/y]
 ]);
 
 export function lexer(code) {
@@ -111,8 +112,8 @@ export function lexer(code) {
             // no other tokens can be multiline
             else {
 
-              // operator symbols: check valid operator  
-              if (type === 'operator') {
+              // symbol operator: check valid operator  
+              if (type === 'symbolOperator') {
                 if (!operatorDetails[match[0]]) {
                   lexerError(`unrecognized operator: ${match[0]}`);
                 }
