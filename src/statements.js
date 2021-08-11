@@ -10,18 +10,18 @@
 //     - 'ifOmitted': code to add if optional group omitted 
 //     - 'repeat': whether the optional group can be repeated
 //
-// - Components of type 'keyword' and 'unreservedName' have a compile function
-//   that is passed the corresponding token value and generates the JS. The
-//   JS for other component types is handled in components.js.
+// - Components of type 'keyword', 'unreservedName' and 'asUnreservedName' have
+//   a compile function that is passed the corresponding token value and
+//   generates the JS. The JS for other component types is handled in
+//   components.js.
 //
 // - The requirement that try statements have at least one of 'catch' or
 //   'finally' is not encoded here.
 // 
-// - When a statement has multiple branches (i.e. versions):
-//    - the first component of each branch is identical
-//    - the second component of each branch uniquely identifies the branch (and
-//      unless on the last branch, should not be optional)
-//
+// - When a statement has multiple branches (i.e. versions), all branches have
+//   the same first component (i.e. opening keyword). The second component of
+//   each branch uniquely identifies the branch (and unless on the last branch,
+//   should not be optional)
 ////////////////////////////////////////////////////////////////////////////////
 
 export const structures, allFirstWords, simpleFirstWords, blockFirstWords;
@@ -83,73 +83,45 @@ statements.set('delete', [
 ]);
 
 // let
-statements.set('let', [
-  [
-    {type: 'keyword', word: 'let', compile: () => 'let '},
-    {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
-    {type: 'expression'}
-  ]
-]);
-
-// let_
-statements.set('let_', [
-  [
-    {type: 'keyword', word: 'let_', compile: () => 'let ['},
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'be', compile: () => '] = '},
-    {type: 'expression'}
-  ]
-]);
-
-// let__
-statements.set('let__', [
-  [
-    {type: 'keyword', word: 'let__', compile: () => 'let {'},
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'be', compile: () => '} = '},
-    {type: 'expression'}
-  ]
-]);
-
-// set
 {
-  const firstComponent = {type: 'keyword', word: 'set', compile: () => ''};
-  statements.set('set', [
+  const firstComponent = {type: 'keyword', word: 'let', compile: () => 'let '};
+  statements.set('let', [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
       {type: 'expression'}
     ],
     [
       firstComponent,
-      {type: 'getterExpression'},
-      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'destructure'},
+      {type: 'keyword', word: 'be', compile: () => ' = '},
       {type: 'expression'}
     ]
   ]);
 }
 
-// set_
-statements.set('set_', [
-  [
-    {type: 'keyword', word: 'set_', compile: () => '['},
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'to', compile: () => '] = '},
-    {type: 'expression'}
-  ]
-]);
-
-// set__
-statements.set('set__', [
-  [
-    {type: 'keyword', word: 'set__', compile: () => '({'},
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'to', compile: () => '} = '},
-    {type: 'expression', after: ')'}
-  ]
-]);
+// set
+{
+  const createBranch = component => {
+    const isDestructure = component.type === 'destructure';
+    return [
+      {
+        type: 'keyword',
+        word: 'set',
+        compile: isDestructure ? () => '(' : () => ''
+      },
+      component,
+      {type: 'keyword', word: 'to', compile: () => ' = '},
+      {type: 'expression', after: isDestructure ? ')' : ''}
+    ]
+  };
+  statements.set('set', [
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch({type: 'getterExpression'}),
+    createBranch({type: 'destructure'})
+  ]);
+}
 
 // cet
 {
@@ -172,116 +144,94 @@ statements.set('set__', [
 
 // inc
 {
-  const firstComponent = {type: 'keyword', word: 'inc', compile: () => ''};
+  const createBranch = component => [
+    {type: 'keyword', word: 'inc', compile: () => ''},
+    component,
+    {
+      type: 'keyword',
+      word: 'by',
+      compile: () => ' += ',
+      optional: 2,
+      ifOmitted: '++'
+    },
+    {type: 'expression'}
+  ];
   statements.set('inc', [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {
-        type: 'keyword',
-        word: 'by',
-        compile: () => ' += ',
-        optional: 2,
-        ifOmitted: '++'
-      },
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      {type: 'getterExpression'},
-      {
-        type: 'keyword',
-        word: 'by',
-        compile: () => ' += ',
-        optional: 2,
-        ifOmitted: '++'
-      },
-      {type: 'expression'}
-    ]
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch({type: 'getterExpression'})
   ]);
 }
 
 // dec
 {
-  const firstComponent = {type: 'keyword', word: 'dec', compile: () => ''};
+  const createBranch = component => [
+    {type: 'keyword', word: 'dec', compile: () => ''},
+    component,
+    {
+      type: 'keyword',
+      word: 'by',
+      compile: () => ' -= ',
+      optional: 2,
+      ifOmitted: '--'
+    },
+    {type: 'expression'}
+  ];
   statements.set('dec', [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {
-        type: 'keyword',
-        word: 'by',
-        compile: () => ' -= ',
-        optional: 2,
-        ifOmitted: '--'
-      },
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      {type: 'getterExpression'},
-      {
-        type: 'keyword',
-        word: 'by',
-        compile: () => ' -= ',
-        optional: 2,
-        ifOmitted: '--'
-      },
-      {type: 'expression'}
-    ]
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch({type: 'getterExpression'})
   ]);
 }
+
+// wait
+statements.set('wait', [
+  [
+    {
+      type: 'keyword',
+      word: 'wait',
+      compile: () => 'await new Promise(r => setTimeout(r, ('
+    },
+    {type: 'expression', after: ')))'}
+  ]
+]);
 
 // export
 {
   const firstComponent = {
-    type: 'keyword',
+    type: 'keyword', 
     word: 'export',
     compile: () => 'export '
   };
   statements.set('export', [
     [
       firstComponent,
-      {type: 'keyword', word: 'def', compile: () => 'default '},
-      {type: 'expression'},
+      {type: 'namesAs'}
     ],
     [
       firstComponent,
-      {type: 'namesAs'}
+      {type: 'keyword', word: 'default', compile: () => 'default '},
+      {type: 'unreservedName', compile: name => name}
     ]
   ]);
 }
 
 // import
 {
-  const firstComponent = {
-    type: 'keyword',
-    word: 'import',
-    compile: () => 'import '
-  };
+  const createBranch = (...comps) => [
+    {type: 'keyword', word: 'import', compile: () => 'import '},
+    ...comps,
+    {type: 'keyword', word: 'from', compile: () => ' from '},
+    {type: 'pathLit'}
+  ];
   statements.set('import', [
-    [
-      firstComponent,
-      {type: 'keyword', word: 'def', compile: () => ''},
-      {type: 'keyword', word: 'as', compile: () => ''},
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit'}
-    ],
-    [
-      firstComponent,
-      {type: 'keyword', word: 'all', compile: () => '*'},
-      {type: 'keyword', word: 'as', compile: () => ' as '},
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit'}
-    ],
-    [
-      firstComponent,
-      {type: 'namesAs', optional: 2},
-      {type: 'keyword', word: 'from', compile: () => ' from '},
-      {type: 'pathLit'}
-    ],
+    createBranch({type: 'namesAs', optional: 2}),
+    createBranch(
+      {type: 'keyword', word: 'default', compile: () => ''},
+      {type: 'asUnreservedName', compile: name => name}
+    ),
+    createBranch(
+      {type: 'keyword', word: 'all', compile: () => '* as '},
+      {type: 'asUnreservedName', compile: name => name}
+    )
   ]);
 }
 
@@ -293,6 +243,14 @@ statements.set('block', [
   [
     {type: 'keyword', word: 'block', compile: () => ''},
     {type: 'block'}
+  ]
+]);
+
+// asyncBlock
+statements.set('asyncBlock', [
+  [
+    {type: 'keyword', word: 'asyncBlock', compile: () => '(async () => '},
+    {type: 'block', after: ')()'}
   ]
 ]);
 
@@ -327,49 +285,23 @@ statements.set('while', [
 ]);
 
 // each, awaitEach
-statements.set(new Set(['each', 'awaitEach']), [
-  [
+{
+  const createBranch = component => [
     {
       type: 'keyword',
       word: new Set(['each', 'awaitEach']),
       compile: word => `for ${word === 'each' ? '' : 'await '}(let `
     },
-    {type: 'unreservedName', compile: name => name},
+    component,
     {type: 'keyword', word: 'of', compile: () => ' of '},
     {type: 'expression', after: ')'},
     {type: 'block'}
-  ]
-]);
-
-// each_, awaitEach_
-statements.set(new Set(['each_', 'awaitEach_']), [
-  [
-    {
-      type: 'keyword',
-      word: new Set(['each_', 'awaitEach_']),
-      compile: word => `for ${word === 'each_' ? '' : 'await '}(let [`
-    },
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'of', compile: () => '] of '},
-    {type: 'expression', after: ')'},
-    {type: 'block'}
-  ]
-]);
-
-// each__, awaitEach__
-statements.set(new Set(['each__', 'awaitEach__']), [
-  [
-    {
-      type: 'keyword',
-      word: new Set(['each__', 'awaitEach__']),
-      compile: word => `for ${word === 'each__' ? '' : 'await '}(let {`
-    },
-    {type: 'unreservedNames'},
-    {type: 'keyword', word: 'of', compile: () => '} of '},
-    {type: 'expression', after: ')'},
-    {type: 'block'}
-  ]
-]);
+  ];
+  statements.set(new Set(['each', 'awaitEach']), [
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch({type: 'destructure'})
+  ]);
+}
 
 // loop
 statements.set('loop', [
@@ -404,57 +336,6 @@ statements.set('try', [
   ]
 ]);
 
-// parameter components, used by function and class statements
-const parameterComponents = [
-  {type: 'keyword', word: 'par', compile: () => '', optional: 2},
-  {type: 'unreservedNames', after: ','},
-  {type: 'keyword', word: 'def', compile: () => '', optional: 2},
-  {type: 'defObjectExpression', after: ','},
-  {type: 'keyword', word: 'ops', compile: () => '', optional: 2},
-  {type: 'opsObjectExpression', after: ','},
-  {type: 'keyword', word: 'rem', compile: () => '', optional: 2},
-  {type: 'unreservedName', compile: name => `...${name}`},
-];
-
-// function
-statements.set(new Set(['fun', 'gen', 'asyncFun', 'asyncGen']), [
-  [
-    {
-      type: 'keyword',
-      word: new Set(['fun', 'gen', 'asyncFun', 'asyncGen']),
-      compile: word => {
-        switch (word) {
-          case 'fun':       return 'function ';
-          case 'gen':       return 'function* ';
-          case 'asyncFun':  return 'async function ';
-          case 'asyncGen':  return 'async function* ';
-        }
-      }
-    },
-    {type: 'unreservedName', compile: name => `${name}(`},
-    ...parameterComponents,
-    {type: 'functionBlock'},
-  ]
-]);
-
-// class
-statements.set('class', [
-  [
-    {type: 'keyword', word: 'class', compile: () => 'class '},
-    {type: 'unreservedName', compile: name => name},
-    {
-      type: 'keyword',
-      word: 'extends',
-      compile: () => ' extends ',
-      optional: 2,
-      ifOmitted: ' { constructor('
-    },
-    {type: 'unreservedName', compile: name => `${name} { constructor(`},
-    ...parameterComponents,
-    {type: 'functionBlock', after: '}'},
-  ]
-]);
-
 
 // ========== exports ==========
 
@@ -477,7 +358,7 @@ for (let [key, struc] of statements) {
 
 // simple statements have no block components
 simpleFirstWords = new Set();
-blockFirstWords  = new Set();
+blockFirstWords = new Set();
 outerLoop: for (let fw of allFirstWords) {
   for (let branch of structures[fw]) {
     if (branch.some(obj => obj.type === 'block')) {

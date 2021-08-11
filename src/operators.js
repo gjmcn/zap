@@ -156,10 +156,7 @@ export const operatorDetails = {
   '~': {prec: 1, type: 'postfix', arity: [1, 1], compile: compileUnaryPostfix},
 
   // get property
-  '::': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
-
-  // optional chaining ::
-  '?::': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
+  'At': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // call function
   '=>': {prec: 2, type: 'function-call', arity: [1, Infinity],
@@ -183,6 +180,7 @@ export const operatorDetails = {
         },
 
   // as => but spread array arguments
+  SHOULD USE f.apply(this, [allArgsHere].flat()) - SINCE IF USE ..., WILL SPREAD ALL ITERABLES INC STRINGS!
   '==>': {prec: 2, type: 'function-call', arity: [1, Infinity],
             compile: block => {
               const {operands, operator, position} = block;
@@ -233,22 +231,6 @@ export const operatorDetails = {
             }
          },
 
-  // as -> but return calling object
-  '<>': {prec: 2, type: 'method-call', arity: [2, Infinity],
-          compile: block => {
-            const {operands, operator} = block;
-            const method = operands[1];
-            operator.js = '((o, m, ...z) => (o[m](...z), o))(';
-            return [
-              operator,
-              operands[0],
-              isIdentifier(method) ? [",'", method, "',"] : [',', method, ','],
-              argumentList(block, new Set(0, 1)),
-              ')'
-            ];
-          }
-        },
-
   // set property with variable
   '&': {prec: 2, type: 'infix', arity: [2, 2],  
           compile: block => {
@@ -273,8 +255,17 @@ export const operatorDetails = {
           }
        },
 
-  // copy properties from rhs to lhs
-  '<<': {prec: 2, type: 'infix', arity: [2, 2],
+  // copy
+  'copy': {prec: 2, type: 'postfix', arity: [1, 1],
+          compile: block => {
+            const {operator} = block;
+            operator.js = '{...';
+            return [operator, operands[0], '}'];
+          }
+        },
+
+  // copyFrom
+  'copyfrom': {prec: 2, type: 'infix', arity: [2, 2],
           compile: block => {
             const {operator} = block;
             operator.js = 'Object.assign(';
@@ -282,8 +273,8 @@ export const operatorDetails = {
           }
         },
 
-  // copy properties from lhs to rhs
-  '>>': {prec: 2, type: 'infix', arity: [2, 2],
+  // copy
+  'copyTo': {prec: 2, type: 'infix', arity: [2, 2],
           compile: block => {
             const {operator, operands} = block;
             operator.js = 'Object.assign(';

@@ -194,8 +194,12 @@ export const parseComponent = {
   }
 
   ///// ALSO TO DO //////////////////////
-  // - defObjectExpression - an expression that is an object wordLiteral
-  // - opsObjectExpression - an expression that is an object wordLiteral
+  // - getterExpression
+  // - asUnreservedName
+  // - defaultObjectExpression - an expression that is an object wordLiteral
+  //   but without the enclosing {}
+  // - optionObjectExpression -  an expression that is an object wordLiteral
+  //   but without the enclosing {}
   //    - when parsing to destructured param, remember to add  '= {}' to end 
   //      so works when the arg is not passed
   // - block
