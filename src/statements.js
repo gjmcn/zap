@@ -83,43 +83,48 @@ statements.set('delete', [
 ]);
 
 // let
-{
-  const firstComponent = {type: 'keyword', word: 'let', compile: () => 'let '};
-  statements.set('let', [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      {type: 'destructure'},
-      {type: 'keyword', word: 'be', compile: () => ' = '},
-      {type: 'expression'}
-    ]
-  ]);
-}
+statements.set('let', [
+  [
+    {type: 'keyword', word: 'let', compile: () => 'let '},
+    {type: 'unreservedName', compile: name => name},
+    {type: 'keyword', word: 'be', compile: () => ' = ', optional: 2},
+    {type: 'expression'}
+  ]
+]);
+
+// get
+statements.set('get', [
+  [
+    {type: 'keyword', word: 'get', compile: () => 'let '},
+    {type: 'objectDestructure'},
+    {type: 'keyword', word: 'from', compile: () => ' = '},
+    {type: 'expression'}
+  ]
+]);
+
+// elm
+statements.set('elm', [
+  [
+    {type: 'keyword', word: 'elm', compile: () => 'let '},
+    {type: 'arrayDestructure'},
+    {type: 'keyword', word: 'from', compile: () => ' = '},
+    {type: 'expression'}
+  ]
+]);
 
 // set
 {
   const createBranch = component => {
-    const isDestructure = component.type === 'destructure';
     return [
-      {
-        type: 'keyword',
-        word: 'set',
-        compile: isDestructure ? () => '(' : () => ''
-      },
+      {type: 'keyword', word: 'set', compile: () => ''},
       component,
       {type: 'keyword', word: 'to', compile: () => ' = '},
-      {type: 'expression', after: isDestructure ? ')' : ''}
+      {type: 'expression'}
     ]
   };
   statements.set('set', [
     createBranch({type: 'unreservedName', compile: name => name}),
     createBranch({type: 'getterExpression'}),
-    createBranch({type: 'destructure'})
   ]);
 }
 
@@ -285,23 +290,19 @@ statements.set('while', [
 ]);
 
 // each, awaitEach
-{
-  const createBranch = component => [
+statements.set(new Set(['each', 'awaitEach']), [
+  [
     {
       type: 'keyword',
       word: new Set(['each', 'awaitEach']),
       compile: word => `for ${word === 'each' ? '' : 'await '}(let `
     },
-    component,
+    {type: 'unreservedName', compile: name => name},
     {type: 'keyword', word: 'of', compile: () => ' of '},
     {type: 'expression', after: ')'},
     {type: 'block'}
-  ];
-  statements.set(new Set(['each', 'awaitEach']), [
-    createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch({type: 'destructure'})
-  ]);
-}
+  ]
+]);
 
 // loop
 statements.set('loop', [

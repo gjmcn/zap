@@ -39,25 +39,25 @@ reserved.swapped = new Set([
   'int32Array', 'uint32Array', 'float32Array', 'float64Array', 'bigInt64Array',
   'bigUint64Array', 'arrayBuffer', 'sharedArrayBuffer', 'atomics', 'dataView',
   // other built-ins
-  'jsonParse', 'jsonStringify', 'promise', 'reflect', 'proxy',
-  // undefined
-  '__'
+  'jsonParse', 'jsonStringify', 'promise', 'reflect', 'proxy'
 ]);
 
 reserved.keywords = new Set([
   'end', 'done', 'break', 'continue', 'do', 'out', 'throw', 'print', 'delete',
-  'let', 'be', 'set', 'cet', 'to', 'inc', 'dec', 'by', 'block', 'asyncBlock',
-  'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of', 'loop', 'index',
-  'try', 'catch', 'finally', 'fun', 'proc', 'gen', 'asyncFun', 'asyncProc',
-  'asyncGen', 'class', 'subclass', 'export', 'import', 'default', 'all',
-  'from', 'debugger', 'wait'
+  'let', 'be', 'get', 'elm', 'set', 'cet', 'to', 'inc', 'dec', 'by', 'block',
+  'asyncBlock', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
+  'loop', 'index', 'try', 'catch', 'finally', 'fun', 'proc', 'gen', 'asyncFun',
+  'asyncProc', 'asyncGen', 'class', 'subclass', 'export', 'import', 'default',
+  'all', 'from', 'debugger', 'wait'
 ]);
 
 reserved.invalid = new Set([
+  // JS reserved words
   'case', 'const', 'extends', 'for', 'in', 'instanceof', 'new', 'return',
   'switch', 'typeof', 'var', 'void', 'with', 'yield', 'enum', 'implements',
   'interface', 'package', 'private', 'protected', 'public', 'static', 'await',
-  'as'  // pseudokeyword
+  // pseudokeywords
+  'as', 'def'
 ]);
 
 reserved.nonKeywords = new Set([

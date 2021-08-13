@@ -198,10 +198,10 @@ export const parseComponent = {
   // - asUnreservedName
   // - defaultObjectExpression - an expression that is an object wordLiteral
   //   but without the enclosing {}
-  // - optionObjectExpression -  an expression that is an object wordLiteral
-  //   but without the enclosing {}
-  //    - when parsing to destructured param, remember to add  '= {}' to end 
-  //      so works when the arg is not passed
+  // - objectDestructure and arrayDestructure: an 'unresolved expression' (i.e.
+  //   may have multiple operands). Crucially, each operand is a name, 'as'
+  //   or 'def', except that the final operand will be a 'free' expression if
+  //   'def' is used  
   // - block
   // - functionBlock - ablock with closing ')' at the start to close the
   //   function signature

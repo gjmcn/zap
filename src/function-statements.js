@@ -3,9 +3,37 @@
 // 
 // Functions are not true statements since they are inside expressions, but are
 // otherwise like block statements.
+//
+// Unlike normal statements, each statement is a single brnach rather than an
+// array of potential branches.
 ////////////////////////////////////////////////////////////////////////////////
 
+// export const structures, allFirstWords, simpleFirstWords, blockFirstWords;
 
+
+const statements = new Map();
+
+
+// fun
+statements.set('fun', [ 
+  {type: 'keyword', word: 'fun', compile: () => '(function(',}
+  {type:}
+]);
+
+  
+
+// ========= simple statements (i.e. do not contain a block component) =========
+
+// break, continue, debugger
+statements.set(new Set(['break', 'continue', 'debugger']), [
+  [
+    {
+      type: 'keyword',
+      word: new Set(['break', 'continue', 'debugger']),
+      compile: word => word
+    }
+  ]
+]);
 
 
 
