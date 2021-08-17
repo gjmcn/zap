@@ -16,9 +16,9 @@ reserved.wordLiterals = new Set([
 
 reserved.operators = new Set([
   // JS word operators
-  'New', 'Await', 'Void', 'TypeOf', 'In', 'InstanceOf', 'Yield', 'YieldFrom',
+  'New', 'Void', 'TypeOf', 'In', 'InstanceOf', 'Yield', 'YieldFrom',
   // JS symbol operators that are replaced with words
-  'And', 'Or', 'Un', 'Not', 'Is', 'Isnt',
+  'And', 'Or', 'Or_', 'Not', 'Is', 'Isnt',
   // isXXX
   'IsArray', 'IsBigInt', 'IsBoolean', 'IsFinite', 'IsFunction', 'IsInteger',
   'IsNaN', 'IsNullish', 'IsNumber', 'IsString', 'IsSymbol',
@@ -44,18 +44,18 @@ reserved.swapped = new Set([
 
 reserved.keywords = new Set([
   'end', 'done', 'break', 'continue', 'do', 'out', 'throw', 'print', 'delete',
-  'let', 'be', 'get', 'elm', 'set', 'cet', 'to', 'inc', 'dec', 'by', 'block',
-  'asyncBlock', 'if', 'elif', 'else', 'while', 'each', 'awaitEach', 'of',
-  'loop', 'index', 'try', 'catch', 'finally', 'fun', 'proc', 'gen', 'asyncFun',
-  'asyncProc', 'asyncGen', 'class', 'subclass', 'export', 'import', 'default',
-  'all', 'from', 'debugger', 'wait'
+  'let', 'be', 'get', 'prop', 'elmt', 'from', 'set', 'cet', 'to', 'inc', 'dec',
+  'by', 'block', '@block', 'if', 'elif', 'else', 'while', 'for', 'await',
+  'each', 'of', 'loop', 'index', 'try', 'catch', 'finally', 'fun', 'proc',
+  'gen', '@fun', '@proc', '@gen', 'class', 'subclass', 'export', 'import',
+  'default', 'all', 'debugger', 'wait'
 ]);
 
 reserved.invalid = new Set([
   // JS reserved words
-  'case', 'const', 'extends', 'for', 'in', 'instanceof', 'new', 'return',
-  'switch', 'typeof', 'var', 'void', 'with', 'yield', 'enum', 'implements',
-  'interface', 'package', 'private', 'protected', 'public', 'static', 'await',
+  'case', 'const', 'extends', 'in', 'instanceof', 'new', 'return', 'switch',
+  'typeof', 'var', 'void', 'with', 'yield', 'enum', 'implements', 'interface',
+  'package', 'private', 'protected', 'public', 'static',
   // pseudokeywords
   'as', 'def'
 ]);

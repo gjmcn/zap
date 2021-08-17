@@ -196,14 +196,8 @@ export const parseComponent = {
   ///// ALSO TO DO //////////////////////
   // - getterExpression
   // - asUnreservedName
-  // - defaultObjectExpression - an expression that is an object wordLiteral
-  //   but without the enclosing {}
-  // - objectDestructure and arrayDestructure: an 'unresolved expression' (i.e.
-  //   may have multiple operands). Crucially, each operand is a name, 'as'
-  //   or 'def', except that the final operand will be a 'free' expression if
-  //   'def' is used  
+  // - unreservedNameDef
+  // - nameAsDef
   // - block
-  // - functionBlock - ablock with closing ')' at the start to close the
-  //   function signature
 
 };

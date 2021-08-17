@@ -6,6 +6,9 @@
 //   component itself can be omitted, whereas 'optional: 3' indicates that the
 //   component and the 2 following components are included/omitted as a group.
 //
+// - An optional group is 'commited to' based on its first component, so this
+//   cannot be the same as the component that follows the optional group.
+//
 // - Components with an 'optional' property can have one (or none) of:
 //     - 'ifOmitted': code to add if optional group omitted 
 //     - 'repeat': whether the optional group can be repeated
@@ -93,24 +96,27 @@ statements.set('let', [
 ]);
 
 // get
-statements.set('get', [
-  [
-    {type: 'keyword', word: 'get', compile: () => 'let '},
-    {type: 'objectDestructure'},
-    {type: 'keyword', word: 'from', compile: () => ' = '},
-    {type: 'expression'}
-  ]
-]);
-
-// elm
-statements.set('elm', [
-  [
-    {type: 'keyword', word: 'elm', compile: () => 'let '},
-    {type: 'arrayDestructure'},
-    {type: 'keyword', word: 'from', compile: () => ' = '},
-    {type: 'expression'}
-  ]
-]);
+{
+  const firstComponent = {type: 'keyword', word: 'get', compile: () => 'let '}
+  statements.set('get', [
+    [
+      firstComponent,
+      {type: 'keyword', word: 'prop', compile: () => '{'},
+      {type: 'nameAsDef'},
+      {type: 'nameAsDef', optional: 1, repeat: true},
+      {type: 'keyword', word: 'from', compile: () => '} = '},
+      {type: 'expression'}
+    ],
+    [
+      firstComponent,
+      {type: 'keyword', word: 'elmt', compile: () => '['},
+      {type: 'unreservedNameDef'},
+      {type: 'unreservedNameDef', optional: 1, repeat: true},
+      {type: 'keyword', word: 'from', compile: () => '] = '},
+      {type: 'expression'}
+    ]
+  ]);
+}
 
 // set
 {
@@ -251,10 +257,10 @@ statements.set('block', [
   ]
 ]);
 
-// asyncBlock
-statements.set('asyncBlock', [
+// @block
+statements.set('@block', [
   [
-    {type: 'keyword', word: 'asyncBlock', compile: () => '(async () => '},
+    {type: 'keyword', word: '@block', compile: () => '(async () => '},
     {type: 'block', after: ')()'}
   ]
 ]);
@@ -289,17 +295,43 @@ statements.set('while', [
   ]
 ]);
 
-// each, awaitEach
-statements.set(new Set(['each', 'awaitEach']), [
+// for
+{
+  const createBranch = (...comps) => [
+    {type: 'keyword', word: 'for', compile: () => 'for (let '},
+    ...comps,
+    {type: 'expression', after: ')'},
+    {type: 'block'}
+  ];
+  statements.set('for', [
+    createBranch(
+      {type: 'keyword', word: 'each', compile: () => ''},
+      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: 'of', compile: () => ' of '}
+    ),
+    createBranch(
+      {type: 'keyword', word: 'prop', compile: () => '{'},
+      {type: 'nameAsDef'},
+      {type: 'nameAsDef', optional: 1, repeat: true},
+      {type: 'keyword', word: 'of', compile: () => '} of '}
+    ),
+    createBranch(
+      {type: 'keyword', word: 'elmt', compile: () => '['},
+      {type: 'unreservedNameDef'},
+      {type: 'unreservedNameDef', optional: 1, repeat: true},
+      {type: 'keyword', word: 'of', compile: () => '] of '}
+    )
+  ]);
+}
+
+// await
+statements.set('await', [
   [
-    {
-      type: 'keyword',
-      word: new Set(['each', 'awaitEach']),
-      compile: word => `for ${word === 'each' ? '' : 'await '}(let `
-    },
+    {type: 'keyword', word: 'await', compile: () => 'for await (let '},
+    {type: 'keyword', word: 'each', compile: () => ''},
     {type: 'unreservedName', compile: name => name},
     {type: 'keyword', word: 'of', compile: () => ' of '},
-    {type: 'expression', after: ')'},
+    {type: 'expression'},
     {type: 'block'}
   ]
 ]);
