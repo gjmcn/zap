@@ -6,6 +6,10 @@ import { syntaxError, last } from './helpers.js';
 import { reserved } from './reserved.js';
 import { parseExpression } from './parse-expression.js';
 
+
+
+!! Keyword, insert, ... components ca now be function or strings
+
 // check if code component is of given component type
 // (not all component types are included here)
 const isComponent = {
@@ -198,6 +202,7 @@ export const parseComponent = {
   // - asUnreservedName
   // - unreservedNameDef
   // - nameAsDef
+  // - insert
   // - block
 
 };

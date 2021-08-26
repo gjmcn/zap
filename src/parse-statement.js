@@ -2,6 +2,10 @@
 // Parse statement.
 ////////////////////////////////////////////////////////////////////////////////
 
+!!!!!!!!!!!NEED TO ALLOW FOR DIFFERENT POSS KEYWORDS (A SET) IN
+word PROPERTY OF KEYWORDS COMPONENT NOW - and pass actual used word to compile
+function
+
 import { structures } from './statements.js';
 import { resolveBranch, parseComponent } from './components.js';
 import { syntaxError, last } from './helpers.js';
@@ -27,7 +31,7 @@ export function parseStatement(codeComponents, addJS) {
     // resolve branch using second component
     const branch = resolveBranch(codeComponents, struc).slice(1).reverse();  
 
-    // if try statement, need at least one of catch or finally
+    // if try statement, need at least one of catch or finally !! NO LONGER REQD !!
     if (firstWord === 'try' &&
         !branch.some(stComp => {
           return stComp.type === 'keyword' &&
@@ -60,7 +64,7 @@ export function parseStatement(codeComponents, addJS) {
         if (stComp.optional) {
           branch.length -= stComp.optional - 1; 
           if (stComp.ifOmitted) {
-            addJS(stComp.ifOmitted);
+            addJS(stComp.ifOmitted());
           }
           continue;
         }
