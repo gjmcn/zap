@@ -373,7 +373,7 @@ statements.set('loop', [
 ]);
 
 // try
-statements.set('try', [
+statements.set('try', [ 
   [
     {type: 'keyword', word: 'try', compile: 'try '},
     {type: 'block'},

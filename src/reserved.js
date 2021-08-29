@@ -57,7 +57,7 @@ reserved.invalid = new Set([
   'var', 'void', 'with', 'yield', 'enum', 'implements', 'interface', 'package',
   'private', 'protected', 'public', 'static',
   // pseudokeywords
-  'as', 'def'
+  'as', 'def', 'anon', '@anon', 'then', 'done'
 ]);
 
 reserved.nonKeywords = new Set([
