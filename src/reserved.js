@@ -23,7 +23,7 @@ reserved.operators = new Set([
   'IsArray', 'IsBigInt', 'IsBoolean', 'IsFinite', 'IsFunction', 'IsInteger',
   'IsNaN', 'IsNullish', 'IsNumber', 'IsString', 'IsSymbol',
   // other
-  'AsSet', 'AsMap', 'Pipe', 'Call', 'Prt', 'Zeros', 'Ones'
+  'AsSet', 'AsMap', 'AsArray', 'Pipe', 'Call', 'Prt', 'Zeros', 'Ones'
 ]);
 
 reserved.special = new Set([
