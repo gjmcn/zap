@@ -47,8 +47,8 @@ reserved.keywords = new Set([
   'let', 'be', 'get', 'prop', 'elmt', 'from', 'set', 'cet', 'to', 'inc', 'dec',
   'by', 'block', 'if', 'elif', 'else', 'while', 'for', 'await', 'each', 'of',
   'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', '@fun', '@gen',
-  'now', '@now', 'class', 'extends', 'par', 'export', 'import', 'default',
-  'all', 'debugger', 'wait'
+  'class', 'extends', 'par', 'export', 'import', 'default', 'all', 'debugger',
+  'wait'
 ]);
 
 reserved.invalid = new Set([

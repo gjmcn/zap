@@ -412,22 +412,6 @@ statements.set('try', [
   ]);
 }
 
-// now, @now
-{
-  const words = new Set(['now', '@now']);
-  statements.set(words, [
-    [
-      {
-        type: 'keyword',
-        word: words,
-        compile: word => `(${word === '@now' ? 'async ' : ''}() => `
-      },
-      {type: 'block'},
-      {type: 'insert', value: ')()'}
-    ]
-  ]);
-}
-
 // class
 statements.set('class', [
   [

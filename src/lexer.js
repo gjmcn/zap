@@ -10,13 +10,14 @@ import { allFirstWords } from "./statements.js";
 
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],  // same-line whitespace
-  ['comment', /\/\/.*/y],
+  ['comment', /\/\/.*|#\S*/y],
   ['newline', /\r?\n/y],
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
-  ['string', /'[^'\\]*(?:\\.[^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
-  ['regexp', /\\(?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*/y],
-  ['keyword', new RegExp([...reserved.keywords].join('|'), 'y')],
-  ['wordOperator', new RegExp([...reserved.operators].join('|'), 'y')],
+  ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
+  ['regexp', /`([^`\\/]*(?:\\.[^`\\/]*)*)`([\w$]*)/y],
+
+!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
+
   ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openParentheses', /\(/y],
   ['closeParentheses', /\)/y],  
@@ -59,6 +60,16 @@ export function lexer(code) {
           column,
           $$$zapToken$$$: true
         };
+
+        // change type to 'keyword' or 'operator' if appropriate
+        if (type === 'identifier') {
+          if (reserved.keywords.has(match[0])) {
+            type = tkn.type = 'keyword'
+          }
+          else if (reserved.operators.has(match[0])) {
+            type = tkn.type = 'operator'
+          }
+        }
 
         // keyword
         if (type === 'keyword') {
@@ -117,6 +128,11 @@ export function lexer(code) {
                 if (!operatorDetails[match[0]]) {
                   lexerError(`unrecognized operator: ${match[0]}`);
                 }
+              }
+
+              // regex: replace outer backticks with forward slashes
+              else if (type === 'regexp') {
+                tkn.value = `/${match[1]}/${match[2]}`;  // HAVE CHECKED REGEX-REGEX! - e.g. if empty flags, slashes, ...
               }
 
               column += match[0].length;
