@@ -15,18 +15,13 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /`([^`\\/]*(?:\\.[^`\\/]*)*)`([\w$]*)/y],
-
-!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
-
-  ['identifier', /[a-zA-Z_$][\w$]*/y],
-  ['openParentheses', /\(/y],
-  ['closeParentheses', /\)/y],  
-  ['openSquare', /\[[#\^]?/y],
-  ['closeSquare', /]/y],  
-  ['openCurly', /\{\^?/y],
-  ['closeCurly', /}/y],
-  ['quickFunction', /\|/y],
-  ['symbolOperator', /[+\-*/%~<>=!?&.:,]+/y]
+  ['identifier', /([!\^\\]?)([a-zA-Z_$][\w$]*)/y],
+  ['openBracket', /[({[]/y],
+  ['closeBracket', /[)}\]]/y],
+  ['bar', /\|/y],
+  ['ampersand', /&/y],
+  ['comma', /,/y],
+  ['symbolOperator', /[+\-*/%~<>=!?.:;]+/y]
 ]);
 
 export function lexer(code) {

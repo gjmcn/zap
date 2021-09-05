@@ -155,7 +155,7 @@ export const operatorDetails = {
   // unary minus
   '~': {prec: 1, type: 'postfix', arity: [1, 1], compile: compileUnaryPostfix},
 
-  // get property
+  // get property  BACK TO ::
   'At': {prec: 2, type: 'infix', arity: [2, 2], compile: compileColonGetter},
 
   // call function
