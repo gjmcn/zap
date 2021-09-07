@@ -6,7 +6,7 @@
 
 import { operatorDetails } from "./operators.js";
 import { reserved } from "./reserved.js";
-import { allFirstWords } from "./statements.js";
+import { commaFirstWords, allFirstWords } from "./statements.js";
 
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],  // same-line whitespace
@@ -27,10 +27,11 @@ const regexps = new Map([
 export function lexer(code) {
   
   const components = [];
-  let group = null;  // contiguous non-keyword tokens
-  let index = 0;     // position in code
-  let line = 1;      // current line
-  let column = 0;    // current column
+  let group = null;      // contiguous non-keyword tokens
+  let firstWord = null;  // first word of current statement
+  let index = 0;         // position in code
+  let line = 1;          // current line
+  let column = 0;        // current column
 
   // zap syntax error
   function lexerError(msg) {
@@ -41,7 +42,7 @@ export function lexer(code) {
   codeLoop: while (index < code.length) {
 
     // iterate over regexps
-    for (let [type, reg] of regexps.entries()) {
+    for (let [type, reg] of regexps) {
       
       reg.lastIndex = index;
       const match = reg.exec(code);
@@ -56,23 +57,53 @@ export function lexer(code) {
           $$$zapToken$$$: true
         };
 
-        // change type to 'keyword' or 'operator' if appropriate
+        // identifier
         if (type === 'identifier') {
+          const prefix = match[1];
+          const word = match[2];
+          if (prefix) {
+            if (reserved.all.has(word)) {
+              lexerError(`invalid prefix "${
+                prefix}" with reserved word "${word}"`);
+            }
+            if (!/A-Z/.test(word[0])) {
+              lexerError(`invalid prefix "${prefix}" ("${
+                word}" does not start with an uppercase letter)`);
+            }
+          }
           if (reserved.keywords.has(match[0])) {
-            type = tkn.type = 'keyword'
+            type = tkn.type = 'keyword';
+            column += match[0].length;
           }
           else if (reserved.operators.has(match[0])) {
-            type = tkn.type = 'operator'
+            type = tkn.type = 'operator';
           }
+          else {
+            tkn.prefix = prefix;
+            tkn.word = word;
+          }
+        }
+
+        // comma
+        else if (type === 'comma') {
+          if (!commaFirstWords.has(firstWord)) {
+            lexerError('invalid comma');
+          }
+          tkn.value = firstWord;
+          type = tkn.type = 'keyword';
+          column += match[0].length;
         }
 
         // keyword
         if (type === 'keyword') {
           if (group) {
-            components.push(group);
+            if (group.length) {
+              components.push(group);
+            }
             group = null;
           }
           if (allFirstWords.has(match[0])) {
+            firstWord = match[0];
             tkn.openStatement = true;
           }
           components.push(tkn);
@@ -99,14 +130,24 @@ export function lexer(code) {
           // add token
           else {
 
-            // (potentially) multiline string
-            if (type === 'string' && match[0][0] === '"') {
+            // string
+            if (type === 'string') {
               let hasNewline;
-              tkn.value = tkn.value.replace(/\r?\n/g, () => {
-                line++;
-                hasNewline = true;
-                return '\\n';
-              });
+              if (match[0][0] === '"') {
+                tkn.value = tkn.value.replace(/\r?\n/g, () => {
+                  line++;
+                  hasNewline = true;
+                  return '\\n';
+                });
+              }
+              else {
+                tkn.value =
+                  tkn.value.replace(/[^\S\r\n]*(?:\r?\n[^\S\r\n]*)+/g, s => {
+                    line += s.match(/\n/g).length;
+                    hasNewline = true;
+                    return ' ';
+                  });
+              }
               if (hasNewline) {
                 column = match[0].length - match[0].lastIndexOf('\n') - 1;
               }
@@ -118,19 +159,20 @@ export function lexer(code) {
             // no other tokens can be multiline
             else {
 
-              // symbol operator: check valid operator  
+              // symbol operator
               if (type === 'symbolOperator') {
                 if (!operatorDetails[match[0]]) {
                   lexerError(`unrecognized operator: ${match[0]}`);
                 }
               }
 
-              // regex: replace outer backticks with forward slashes
+              // regex
               else if (type === 'regexp') {
-                tkn.value = `/${match[1]}/${match[2]}`;  // HAVE CHECKED REGEX-REGEX! - e.g. if empty flags, slashes, ...
+                tkn.value = `/${match[1]}/${match[2]}`;
               }
 
               column += match[0].length;
+
             }
 
             group.push(tkn);
@@ -153,7 +195,7 @@ export function lexer(code) {
   }
 
   // possibly an open group of non-keyword tokens
-  if (group) {
+  if (group?.length) {
     components.push(group);
   }
   

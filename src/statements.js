@@ -23,7 +23,8 @@
 //   should not be optional)
 ////////////////////////////////////////////////////////////////////////////////
 
-export let structures, allFirstWords, simpleFirstWords, blockFirstWords;
+export let structures, allFirstWords, simpleFirstWords, blockFirstWords,
+           commaFirstWords;
 
 const statements = new Map();
 
@@ -74,18 +75,18 @@ const parameterSignature = [
   ]);
 }
 
-// do
-statements.set('do', [
+// now
+statements.set('now', [
   [
-    {type: 'keyword', word: 'do', compile: ''},
+    {type: 'keyword', word: 'now', compile: ''},
     {type: 'expression'}
   ]
 ]);
 
-// out
-statements.set('out', [
+// ret
+statements.set('ret', [
   [
-    {type: 'keyword', word: 'out', compile: 'return '},
+    {type: 'keyword', word: 'ret', compile: 'return '},
     {type: 'expression', optional: 1}
   ]
 ]);
@@ -98,20 +99,12 @@ statements.set('throw', [
   ]
 ]);
 
-// print
-statements.set('print', [
+// say
+statements.set('say', [
   [
-    {type: 'keyword', word: 'print', compile: 'console.log('},
+    {type: 'keyword', word: 'say', compile: 'console.log('},
     {type: 'expression'},
     {type: 'insert', value: ')'}
-  ]
-]);
-
-// delete
-statements.set('delete', [
-  [
-    {type: 'keyword', word: 'delete', compile: 'delete '},
-    {type: 'getterExpression'}
   ]
 ]);
 
@@ -231,10 +224,10 @@ statements.set('wait', [
   ]
 ]);
 
-// export
+// out
 {
-  const firstComponent = {type: 'keyword', word: 'export', compile: 'export '};
-  statements.set('export', [
+  const firstComponent = {type: 'keyword', word: 'out', compile: 'export '};
+  statements.set('out', [
     [
       firstComponent,
       {type: 'namesAs'}
@@ -247,15 +240,15 @@ statements.set('wait', [
   ]);
 }
 
-// import
+// use
 {
   const createBranch = (...comps) => [
-    {type: 'keyword', word: 'import', compile: 'import '},
+    {type: 'keyword', word: 'use', compile: 'import '},
     ...comps,
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
   ];
-  statements.set('import', [
+  statements.set('use', [
     createBranch({type: 'namesAs', optional: 2}),
     createBranch(
       {type: 'keyword', word: 'default', compile: ''},
@@ -426,7 +419,13 @@ statements.set('class', [
   ]
 ]);
 
+
 // ========== exports ==========
+
+// comma statements
+commaFirstWords = new Set([
+  'now', 'say', 'let', 'get', 'set', 'cet', 'inc', 'dec', 'wait', 'out', 'use'
+]);
 
 // unlike the statements map, the structures object has a single word for each
 // key - so some keys point to the same object

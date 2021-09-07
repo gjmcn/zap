@@ -133,6 +133,8 @@ const compileJSWords = new Map([
 ]);
 
 
+!! NEED TO ADD  Delete AND Load !!!!!!!!!!!!!!!!!!!
+
 // ========== operator details ==========
 
 export const operatorDetails = {

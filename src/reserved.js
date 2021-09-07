@@ -16,14 +16,14 @@ reserved.wordLiterals = new Set([
 
 reserved.operators = new Set([
   // JS word operators
-  'New', 'Void', 'TypeOf', 'In', 'InstanceOf', 'Yield', 'YieldFrom',
+  'New', 'Void', 'Delete', 'TypeOf', 'In', 'InstanceOf', 'Yield', 'YieldFrom',
   // JS symbol operators that are replaced with words
   'And', 'Or', 'Or_', 'Not', 'Is', 'Isnt',
   // isXXX
   'IsArray', 'IsBigInt', 'IsBoolean', 'IsFinite', 'IsFunction', 'IsInteger',
   'IsNaN', 'IsNullish', 'IsNumber', 'IsString', 'IsSymbol',
   // other
-  'AsSet', 'AsMap', 'AsArray', 'Pipe', 'Call', 'Prt', 'Zeros', 'Ones'
+  'AsSet', 'AsMap', 'AsArray', 'Pipe', 'Call', 'Put', 'Zeros', 'Ones', 'Load'
 ]);
 
 reserved.special = new Set([
@@ -43,27 +43,28 @@ reserved.swapped = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', 'break', 'continue', 'do', 'out', 'throw', 'print', 'delete',
+  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 
   'let', 'be', 'get', 'prop', 'elmt', 'from', 'set', 'cet', 'to', 'inc', 'dec',
   'by', 'block', 'if', 'elif', 'else', 'while', 'for', 'await', 'each', 'of',
   'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', '@fun', '@gen',
-  'class', 'extends', 'par', 'export', 'import', 'default', 'all', 'debugger',
-  'wait'
+  'class', 'extends', 'par', 'out', 'use', 'default', 'all', 'debugger', 'wait'
 ]);
 
 reserved.invalid = new Set([
   // JS reserved words
-  'case', 'const', 'in', 'instanceof', 'new', 'return', 'switch', 'typeof',
-  'var', 'void', 'with', 'yield', 'enum', 'implements', 'interface', 'package',
-  'private', 'protected', 'public', 'static',
+  'case', 'const', 'delete', 'do', 'export', 'import', 'in', 'instanceof',
+  'new', 'return', 'switch', 'typeof', 'var', 'void', 'with', 'yield', 'enum',
+  'implements', 'interface', 'package', 'private', 'protected', 'public',
+  'static',
   // pseudokeywords
   'as', 'def', 'anon', '@anon', 'then', 'done'
 ]);
 
-reserved.nonKeywords = new Set([
+reserved.all = new Set([
   ...reserved.wordLiterals,
   ...reserved.operators,
   ...reserved.special,
   ...reserved.swapped,
+  ...reserved.keywords,
   ...reserved.invalid
 ]);
