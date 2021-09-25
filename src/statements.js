@@ -31,35 +31,16 @@ const statements = new Map();
 
 // ========= reusable components ==========
 
-const destructuredObject = {type: 'nameAsDef', optional: 1, repeat: true};
+const destructureArray = [
+  {type: 'openSquare'},
+  {type: 'unreservedName', compile: name => name, optional: 1, repeat: true},
+  {type: 'closeSquare'}
+];
 
-const destructuredArray = 
-  {type: 'unreservedNameDef', optional: 1, repeat: true};
-
-let parameterKeyword;
-const parameterSignature = [
-  {
-    type: 'keyword',
-    word: new Set(['par', 'prop', 'elmt']),
-    compile: word => {
-      parameterKeyword = word;
-      if      (word === 'par' ) return '(';
-      else if (word === 'prop') return '({';
-      else                      return '([';
-    },
-    optional: 1,
-    ifOmitted: () => {
-      parameterKeyword = 'par';
-      return '(';
-    }
-  },
-  (parameterKeyword === 'prop' ? destructuredObject : destructuredArray),
-  {
-    type: 'insert',
-    value: () => parameterKeyword === 'par'
-      ? ')'
-      : (parameterKeyword === 'prop' ? '})' : '])')
-  }
+const destructureObject = [
+  {type: 'openCurly'},
+  {type: 'unreservedName', compile: name => name, optional: 1, repeat: true},
+  {type: 'closeCurly'}
 ];
 
 
@@ -109,105 +90,86 @@ statements.set('say', [
 ]);
 
 // let
-statements.set('let', [
-  [
-    {type: 'keyword', word: 'let', compile: 'let '},
-    {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'be', compile: ' = ', optional: 2},
-    {type: 'expression'}
-  ]
-]);
-
-// get
 {
-  const firstComponent = {type: 'keyword', word: 'get', compile: 'let '}
-  statements.set('get', [
+  const firstComponent = {type: 'keyword', word: 'let', compile: 'let '};
+  statements.set('let', [
     [
       firstComponent,
-      {type: 'keyword', word: 'prop', compile: '{'},
-      destructuredObject,
-      {type: 'keyword', word: 'from', compile: '} = '},
+      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: 'be', compile: ' = ', optional: 2},
       {type: 'expression'}
     ],
     [
       firstComponent,
-      {type: 'keyword', word: 'elmt', compile: '['},
-      destructuredArray,
-      {type: 'keyword', word: 'from', compile: '] = '},
+      ...destructureArray,
+      {type: 'keyword', word: 'be', compile: ' = '},
+      {type: 'expression'}
+    ],
+    [
+      firstComponent,
+      ...destructureObject,
+      {type: 'keyword', word: 'be', compile: ' = '},
       {type: 'expression'}
     ]
   ]);
 }
 
 // set
-{
-  const createBranch = component => {
-    return [
-      {type: 'keyword', word: 'set', compile: ''},
-      component,
-      {type: 'keyword', word: 'to', compile: ' = '},
-      {type: 'expression'}
-    ]
-  };
-  statements.set('set', [
-    createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch({type: 'getterExpression'}),
-  ]);
-}
+statements.set('set', [
+  [
+    {type: 'keyword', word: 'set', compile: ''},
+    {type: 'lhsExpression'},
+    {type: 'keyword', word: 'to', compile: ` = `},
+    {type: 'expression'}
+  ]
+]);
 
 // cet
 {
-  const createBranch = component => {
-    return [
-      {type: 'keyword', word: 'cet', compile: ''},
-      component,
-      {type: 'keyword', word: 'to', compile: ' ??= '},
-      {type: 'expression'}
-    ]
-  };
+  const createBranch = component => [
+    {type: 'keyword', word: 'cet', compile: ''},
+    component,
+    {type: 'keyword', word: 'to', compile: ` ??= `},
+    {type: 'expression'},
+  ];
   statements.set('cet', [
     createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch({type: 'getterExpression'}),
+    createBranch({type: 'getterExpression'})
   ]);
 }
 
-// inc
-{
-  const createBranch = component => [
-    {type: 'keyword', word: 'inc', compile: ''},
-    component,
+// opt
+statements.set('opt', [
+  [
+    {type: 'keyword', word: 'opt', compile: 'let {'},
+    {type: 'unreservedName', compile: name => name},
     {
       type: 'keyword',
-      word: 'by',
-      compile: ' += ',
-      optional: 2,
-      ifOmitted: '++'
+      word: 'def',
+      compile: ' = ',
+      optional: 3,
+      ifOmitted: '} = ops'
     },
-    {type: 'expression'}
+    {type: 'expression'},
+    {type: 'insert', value: '} = ops'}
+  ]
+]);
+
+// inc, dec
+{
+  const createBranch = (openingWord, component, op) => [
+    {type: 'keyword', word: openingWord, compile: ''},
+    component,
+    {type: 'keyword', word: 'by', compile: ` ${op} `},
+    {type: 'expression', optional: 1, ifOmitted: '1'}
   ];
   statements.set('inc', [
-    createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch({type: 'getterExpression'})
+    createBranch('inc', {type: 'unreservedName', compile: name => name}, '+='),
+    createBranch('inc', {type: 'getterExpression'}, '+=')
   ]);
-}
-
-// dec
-{
-  const createBranch = component => [
-    {type: 'keyword', word: 'dec', compile: ''},
-    component,
-    {
-      type: 'keyword',
-      word: 'by',
-      compile: ' -= ',
-      optional: 2,
-      ifOmitted: '--'
-    },
-    {type: 'expression'}
-  ];
   statements.set('dec', [
-    createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch({type: 'getterExpression'})
+    createBranch('dec', {type: 'unreservedName', compile: name => name}, '-='),
+    createBranch('dec', {type: 'getterExpression'}, '-=')
   ]);
 }
 
@@ -234,7 +196,7 @@ statements.set('wait', [
     ],
     [
       firstComponent,
-      {type: 'keyword', word: 'default', compile: 'default '},
+      {type: 'keyword', word: 'def', compile: 'default '},
       {type: 'unreservedName', compile: name => name}
     ]
   ]);
@@ -249,9 +211,9 @@ statements.set('wait', [
     {type: 'pathLit'}
   ];
   statements.set('use', [
-    createBranch({type: 'namesAs', optional: 2}),
+    createBranch({type: 'anyNamesAs', optional: 2}),
     createBranch(
-      {type: 'keyword', word: 'default', compile: ''},
+      {type: 'keyword', word: 'def', compile: ''},
       {type: 'asUnreservedName', compile: name => name}
     ),
     createBranch(
@@ -261,6 +223,7 @@ statements.set('wait', [
   ]);
 }
 
+!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // ========== block statements (i.e. contain a 'block' component) ==========
 
@@ -384,17 +347,17 @@ statements.set('try', [
   ]
 ]);
 
-// fun, gen, @fun, @gen
+// fun, gen, fun__, gen__
 {
-  const words = new Set(['fun', 'gen', '@fun', '@gen']);
+  const words = new Set(['fun', 'gen', 'fun__', 'gen__']);
   statements.set(words, [
     [
       {
         type: 'keyword',
         word: words,
         compile: word => {
-          const asyncStr = word[0] === '@' ? 'async ' : '';
-          const genStr = word.slice(-3) === 'gen' ? '*' : '';
+          const genStr = word.slice(0, 3) === 'gen' ? '*' : '';
+          const asyncStr = word.slice(-2) === '__' ? 'async ' : '';
           return `${asyncStr}function${genStr} `;
         }
       },
@@ -424,7 +387,7 @@ statements.set('class', [
 
 // comma statements
 commaFirstWords = new Set([
-  'now', 'say', 'let', 'get', 'set', 'cet', 'inc', 'dec', 'wait', 'out', 'use'
+  'now', 'say', 'let', 'set', 'cet', 'opt', 'inc', 'dec', 'wait', 'out', 'use'
 ]);
 
 // unlike the statements map, the structures object has a single word for each

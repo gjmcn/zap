@@ -23,7 +23,8 @@ reserved.operators = new Set([
   'IsArray', 'IsBigInt', 'IsBoolean', 'IsFinite', 'IsFunction', 'IsInteger',
   'IsNaN', 'IsNullish', 'IsNumber', 'IsString', 'IsSymbol',
   // other
-  'AsSet', 'AsMap', 'AsArray', 'Pipe', 'Call', 'Put', 'Zeros', 'Ones', 'Load'
+  'AsSet', 'AsMap', 'AsArray', 'Call', 'Put', 'Zeros', 'Ones', 'Load',
+  'JsonParse', 'JsonStringify', 
 ]);
 
 reserved.special = new Set([
@@ -39,25 +40,25 @@ reserved.swapped = new Set([
   'int32Array', 'uint32Array', 'float32Array', 'float64Array', 'bigInt64Array',
   'bigUint64Array', 'arrayBuffer', 'sharedArrayBuffer', 'atomics', 'dataView',
   // other built-ins
-  'jsonParse', 'jsonStringify', 'promise', 'reflect', 'proxy'
+  'promise', 'reflect', 'proxy'
 ]);
 
 reserved.keywords = new Set([
-  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 
-  'let', 'be', 'get', 'prop', 'elmt', 'from', 'set', 'cet', 'to', 'inc', 'dec',
-  'by', 'block', 'if', 'elif', 'else', 'while', 'for', 'await', 'each', 'of',
-  'loop', 'index', 'try', 'catch', 'finally', 'fun', 'gen', '@fun', '@gen',
-  'class', 'extends', 'par', 'out', 'use', 'default', 'all', 'debugger', 'wait'
+  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 'let', 'be', 'set',
+  'cet', 'to', 'opt', 'def', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
+  'while', 'each', 'of', 'loop', 'index', 'try', 'catch', 'finally', 'fun',
+  'gen', 'fun__', 'gen__', 'class', 'extends', 'par', 'out', 'use', 'from',
+  'all', 'debugger', 'wait'
 ]);
 
 reserved.invalid = new Set([
   // JS reserved words
-  'case', 'const', 'delete', 'do', 'export', 'import', 'in', 'instanceof',
-  'new', 'return', 'switch', 'typeof', 'var', 'void', 'with', 'yield', 'enum',
-  'implements', 'interface', 'package', 'private', 'protected', 'public',
-  'static',
+  'await', 'case', 'const', 'default', 'delete', 'do', 'export', 'for',
+  'import', 'in', 'instanceof', 'new', 'return', 'switch', 'typeof', 'var',
+  'void', 'with', 'yield', 'enum', 'implements', 'interface', 'package',
+  'private', 'protected', 'public', 'static',
   // pseudokeywords
-  'as', 'def', 'anon', '@anon', 'then', 'done'
+  'as', 'anon', 'anon__', 'arrow', 'arrow__', 'done'
 ]);
 
 reserved.all = new Set([

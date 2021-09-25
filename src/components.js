@@ -5,20 +5,27 @@
 import { syntaxError, last } from './helpers.js';
 import { reserved } from './reserved.js';
 import { parseExpression } from './parse-expression.js';
+import { requiresArg } from 'yargs';
+import { required } from 'yargs';
 
-
-
-!! Keyword, insert, ... components ca now be function or strings
+function isTokenUnreservedName(tkn) {
+  return tkn.type === 'identifier' && tkn.validName;
+}
 
 // check if code component is of given component type
-// (not all component types are included here)
+// - not all component types are included here
 const isComponent = {
 
-  // true if the code component is a single keyword token and its keyword
-  // matches the keyword(s) of the statement component
-  keyword: (codeComp, stComp) => {
-    return !Array.isArray(codeComp) &&
-      codeComp.type === 'keyword' &&
+  keyword: codeComp => {
+    return !Array.isArray(codeComp);
+  },
+
+  openingKeyword: codeComp => {
+    return isComponent.keyword(codeComp) && codeComp.openStatement;
+  },
+
+  specificKeyword: (codeComp, stComp) => {
+    return isComponent.keyword(codeComp) &&
       (typeof stComp.word === 'string'
         ? codeComp.value === stComp.word
         : stComp.word.has(codeComp.value)
@@ -26,21 +33,42 @@ const isComponent = {
   },
 
   unreservedName: codeComp => {
-    if (Array.isArray(codeComp) && 
-        codeComp.length === 1 &&
-        codeComp[0].type === 'identifier') {
-      const tkn = codeComp[0];
-      if (reserved.nonKeywords.has(tkn.value)) {
-        syntaxError(tkn, `${tkn.value} is a reserved word`);
-      }
-      return true;
-    }
+    return !isComponent.keyword(codeComp) && 
+      codeComp.length === 1 &&
+      isTokenUnreservedName(codeComp[0]);
   },
+
+  asUnreservedName: codeComp => {
+    return !isComponent.keyword(codeComp) && 
+      codeComp.length === 2 &&
+      codeComp[0].type === 'identifier' &&
+      codeComp[0].value === 'as' &&
+      codeComp[1].type === 'identifier' &&
+      isTokenUnreservedName(codeComp[1]);
+  },
+
+
+!!!!!HERE!!!!!!!!!!!!
+-namesAs (export): only allow valid unreserved Zap names
+-anyNamesAs (import): if renaming, allow original name to be a quoted identifier?
+  - reqd in case e.g. importing from JS library where import name is capitalized or a zap reserved word
+-lhsExpression: allow unreservedName, destructure (all unreserved names) or single property getter
+  -catch duplicates
+
+  unreservedNameDef: codeComp => {
+    if (isComponent.keyword(codeComp)) {
+      return false;
+    }
+    while
+    for (let i = 0; i < codeComp.length; i++)
+  }
+
+
 
   unreservedNames: codeComp => {
     if (Array.isArray(codeComp) &&
         codeComp.every(tkn => tkn.type === 'identifier')) {
-      const resTkn = codeComp.find(tkn => reserved.nonKeywords.has(tkn.value));
+      const resTkn = codeComp.find(tkn => reserved.all.has(tkn.value));
       if (resTkn) {
         syntaxError(resTkn, `${resTkn.value} is a reserved word`);
       }
@@ -51,13 +79,6 @@ const isComponent = {
     }
   },
 
-  pathLit: codeComp => {
-    if (Array.isArray(codeComp) && 
-        codeComp.length === 1 &&
-        codeComp[0].type === 'string') {
-      return true;
-    }
-  },
 
   // if a namesAs component, returns the names as an array where each element is
   // a name or an array: [oldName, newName]
@@ -67,7 +88,7 @@ const isComponent = {
       let i = 0;
       while (i < codeComp.length) {
         if (codeComp[i].type === 'identifer') {
-          if (reserved.nonKeywords.has(codeComp[i].value)) {
+          if (reserved.all.has(codeComp[i].value)) {
             syntaxError(codeComp[i], `${codeComp[i].value} is a reserved word`);
           }
           names.push(codeComp[i].value);
@@ -80,7 +101,7 @@ const isComponent = {
             codeComp[i + 2].value === 'as' &&
             codeComp[i + 3].type === 'identifier' &&
             codeComp[i + 4].type === 'closeParentheses') {
-          if (reserved.nonKeywords.has(codeComp[i + 3]).value) {
+          if (reserved.all.has(codeComp[i + 3]).value) {
             syntaxError(
               codeComp[i + 3],
               `${codeComp[i + 3].value} is a reserved word`
@@ -99,9 +120,27 @@ const isComponent = {
       }
       return names;
     }
-  }
+  },
+
+  pathLit: codeComp => {
+    if (Array.isArray(codeComp) && 
+        codeComp.length === 1 &&
+        codeComp[0].type === 'string') {
+      return true;
+    }
+  },
 
 };
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+// Note that now isComponent functions do not throw if not, so need to handle this
+// explicitly - in paraseComponents and below
+
+// May want to include in error msgs for non-matched comopenents:
+//  -unreservedName: unreserved and unprefixed identifier expected
+//  -
+
 
 // resolve branch of statement
 export function resolveBranch(codeComponents, struc) {
@@ -129,6 +168,9 @@ function parseSuccessful(codeComponents, stComp) {
   }
   return true;
 }
+
+
+!! Keyword, insert, ... components ca now be function or strings
 
 // Parse component and add JS. Each function returns true if the code component
 // is of the type expected by the statement.

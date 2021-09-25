@@ -4,6 +4,7 @@
 // tokens. Comment and space (including newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
+import { isCapitalized } from "./helpers.js";
 import { operatorDetails } from "./operators.js";
 import { reserved } from "./reserved.js";
 import { commaFirstWords, allFirstWords } from "./statements.js";
@@ -14,8 +15,8 @@ const regexps = new Map([
   ['newline', /\r?\n/y],
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
-  ['regexp', /`([^`\\/]*(?:\\.[^`\\/]*)*)`([\w$]*)/y],
-  ['identifier', /([!\^\\]?)([a-zA-Z_$][\w$]*)/y],
+  ['regexp', /\\((?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*)/y],
+  ['identifier', /[a-zA-Z_$][\w$]*/y],
   ['openBracket', /[({[]/y],
   ['closeBracket', /[)}\]]/y],
   ['bar', /\|/y],
@@ -59,18 +60,6 @@ export function lexer(code) {
 
         // identifier
         if (type === 'identifier') {
-          const prefix = match[1];
-          const word = match[2];
-          if (prefix) {
-            if (reserved.all.has(word)) {
-              lexerError(`invalid prefix "${
-                prefix}" with reserved word "${word}"`);
-            }
-            if (!/A-Z/.test(word[0])) {
-              lexerError(`invalid prefix "${prefix}" ("${
-                word}" does not start with an uppercase letter)`);
-            }
-          }
           if (reserved.keywords.has(match[0])) {
             type = tkn.type = 'keyword';
             column += match[0].length;
@@ -79,8 +68,15 @@ export function lexer(code) {
             type = tkn.type = 'operator';
           }
           else {
-            tkn.prefix = prefix;
-            tkn.word = word;
+            if (reserved.all.has(match[0])) {
+              tkn.reserved = true;
+              if (match[0] === 'anon' || match[0] === 'anon__') {
+                firstWord = null;
+              }
+            }
+            else if (!isCapitalized(match[0])) {
+              tkn.validName = true;
+            }
           }
         }
 
@@ -89,8 +85,8 @@ export function lexer(code) {
           if (!commaFirstWords.has(firstWord)) {
             lexerError('invalid comma');
           }
-          tkn.value = firstWord;
           type = tkn.type = 'keyword';
+          tkn.value = firstWord;
           column += match[0].length;
         }
 
@@ -168,7 +164,7 @@ export function lexer(code) {
 
               // regex
               else if (type === 'regexp') {
-                tkn.value = `/${match[1]}/${match[2]}`;
+                tkn.value = `/${match[1]}`;
               }
 
               column += match[0].length;
