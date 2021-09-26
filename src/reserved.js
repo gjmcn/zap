@@ -44,19 +44,19 @@ reserved.swapped = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 'let', 'be', 'set',
-  'cet', 'to', 'opt', 'def', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
-  'while', 'each', 'of', 'loop', 'index', 'try', 'catch', 'finally', 'fun',
-  'gen', 'fun__', 'gen__', 'class', 'extends', 'par', 'out', 'use', 'from',
-  'all', 'debugger', 'wait'
+  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 'var', 'set', 'cet',
+  'to', 'opt', 'def', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
+  'while', 'each', 'await', 'of', 'loop', 'index', 'try', 'catch', 'finally',
+  'fun', 'gen', 'fun__', 'gen__', 'class', 'extends', 'par', 'out', 'use',
+  'from', 'all', 'debugger', 'wait'
 ]);
 
 reserved.invalid = new Set([
   // JS reserved words
-  'await', 'case', 'const', 'default', 'delete', 'do', 'export', 'for',
-  'import', 'in', 'instanceof', 'new', 'return', 'switch', 'typeof', 'var',
-  'void', 'with', 'yield', 'enum', 'implements', 'interface', 'package',
-  'private', 'protected', 'public', 'static',
+  'case', 'const', 'default', 'delete', 'do', 'export', 'for', 'import', 'in',
+  'instanceof', 'let', 'new', 'return', 'switch', 'typeof', 'void', 'with',
+  'yield', 'enum', 'implements', 'interface', 'package', 'private', 'protected',
+  'public', 'static',
   // pseudokeywords
   'as', 'anon', 'anon__', 'arrow', 'arrow__', 'done'
 ]);

@@ -53,7 +53,7 @@ const isComponent = {
 -anyNamesAs (import): if renaming, allow original name to be a quoted identifier?
   - reqd in case e.g. importing from JS library where import name is capitalized or a zap reserved word
 -lhsExpression: allow unreservedName, destructure (all unreserved names) or single property getter
-  -catch duplicates
+
 
   unreservedNameDef: codeComp => {
     if (isComponent.keyword(codeComp)) {

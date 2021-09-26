@@ -89,26 +89,26 @@ statements.set('say', [
   ]
 ]);
 
-// let
+// var
 {
-  const firstComponent = {type: 'keyword', word: 'let', compile: 'let '};
-  statements.set('let', [
+  const firstComponent = {type: 'keyword', word: 'var', compile: 'let '};
+  statements.set('var', [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'be', compile: ' = ', optional: 2},
+      {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
       {type: 'expression'}
     ],
     [
       firstComponent,
       ...destructureArray,
-      {type: 'keyword', word: 'be', compile: ' = '},
+      {type: 'keyword', word: 'to', compile: ' = '},
       {type: 'expression'}
     ],
     [
       firstComponent,
       ...destructureObject,
-      {type: 'keyword', word: 'be', compile: ' = '},
+      {type: 'keyword', word: 'to', compile: ' = '},
       {type: 'expression'}
     ]
   ]);
@@ -223,7 +223,6 @@ statements.set('wait', [
   ]);
 }
 
-!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // ========== block statements (i.e. contain a 'block' component) ==========
 
@@ -267,46 +266,29 @@ statements.set('while', [
   ]
 ]);
 
-// for
+// each, await
 {
+  const words = new Set(['each', 'await']);
   const createBranch = (...comps) => [
-    {type: 'keyword', word: 'for', compile: 'for (let '},
+    {
+      type: 'keyword',
+      word: words,
+      compile: word => word === 'each' ? 'for (let ' : 'for await (let '
+    },
     ...comps,
-    {type: 'expression'},
-    {type: 'insert', value: ')'},
-    {type: 'block'}
-  ];
-  statements.set('for', [
-    createBranch(
-      {type: 'keyword', word: 'each', compile: ''},
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'of', compile: ' of '}
-    ),
-    createBranch(
-      {type: 'keyword', word: 'prop', compile: '{'},
-      destructuredObject,
-      {type: 'keyword', word: 'of', compile: '} of '}
-    ),
-    createBranch(
-      {type: 'keyword', word: 'elmt', compile: '['},
-      destructuredArray,
-      {type: 'keyword', word: 'of', compile: '] of '}
-    )
-  ]);
-}
-
-// await
-statements.set('await', [
-  [
-    {type: 'keyword', word: 'await', compile: 'for await (let '},
-    {type: 'keyword', word: 'each', compile: ''},
-    {type: 'unreservedName', compile: name => name},
     {type: 'keyword', word: 'of', compile: ' of '},
     {type: 'expression'},
     {type: 'insert', value: ')'},
     {type: 'block'}
-  ]
-]);
+  ];
+  statements.set(words, [
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch(...destructureObject),
+    createBranch(...destructureArray)
+  ]);
+}
+
+!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // loop
 statements.set('loop', [
@@ -387,7 +369,7 @@ statements.set('class', [
 
 // comma statements
 commaFirstWords = new Set([
-  'now', 'say', 'let', 'set', 'cet', 'opt', 'inc', 'dec', 'wait', 'out', 'use'
+  'now', 'say', 'var', 'set', 'cet', 'opt', 'inc', 'dec', 'wait', 'out', 'use'
 ]);
 
 // unlike the statements map, the structures object has a single word for each
