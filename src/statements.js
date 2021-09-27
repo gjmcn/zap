@@ -288,27 +288,44 @@ statements.set('while', [
   ]);
 }
 
-!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-// loop
-statements.set('loop', [
-  [
-    {type: 'keyword', word: 'loop', compile: 'for (let _limit_ = '},
-    {type: 'expression', optional: 1, ifOmitted: 'Infinity'},
-    {
-      type: 'keyword',
-      word: 'index',
-      compile: '',
-      optional: 2,
-      ifOmitted: `, _index_ = 0; _index_ < _limit_; _index_++)`
-    },
-    {
-      type: 'unreservedName',
-      compile: name => `, ${name} = 0; ${name} < _limit_; ${name}++)`
-    },
-    {type: 'block'}
-  ]
-]);
+// up, down
+{
+  const createBranch = word => {
+    const comparisonOp = word === 'up' ? '<=' : '>=';
+    return [  
+      {type: 'keyword', word, compile: 'for (let z_start_ = '},
+      {type: 'expression'},
+      {type: 'keyword', word: 'to', compile: ', z_limit_ = '},
+      {type: 'expression'},
+      {
+        type: 'keyword',
+        word: 'by',
+        compile: ', z_by_ = ',
+        optional: 2,
+        ifOmitted: `, z_by_ = 1` 
+      },
+      {type: 'expression'},
+      {
+        type: 'keyword',
+        word: 'at',
+        compile: '',
+        optional: 2, 
+        ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp} z_limit_; z_loop_ += z_by_)`
+      },
+      {
+        type: 'unreservedName',
+        compile: name => `, ${name} = z_start_; ${name} ${comparisonOp} z_limit_; ${name} += z_by_)`,
+      },
+      {type: 'block'}
+    ];
+  };
+  statements.set('up', [
+    createBranch('up')
+  ]);
+  statements.set('down', [
+    createBranch('down')
+  ]);
+}
 
 // try
 statements.set('try', [ 

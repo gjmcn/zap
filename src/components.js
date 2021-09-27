@@ -244,7 +244,7 @@ export const parseComponent = {
   // - asUnreservedName
   // - unreservedNameDef
   // - nameAsDef
-  // - insert
+  // - insert - allow funciton or string
   // - block
 
 };

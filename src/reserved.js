@@ -46,7 +46,7 @@ reserved.swapped = new Set([
 reserved.keywords = new Set([
   'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 'var', 'set', 'cet',
   'to', 'opt', 'def', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
-  'while', 'each', 'await', 'of', 'loop', 'index', 'try', 'catch', 'finally',
+  'while', 'each', 'await', 'of', 'up', 'down', 'at', 'try', 'catch', 'finally',
   'fun', 'gen', 'fun__', 'gen__', 'class', 'extends', 'par', 'out', 'use',
   'from', 'all', 'debugger', 'wait'
 ]);
@@ -58,7 +58,9 @@ reserved.invalid = new Set([
   'yield', 'enum', 'implements', 'interface', 'package', 'private', 'protected',
   'public', 'static',
   // pseudokeywords
-  'as', 'anon', 'anon__', 'arrow', 'arrow__', 'done'
+  'as', 'anon', 'anon__', 'arrow', 'arrow__', 'done',
+  // up/down loop variables
+  'z_start_', 'z_limit_', 'z_by_', 'z_loop_'
 ]);
 
 reserved.all = new Set([
