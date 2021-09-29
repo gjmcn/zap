@@ -302,7 +302,7 @@ statements.set('while', [
         word: 'by',
         compile: ', z_by_ = ',
         optional: 2,
-        ifOmitted: `, z_by_ = 1` 
+        ifOmitted: `, z_by_ = ${word === 'up' ? '1' : '-1'}` 
       },
       {type: 'expression'},
       {
@@ -361,7 +361,9 @@ statements.set('try', [
         }
       },
       {type: 'unreservedName', compile: name => name},
-      ...parameterSignature,
+      {type: 'keyword', word: 'par', compile: '('},
+      {type: 'parameterToken', optional: 1, repeat: true},
+      {type: 'insert', value: ')'},
       {type: 'block'}
     ]
   ]);
@@ -372,14 +374,17 @@ statements.set('class', [
   [
     {type: 'keyword', word: 'class', compile: 'class '},
     {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'extends', compile: () => ' extends ', optional: 2},
-    {type: 'unreservedName', compile: name => name},
-    {type: 'insert', value: ' {constructor'},
-    ...parameterSignature,
+    {type: 'keyword', word: 'extends', compile: ' extends ', optional: 2},
+    {type: 'expression'},
+    {type: 'keyword', word: 'par', compile: ' {constructor('},
+    {type: 'parameterToken', optional: 1, repeat: true},
+    {type: 'insert', value: ')'},
     {type: 'block'},
     {type: 'insert', value: '}'}
   ]
 ]);
+
+!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 // ========== exports ==========
