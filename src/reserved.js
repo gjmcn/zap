@@ -1,11 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Reserved words.
-//
-// Reserved words cannot be assigned to.
-//
-// Currently, all reserved words are identified naively and used for their
-// special purpose - so reserved words must be quoted where this is not
-// appropriate (even with operators that autoquote).
 ////////////////////////////////////////////////////////////////////////////////
 
 export const reserved = {};
@@ -16,19 +10,20 @@ reserved.wordLiterals = new Set([
 
 reserved.operators = new Set([
   // JS word operators
-  'New', 'Void', 'Delete', 'TypeOf', 'In', 'InstanceOf', 'Yield', 'YieldFrom',
+  'New', 'Await', 'Void', 'Delete', 'TypeOf', 'In', 'InstanceOf', 'Yield',
+  'YieldFrom',
   // JS symbol operators that are replaced with words
   'And', 'Or', 'Or_', 'Not', 'Is', 'Isnt',
   // isXXX
   'IsArray', 'IsBigInt', 'IsBoolean', 'IsFinite', 'IsFunction', 'IsInteger',
   'IsNaN', 'IsNullish', 'IsNumber', 'IsString', 'IsSymbol',
   // other
-  'AsSet', 'AsMap', 'AsArray', 'Call', 'Put', 'Zeros', 'Ones', 'Load',
-  'JsonParse', 'JsonStringify', 
+  'At', 'AsSet', 'AsMap', 'AsArray', 'Call', 'Put', 'Zeros', 'Ones', 'Load',
+  'JsonParse', 'JsonStringify', 'CopyFrom', 'CopyTo'
 ]);
 
 reserved.special = new Set([
-  'this', 'super', '_limit_', '_index_'
+  'this', 'super'
 ]);
 
 reserved.swapped = new Set([
@@ -44,21 +39,20 @@ reserved.swapped = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', 'break', 'continue', 'now', 'ret', 'throw', 'say', 'var', 'set', 'cet',
-  'to', 'opt', 'def', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
-  'while', 'each', 'await', 'of', 'up', 'down', 'at', 'try', 'catch', 'finally',
-  'fun', 'gen', 'fun__', 'gen__', 'class', 'extends', 'par', 'out', 'use',
-  'from', 'all', 'debugger', 'wait'
+  'end', 'break', 'continue', 'now', 'out', 'throw', 'say', 'var', 'set', 'nil',
+  'opt', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while',
+  'each', 'await', 'of', 'up', 'down', 'try', 'catch', 'finally', 'fun', 'gen',
+  'async', 'par', 'export', 'import', 'from', 'default', 'all', 'debugger',
+  'wait', 'class', 'extends', 'field', 'getter', 'setter', 'static'
 ]);
 
 reserved.invalid = new Set([
   // JS reserved words
-  'case', 'const', 'default', 'delete', 'do', 'export', 'for', 'import', 'in',
-  'instanceof', 'let', 'new', 'return', 'switch', 'typeof', 'void', 'with',
-  'yield', 'enum', 'implements', 'interface', 'package', 'private', 'protected',
-  'public', 'static',
+  'case', 'const', 'delete', 'do', 'for', 'in', 'instanceof', 'let', 'return',
+  'switch', 'typeof', 'void', 'with', 'yield', 'enum', 'implements',
+  'interface', 'package', 'private', 'protected', 'public',
   // pseudokeywords
-  'as', 'anon', 'anon__', 'arrow', 'arrow__', 'done',
+  'as', 'anon', 'anon_', 'done',
   // up/down loop variables
   'z_start_', 'z_limit_', 'z_by_', 'z_loop_'
 ]);
@@ -70,4 +64,17 @@ reserved.all = new Set([
   ...reserved.swapped,
   ...reserved.keywords,
   ...reserved.invalid
+]);
+
+reserved.compound = new Set([
+  'export var',
+  'await each',
+  'async fun', 'gen fun', 'export fun',
+  'async gen fun', 'export gen fun', 'export async fun', 'export async gen fun',
+  'static fun', 'static async fun', 'static gen fun', 'static async gen fun',
+  'getter fun', 'setter fun',
+  'export class',
+  'static field',
+  'export default',
+  'import default', 'import all'
 ]);

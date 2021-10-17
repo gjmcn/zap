@@ -20,6 +20,8 @@ export function parseStatement(codeComponents, addJS) {
     syntaxError(firstTkn, 'expected a keyword that starts a new statement');
   }
 
+!! IF HAVE AN INSERT IN AN OPTIONAL (ONLY ELSE IF?) JUST SKIP AS IF SEEN?
+
   // not keyword-only statement
   if (struc[0].length > 1) {
     

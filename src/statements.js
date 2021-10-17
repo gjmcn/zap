@@ -64,10 +64,10 @@ statements.set('now', [
   ]
 ]);
 
-// ret
-statements.set('ret', [
+// out
+statements.set('out', [
   [
-    {type: 'keyword', word: 'ret', compile: 'return '},
+    {type: 'keyword', word: 'out', compile: 'return '},
     {type: 'expression', optional: 1}
   ]
 ]);
@@ -91,8 +91,13 @@ statements.set('say', [
 
 // var
 {
-  const firstComponent = {type: 'keyword', word: 'var', compile: 'let '};
-  statements.set('var', [
+  const words = new Set(['var', 'export var']);
+  const firstComponent = {
+    type: 'keyword',
+    word: words,
+    compile: word => word === 'var' ? 'let ' : 'export let '
+  };
+  statements.set(words, [
     [
       firstComponent,
       {type: 'unreservedName', compile: name => name},
@@ -117,22 +122,23 @@ statements.set('say', [
 // set
 statements.set('set', [
   [
-    {type: 'keyword', word: 'set', compile: ''},
+    {type: 'keyword', word: 'set', compile: '('},
     {type: 'lhsExpression'},
     {type: 'keyword', word: 'to', compile: ` = `},
-    {type: 'expression'}
+    {type: 'expression'},
+    {type: 'insert', value: ')'}
   ]
 ]);
 
-// cet
+// nil
 {
   const createBranch = component => [
-    {type: 'keyword', word: 'cet', compile: ''},
+    {type: 'keyword', word: 'nil', compile: ''},
     component,
     {type: 'keyword', word: 'to', compile: ` ??= `},
     {type: 'expression'},
   ];
-  statements.set('cet', [
+  statements.set('nil', [
     createBranch({type: 'unreservedName', compile: name => name}),
     createBranch({type: 'getterExpression'})
   ]);
@@ -142,13 +148,12 @@ statements.set('set', [
 statements.set('opt', [
   [
     {type: 'keyword', word: 'opt', compile: 'let {'},
-    {type: 'unreservedName', compile: name => name},
+    {type: 'optName'},
     {
       type: 'keyword',
-      word: 'def',
+      word: 'to',
       compile: ' = ',
-      optional: 3,
-      ifOmitted: '} = ops'
+      optional: 2,
     },
     {type: 'expression'},
     {type: 'insert', value: '} = ops'}
@@ -186,42 +191,49 @@ statements.set('wait', [
   ]
 ]);
 
-// out
-{
-  const firstComponent = {type: 'keyword', word: 'out', compile: 'export '};
-  statements.set('out', [
-    [
-      firstComponent,
-      {type: 'namesAs'}
-    ],
-    [
-      firstComponent,
-      {type: 'keyword', word: 'def', compile: 'default '},
-      {type: 'unreservedName', compile: name => name}
-    ]
-  ]);
-}
+// export
+statements.set('export', [
+  [
+    {type: 'keyword', word: 'export', compile: 'export {'},
+    {type: 'exportName'},
+    {type: 'exportName', optional: 1, repeat: true},
+    {type: 'insert', value: '}'},
+    {type: 'keyword', word: 'from', compile: ' from ', optional: 2},
+    {type: 'pathLit'}
+  ]
+]);
+statements.set('export default', [
+  [
+    {type: 'keyword', word: 'export default', compile: 'export default '},
+    {type: 'expression'}
+  ]
+]);
 
-// use
-{
-  const createBranch = (...comps) => [
-    {type: 'keyword', word: 'use', compile: 'import '},
-    ...comps,
+// import
+statements.set('import', [
+  [
+    {type: 'keyword', word: 'import', compile: 'import {'},
+    {type: 'importName', optional: 1, repeat: true},
+    {type: 'keyword', word: 'from', compile: '} from '},
+    {type: 'pathLit'}
+  ]
+]);
+statements.set('import default', [
+  [
+    {type: 'keyword', word: 'import default', compile: 'import '},
+    {type: 'asUnreservedName', compile: name => name},
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
-  ];
-  statements.set('use', [
-    createBranch({type: 'anyNamesAs', optional: 2}),
-    createBranch(
-      {type: 'keyword', word: 'def', compile: ''},
-      {type: 'asUnreservedName', compile: name => name}
-    ),
-    createBranch(
-      {type: 'keyword', word: 'all', compile: '* as '},
-      {type: 'asUnreservedName', compile: name => name}
-    )
-  ]);
-}
+  ]
+]);
+statements.set('import all', [
+  [
+    {type: 'keyword', word: 'import all', compile: 'import * as '},
+    {type: 'asUnreservedName', compile: name => name},
+    {type: 'keyword', word: 'from', compile: ' from '},
+    {type: 'pathLit'}
+  ]
+]);
 
 
 // ========== block statements (i.e. contain a 'block' component) ==========
@@ -266,9 +278,9 @@ statements.set('while', [
   ]
 ]);
 
-// each, await
+// each
 {
-  const words = new Set(['each', 'await']);
+  const words = new Set(['each', 'await each']);
   const createBranch = (...comps) => [
     {
       type: 'keyword',
@@ -292,7 +304,7 @@ statements.set('while', [
 {
   const createBranch = word => {
     const comparisonOp = word === 'up' ? '<=' : '>=';
-    return [  
+    return [
       {type: 'keyword', word, compile: 'for (let z_start_ = '},
       {type: 'expression'},
       {type: 'keyword', word: 'to', compile: ', z_limit_ = '},
@@ -306,15 +318,10 @@ statements.set('while', [
       },
       {type: 'expression'},
       {
-        type: 'keyword',
-        word: 'at',
-        compile: '',
-        optional: 2, 
-        ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp} z_limit_; z_loop_ += z_by_)`
-      },
-      {
-        type: 'unreservedName',
+        type: 'asUnreservedName',
         compile: name => `, ${name} = z_start_; ${name} ${comparisonOp} z_limit_; ${name} += z_by_)`,
+        optional: 1,
+        ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp} z_limit_; z_loop_ += z_by_)`
       },
       {type: 'block'}
     ];
@@ -345,6 +352,8 @@ statements.set('try', [
     {type: 'block'}
   ]
 ]);
+
+!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
 
 // fun, gen, fun__, gen__
 {
@@ -384,14 +393,15 @@ statements.set('class', [
   ]
 ]);
 
-!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
 
+?? COULD/SHOULD WE REVERT TO AFTER (AND BEFORE?) RATHER THAN INSERT?
 
 // ========== exports ==========
 
 // comma statements
 commaFirstWords = new Set([
-  'now', 'say', 'var', 'set', 'cet', 'opt', 'inc', 'dec', 'wait', 'out', 'use'
+  'now', 'say', 'var', 'export var', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
+  'export', 'import', 'import default', 'import all'
 ]);
 
 // unlike the statements map, the structures object has a single word for each

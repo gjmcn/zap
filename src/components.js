@@ -49,10 +49,12 @@ const isComponent = {
 
 
 !!!!!HERE!!!!!!!!!!!!
--namesAs (export): only allow valid unreserved Zap names
--anyNamesAs (import): if renaming, allow original name to be a quoted identifier?
-  - reqd in case e.g. importing from JS library where import name is capitalized or a zap reserved word
--lhsExpression: allow unreservedName, destructure (all unreserved names) or single property getter
+-exportName:  unreservedName  OR  (identifier as unreservedName)
+-importNames: unreservedName  OR  (unreservedName as identifier)
+-optName:  unreservedName  OR identifier as unreservedName
+-lhsExpression: allow unreservedName, destructure or single property getter
+  -in destructured array, contents can be unreserved names or property getters
+  -in destructured object, contents must be unreserved names
 
 
   unreservedNameDef: codeComp => {
