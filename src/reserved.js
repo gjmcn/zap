@@ -42,8 +42,8 @@ reserved.keywords = new Set([
   'end', 'break', 'continue', 'now', 'out', 'throw', 'say', 'var', 'set', 'nil',
   'opt', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else', 'while',
   'each', 'await', 'of', 'up', 'down', 'try', 'catch', 'finally', 'fun', 'gen',
-  'async', 'par', 'export', 'import', 'from', 'default', 'all', 'debugger',
-  'wait', 'class', 'extends', 'field', 'getter', 'setter', 'static'
+  'async', 'export', 'import', 'from', 'default', 'all', 'debugger', 'wait',
+  'class', 'extends', 'field', 'getter', 'setter', 'static', 'method'
 ]);
 
 reserved.invalid = new Set([
@@ -52,7 +52,7 @@ reserved.invalid = new Set([
   'switch', 'typeof', 'void', 'with', 'yield', 'enum', 'implements',
   'interface', 'package', 'private', 'protected', 'public',
   // pseudokeywords
-  'as', 'anon', 'anon_', 'done',
+  'par', 'as', 'anon', 'anon_', 'done',
   // up/down loop variables
   'z_start_', 'z_limit_', 'z_by_', 'z_loop_'
 ]);
@@ -69,12 +69,14 @@ reserved.all = new Set([
 reserved.compound = new Set([
   'export var',
   'await each',
-  'async fun', 'gen fun', 'export fun',
-  'async gen fun', 'export gen fun', 'export async fun', 'export async gen fun',
-  'static fun', 'static async fun', 'static gen fun', 'static async gen fun',
-  'getter fun', 'setter fun',
-  'export class',
+  'export fun', 'async fun', 'gen fun',
+  'export gen fun', 'async gen fun', 'export async fun',
+  'export async gen fun',
+  'static method', 'async method', 'gen method',
+  'static gen method', 'async gen method', 'static async method',
+  'static async gen method',
   'static field',
+  'export class',
   'export default',
   'import default', 'import all'
 ]);

@@ -47,15 +47,29 @@ const isComponent = {
       isTokenUnreservedName(codeComp[1]);
   },
 
-
 !!!!!HERE!!!!!!!!!!!!
--exportName:  unreservedName  OR  (identifier as unreservedName)
--importNames: unreservedName  OR  (unreservedName as identifier)
--optName:  unreservedName  OR identifier as unreservedName
+
+-parameterList:  par  followed by either:
+  -any number of (enforce at least one?) unreserved names
+  -destructuring array or object
+  (- or since bespoke processing of param now, could allow each param to
+     be an unreserved name or destruc array/object and hence not limit
+     to one parameter when use destruc) 
+  (- need to handle parameter list as one component since it is not the second
+     component of the branch so cannot split on it. There would also be issues
+     with making the entire parameter list optional since destructuring
+     array/object already has 'optionality')
+-setterParameter: as parameterList, but single parameter - which can be a
+ destructuring array/object
+-asUnreservedName:  as unreservedName
+-exportName:  unreservedName  OR  (unreservedName as identifier)
+-importName:  unreservedName  OR  (identifier as unreservedName)
+-nameOrRename: unreservedName  OR  (identifier as unreservedName)
+  - same as importName, but compiles to   name,  or  ident: name,
+-optName: unreservedName  OR identifier as unreservedName
 -lhsExpression: allow unreservedName, destructure or single property getter
   -in destructured array, contents can be unreserved names or property getters
   -in destructured object, contents must be unreserved names
-
 
   unreservedNameDef: codeComp => {
     if (isComponent.keyword(codeComp)) {

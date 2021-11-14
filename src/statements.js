@@ -23,6 +23,8 @@
 //   should not be optional)
 ////////////////////////////////////////////////////////////////////////////////
 
+import { parseComponent } from "./components";
+
 export let structures, allFirstWords, simpleFirstWords, blockFirstWords,
            commaFirstWords;
 
@@ -32,15 +34,20 @@ const statements = new Map();
 // ========= reusable components ==========
 
 const destructureArray = [
-  {type: 'openSquare'},
-  {type: 'unreservedName', compile: name => name, optional: 1, repeat: true},
-  {type: 'closeSquare'}
+  {type: 'openSquare', compile: '['},
+  {
+    type: 'unreservedName',
+    compile: name => `${name},`,
+    optional: 1,
+    repeat: true
+  },
+  {type: 'closeSquare', compile: ']'}
 ];
 
 const destructureObject = [
-  {type: 'openCurly'},
-  {type: 'unreservedName', compile: name => name, optional: 1, repeat: true},
-  {type: 'closeCurly'}
+  {type: 'openCurly', compile: '{'},
+  {type: 'nameOrRename', optional: 1, repeat: true},
+  {type: 'closeCurly', compile: '}'}
 ];
 
 
@@ -120,15 +127,21 @@ statements.set('say', [
 }
 
 // set
-statements.set('set', [
-  [
+{
+  const createBranch = (...comps) => [
     {type: 'keyword', word: 'set', compile: '('},
-    {type: 'lhsExpression'},
+    ...comps,
     {type: 'keyword', word: 'to', compile: ` = `},
     {type: 'expression'},
     {type: 'insert', value: ')'}
-  ]
-]);
+  ];
+  statements.set('set', [
+    createBranch({type: 'unreservedName', compile: name => name}),
+    createBranch(...destructureObject),
+    createBranch(...destructureArray),
+    {type: 'getterExpression'}
+  ]);
+}
 
 // nil
 {
@@ -353,48 +366,107 @@ statements.set('try', [
   ]
 ]);
 
-!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!
-
-// fun, gen, fun__, gen__
+// fun, method
 {
-  const words = new Set(['fun', 'gen', 'fun__', 'gen__']);
+  const funWords = new Set([
+    'fun',
+    'export fun', 'async fun', 'gen fun',
+    'export gen fun', 'async gen fun', 'export async fun',
+    'export async gen fun'
+  ]);
+  const methodWords = new Set([
+    'method',
+    'static method', 'async method', 'gen method',
+    'static gen method', 'async gen method', 'static async method',
+    'static async gen method'
+  ]);
+  const createBranch = isMethod => [
+    {
+      type: 'keyword',
+      word: isMethod ? methodWords : funWords,
+      compile: word => {       
+        const asyncStr = word.includes('async') ? 'async ' : '';
+        const genStr   = word.includes('gen')   ? '*'      : '';
+        if (isMethod) {
+          const staticStr = word.includes('static') ? 'static ' : '';
+          return `${staticStr}${asyncStr}${genStr}`;
+        }
+        else {
+          const exportStr = word.includes('export') ? 'export ' : '';
+          return `${exportStr}${asyncStr}function${genStr} `;
+        }
+      }
+    },
+    {
+      type: 'unreservedName',
+      compile: isMethod
+        ? name => (name === 'new' ? 'constructor(' : `${name}(`)
+        : name => `${name}(`
+    },
+    {type: 'parameterList', optional: 1},
+    {type: 'insert', value: ')'},
+    {type: 'block'}
+  ];
+  statements.set(funWords, [
+    createBranch(false),
+  ]);
+  statements.set(methodWords, [
+    createBranch(true),
+  ]);
+}
+
+// getter
+statements.set('getter', [
+  [
+    {type: 'keyword', word: 'getter', compile: 'get '},
+    {type: 'unreservedName', compile: name => `${name}() `},
+    {type: 'block'}
+  ]
+]);
+
+// setter
+statements.set('setter', [ 
+  [
+    {type: 'keyword', word: 'setter', compile: 'set '},
+    {type: 'unreservedName', compile: name => `${name}(`},
+    {type: 'setterParameter'},
+    {type: 'insert', value: ')'},
+    {type: 'block'}
+  ]
+]);
+
+// field
+{
+  const words = new Set(['field', 'static field']);
   statements.set(words, [
     [
       {
         type: 'keyword',
         word: words,
-        compile: word => {
-          const genStr = word.slice(0, 3) === 'gen' ? '*' : '';
-          const asyncStr = word.slice(-2) === '__' ? 'async ' : '';
-          return `${asyncStr}function${genStr} `;
-        }
+        compile: word => word === 'field' ? '' : 'static '
       },
       {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'par', compile: '('},
-      {type: 'parameterToken', optional: 1, repeat: true},
-      {type: 'insert', value: ')'},
-      {type: 'block'}
+      {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
+      {type: 'expression'}
     ]
   ]);
 }
 
 // class
-statements.set('class', [
-  [
-    {type: 'keyword', word: 'class', compile: 'class '},
-    {type: 'unreservedName', compile: name => name},
-    {type: 'keyword', word: 'extends', compile: ' extends ', optional: 2},
-    {type: 'expression'},
-    {type: 'keyword', word: 'par', compile: ' {constructor('},
-    {type: 'parameterToken', optional: 1, repeat: true},
-    {type: 'insert', value: ')'},
-    {type: 'block'},
-    {type: 'insert', value: '}'}
-  ]
-]);
+{
+  const words = new Set(['class', 'export class']);
+  statements.set(words, [
+    [
+      {type: 'keyword', word: words, compile: word => `${word} `},
+      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: 'extends', compile: ' extends ', optional: 2},
+      {type: 'expression'},
+      {type: 'block'}
+    ]
+  ]);
+}
 
-
-?? COULD/SHOULD WE REVERT TO AFTER (AND BEFORE?) RATHER THAN INSERT?
+!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // ========== exports ==========
 
