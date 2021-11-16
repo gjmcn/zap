@@ -23,8 +23,6 @@
 //   should not be optional)
 ////////////////////////////////////////////////////////////////////////////////
 
-import { parseComponent } from "./components";
-
 export let structures, allFirstWords, simpleFirstWords, blockFirstWords,
            commaFirstWords;
 
@@ -248,6 +246,23 @@ statements.set('import all', [
   ]
 ]);
 
+// field
+{
+  const words = new Set(['field', 'static field']);
+  statements.set(words, [
+    [
+      {
+        type: 'keyword',
+        word: words,
+        compile: word => word === 'field' ? '' : 'static '
+      },
+      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
+      {type: 'expression'}
+    ]
+  ]);
+}
+
 
 // ========== block statements (i.e. contain a 'block' component) ==========
 
@@ -435,23 +450,6 @@ statements.set('setter', [
   ]
 ]);
 
-// field
-{
-  const words = new Set(['field', 'static field']);
-  statements.set(words, [
-    [
-      {
-        type: 'keyword',
-        word: words,
-        compile: word => word === 'field' ? '' : 'static '
-      },
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
-      {type: 'expression'}
-    ]
-  ]);
-}
-
 // class
 {
   const words = new Set(['class', 'export class']);
@@ -466,14 +464,13 @@ statements.set('setter', [
   ]);
 }
 
-!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // ========== exports ==========
 
 // comma statements
 commaFirstWords = new Set([
   'now', 'say', 'var', 'export var', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
-  'export', 'import', 'import default', 'import all'
+  'export', 'import', 'import default', 'import all', 'field'
 ]);
 
 // unlike the statements map, the structures object has a single word for each
