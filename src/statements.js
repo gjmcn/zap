@@ -10,23 +10,31 @@
 //   cannot be the same as the component that follows the optional group.
 //
 // - Components with an 'optional' property can have one (or none) of:
-//     - 'ifOmitted': string/function, code to add if optional group omitted 
+//     - 'ifOmitted': string, code to add if optional group omitted 
 //     - 'repeat': whether the optional group can be repeated
 //
-// - Some components types have a compile property: a string or a function that
-//   is passed the corresponding token value and generates the JS. The JS for
-//   other component types is handled in components.js.
+// - Some components types have a compile property: a string, or a function that
+//   is passed the relevant value and generates the JS. The JS for other
+//   component types is handled in components.js.
 // 
 // - When a statement has multiple branches (i.e. versions), all branches have
-//   the same first component (i.e. opening keyword). The second component of
-//   each branch uniquely identifies the branch (and unless on the last branch,
-//   should not be optional)
+//   the same first component (i.e. start). The second component of each branch
+//   uniquely identifies the branch (and unless on the last branch, should not
+//   be optional).
 ////////////////////////////////////////////////////////////////////////////////
 
-export let structures, allFirstWords, simpleFirstWords, blockFirstWords,
-           commaFirstWords;
+import { dropIfAt } from "./helpers.js";
 
-const statements = new Map();
+export const statements = {};
+export const simpleStarts = new Set();
+export const blockStarts = new Set();
+export const commaStarts = new Set([
+  'now', 'say', 'let', 'export let', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
+  'export', 'import', 'import default', 'import all', 'field', 'static field'
+]);
+export function isStart(s) {
+  return simpleStarts.has(s) || blockStarts.has(s);
+}
 
 
 // ========= reusable components ==========
@@ -35,7 +43,7 @@ const destructureArray = [
   {type: 'openSquare', compile: '['},
   {
     type: 'unreservedName',
-    compile: name => `${name},`,
+    compile: name => `${dropIfAt(name)},`,
     optional: 1,
     repeat: true
   },
@@ -44,7 +52,7 @@ const destructureArray = [
 
 const destructureObject = [
   {type: 'openCurly', compile: '{'},
-  {type: 'nameOrRename', optional: 1, repeat: true},
+  {type: 'unreservedOrRename', optional: 1, repeat: true},
   {type: 'closeCurly', compile: '}'}
 ];
 
@@ -53,75 +61,87 @@ const destructureObject = [
 
 // break, continue, debugger
 {
-  const words = new Set(['break', 'continue', 'debugger'])
-  statements.set(words, [
+  const branches = start => [
     [
-      {type: 'keyword', word: words, compile: word => word}
+      {type: 'keyword', word: start, compile: start}
     ]
-  ]);
+  ];
+  for (let start of ['break', 'continue', 'debugger']) {
+    statements[start] = branches(start);
+    simpleStarts.add(start);
+  }
 }
 
 // now
-statements.set('now', [
+statements.now = [
   [
     {type: 'keyword', word: 'now', compile: ''},
     {type: 'expression'}
   ]
-]);
+];
+simpleStarts.add('now');
 
 // out
-statements.set('out', [
+statements.out = [
   [
-    {type: 'keyword', word: 'out', compile: 'return '},
+    {type: 'keyword',  word: 'out', compile: 'return '},
     {type: 'expression', optional: 1}
   ]
-]);
+];
+simpleStarts.add('out');
 
 // throw
-statements.set('throw', [
+statements.throw = [
   [
-    {type: 'keyword', word: 'throw', compile: 'throw '},
+    {type: 'keyword',  word: 'throw', compile: 'throw '},
     {type: 'expression'}
   ]
-]);
+];
+simpleStarts.add('throw');
 
 // say
-statements.set('say', [
+statements.say = [
   [
     {type: 'keyword', word: 'say', compile: 'console.log('},
     {type: 'expression'},
     {type: 'insert', value: ')'}
   ]
-]);
+];
+simpleStarts.add('say');
 
-// var
+// let
 {
-  const words = new Set(['var', 'export var']);
-  const firstComponent = {
-    type: 'keyword',
-    word: words,
-    compile: word => word === 'var' ? 'let ' : 'export let '
+  const branches = start => {
+    const firstComponent = {
+      type: 'keyword',
+      word: start,
+      compile: `${start} `
+    };
+    return [
+      [
+        firstComponent,
+        {type: 'unreservedName', compile: dropIfAt},
+        {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
+        {type: 'expression'}
+      ],
+      [
+        firstComponent,
+        ...destructureArray,
+        {type: 'keyword', word: 'to', compile: ' = '},
+        {type: 'expression'}
+      ],
+      [
+        firstComponent,
+        ...destructureObject,
+        {type: 'keyword', word: 'to', compile: ' = '},
+        {type: 'expression'}
+      ]
+    ];
   };
-  statements.set(words, [
-    [
-      firstComponent,
-      {type: 'unreservedName', compile: name => name},
-      {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      ...destructureArray,
-      {type: 'keyword', word: 'to', compile: ' = '},
-      {type: 'expression'}
-    ],
-    [
-      firstComponent,
-      ...destructureObject,
-      {type: 'keyword', word: 'to', compile: ' = '},
-      {type: 'expression'}
-    ]
-  ]);
+  for (let start of ['let', 'export let']) {
+    statements[start] = branches(start);
+    simpleStarts.add(start);
+  }
 }
 
 // set
@@ -133,12 +153,13 @@ statements.set('say', [
     {type: 'expression'},
     {type: 'insert', value: ')'}
   ];
-  statements.set('set', [
-    createBranch({type: 'unreservedName', compile: name => name}),
+  statements.set = [
+    createBranch({type: 'unreservedName', compile: dropIfAt}),
     createBranch(...destructureObject),
     createBranch(...destructureArray),
-    {type: 'getterExpression'}
-  ]);
+    createBranch({type: 'getterExpression'})
+  ];
+  simpleStarts.add('set');
 }
 
 // nil
@@ -149,14 +170,15 @@ statements.set('say', [
     {type: 'keyword', word: 'to', compile: ` ??= `},
     {type: 'expression'},
   ];
-  statements.set('nil', [
-    createBranch({type: 'unreservedName', compile: name => name}),
+  statements.nil = [
+    createBranch({type: 'unreservedName', compile: dropIfAt}),
     createBranch({type: 'getterExpression'})
-  ]);
+  ];
+  simpleStarts.add('nil');
 }
 
 // opt
-statements.set('opt', [
+statements.opt = [
   [
     {type: 'keyword', word: 'opt', compile: 'let {'},
     {type: 'optName'},
@@ -169,28 +191,31 @@ statements.set('opt', [
     {type: 'expression'},
     {type: 'insert', value: '} = ops'}
   ]
-]);
+];
+simpleStarts.add('opt');
 
 // inc, dec
 {
-  const createBranch = (openingWord, component, op) => [
-    {type: 'keyword', word: openingWord, compile: ''},
+  const createBranch = (start, component, op) => [
+    {type: 'keyword', word: start, compile: ''},
     component,
     {type: 'keyword', word: 'by', compile: ` ${op} `},
     {type: 'expression', optional: 1, ifOmitted: '1'}
   ];
-  statements.set('inc', [
-    createBranch('inc', {type: 'unreservedName', compile: name => name}, '+='),
+  statements.inc = [
+    createBranch('inc', {type: 'unreservedName', compile: dropIfAt}, '+='),
     createBranch('inc', {type: 'getterExpression'}, '+=')
-  ]);
-  statements.set('dec', [
-    createBranch('dec', {type: 'unreservedName', compile: name => name}, '-='),
+  ];
+  statements.dec = [
+    createBranch('dec', {type: 'unreservedName', compile: dropIfAt}, '-='),
     createBranch('dec', {type: 'getterExpression'}, '-=')
-  ]);
+  ];
+  simpleStarts.add('inc');
+  simpleStarts.add('dec');
 }
 
 // wait
-statements.set('wait', [
+statements.wait = [
   [
     {
       type: 'keyword',
@@ -200,10 +225,11 @@ statements.set('wait', [
     {type: 'expression'},
     {type: 'insert', value: ')))'}
   ]
-]);
+];
+simpleStarts.add('wait');
 
 // export
-statements.set('export', [
+statements.export = [
   [
     {type: 'keyword', word: 'export', compile: 'export {'},
     {type: 'exportName'},
@@ -212,70 +238,79 @@ statements.set('export', [
     {type: 'keyword', word: 'from', compile: ' from ', optional: 2},
     {type: 'pathLit'}
   ]
-]);
-statements.set('export default', [
+];
+statements['export default'] = [
   [
     {type: 'keyword', word: 'export default', compile: 'export default '},
     {type: 'expression'}
   ]
-]);
+];
+simpleStarts.add('export');
+simpleStarts.add('export default');
 
 // import
-statements.set('import', [
+statements.import = [
   [
     {type: 'keyword', word: 'import', compile: 'import {'},
     {type: 'importName', optional: 1, repeat: true},
     {type: 'keyword', word: 'from', compile: '} from '},
     {type: 'pathLit'}
   ]
-]);
-statements.set('import default', [
+];
+statements['import default'] = [
   [
     {type: 'keyword', word: 'import default', compile: 'import '},
-    {type: 'asUnreservedName', compile: name => name},
+    {type: 'asUnreservedName', compile: dropIfAt},
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
   ]
-]);
-statements.set('import all', [
+];
+statements['import all'] = [
   [
     {type: 'keyword', word: 'import all', compile: 'import * as '},
-    {type: 'asUnreservedName', compile: name => name},
+    {type: 'asUnreservedName', compile: dropIfAt},
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
   ]
-]);
+];
+simpleStarts.add('import');
+simpleStarts.add('import default');
+simpleStarts.add('import all');
 
 // field
 {
-  const words = new Set(['field', 'static field']);
-  statements.set(words, [
+  const branches = start => [
     [
       {
         type: 'keyword',
-        word: words,
-        compile: word => word === 'field' ? '' : 'static '
+        word: start,
+        compile: start === 'field' ? '' : 'static '
       },
-      {type: 'unreservedName', compile: name => name},
+      {type: 'unreservedName', compile: dropIfAt},
       {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
       {type: 'expression'}
     ]
-  ]);
+  ];
+  for (let start of ['field', 'static field']) {
+    statements[start] = branches(start);
+    simpleStarts.add(start);
+  }
 }
 
 
 // ========== block statements (i.e. contain a 'block' component) ==========
 
 // block
-statements.set('block', [
+statements.block = [
   [
     {type: 'keyword', word: 'block', compile: ''},
     {type: 'block'}
   ]
-]);
+];
+blockStarts.add('block');
 
 // if
-statements.set('if', [
+statements.if = [
   [
     {type: 'keyword', word: 'if', compile: 'if ('},
     {type: 'expression'},
@@ -294,26 +329,27 @@ statements.set('if', [
     {type: 'keyword', word: 'else', compile: 'else ', optional: 2},
     {type: 'block'},
   ]
-]);
+];
+blockStarts.add('if');
 
 // while
-statements.set('while', [
+statements.while = [
   [
     {type: 'keyword', word: 'while', compile: 'while ('},
     {type: 'expression'},
     {type: 'insert', value: ')'},
     {type: 'block'}
   ]
-]);
+];
+blockStarts.add('while');
 
 // each
 {
-  const words = new Set(['each', 'await each']);
-  const createBranch = (...comps) => [
+  const createBranch = (start, ...comps) => [
     {
       type: 'keyword',
-      word: words,
-      compile: word => word === 'each' ? 'for (let ' : 'for await (let '
+      word: start,
+      compile: start === 'each' ? 'for (let ' : 'for await (let '
     },
     ...comps,
     {type: 'keyword', word: 'of', compile: ' of '},
@@ -321,49 +357,58 @@ statements.set('while', [
     {type: 'insert', value: ')'},
     {type: 'block'}
   ];
-  statements.set(words, [
-    createBranch({type: 'unreservedName', compile: name => name}),
-    createBranch(...destructureObject),
-    createBranch(...destructureArray)
-  ]);
+  for (let start of ['each', 'wait for each']) {
+    statements[start] = [
+      createBranch(start, {type: 'unreservedName', compile: dropIfAt}),
+      createBranch(start, ...destructureObject),
+      createBranch(start, ...destructureArray)
+    ]
+    blockStarts.add(start);
+  }
 }
 
 // up, down
 {
-  const createBranch = word => {
-    const comparisonOp = word === 'up' ? '<=' : '>=';
+  const branches = start => {
+    const comparisonOp = start === 'up' ? '<=' : '>=';
+    const incrementOp  = start === 'up' ? '+=' : '-=';
     return [
-      {type: 'keyword', word, compile: 'for (let z_start_ = '},
-      {type: 'expression'},
-      {type: 'keyword', word: 'to', compile: ', z_limit_ = '},
-      {type: 'expression'},
-      {
-        type: 'keyword',
-        word: 'by',
-        compile: ', z_by_ = ',
-        optional: 2,
-        ifOmitted: `, z_by_ = ${word === 'up' ? '1' : '-1'}` 
-      },
-      {type: 'expression'},
-      {
-        type: 'asUnreservedName',
-        compile: name => `, ${name} = z_start_; ${name} ${comparisonOp} z_limit_; ${name} += z_by_)`,
-        optional: 1,
-        ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp} z_limit_; z_loop_ += z_by_)`
-      },
-      {type: 'block'}
+      [
+        {type: 'keyword', word: start, compile: 'for (let z_start_ = '},
+        {type: 'expression'},
+        {type: 'keyword', word: 'to', compile: ', z_limit_ = '},
+        {type: 'expression'},
+        {
+          type: 'keyword',
+          word: 'by',
+          compile: ', z_by_ = ',
+          optional: 2,
+          ifOmitted: ', z_by_ = 1'
+        },
+        {type: 'expression'},
+        {
+          type: 'asUnreservedName',
+          compile: name => {
+            const rawName = dropIfAt(name);
+            return `, ${rawName} = z_start_; ${rawName} ${comparisonOp
+              } z_limit_; ${rawName} ${incrementOp} z_by_)`;
+          },
+          optional: 1,
+          ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp
+            } z_limit_; z_loop_ ${incrementOp} z_by_)`
+        },
+        {type: 'block'}
+      ]
     ];
   };
-  statements.set('up', [
-    createBranch('up')
-  ]);
-  statements.set('down', [
-    createBranch('down')
-  ]);
+  for (let start of ['up', 'down']) {
+    statements[start] = branches(start);
+    blockStarts.add(start);
+  }
 }
 
 // try
-statements.set('try', [ 
+statements.try = [
   [
     {type: 'keyword', word: 'try', compile: 'try '},
     {type: 'block'},
@@ -374,131 +419,94 @@ statements.set('try', [
       optional: 3,
       ifOmitted: 'catch (e) {}'
     },
-    {type: 'unreservedName', compile: name => `${name})`},
+    {type: 'unreservedName', compile: name => `${dropIfAt(name)})`},
     {type: 'block'},
     {type: 'keyword', word: 'finally', compile: 'finally ', optional: 2},
     {type: 'block'}
   ]
-]);
+];
+blockStarts.add('try');
 
 // fun, method
 {
-  const funWords = new Set([
-    'fun',
-    'export fun', 'async fun', 'gen fun',
-    'export gen fun', 'async gen fun', 'export async fun',
-    'export async gen fun'
-  ]);
-  const methodWords = new Set([
-    'method',
-    'static method', 'async method', 'gen method',
-    'static gen method', 'async gen method', 'static async method',
-    'static async gen method'
-  ]);
-  const createBranch = isMethod => [
-    {
-      type: 'keyword',
-      word: isMethod ? methodWords : funWords,
-      compile: word => {       
-        const asyncStr = word.includes('async') ? 'async ' : '';
-        const genStr   = word.includes('gen')   ? '*'      : '';
-        if (isMethod) {
-          const staticStr = word.includes('static') ? 'static ' : '';
-          return `${staticStr}${asyncStr}${genStr}`;
-        }
-        else {
-          const exportStr = word.includes('export') ? 'export ' : '';
-          return `${exportStr}${asyncStr}function${genStr} `;
-        }
-      }
-    },
-    {
-      type: 'unreservedName',
-      compile: isMethod
-        ? name => (name === 'new' ? 'constructor(' : `${name}(`)
-        : name => `${name}(`
-    },
-    {type: 'parameterList', optional: 1},
-    {type: 'insert', value: ')'},
-    {type: 'block'}
-  ];
-  statements.set(funWords, [
-    createBranch(false),
-  ]);
-  statements.set(methodWords, [
-    createBranch(true),
-  ]);
+  const branches = (start, isMethod) => {
+    const asyncStr = start.includes('async') ? 'async ' : '';
+    const genStr   = start.includes('gen')   ? '*'      : '';
+    let staticStr, exportStr;
+    isMethod
+      ? (staticStr = start.includes('static') ? 'static ' : '')
+      : (exportStr = start.includes('export') ? 'export ' : '');
+    return [
+      [
+        {
+          type: 'keyword',
+          word: start,
+          compile: isMethod
+            ? `${staticStr}${asyncStr}${genStr}`      
+            : `${exportStr}${asyncStr}function${genStr} `
+        },
+        {type: 'unreservedName', compile: name => `${dropIfAt(name)}(`},
+        {type: 'parameterList', optional: 1},
+        {type: 'insert', value: ')'},
+        {type: 'block'}
+      ]
+    ];
+  }
+  for (let start of [
+        'fun',
+        'export fun', 'async fun', 'gen fun',
+        'export gen fun', 'async gen fun', 'export async fun',
+        'export async gen fun'
+      ]) {
+    statements[start] = branches(start, false);
+    blockStarts.add(start);
+  }
+  for (let start of [
+        'method',
+        'static method', 'async method', 'gen method',
+        'static gen method', 'async gen method', 'static async method',
+        'static async gen method'
+      ]) {
+    statements[start] = branches(start, true);
+    blockStarts.add(start);
+  }
 }
 
 // getter
-statements.set('getter', [
+statements.getter = [
   [
     {type: 'keyword', word: 'getter', compile: 'get '},
-    {type: 'unreservedName', compile: name => `${name}() `},
+    {type: 'unreservedName', compile: name => `${dropIfAt(name)}()`},
     {type: 'block'}
   ]
-]);
+];
+blockStarts.add('getter');
 
 // setter
-statements.set('setter', [ 
+statements.setter = [
   [
     {type: 'keyword', word: 'setter', compile: 'set '},
-    {type: 'unreservedName', compile: name => `${name}(`},
+    {type: 'unreservedName', compile: name => `${dropIfAt(name)}(`},
     {type: 'setterParameter'},
     {type: 'insert', value: ')'},
     {type: 'block'}
   ]
-]);
+];
+blockStarts.add('setter');
 
 // class
 {
-  const words = new Set(['class', 'export class']);
-  statements.set(words, [
+  const branches = start => [
     [
-      {type: 'keyword', word: words, compile: word => `${word} `},
-      {type: 'unreservedName', compile: name => name},
+      {type: 'keyword', word: start, compile: `${start} `},
+      {type: 'unreservedName', compile: dropIfAt},
       {type: 'keyword', word: 'extends', compile: ' extends ', optional: 2},
       {type: 'expression'},
       {type: 'block'}
     ]
-  ]);
-}
-
-
-// ========== exports ==========
-
-// comma statements
-commaFirstWords = new Set([
-  'now', 'say', 'var', 'export var', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
-  'export', 'import', 'import default', 'import all', 'field'
-]);
-
-// unlike the statements map, the structures object has a single word for each
-// key - so some keys point to the same object
-structures = {};
-allFirstWords = new Set ();
-for (let [key, struc] of statements) {
-  if (typeof key === 'string') {
-    structures[key] = struc;
-    allFirstWords.add(key);
+  ];
+  for (let start of ['class', 'export class']) {
+    statements[start] = branches(start);
+    blockStarts.add(start);
   }
-  else {
-    for (let k of key) {
-      structures[k] = struc;
-      allFirstWords.add(k);
-    }
-  }
-}
-
-// simple statements have no block components
-simpleFirstWords = new Set();
-blockFirstWords = new Set();
-outerLoop: for (let fw of allFirstWords) {
-  for (let branch of structures[fw]) {
-    if (branch.some(obj => obj.type === 'block')) {
-      blockFirstWords.add(fw);
-      continue outerLoop;
-    }
-  }
-  simpleFirstWords.add(fw);
 }

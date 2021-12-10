@@ -1,7 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Tokenize a string of Zap code. The exported function returns an array of
-// 'components': each element is a keyword token, or an array of non-keyword
-// tokens. Comment and space (including newline) tokens are discarded.
+// 'components': each component is a keyword token (possibly a compound
+// keyword), or an array of non-keyword tokens. Comment and space (including
+// newline) tokens are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
 import { isCapitalized } from "./helpers.js";
@@ -16,20 +17,24 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\((?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*)/y],
-  ['identifier', /[a-zA-Z_$][\w$]*/y],
+  ['identifier', /!?[a-zA-Z_$][\w$]*/y],
   ['openBracket', /[({[]/y],
   ['closeBracket', /[)}\]]/y],
   ['bar', /\|/y],
   ['ampersand', /&/y],
   ['comma', /,/y],
-  ['symbolOperator', /[+\-*/%~<>=!?.:;]+/y]
+  ['symbolOperator', /[+\-*/%~<>=?.:]+/y]
 ]);
 
 export function lexer(code) {
   
   const components = [];
   let group = null;      // contiguous non-keyword tokens
-  let firstWord = null;  // first word of current statement
+
+!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  let pres = '';         // space-separated list of current preopener keywords
+  let firstWord = null;  // first word of current statement (possibly compound)
   let index = 0;         // position in code
   let line = 1;          // current line
   let column = 0;        // current column
@@ -68,7 +73,7 @@ export function lexer(code) {
             type = tkn.type = 'operator';
           }
           else {
-            if (reserved.all.has(match[0])) {
+            if (reserved.allWords.has(match[0])) {
               tkn.reserved = true;
               if (match[0] === 'anon' || match[0] === 'anon__') {
                 firstWord = null;

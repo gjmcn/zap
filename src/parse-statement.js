@@ -5,6 +5,7 @@
 import { structures } from './statements.js';
 import { resolveBranch, parseComponent } from './components.js';
 import { syntaxError, last } from './helpers.js';
+import { updateStrings } from 'yargs';
 
 // returns first word of statement
 export function parseStatement(codeComponents, addJS) {
@@ -26,6 +27,8 @@ export function parseStatement(codeComponents, addJS) {
 ONLY METHOD AND FIELD STATEMENTS IN CLASSES, AND USE ANYTHING ELSE IN OTHER
 NON-CLASS
   -- ALSO NO SEMICOLONS AFTER STATEMENTS IN CLASS BLOCK
+
+-- ifOmitted and insert components are always updateStrings now, never functions
 
   // not keyword-only statement
   if (struc[0].length > 1) {

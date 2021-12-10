@@ -17,3 +17,8 @@ export function last(arr) {
 export function isCapitalized(s) {
   return /^[A-Z]/.test(s);
 }
+
+// remove first character from string if it is @
+export function dropIfAt(str) {
+  return str[0] === '@' ? str.slice(1) : str;
+}

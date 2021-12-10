@@ -50,26 +50,17 @@ const isComponent = {
 !!!!!HERE!!!!!!!!!!!!
 
 -parameterList:  par  followed by either:
-  -any number of (enforce at least one?) unreserved names
+  -any number of (enforce at least one?) unreservedNames (strip @) - last can
+   be preceded by a rest symbol
   -destructuring array or object
-  (- or since bespoke processing of param now, could allow each param to
-     be an unreserved name or destruc array/object and hence not limit
-     to one parameter when use destruc) 
-  (- need to handle parameter list as one component since it is not the second
-     component of the branch so cannot split on it. There would also be issues
-     with making the entire parameter list optional since destructuring
-     array/object already has 'optionality')
--setterParameter: as parameterList, but single parameter - which can be a
+-setterParameter: as parameterList, but single parameter- which can be a
  destructuring array/object
--asUnreservedName:  as unreservedName
--exportName:  unreservedName  OR  (unreservedName as identifier)
--importName:  unreservedName  OR  (identifier as unreservedName)
--nameOrRename: unreservedName  OR  (identifier as unreservedName)
-  - same as importName, but compiles to   name,  or  ident: name,
--optName: unreservedName  OR identifier as unreservedName
--lhsExpression: allow unreservedName, destructure or single property getter
-  -in destructured array, contents can be unreserved names or property getters
-  -in destructured object, contents must be unreserved names
+-asUnreservedName:  as unreservedName (strip @)
+-exportName: unreservedName OR (unreservedName as identifier)  (strip @)
+-importName: unreservedName OR (identifier as unreservedName) (strip @)
+-unreservedOrRename: unreservedName  OR  (identifier as unreservedName) (strip @)
+-optName: unreservedName OR identifier as unreservedName (strip @)
+
 
   unreservedNameDef: codeComp => {
     if (isComponent.keyword(codeComp)) {
@@ -84,7 +75,7 @@ const isComponent = {
   unreservedNames: codeComp => {
     if (Array.isArray(codeComp) &&
         codeComp.every(tkn => tkn.type === 'identifier')) {
-      const resTkn = codeComp.find(tkn => reserved.all.has(tkn.value));
+      const resTkn = codeComp.find(tkn => reserved.allWords.has(tkn.value));
       if (resTkn) {
         syntaxError(resTkn, `${resTkn.value} is a reserved word`);
       }
@@ -104,7 +95,7 @@ const isComponent = {
       let i = 0;
       while (i < codeComp.length) {
         if (codeComp[i].type === 'identifer') {
-          if (reserved.all.has(codeComp[i].value)) {
+          if (reserved.allWords.has(codeComp[i].value)) {
             syntaxError(codeComp[i], `${codeComp[i].value} is a reserved word`);
           }
           names.push(codeComp[i].value);
@@ -117,7 +108,7 @@ const isComponent = {
             codeComp[i + 2].value === 'as' &&
             codeComp[i + 3].type === 'identifier' &&
             codeComp[i + 4].type === 'closeParentheses') {
-          if (reserved.all.has(codeComp[i + 3]).value) {
+          if (reserved.allWords.has(codeComp[i + 3]).value) {
             syntaxError(
               codeComp[i + 3],
               `${codeComp[i + 3].value} is a reserved word`
