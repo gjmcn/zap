@@ -12,13 +12,3 @@ export function syntaxError(t, msg) {
 export function last(arr) {
   return arr[arr.length - 1];
 }
-
-// does string start with capital letter?
-export function isCapitalized(s) {
-  return /^[A-Z]/.test(s);
-}
-
-// remove first character from string if it is @
-export function dropIfAt(str) {
-  return str[0] === '@' ? str.slice(1) : str;
-}

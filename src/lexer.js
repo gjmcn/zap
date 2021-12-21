@@ -1,14 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Tokenize a string of Zap code. The exported function returns an array of
-// 'components': each component is a keyword token (possibly a compound
-// keyword), or an array of non-keyword tokens. Comment and space (including
-// newline) tokens are discarded.
+// 'components': each component is a keyword token, comma token, or an array of
+// non-keyword-non-comma tokens. Comment and space (including newline) tokens
+// are discarded.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { isCapitalized } from "./helpers.js";
 import { operatorDetails } from "./operators.js";
 import { reserved } from "./reserved.js";
-import { commaFirstWords, allFirstWords } from "./statements.js";
 
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],  // same-line whitespace
@@ -17,27 +15,23 @@ const regexps = new Map([
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
   ['regexp', /\\((?!\/)[^\/\\]*(?:\\.[^\/\\]*)*\/[\w$]*)/y],
-  ['identifier', /!?[a-zA-Z_$][\w$]*/y],
+  ['identifier', /[a-zA-Z_$][\w$]*/y],
+  ['atVariable', /@[a-zA-Z_$][\w$]*/y],
   ['openBracket', /[({[]/y],
   ['closeBracket', /[)}\]]/y],
   ['bar', /\|/y],
   ['ampersand', /&/y],
   ['comma', /,/y],
-  ['symbolOperator', /[+\-*/%~<>=?.:]+/y]
+  ['symbolOperator', /[+\-*/%~<>=?.:^]+/y]
 ]);
 
 export function lexer(code) {
   
   const components = [];
-  let group = null;      // contiguous non-keyword tokens
-
-!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  let pres = '';         // space-separated list of current preopener keywords
-  let firstWord = null;  // first word of current statement (possibly compound)
-  let index = 0;         // position in code
-  let line = 1;          // current line
-  let column = 0;        // current column
+  let group = null;  // contiguous non-keyword-non-comma tokens
+  let index = 0;     // position in code
+  let line = 1;      // current line
+  let column = 0;    // current column
 
   // zap syntax error
   function lexerError(msg) {
@@ -62,60 +56,23 @@ export function lexer(code) {
           column,
           $$$zapToken$$$: true
         };
-
-        // identifier
-        if (type === 'identifier') {
-          if (reserved.keywords.has(match[0])) {
-            type = tkn.type = 'keyword';
-            column += match[0].length;
+        
+        // comma or keyword
+        if (type === 'comma' ||
+            (type === 'identifier' && reserved.keywords.has(match[0]))) {
+          if (type !== 'comma') {
+            tkn.type = 'keyword';
           }
-          else if (reserved.operators.has(match[0])) {
-            type = tkn.type = 'operator';
-          }
-          else {
-            if (reserved.allWords.has(match[0])) {
-              tkn.reserved = true;
-              if (match[0] === 'anon' || match[0] === 'anon__') {
-                firstWord = null;
-              }
-            }
-            else if (!isCapitalized(match[0])) {
-              tkn.validName = true;
-            }
-          }
-        }
-
-        // comma
-        else if (type === 'comma') {
-          if (!commaFirstWords.has(firstWord)) {
-            lexerError('invalid comma');
-          }
-          type = tkn.type = 'keyword';
-          tkn.value = firstWord;
           column += match[0].length;
-        }
-
-        // keyword
-        if (type === 'keyword') {
-          if (group) {
-            if (group.length) {
-              components.push(group);
-            }
+          if (group?.length) {
+            components.push(group);
             group = null;
-          }
-          if (allFirstWords.has(match[0])) {
-            firstWord = match[0];
-            tkn.openStatement = true;
           }
           components.push(tkn);
         }
 
-        // non-keywords
+        // not keyword or comma
         else {
-
-          if (!group) {
-            group = [];
-          }
 
           // comment or same-line whitespace: discard token
           if (type === 'comment' || type === 'space') {
@@ -134,7 +91,7 @@ export function lexer(code) {
             // string
             if (type === 'string') {
               let hasNewline;
-              if (match[0][0] === '"') {
+              if (match[0][0] === "'") {
                 tkn.value = tkn.value.replace(/\r?\n/g, () => {
                   line++;
                   hasNewline = true;
@@ -160,8 +117,24 @@ export function lexer(code) {
             // no other tokens can be multiline
             else {
 
+              // word operator
+              if (type === 'identifier') {
+                if (reserved.operators.has(match[0])) {
+                  tkn.type = 'operator';
+                }
+              }
+
+              // atVariable
+              else if (type === 'atVariable') {
+                tkn.value = match[0].slice(1);
+                if (reserved.allWords.has(tkn.value) &&
+                    !reserved.special.has(tkn.value)) {
+                  lexerError(`@-prefix with reserved word: ${match[0]}`);
+                }
+              }
+
               // symbol operator
-              if (type === 'symbolOperator') {
+              else if (type === 'symbolOperator') {
                 if (!operatorDetails[match[0]]) {
                   lexerError(`unrecognized operator: ${match[0]}`);
                 }
@@ -176,7 +149,12 @@ export function lexer(code) {
 
             }
 
+            // push token to group
+            if (!group) {
+              group = [];
+            }
             group.push(tkn);
+
           }
         
         }
@@ -193,6 +171,7 @@ export function lexer(code) {
       snippet += ' ...';
     }
     lexerError(`unrecognized token: ${snippet}`);
+
   }
 
   // possibly an open group of non-keyword tokens

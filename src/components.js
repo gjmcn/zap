@@ -50,16 +50,16 @@ const isComponent = {
 !!!!!HERE!!!!!!!!!!!!
 
 -parameterList:  par  followed by either:
-  -any number of (enforce at least one?) unreservedNames (strip @) - last can
-   be preceded by a rest symbol
+  -any number of (enforce at least one?) unreservedNames - last can be preceded
+   by a rest symbol
   -destructuring array or object
--setterParameter: as parameterList, but single parameter- which can be a
+-setterParameter: as parameterList, but single parameter - which can be a
  destructuring array/object
--asUnreservedName:  as unreservedName (strip @)
--exportName: unreservedName OR (unreservedName as identifier)  (strip @)
--importName: unreservedName OR (identifier as unreservedName) (strip @)
--unreservedOrRename: unreservedName  OR  (identifier as unreservedName) (strip @)
--optName: unreservedName OR identifier as unreservedName (strip @)
+-asUnreservedName:  as unreservedName
+-exportName: unreservedName OR (unreservedName as identifier/stringIndentifier)
+-importName: unreservedName OR (identifier/stringIndentifier as unreservedName)
+-unreservedOrRename: unreservedName  OR  (identifier/string as unreservedName)
+-optName: unreservedName OR (identifier/string as unreservedName)
 
 
   unreservedNameDef: codeComp => {

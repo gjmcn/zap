@@ -7,6 +7,10 @@ import { resolveBranch, parseComponent } from './components.js';
 import { syntaxError, last } from './helpers.js';
 import { updateStrings } from 'yargs';
 
+!! NEED TO PARSE PREOPERNERS HERE!!!!!!!!!!!! AND ALSO COMMAS HERE
+!! do not even currently nknwo when statement opens from lexer now
+
+
 // returns first word of statement
 export function parseStatement(codeComponents, addJS) {
 
@@ -20,6 +24,8 @@ export function parseStatement(codeComponents, addJS) {
   if (!parseComponent.openingKeyword(codeComponents, struc[0][0], addJS)) {
     syntaxError(firstTkn, 'expected a keyword that starts a new statement');
   }
+
+
 
 !! IF HAVE AN INSERT IN AN OPTIONAL (ONLY ELSE IF?) JUST SKIP AS IF SEEN?
 

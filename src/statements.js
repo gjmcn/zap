@@ -23,18 +23,14 @@
 //   be optional).
 ////////////////////////////////////////////////////////////////////////////////
 
-import { dropIfAt } from "./helpers.js";
-
 export const statements = {};
 export const simpleStarts = new Set();
 export const blockStarts = new Set();
+export let allStarts;
 export const commaStarts = new Set([
   'now', 'say', 'let', 'export let', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
   'export', 'import', 'import default', 'import all', 'field', 'static field'
 ]);
-export function isStart(s) {
-  return simpleStarts.has(s) || blockStarts.has(s);
-}
 
 
 // ========= reusable components ==========
@@ -43,7 +39,7 @@ const destructureArray = [
   {type: 'openSquare', compile: '['},
   {
     type: 'unreservedName',
-    compile: name => `${dropIfAt(name)},`,
+    compile: name => `${name},`,
     optional: 1,
     repeat: true
   },
@@ -120,7 +116,7 @@ simpleStarts.add('say');
     return [
       [
         firstComponent,
-        {type: 'unreservedName', compile: dropIfAt},
+        {type: 'unreservedName', compile: name => name},
         {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
         {type: 'expression'}
       ],
@@ -154,7 +150,7 @@ simpleStarts.add('say');
     {type: 'insert', value: ')'}
   ];
   statements.set = [
-    createBranch({type: 'unreservedName', compile: dropIfAt}),
+    createBranch({type: 'unreservedName', compile: name => name}),
     createBranch(...destructureObject),
     createBranch(...destructureArray),
     createBranch({type: 'getterExpression'})
@@ -171,7 +167,7 @@ simpleStarts.add('say');
     {type: 'expression'},
   ];
   statements.nil = [
-    createBranch({type: 'unreservedName', compile: dropIfAt}),
+    createBranch({type: 'unreservedName', compile: name => name}),
     createBranch({type: 'getterExpression'})
   ];
   simpleStarts.add('nil');
@@ -203,11 +199,11 @@ simpleStarts.add('opt');
     {type: 'expression', optional: 1, ifOmitted: '1'}
   ];
   statements.inc = [
-    createBranch('inc', {type: 'unreservedName', compile: dropIfAt}, '+='),
+    createBranch('inc', {type: 'unreservedName', compile: name => name}, '+='),
     createBranch('inc', {type: 'getterExpression'}, '+=')
   ];
   statements.dec = [
-    createBranch('dec', {type: 'unreservedName', compile: dropIfAt}, '-='),
+    createBranch('dec', {type: 'unreservedName', compile: name => name}, '-='),
     createBranch('dec', {type: 'getterExpression'}, '-=')
   ];
   simpleStarts.add('inc');
@@ -260,7 +256,7 @@ statements.import = [
 statements['import default'] = [
   [
     {type: 'keyword', word: 'import default', compile: 'import '},
-    {type: 'asUnreservedName', compile: dropIfAt},
+    {type: 'asUnreservedName', compile: name => name},
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
   ]
@@ -268,7 +264,7 @@ statements['import default'] = [
 statements['import all'] = [
   [
     {type: 'keyword', word: 'import all', compile: 'import * as '},
-    {type: 'asUnreservedName', compile: dropIfAt},
+    {type: 'asUnreservedName', compile: name => name},
     {type: 'keyword', word: 'from', compile: ' from '},
     {type: 'pathLit'}
   ]
@@ -286,7 +282,7 @@ simpleStarts.add('import all');
         word: start,
         compile: start === 'field' ? '' : 'static '
       },
-      {type: 'unreservedName', compile: dropIfAt},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'to', compile: ' = ', optional: 2},
       {type: 'expression'}
     ]
@@ -343,13 +339,13 @@ statements.while = [
 ];
 blockStarts.add('while');
 
-// each
+// for
 {
   const createBranch = (start, ...comps) => [
     {
       type: 'keyword',
       word: start,
-      compile: start === 'each' ? 'for (let ' : 'for await (let '
+      compile: start === 'for' ? 'for (let ' : 'for await (let '
     },
     ...comps,
     {type: 'keyword', word: 'of', compile: ' of '},
@@ -357,15 +353,35 @@ blockStarts.add('while');
     {type: 'insert', value: ')'},
     {type: 'block'}
   ];
-  for (let start of ['each', 'wait for each']) {
+  for (let start of ['for', 'wait for']) {
     statements[start] = [
-      createBranch(start, {type: 'unreservedName', compile: dropIfAt}),
+      createBranch(start, {type: 'unreservedName', compile: name => name}),
       createBranch(start, ...destructureObject),
       createBranch(start, ...destructureArray)
     ]
     blockStarts.add(start);
   }
 }
+
+// loop
+statements.loop = [
+  [
+    {
+      type: 'keyword',
+      word: 'loop',
+      compile: 'for (let z_limit_ = '
+    },
+    {type: 'expression'},
+    {
+      type: 'asUnreservedName',
+      compile: name => `, ${name} = 0; ${name} < z_limit_; ${name}++)`,
+      optional: 1,
+      ifOmitted: ', z_loop_ = 0; z_loop_ < z_limit_; z_loop_++)'
+    },
+    {type: 'block'}
+  ]
+];
+blockStarts.add('loop');
 
 // up, down
 {
@@ -388,11 +404,8 @@ blockStarts.add('while');
         {type: 'expression'},
         {
           type: 'asUnreservedName',
-          compile: name => {
-            const rawName = dropIfAt(name);
-            return `, ${rawName} = z_start_; ${rawName} ${comparisonOp
-              } z_limit_; ${rawName} ${incrementOp} z_by_)`;
-          },
+          compile: name => `, ${name} = z_start_; ${name} ${comparisonOp
+              } z_limit_; ${name} ${incrementOp} z_by_)`,
           optional: 1,
           ifOmitted: `, z_loop_ = z_start_; z_loop_ ${comparisonOp
             } z_limit_; z_loop_ ${incrementOp} z_by_)`
@@ -419,7 +432,7 @@ statements.try = [
       optional: 3,
       ifOmitted: 'catch (e) {}'
     },
-    {type: 'unreservedName', compile: name => `${dropIfAt(name)})`},
+    {type: 'unreservedName', compile: name => `${name})`},
     {type: 'block'},
     {type: 'keyword', word: 'finally', compile: 'finally ', optional: 2},
     {type: 'block'}
@@ -445,7 +458,7 @@ blockStarts.add('try');
             ? `${staticStr}${asyncStr}${genStr}`      
             : `${exportStr}${asyncStr}function${genStr} `
         },
-        {type: 'unreservedName', compile: name => `${dropIfAt(name)}(`},
+        {type: 'unreservedName', compile: name => `${name}(`},
         {type: 'parameterList', optional: 1},
         {type: 'insert', value: ')'},
         {type: 'block'}
@@ -476,7 +489,7 @@ blockStarts.add('try');
 statements.getter = [
   [
     {type: 'keyword', word: 'getter', compile: 'get '},
-    {type: 'unreservedName', compile: name => `${dropIfAt(name)}()`},
+    {type: 'unreservedName', compile: name => `${name}()`},
     {type: 'block'}
   ]
 ];
@@ -486,7 +499,7 @@ blockStarts.add('getter');
 statements.setter = [
   [
     {type: 'keyword', word: 'setter', compile: 'set '},
-    {type: 'unreservedName', compile: name => `${dropIfAt(name)}(`},
+    {type: 'unreservedName', compile: name => `${name}(`},
     {type: 'setterParameter'},
     {type: 'insert', value: ')'},
     {type: 'block'}
@@ -499,7 +512,7 @@ blockStarts.add('setter');
   const branches = start => [
     [
       {type: 'keyword', word: start, compile: `${start} `},
-      {type: 'unreservedName', compile: dropIfAt},
+      {type: 'unreservedName', compile: name => name},
       {type: 'keyword', word: 'extends', compile: ' extends ', optional: 2},
       {type: 'expression'},
       {type: 'block'}
@@ -510,3 +523,6 @@ blockStarts.add('setter');
     blockStarts.add(start);
   }
 }
+
+// all starts
+allStarts = new Set([...simpleStarts, ...blockStarts]);

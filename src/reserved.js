@@ -28,9 +28,9 @@ reserved.special = new Set([
 reserved.keywords = new Set([
   'end', 'break', 'continue', 'now', 'out', 'throw', 'say', 'let', 'be', 'set',
   'nil', 'opt', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
-  'while', 'each', 'of', 'up', 'down', 'try', 'catch', 'finally', 'fun', 'gen',
-  'async', 'export', 'import', 'from', 'default', 'all', 'debugger', 'wait',
-  'for', 'class', 'extends', 'field', 'getter', 'setter', 'static', 'method'
+  'while', 'loop', 'for', 'of', 'up', 'down', 'try', 'catch', 'finally', 'fun',
+  'gen', 'async', 'export', 'import', 'from', 'default', 'all', 'debugger',
+  'wait', 'class', 'extends', 'field', 'getter', 'setter', 'static', 'method'
 ]);
 
 reserved.invalid = new Set([
@@ -54,7 +54,7 @@ reserved.allWords = new Set([
 
 reserved.compound = new Set([
   'export let',
-  'wait for each',
+  'wait for',
   'export fun', 'async fun', 'gen fun',
   'export gen fun', 'async gen fun', 'export async fun',
   'export async gen fun',
@@ -68,7 +68,7 @@ reserved.compound = new Set([
 ]);
 
 reserved.pre = new Set([
-  'wait', 'for', 'async', 'gen', 'static', 'import', 'export'
+  'wait', 'async', 'gen', 'static', 'import', 'export'
 ]);
 
 reserved.preOrOpener = new Set(['wait', 'import', 'export']);
