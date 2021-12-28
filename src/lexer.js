@@ -125,7 +125,7 @@ export function lexer(code) {
                   /(\\?@)([a-zA-Z_$][\w$]*)(\.[a-zA-Z_$][\w$]*|:\d+)*/g,
                   (matchedSubstr, atSymbol, variableName, ...otherArgs) => {
                 if (atSymbol.length === 2) {
-                  return matchedSubstr;
+                  return matchedSubstr.slice(1);
                 }
                 interpString = true;
                 assertVariableName(variableName);
