@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // The 'component' structure of each statement. Notes:
 // 
+// - Can only get contiguous non-"end" keywords at the start of a statement. 
 // - The 'optional' property indicates if a component can be omitted and if so,
 //   the number of components in the group. So 'optional: 1' indicates that the
 //   component itself can be omitted, whereas 'optional: 3' indicates that the
@@ -28,8 +29,8 @@ export const simpleStarts = new Set();
 export const blockStarts = new Set();
 export let allStarts;
 export const commaStarts = new Set([
-  'now', 'say', 'let', 'export let', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
-  'export', 'import', 'import default', 'import all', 'field', 'static field'
+  'cmd', 'say', 'let', 'export let', 'set', 'nil', 'opt', 'inc', 'dec', 'wait',
+  'field', 'static field'
 ]);
 
 
@@ -68,14 +69,14 @@ const destructureObject = [
   }
 }
 
-// now
-statements.now = [
+// cmd
+statements.cmd = [
   [
-    {type: 'keyword', word: 'now', compile: ''},
+    {type: 'keyword', word: 'cmd', compile: ''},
     {type: 'expression'}
   ]
 ];
-simpleStarts.add('now');
+simpleStarts.add('cmd');
 
 // out
 statements.out = [

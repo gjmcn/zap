@@ -11,10 +11,12 @@ export function compile(zapCode, {sourceFile}) {
 
   const sourceMap = new SourceNode(1, 0, sourceFile, '');
   const components = lexer(zapCode).reverse();
-  
+  components._lastStart = null;
+
   function addJS(js, line, column) {
     sourceMap.add(
-      js.$$$isSourceNode$$$ || line === undefined  // already a source node or no line and column info
+      js.$$$isSourceNode$$$ ||  // already a source node
+      line === undefined        // no line and column info
         ? js
         : new SourceNode(line, column, sourceFile, js)
     );

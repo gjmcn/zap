@@ -18,7 +18,7 @@ reserved.operators = new Set([
   'isarray', 'isbigint', 'isboolean', 'isfinite', 'isfunction', 'isinteger',
   'isnan', 'isnullish', 'isnumber', 'isstring', 'issymbol',
   // other
-  'put', 'load',
+  'put', 'load', 'do', 'pass'
 ]);
 
 reserved.special = new Set([
@@ -26,7 +26,7 @@ reserved.special = new Set([
 ]);
 
 reserved.keywords = new Set([
-  'end', 'break', 'continue', 'now', 'out', 'throw', 'say', 'let', 'be', 'set',
+  'end', 'break', 'continue', 'cmd', 'out', 'throw', 'say', 'let', 'be', 'set',
   'nil', 'opt', 'to', 'inc', 'dec', 'by', 'block', 'if', 'elif', 'else',
   'while', 'loop', 'for', 'of', 'up', 'down', 'try', 'catch', 'finally', 'fun',
   'gen', 'async', 'export', 'import', 'from', 'default', 'all', 'debugger',
@@ -35,11 +35,10 @@ reserved.keywords = new Set([
 
 reserved.invalid = new Set([
   // JS reserved words
-  'case', 'const', 'do', 'function', 'return', 'switch', 'this', 'var', 'with',
-  'enum', 'implements', 'interface', 'package', 'private', 'protected',
-  'public',
+  'case', 'const', 'function', 'return', 'switch', 'var', 'with', 'enum',
+  'implements', 'interface', 'package', 'private', 'protected', 'public',
   // pseudokeywords
-  'par', 'as', 'anon', 'anon_', 'done',
+  'par', 'as', 'sfun', 'sfun_', 'efun',
   // up/down loop variables
   'z_start_', 'z_limit_', 'z_by_', 'z_loop_'
 ]);
@@ -51,24 +50,3 @@ reserved.allWords = new Set([
   ...reserved.keywords,
   ...reserved.invalid
 ]);
-
-reserved.compound = new Set([
-  'export let',
-  'wait for',
-  'export fun', 'async fun', 'gen fun',
-  'export gen fun', 'async gen fun', 'export async fun',
-  'export async gen fun',
-  'static method', 'async method', 'gen method',
-  'static gen method', 'async gen method', 'static async method',
-  'static async gen method',
-  'static field',
-  'export class',
-  'export default',
-  'import default', 'import all'
-]);
-
-reserved.pre = new Set([
-  'wait', 'async', 'gen', 'static', 'import', 'export'
-]);
-
-reserved.preOrOpener = new Set(['wait', 'import', 'export']);

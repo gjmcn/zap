@@ -10,7 +10,7 @@ import { reserved } from "./reserved.js";
 
 const regexps = new Map([
   ['space', /[^\S\r\n]+/y],  // same-line whitespace
-  ['comment', /\/\/.*|#\S*/y],
+  ['comment', /#.*/y],
   ['newline', /\r?\n/y],
   ['number', /0[bB][01]+n?|0[oO][0-7]+n?|0[xX][\da-fA-F]+n?|0n|[1-9]\d*n|\d+(?:\.\d+)?(?:e[+\-]?\d+)?/y],
   ['string', /'[^'\\]*(?:\\[\S\s][^'\\]*)*'|"[^"\\]*(?:\\[\S\s][^"\\]*)*"/y],
@@ -33,10 +33,17 @@ export function lexer(code) {
   let line = 1;      // current line
   let column = 0;    // current column
 
-  // zap syntax error
+  // syntax error functions
   function lexerError(msg) {
     throw Error(`Zap syntax at ${line}:${column + 1}, ${msg}`);
   }
+  function assertVariableName(name) {
+    if (reserved.allWords.has(name) &&
+        !reserved.special.has(name)) {
+      lexerError(`@-prefix with reserved word: @${name}`);
+    }
+  }
+
 
   // iterate over code
   codeLoop: while (index < code.length) {
@@ -91,7 +98,8 @@ export function lexer(code) {
             // string
             if (type === 'string') {
               let hasNewline;
-              if (match[0][0] === "'") {
+              const quote = match[0][0];
+              if (quote === "'") {
                 tkn.value = tkn.value.replace(/\r?\n/g, () => {
                   line++;
                   hasNewline = true;
@@ -112,6 +120,24 @@ export function lexer(code) {
               else {
                 column += match[0].length;
               }
+              let interpString;
+              tkn.value = tkn.value.replace(
+                  /(\\?@)([a-zA-Z_$][\w$]*)(\.[a-zA-Z_$][\w$]*|:\d+)*/g,
+                  (matchedSubstr, atSymbol, variableName, ...otherArgs) => {
+                if (atSymbol.length === 2) {
+                  return matchedSubstr;
+                }
+                interpString = true;
+                assertVariableName(variableName);
+                let s = `${quote} + ${variableName}`;
+                for (let p of otherArgs.slice(0, -3)) {
+                  s += p[0] === '.' ? `['${p.slice(1)}']` : `[${p.slice(1)}]`;
+                }
+                return `${s} + ${quote}`;
+              });
+              if (interpString) {
+                tkn.value = `(${tkn.value})`;
+              }
             }
 
             // no other tokens can be multiline
@@ -127,10 +153,7 @@ export function lexer(code) {
               // atVariable
               else if (type === 'atVariable') {
                 tkn.value = match[0].slice(1);
-                if (reserved.allWords.has(tkn.value) &&
-                    !reserved.special.has(tkn.value)) {
-                  lexerError(`@-prefix with reserved word: ${match[0]}`);
-                }
+                assertVariableName(tkn.value);
               }
 
               // symbol operator

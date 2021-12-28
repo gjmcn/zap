@@ -2,13 +2,72 @@
 // Parse statement.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { structures } from './statements.js';
+import reserved from './reserved.js';
+import { statements, simpleStarts, allStarts } from './statements.js';
 import { resolveBranch, parseComponent } from './components.js';
-import { syntaxError, last } from './helpers.js';
-import { updateStrings } from 'yargs';
+import { syntaxError } from './helpers.js';
 
-!! NEED TO PARSE PREOPERNERS HERE!!!!!!!!!!!! AND ALSO COMMAS HERE
-!! do not even currently nknwo when statement opens from lexer now
+// Decide if at start of new statement. Returns false or an object:
+//  - word: string, keyword or space-separated string of keywords
+//  - tokens: array containing the corresponding keyword tokens
+// Mutations (only if at start of a statement):
+//  - removes returned keyword tokens from end of codeComponents
+//  - sets _lastStart property of codeComponents
+function isNewStatement(codeComponents) {
+
+  const lastComp = codeComponents.at(-1);
+  const tokens = [lastComp];
+  let word;
+
+  // non-keyword or "end" keyword
+  if (Array.isArray(lastComp) || lastComp.value === 'end') {
+    return false;
+  }
+  
+  // comma
+  if (lastComp.value === ',') {
+    if (!simpleStarts.has(codeComponents._lastStart) ||
+        !Array.isArray(codeComponents.at(-2))) {
+      syntaxError(lastComp, 'invalid comma');
+    }
+    codeComponents.pop();
+    return { word: codeComponents._lastStart, tokens };
+  }
+
+  // add any additional keywords
+  for (let i = 2; i <= codeComponents.length; i++) {
+    const comp = codeComponents.at(-i);
+    if (Array.isArray(comp) || comp.value === 'end') {
+      break;
+    }
+    tokens.push(comp);
+  }
+
+  // single keyword - may or may not be start of statement
+  if (tokens.length === 1) {  
+    word = lastComp.value;
+    if (!allStarts.has(word)) {
+      return false;
+    }
+    codeComponents.pop();
+  }
+
+  // multiple keywords - must be start of statement
+  else {
+    word = tokens.map(t => t.value).join(' ');
+    if (!allStarts.has(word)) {
+      syntaxError(lastComp, 'invalid combination of keywords');
+    }
+    codeComponents.length -= tokens.length;
+  }
+  
+  codeComponents._lastStart = word;
+  return { word, tokens };
+
+}
+
+// !!! DONE TO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 
 // returns first word of statement
@@ -17,7 +76,7 @@ export function parseStatement(codeComponents, addJS) {
   // first component: keyword that opens statement
   const firstTkn = last(codeComponents);
   if (Array.isArray(codeComp)) {
-    syntaxError(firstTkn[0], 'expected a keyword that starts a new statement');
+    syntaxError(firstTkn[0], 'keyword expected');
   }
   const firstWord = firstTkn.value;
   const struc = structures[firstWord];
