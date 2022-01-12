@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "browserify": "^16.5.1",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "markdown-it-attrs": "^3.0.2",
     "terser": "^4.6.10"
   }
